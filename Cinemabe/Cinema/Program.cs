@@ -9,12 +9,12 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<API_ServerContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("API_ServerContext") ?? throw new InvalidOperationException("Connection string 'API_ServerContext' not found.")));
+builder.Services.AddDbContext<CinemaContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
 
 // Config cho Identity
 builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<API_ServerContext>()
+                .AddEntityFrameworkStores<CinemaContext>()
                 .AddDefaultTokenProviders();
 
 // Config cho Authentication
@@ -72,9 +72,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseCors();
-
 app.UseAuthentication();
+
+app.UseCors();
 
 app.UseAuthorization();
 

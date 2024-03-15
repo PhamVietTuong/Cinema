@@ -8,6 +8,7 @@
 **/**/.vs/**
 **/**/bin/**
 **/**/obj/**
+**/**/Migrations/**
 
 .vscode/
 **/node_modules/**
