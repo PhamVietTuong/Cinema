@@ -9,6 +9,7 @@
 **/**/bin/**
 **/**/obj/**
 **/**/Migrations/**
+**/**/appsettings.json/**
 
 .vscode/
 **/node_modules/**
