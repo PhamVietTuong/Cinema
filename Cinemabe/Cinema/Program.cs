@@ -1,18 +1,22 @@
-using Cinema.Data.Contexts;
+using Cinema.Contracts;
 using Cinema.Data.Models;
+using Cinema.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
+using Cinema.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 builder.Services.AddDbContext<CinemaContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
 
-// Config cho Identity
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+//Config cho Identity
 builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<CinemaContext>()
                 .AddDefaultTokenProviders();
@@ -54,6 +58,8 @@ builder.Services.AddCors(option =>
                .AllowAnyMethod();
     });
 });
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
