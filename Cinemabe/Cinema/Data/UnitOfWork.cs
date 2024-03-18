@@ -1,6 +1,5 @@
 ﻿using Cinema.Contracts;
 using Cinema.Repository;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Data
 {
@@ -8,12 +7,13 @@ namespace Cinema.Data
     {
         private readonly CinemaContext _context;
 
-        UnitOfWork(CinemaContext context)
+        public UnitOfWork(CinemaContext context)
         {
             _context = context;
         }
 
         public ITicketRepository TicketRepository => new TicketRepository(_context);
+
         public async Task<bool> SaveChangeAsync()
         {
             return await _context.SaveChangesAsync() > 0;

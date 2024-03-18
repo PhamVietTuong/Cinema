@@ -10,11 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Cinema.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<CinemaContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddDbContext<CinemaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
 
 //Config cho Identity
 builder.Services.AddIdentity<User, IdentityRole>()
