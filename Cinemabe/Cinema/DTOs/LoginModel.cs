@@ -1,4 +1,4 @@
-﻿namespace Cinema.Data.Models
+﻿namespace Cinema.DTOs
 {
     public class LoginModel
     {

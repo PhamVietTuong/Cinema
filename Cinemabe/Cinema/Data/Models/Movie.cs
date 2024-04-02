@@ -3,13 +3,14 @@
     public class Movie
     {
         public int Id { get; set; }
+		public int AgeRestrictionId { get; set; }
+		public AgeRestriction AgeRestriction { get; set; }
 
-        public string Name { get; set; }
+		public string Name { get; set; }
+
+        public string Image { get; set; }
 
         public int Time { get; set; }
-
-        public int AgeRestrictionId { get; set; }
-        public AgeRestriction AgeRestriction { get; set; }
 
         public DateTime ReleaseDate { get; set; }
 
