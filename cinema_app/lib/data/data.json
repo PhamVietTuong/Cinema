@@ -1,0 +1,138 @@
+{
+    "theaters": [
+        {
+            "id": 1,
+            "name": "Cinestar Huế",
+            "address": "25 Hai Bà Trưng, Vĩnh Ninh, Thành phố Huế, Thừa Thiên Huế 52000",
+            "phone": "02347300081",
+            "img": "assets/img_demo/theater_img_1.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Cinestar Bình Dương",
+            "address": "Nhà Văn hóa Sinh viên Đại học Quốc gia TP.HCM, P. Đông Hòa, tx. Dĩ An, Bình Dương",
+            "phone": "02873038881",
+            "img": "assets/img_demo/theater_img_2.jpg"
+        },
+        {
+            "id": 3,
+            "name": "Cinestar Hai Bà Trưng",
+            "address": "135 Hai Bà Trưng, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000",
+            "phone": "02873007279",
+            "img": "assets/img_demo/theater_img_3.jpg"
+        },
+        {
+            "id": 4,
+            "name": "Cinestar Đà Lạt",
+            "address": "Quảng trường Lâm Viên, Đ. Trần Quốc Toản, Phường 10, Thành phố Đà Lạt, Lâm Đồng",
+            "phone": "02633969969",
+            "img": "assets/img_demo/theater_img_4.jpg"
+        },
+        {
+            "id": 5,
+            "name": "Cinestar Quốc Thanh",
+            "address": "271 Đ. Nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh 70000",
+            "phone": "02873008881",
+            "img": "assets/img_demo/theater_img_5.jpg"
+        },
+        {
+            "id": 6,
+            "name": "Cinestar Mỹ Tho",
+            "address": "52 Đinh Bộ Lĩnh, Phường 3, Thành phố Mỹ Tho, Tiền Giang",
+            "phone": "02737308881",
+            "img": "assets/img_demo/theater_img_6.jpg"
+        }
+    ],
+    "movies": [
+        {
+            "id": "1",
+            "name": "DUNE 2",
+            "time": "180",
+            "ageRestrictionId": "16",
+            "releaseDate": "29/02/2024",
+            "description": "“Dune: Hành Tinh Cát – Phần 2” sẽ tiếp tục khám phá hành trình đậm chất thần thoại của Paul Atreides khi anh đồng hành cùng Chani và những người Fremen trên chặng đường trả thù những kẻ đã hủy hoại gia đình mình. Đối mặt với những lựa chọn giữa tình yêu của cuộc đời mình và số phận của vũ trụ, Paul phải ngăn chặn viễn cảnh tương lai tồi tệ chỉ mình anh nhìn thấy.",
+            "director": "Denis Villeneuve",
+            "actor": "Timothee Chalamet, Zendaya, Rebecca Ferguson, Javier Bardem, Florence Pugh",
+            "trailer": "https://www.youtube.com/watch?v=0ZqTYVYcx4k",
+            "languages": "Mỹ",
+            "img":"assets/img_demo/movie_img_1.jpg"
+        },
+        {
+            "id": "2",
+            "name": "ĐỀN MẠNG",
+            "time": "105",
+            "ageRestrictionId": "16",
+            "releaseDate": "20/03/2024",
+            "description": "Người cha quá cố đã phản bội lời thề khiến cho hồn ma Nang Rum nổi giận, quyết trả báo ứng lên người August bắt cầu đền mạng để chuộc tội . August sẽ tìm ra được lời thề để hóa giải lỗi lầm hay phải trả giá bằng tính mạng của bản thân?",
+            "director": "Ekachai Sriwichai",
+            "actor": "Ekachai Sriwichai, Siwat Chotichaicharin, Ratchanok Suwannaket",
+            "trailer": "https://youtu.be/-f_bap4xur4",
+            "languages": "Khác",
+            "img":"assets/img_demo/movie_img_2.jpg"
+        },
+        {
+            "id": "3",
+            "name": "GODZILLA X KONG: ĐẾ CHẾ MỚI",
+            "time": "125",
+            "ageRestrictionId": "0",
+            "releaseDate": "27/03/2024",
+            "description": "Kong và Godzilla - hai sinh vật vĩ đại huyền thoại, hai kẻ thủ truyền kiếp sẽ cùng bắt tay thực thi một sứ mệnh chung mang tính sống còn để bảo vệ nhân loại, và trận chiến gắn kết chúng với loài người mãi mãi sẽ bắt đầu.",
+            "director": "Adam Wingard",
+            "actor": "Rebecca Hall, Dan Stevens, Rachel House",
+            "trailer": "https://youtu.be/Pxge99xjWDQ",
+            "languages": "Khác",
+            "img":"assets/img_demo/movie_img_3.jpg"
+        },{
+            "id": "4",
+            "name": "KUNG FU PANDA 4",
+            "time": "94",
+            "ageRestrictionId": "0",
+            "releaseDate": "05/03/2024",
+            "description": "Sau khi Po được chọn trở thành Thủ lĩnh tinh thần của Thung lũng Bình Yên, Po cần tìm và huấn luyện một Chiến binh Rồng mới, trong khi đó một mụ phù thủy độc ác lên kế hoạch triệu hồi lại tất cả những kẻ phản diện mà Po đã đánh bại về cõi linh hồn.",
+            "director": "Mike Mitchell",
+            "actor": "Jack Black, Dustin Hoffman, James Hong, Awkwafina",
+            "trailer": "https://youtu.be/_UWBj1-_V5M",
+            "languages": "Mỹ",
+            "img":"assets/img_demo/movie_img_4.jpg"
+        },{
+            "id": "5",
+            "name": "MUÔN VỊ NHÂN GIAN",
+            "time": "145",
+            "ageRestrictionId": "13",
+            "releaseDate": "20/03/2024",
+            "description": "Phim điện ảnh Muôn Vị Nhân Gian lấy bối cảnh tại một vùng quê nước Pháp năm 1885, xoay quanh mối tình lãng mạn giữa nữ đầu bếp Eugénie (Juliette Binoche) và Dodin (Benoît Magimel) - một chuyên gia ẩm thực với đam mê sáng tạo nên những món ăn trọn vẹn từ hương vị đến hình thức. Khởi nguồn từ tình yêu ẩm thực để cùng nhau tạo ra nhiều món ăn tinh tế và lộng lẫy trong suốt 20 năm, thu hút các thực khách từ khắp nơi trên thế giới đến thưởng thức, tình yêu đôi lứa dần nảy nở giữa Eugénie và Dodin. Tuy nhiên, Eugénie lại là một người phụ nữ yêu tự do và chưa sẵn sàng kết hôn với Dodin. Để chinh phục được trái tim của nàng, Dodin đã quyết định vào bếp, lần đầu tiên nấu ăn cho người mình yêu.",
+            "director": "Trần Anh Hùng",
+            "actor": "Juliette Binoche, Benoît Magimel",
+            "trailer": "https://youtu.be/pXQYvo7OJCE",
+            "languages": "Khác",
+            "img":"assets/img_demo/movie_img_5.jpg"
+        },{
+            "id": "6",
+            "name": "QUẬT MỘ TRÙNG MA",
+            "time": "150",
+            "ageRestrictionId": "16",
+            "releaseDate": "15/03/2024",
+            "description": "Hai pháp sư, một thầy phong thuỷ và một chuyên gia khâm liệm cùng hợp lực khai quật ngôi mộ bị nguyền rủa của một gia đình giàu có, nhằm cứu lấy sinh mạng hậu duệ cuối cùng trong dòng tộc. Bí mật hắc ám của tổ tiên được đánh thức.",
+            "director": "Jang Jae Hyun",
+            "actor": "Choi Min Sik, Yoo Hai Jin, Kim Go Eun, Lee Do Hyun,...",
+            "trailer": "https://youtu.be/5-oRO4rYNQ4",
+            "languages": "Khác",
+            "img":"assets/img_demo/movie_img_6.jpg"
+        }
+    ],
+    "MovieTypes":[
+        {
+            "id": "1",
+            "name": "Khoa Học Viễn Tưởng"
+        },
+        {
+            "id":"2",
+            "name":"Kinh Dị"
+        },
+        {
+            "id": "3",
+            "name": "Hành Động"
+        }
+
+    ]
+}

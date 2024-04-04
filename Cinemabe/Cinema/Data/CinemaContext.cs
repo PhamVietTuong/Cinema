@@ -27,5 +27,19 @@ namespace Cinema.Data
         public DbSet<Cinema.Data.Models.Invoice> Invoices { get; set; }
 
         public DbSet<Cinema.Data.Models.InvoiceDetail> InvoiceDetails { get; set; }
+
+        public DbSet<Cinema.Data.Models.RowChair> RowChairs { get; set; }
+
+        public DbSet<Cinema.Data.Models.Movie> Movies { get; set; }
+
+        public DbSet<Cinema.Data.Models.MovieType> MovieTypes { get; set; }
+
+        public DbSet<Cinema.Data.Models.MovieTypeDetail> MovieTypeDetails { get; set; }
+
+        public DbSet<Cinema.Data.Models.Room> Rooms { get; set; }
+
+        public DbSet<Cinema.Data.Models.ShowTimeType> ShowTimeTypes { get; set; }
+
+        public DbSet<Cinema.Data.Models.Theater> Theaters { get; set; }
     }
 }

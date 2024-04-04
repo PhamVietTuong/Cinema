@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Data;
 using Cinema.Data.Models;
+using Cinema.Contracts;
+using Cinema.DTOs;
 
 namespace Cinema.Controllers
 {
@@ -14,95 +16,23 @@ namespace Cinema.Controllers
     [ApiController]
     public class ShowTimesController : ControllerBase
     {
-        private readonly CinemaContext _context;
+        private readonly IUnitOfWork _uow;
 
-        public ShowTimesController(CinemaContext context)
+        public ShowTimesController(IUnitOfWork uow)
         {
-            _context = context;
+			_uow = uow;
         }
 
-        // GET: api/ShowTimes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShowTime>>> GetShowTime()
+		[HttpGet("GetInformationAboutBoxOffice")]
+		public async Task<ActionResult<InformationAboutBoxOfficeViewModel>> GetInformationAboutBoxOffice(int showTimeId)
         {
-            return await _context.ShowTimes.ToListAsync();
-        }
-
-        // GET: api/ShowTimes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ShowTime>> GetShowTime(int id)
-        {
-            var showTime = await _context.ShowTimes.FindAsync(id);
-
-            if (showTime == null)
+            if (!await _uow.ShowTimeRepository.Exit(showTimeId))
             {
                 return NotFound();
             }
-
-            return showTime;
+            var result = await _uow.ShowTimeRepository.GetInformationAboutBoxOffice(showTimeId);
+            return Ok(result);
         }
 
-        // PUT: api/ShowTimes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutShowTime(int id, ShowTime showTime)
-        {
-            if (id != showTime.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(showTime).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ShowTimeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/ShowTimes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ShowTime>> PostShowTime(ShowTime showTime)
-        {
-            _context.ShowTimes.Add(showTime);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetShowTime", new { id = showTime.Id }, showTime);
-        }
-
-        // DELETE: api/ShowTimes/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShowTime(int id)
-        {
-            var showTime = await _context.ShowTimes.FindAsync(id);
-            if (showTime == null)
-            {
-                return NotFound();
-            }
-
-            _context.ShowTimes.Remove(showTime);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ShowTimeExists(int id)
-        {
-            return _context.ShowTimes.Any(e => e.Id == id);
-        }
-    }
+	}
 }

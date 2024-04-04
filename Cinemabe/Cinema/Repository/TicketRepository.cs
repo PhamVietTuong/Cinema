@@ -1,7 +1,9 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data;
 using Cinema.Data.Models;
+using Cinema.DTOs;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Sockets;
 
 namespace Cinema.Repository
 {
@@ -23,6 +25,11 @@ namespace Cinema.Repository
 		public async Task<bool> Exist(int id)
 		{
 			return await _context.Tickets.AnyAsync(b => b.Id == id);
+		}
+
+		public Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm)
+		{
+			return null;
 		}
 
 		public Task<Ticket> Update(Ticket request)

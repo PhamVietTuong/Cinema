@@ -1,5 +1,7 @@
-﻿using Cinema.Data;
+﻿using Cinema.Contracts;
+using Cinema.Data;
 using Cinema.Data.Models;
+using Cinema.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -15,22 +17,21 @@ namespace Cinema.Controllers
 	[ApiController]
 	public class UsersController : ControllerBase
 	{
-		private readonly CinemaContext _context;
-		private readonly UserManager<User> _userManager;
-		private readonly RoleManager<IdentityRole> _roleManager;
-		private readonly IConfiguration _configuration;
+		private readonly IUnitOfWork _uow;
 
 		public UsersController(
-			CinemaContext context,
-			UserManager<User> userManager,
-			RoleManager<IdentityRole> roleManager,
-			IConfiguration configuration
+			IUnitOfWork uow
 			)
 		{
-			_context = context;
-			_userManager = userManager;
-			_roleManager = roleManager;
-			_configuration = configuration;
+			_uow = uow;
+		}
+
+		[HttpPost]
+		[Route("register")]
+		public async Task<IActionResult> Register(RegisterViewModel re)
+		{
+
+			return await _uow.UserRepository.Register(re);
 		}
 	}
 }
