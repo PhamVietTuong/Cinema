@@ -12,8 +12,8 @@ namespace Cinema.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChairsController : ControllerBase
+    public class MovieTypeDetailsController : ControllerBase
     {
-       
+        
     }
 }
