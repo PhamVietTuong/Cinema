@@ -24,7 +24,7 @@ namespace Cinema.Controllers
         }
 
 		[HttpGet("GetInformationAboutBoxOffice")]
-		public async Task<ActionResult<InformationAboutBoxOfficeViewModel>> GetInformationAboutBoxOffice(int showTimeId)
+		public async Task<ActionResult<InformationAboutBoxOfficeViewModel>> GetInformationAboutBoxOffice(Guid showTimeId)
         {
             if (!await _uow.ShowTimeRepository.Exit(showTimeId))
             {

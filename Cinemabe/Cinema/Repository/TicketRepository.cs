@@ -22,7 +22,7 @@ namespace Cinema.Repository
 			return ticket;
 		}
 
-		public async Task<bool> Exist(int id)
+		public async Task<bool> Exist(Guid id)
 		{
 			return await _context.Tickets.AnyAsync(b => b.Id == id);
 		}

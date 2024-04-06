@@ -2,7 +2,7 @@
 {
 	public class InformationAboutBoxOfficeViewModel
 	{
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string TheaterName { get; set; }
         public string TheaterAddress { get; set; }
         public string ShowTimeTypeName { get; set; }

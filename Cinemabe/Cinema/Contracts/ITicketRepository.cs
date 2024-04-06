@@ -7,7 +7,7 @@ namespace Cinema.Contracts
 	{
 		Task<Ticket> Create(Ticket ticket);
 		Task<Ticket> Update(Ticket request);
-		Task<bool> Exist(int id);
+		Task<bool> Exist(Guid id);
 		Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm);
 	}
 }

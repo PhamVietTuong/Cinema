@@ -14,12 +14,12 @@ namespace Cinema.Repository
             _context = context;
         }
 
-		public async Task<bool> Exit(int id)
+		public async Task<bool> Exit(Guid id)
 		{
 			return await _context.ShowTimes.AnyAsync(e => e.Id == id);
 		}
 
-		public async Task<InformationAboutBoxOfficeViewModel> GetInformationAboutBoxOffice(int showTimeId)
+		public async Task<InformationAboutBoxOfficeViewModel> GetInformationAboutBoxOffice(Guid showTimeId)
 		{
 			var showtime = await _context.ShowTimes
 				.Include(a => a.Movie)
