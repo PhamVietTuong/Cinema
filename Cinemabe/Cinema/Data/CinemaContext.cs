@@ -41,5 +41,6 @@ namespace Cinema.Data
         public DbSet<Cinema.Data.Models.ShowTimeType> ShowTimeTypes { get; set; }
 
         public DbSet<Cinema.Data.Models.Theater> Theaters { get; set; }
-    }
+        public DbSet<Cinema.Data.Models.MovieShowTime> MovieShowTimes { get; set; }
+	}
 }
