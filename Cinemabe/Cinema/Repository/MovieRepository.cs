@@ -22,7 +22,7 @@ namespace Cinema.Repository
 			var movieList = await _context.Movies.ToListAsync();
 
 			var rows = new List<MovieViewModel>();
-			foreach (Movie movie in movieList)
+			foreach (var movie in movieList)
 			{
 				rows.Add(new MovieViewModel
 				{
