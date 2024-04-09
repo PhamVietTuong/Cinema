@@ -113,3 +113,9 @@ SET @NEW_PREF = NEWID();
 INSERT MovieTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Hài hước', 1)
 INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where Name=N'KUNG FU PANDA 4'), @NEW_GUID, 1)
 
+SET @NEW_GUID = NEWID();
+INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+SET @NEW_GUID = NEWID();
+INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Party 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-PARTY.png', 259000, N'4 Coke 22oz - V + 2 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+SET @NEW_GUID = NEWID();
+INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Couple 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-COUPLE.png', 129000, N'2 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)

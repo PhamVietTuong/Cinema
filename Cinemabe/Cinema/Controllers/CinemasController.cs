@@ -52,6 +52,17 @@ namespace Cinema.Controllers
 
 		#endregion
 
+		#region FoodAndDrink
+
+		[HttpGet("Combo")]
+		public async Task<ActionResult<List<InformationAboutBoxOfficeViewModel>>> Combo()
+		{
+			var result = await _uow.FoodAndDrinkRepository.Combo();
+			return Ok(result);
+		}
+
+		#endregion
+
 		#region Ticket
 
 		[HttpPost]

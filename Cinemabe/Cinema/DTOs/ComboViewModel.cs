@@ -1,12 +1,11 @@
-﻿namespace Cinema.Data.Models
+﻿namespace Cinema.DTOs
 {
-    public class FoodAndDrink
-    {
+	public class ComboViewModel
+	{
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
         public double Price { get; set; }
-        public bool Status { get; set; }
     }
 }
