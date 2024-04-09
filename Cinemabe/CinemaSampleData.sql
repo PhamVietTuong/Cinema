@@ -54,6 +54,11 @@ SET @NEW_GUID = NEWID();
 INSERT AgeRestrictions(Id, Name, Description, Status) VALUES (@NEW_GUID, 'T18', N'Phim dành cho khán giả từ đủ 18 tuổi trở lên.' , 1)
 
 SET @NEW_GUID = NEWID();
+INSERT ShowTimeTypes(Id, Name, Status) VALUES (@NEW_GUID, '2D', 1)
+SET @NEW_GUID = NEWID();
+INSERT ShowTimeTypes(Id, Name, Status) VALUES (@NEW_GUID, '3D', 1)
+
+SET @NEW_GUID = NEWID();
 INSERT Movies(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestrictions where Name='T18'), (select Id from ShowTimeTypes where Name='3D'), N'GODZILLA X KONG', 'godzilla-x-kong.jpg', '125', GETDATE(), N'Kong và Godzilla - hai sinh vật vĩ đại huyền thoại, hai kẻ thủ truyền kiếp sẽ cùng bắt tay thực thi một sứ mệnh chung mang tính sống còn để bảo vệ nhân loại, và trận chiến gắn kết chúng với loài người mãi mãi sẽ bắt đầu.', N'Adam Wingard', N'Rebecca Hall, Dan Stevens, Rachel House', N'trailer', N'Tiếng việt', 1)
 SET @NEW_GUID = NEWID();
 INSERT Movies(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestrictions where Name='T18'), (select Id from ShowTimeTypes where Name='2D'), N'QUẬT MỘ TRÙNG MA', 'quat-mo-trung-ma.jpg', '150', GETDATE(), N'Hai pháp sư, một thầy phong thuỷ và một chuyên gia khâm liệm cùng hợp lực khai quật ngôi mộ bị nguyền rủa của một gia đình giàu có, nhằm cứu lấy sinh mạng hậu duệ cuối cùng trong dòng tộc. Bí mật hắc ám của tổ tiên được đánh thức.', N'Jang Jae Hyun', N'Choi Min Sik, Yoo Hai Jin, Kim Go Eun, Lee Do Hyun,...', N'trailer', N'Tiếng việt', 1)
@@ -76,29 +81,15 @@ SET @NEW_GUID = NEWID();
 INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'BHD Star 3/2', N'Lầu 4, Siêu Thị Vincom 3/2, 3C Đường 3/2, Q. 10, Tp. Hồ Chí Minh', 1)
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTimeTypes(Id, Name, Status) VALUES (@NEW_GUID, '2D', 1)
+INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE(), '2024-04-08 18:48:10.9266667', '2024-04-09 17:48:10.9266667', 1)
 SET @NEW_GUID = NEWID();
-INSERT ShowTimeTypes(Id, Name, Status) VALUES (@NEW_GUID, '3D', 1)
-
+INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE() + 1, '2024-04-10 17:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
 SET @NEW_GUID = NEWID();
-SET @NEW_PREF = NEWID();
-INSERT ShowTimes(Id, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE(), '2024-04-08 18:48:10.9266667', '2024-04-09 17:48:10.9266667', 1)
-INSERT MovieShowTimes(Id, MovieId, ShowTimeId) VALUES (@NEW_PREF, (select Id from Movies where Name=N'GODZILLA X KONG'), @NEW_GUID)
-
+INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='2'), GETDATE(),'2024-04-09 19:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
 SET @NEW_GUID = NEWID();
-SET @NEW_PREF = NEWID();
-INSERT ShowTimes(Id, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE() + 1, '2024-04-10 17:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-INSERT MovieShowTimes(Id, MovieId, ShowTimeId) VALUES (@NEW_PREF, (select Id from Movies where Name=N'GODZILLA X KONG'), @NEW_GUID)
-
+INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'KUNG FU PANDA 4'), (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 3, '2024-04-10 20:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
 SET @NEW_GUID = NEWID();
-SET @NEW_PREF = NEWID();
-INSERT ShowTimes(Id, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE(),'2024-04-09 19:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-INSERT MovieShowTimes(Id, MovieId, ShowTimeId) VALUES (@NEW_PREF, (select Id from Movies where Name=N'QUẬT MỘ TRÙNG MA'), @NEW_GUID)
-
-SET @NEW_GUID = NEWID();
-INSERT ShowTimes(Id, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 3, '2024-04-10 20:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-SET @NEW_GUID = NEWID();
-INSERT ShowTimes(Id, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 4, '2024-04-08 21:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
+INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'KUNG FU PANDA 4'), (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 4, '2024-04-08 21:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
 
 SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();

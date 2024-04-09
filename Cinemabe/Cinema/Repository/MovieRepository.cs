@@ -57,24 +57,23 @@ namespace Cinema.Repository
 												.ToListAsync();
 			string movieTypes = String.Join(", ", movieTypeDetails.Select(x => x.MovieType.Name));
 
-			var movieShowTimes = await _context.MovieShowTimes
-												.Include(x => x.ShowTime)
-													.ThenInclude(x => x.Theater)
+			var showTimes = await _context.ShowTimes
+												.Include(x => x.Theater)
 												.Where(x => x.MovieId == movieDetail.Id).ToListAsync();
-			var schedules = movieShowTimes
-										.GroupBy(x => new { x.ShowTime.Day })
+			var schedules = showTimes
+										.GroupBy(x => new { x.Day })
 										.Select(schedule => new Schedules
 										{
 											Date = schedule.Key.Day,
 											Theater = schedule
-														.GroupBy(x => new { x.ShowTime.Theater.Name, x.ShowTime.Theater.Address })
+														.GroupBy(x => new { x.Theater.Name, x.Theater.Address })
 														.Select(theater => new Theaters {
 															TheaterName = theater.Key.Name,
 															TheaterAddress = theater.Key.Address,
 															ShowTime = theater.Select(showTime => new ShowTimes
 															{
-																StartTime = showTime.ShowTime.StartTime,
-																EndTime = showTime.ShowTime.EndTime
+																StartTime = showTime.StartTime,
+																EndTime = showTime.EndTime
 															}).ToList()
 														}).ToList()
 										}).ToList();
