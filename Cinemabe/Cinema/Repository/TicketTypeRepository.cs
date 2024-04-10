@@ -18,7 +18,9 @@ namespace Cinema.Repository
 		{
 			var ticketTypes = await _context.TicketTypes
 														.Include(x => x.ShowTime)
-														.Include(x => x.SeatType).ToListAsync();
+														.Include(x => x.SeatType)
+														.Where(x => x.ShowTimeId == showTimeId)
+														.ToListAsync();
 			var rows = new List<TicketTypeViewModel>();
 
 			foreach (var ticketType in ticketTypes)
