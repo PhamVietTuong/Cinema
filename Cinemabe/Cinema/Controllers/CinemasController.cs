@@ -39,16 +39,16 @@ namespace Cinema.Controllers
 
 		#region ShowTime
 
-		[HttpGet("GetInformationAboutBoxOffice")]
-		public async Task<ActionResult<InformationAboutBoxOfficeViewModel>> GetInformationAboutBoxOffice(Guid showTimeId)
-		{
-			if (!await _uow.ShowTimeRepository.Exit(showTimeId))
-			{
-				return NotFound();
-			}
-			var result = await _uow.ShowTimeRepository.GetInformationAboutBoxOffice(showTimeId);
-			return Ok(result);
-		}
+		//[HttpGet("GetInformationAboutBoxOffice")]
+		//public async Task<ActionResult<InformationAboutBoxOfficeViewModel>> GetInformationAboutBoxOffice(Guid showTimeId)
+		//{
+		//	if (!await _uow.ShowTimeRepository.Exit(showTimeId))
+		//	{
+		//		return NotFound();
+		//	}
+		//	var result = await _uow.ShowTimeRepository.GetInformationAboutBoxOffice(showTimeId);
+		//	return Ok(result);
+		//}
 
 		#endregion
 
@@ -83,6 +83,17 @@ namespace Cinema.Controllers
 				return BadRequest();
 			}
 			return Ok();
+		}
+
+		#endregion
+
+		#region TicketType
+
+		[HttpGet("TicketType/{showTimeId}")]
+		public async Task<ActionResult<List<TicketTypeViewModel>>> GetTicketTypeList(Guid showTimeId)
+		{
+			var result = await _uow.TicketTypeRepository.GetTicketTypeListAysn(showTimeId);
+			return Ok(result);
 		}
 
 		#endregion

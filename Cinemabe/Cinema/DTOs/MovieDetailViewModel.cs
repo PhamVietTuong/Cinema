@@ -36,7 +36,8 @@ namespace Cinema.DTOs
 
 	public class ShowTimes
 	{
-		public DateTime Day { get; set; }
+        public string RoomName { get; set; }
+        public Guid ShowTimeId { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 	}

@@ -6,6 +6,6 @@ namespace Cinema.Contracts
 	public interface IShowTimeRepository
 	{
 		Task<bool> Exit(Guid id);
-		Task<InformationAboutBoxOfficeViewModel> GetInformationAboutBoxOffice(Guid showTimeId);
+		//Task<InformationAboutBoxOfficeViewModel> GetInformationAboutBoxOffice(Guid showTimeId);
 	}
 }

@@ -2,21 +2,11 @@
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 DECLARE @NEW_PREF UNIQUEIDENTIFIER;
-SET @NEW_GUID = NEWID();
-INSERT ChairTypes(Id, Name, Price, Status) VALUES (@NEW_GUID, N'Đơn', 50000, 1)
-SET @NEW_GUID = NEWID();
-INSERT ChairTypes(Id, Name, Price, Status) VALUES (@NEW_GUID, N'Ðôi', 50000, 1)
 
 SET @NEW_GUID = NEWID();
-INSERT RowChairs(Id, Name) VALUES(@NEW_GUID, 'A')
+INSERT SeatTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Đơn', 1)
 SET @NEW_GUID = NEWID();
-INSERT RowChairs(Id, Name) VALUES(@NEW_GUID, 'B')
-SET @NEW_GUID = NEWID();
-INSERT RowChairs(Id, Name) VALUES(@NEW_GUID, 'C')
-SET @NEW_GUID = NEWID();
-INSERT RowChairs(Id, Name) VALUES(@NEW_GUID, 'D')
-SET @NEW_GUID = NEWID();
-INSERT RowChairs(Id, Name) VALUES(@NEW_GUID, 'E')
+INSERT SeatTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Ðôi', 1)
 
 SET @NEW_GUID = NEWID();
 INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '1', '50', '50', 1)
@@ -28,27 +18,6 @@ SET @NEW_GUID = NEWID();
 INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '4', '200', '200', 1)
 SET @NEW_GUID = NEWID();
 INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '5', '250', '250', 1)
-
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name=N'Đơn'), (select Id from RowChairs where Name='A'), (select Id from Rooms where Name='1'), 'A1', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name=N'Đơn'), (select Id from RowChairs where Name='A'), (select Id from Rooms where Name='1'), 'A2', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name=N'Đơn'), (select Id from RowChairs where Name='A'), (select Id from Rooms where Name='1'), 'A3', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name=N'Đơn'), (select Id from RowChairs where Name='A'), (select Id from Rooms where Name='1'), 'A4', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name=N'Đơn'), (select Id from RowChairs where Name='A'), (select Id from Rooms where Name='1'), 'A5', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name='Ðôi'), (select Id from RowChairs where Name='B'), (select Id from Rooms where Name='1'), 'B1', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name='Ðôi'), (select Id from RowChairs where Name='B'), (select Id from Rooms where Name='1'), 'B2', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name='Ðôi'), (select Id from RowChairs where Name='B'), (select Id from Rooms where Name='1'), 'B3', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name='Ðôi'), (select Id from RowChairs where Name='B'), (select Id from Rooms where Name='1'), 'B4', 0)
-SET @NEW_GUID = NEWID();
-INSERT Chairs(Id, ChairTypeId, RowChairId, RoomId, Name, IsSold) VALUES (@NEW_GUID, (select Id from ChairTypes where Name='Ðôi'), (select Id from RowChairs where Name='B'), (select Id from Rooms where Name='1'), 'B5', 0)
 
 SET @NEW_GUID = NEWID();
 INSERT AgeRestrictions(Id, Name, Description, Status) VALUES (@NEW_GUID, 'T18', N'Phim dành cho khán giả từ đủ 18 tuổi trở lên.' , 1)
@@ -81,9 +50,13 @@ SET @NEW_GUID = NEWID();
 INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'BHD Star 3/2', N'Lầu 4, Siêu Thị Vincom 3/2, 3C Đường 3/2, Q. 10, Tp. Hồ Chí Minh', 1)
 
 SET @NEW_GUID = NEWID();
+SET @NEW_PREF = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE(), '2024-04-08 18:48:10.9266667', '2024-04-09 17:48:10.9266667', 1)
+INSERT TicketTypes(Id, ShowTimeId, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, @NEW_GUID, (select Id from SeatTypes where Name=N'Đơn'), N'Người lớn', 120000, 1)
 SET @NEW_GUID = NEWID();
+SET @NEW_PREF = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE() + 1, '2024-04-10 17:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
+INSERT TicketTypes(Id, ShowTimeId, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, @NEW_GUID, (select Id from SeatTypes where Name=N'Ðôi'), N'HSSV-Người Cao Tuổi', 95000, 1)
 SET @NEW_GUID = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='2'), GETDATE(),'2024-04-09 19:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
 SET @NEW_GUID = NEWID();
@@ -102,7 +75,28 @@ INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (se
 SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();
 INSERT MovieTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Hài hước', 1)
-INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where Name=N'KUNG FU PANDA 4'), @NEW_GUID, 1)
+INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where	Name=N'KUNG FU PANDA 4'), @NEW_GUID, 1)
+
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A1', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A2', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A3', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A4', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A5', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B1', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B2', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B3', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B4', 0)
+SET @NEW_GUID = NEWID();
+INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B5', 0)
 
 SET @NEW_GUID = NEWID();
 INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)

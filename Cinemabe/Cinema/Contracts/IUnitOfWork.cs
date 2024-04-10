@@ -7,6 +7,7 @@
 		IShowTimeRepository ShowTimeRepository { get; }
 		IMovieRepository MovieRepository { get; }
 		IFoodAndDrinkRepository FoodAndDrinkRepository { get; }
+		ITicketTypeRepository TicketTypeRepository { get; }
 		Task<bool> SaveChangeAsync();
 	}
 }

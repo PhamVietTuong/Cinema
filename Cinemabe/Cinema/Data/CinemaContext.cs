@@ -14,21 +14,19 @@ namespace Cinema.Data
 
 		public DbSet<Cinema.Data.Models.Ticket> Tickets { get; set; } = default!;
 
-        public DbSet<Cinema.Data.Models.Chair> Chairs { get; set; }
+        public DbSet<Cinema.Data.Models.Seat> Seats { get; set; }
 
         public DbSet<Cinema.Data.Models.ShowTime> ShowTimes { get; set; }
 
         public DbSet<Cinema.Data.Models.AgeRestriction> AgeRestrictions { get; set; }
 
-        public DbSet<Cinema.Data.Models.ChairType> ChairTypes { get; set; }
+        public DbSet<Cinema.Data.Models.TicketType> TicketTypes { get; set; }
 
         public DbSet<Cinema.Data.Models.FoodAndDrink> FoodAndDrinks { get; set; }
 
         public DbSet<Cinema.Data.Models.Invoice> Invoices { get; set; }
 
         public DbSet<Cinema.Data.Models.InvoiceDetail> InvoiceDetails { get; set; }
-
-        public DbSet<Cinema.Data.Models.RowChair> RowChairs { get; set; }
 
         public DbSet<Cinema.Data.Models.Movie> Movies { get; set; }
 
@@ -41,5 +39,7 @@ namespace Cinema.Data
         public DbSet<Cinema.Data.Models.ShowTimeType> ShowTimeTypes { get; set; }
 
         public DbSet<Cinema.Data.Models.Theater> Theaters { get; set; }
+
+        public DbSet<Cinema.Data.Models.SeatType> SeatTypes { get; set; }
 	}
 }

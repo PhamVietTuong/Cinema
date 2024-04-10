@@ -23,6 +23,7 @@ namespace Cinema.Data
 		public IShowTimeRepository ShowTimeRepository => new ShowTimeRepository(_context);
 		public IMovieRepository MovieRepository => new MovieRepository(_context);
 		public IFoodAndDrinkRepository FoodAndDrinkRepository => new FoodAndDrinkRepository(_context);
+		public ITicketTypeRepository TicketTypeRepository => new TicketTypeRepository(_context);
 
 		public async Task<bool> SaveChangeAsync()
         {

@@ -59,6 +59,7 @@ namespace Cinema.Repository
 
 			var showTimes = await _context.ShowTimes
 												.Include(x => x.Theater)
+												.Include(x => x.Room)
 												.Where(x => x.MovieId == movieDetail.Id).ToListAsync();
 			var schedules = showTimes
 										.GroupBy(x => new { x.Day })
@@ -72,6 +73,8 @@ namespace Cinema.Repository
 															TheaterAddress = theater.Key.Address,
 															ShowTime = theater.Select(showTime => new ShowTimes
 															{
+																RoomName = showTime.Room.Name,
+																ShowTimeId = showTime.Id,
 																StartTime = showTime.StartTime,
 																EndTime = showTime.EndTime
 															}).ToList()
