@@ -14,7 +14,7 @@ namespace Cinema.Repository
 			_context = context;
 		}
 
-		public async Task<List<TicketTypeViewModel>> GetTicketTypeListAysn(Guid showTimeId)
+		public async Task<List<TicketTypeViewModel>> TicketTypeByShowTimeAysn(Guid showTimeId)
 		{
 			var ticketTypes = await _context.TicketTypes
 														.Include(x => x.ShowTime)

@@ -6,7 +6,7 @@
 		public Guid TicketTypeId { get; set; }
 		public TicketType TicketType { get; set; }
         public string RowName { get; set; }
-		public string RowSeat { get; set; }
+		public string Name { get; set; }
 		public bool IsSold { get; set; }
 	}
 }

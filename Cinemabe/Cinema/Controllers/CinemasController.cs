@@ -89,10 +89,21 @@ namespace Cinema.Controllers
 
 		#region TicketType
 
-		[HttpGet("TicketType/{showTimeId}")]
-		public async Task<ActionResult<List<TicketTypeViewModel>>> GetTicketTypeList(Guid showTimeId)
+		[HttpGet("TicketTypeByShowTime/{showTimeId}")]
+		public async Task<ActionResult<List<TicketTypeViewModel>>> TicketTypeByShowTime(Guid showTimeId)
 		{
-			var result = await _uow.TicketTypeRepository.GetTicketTypeListAysn(showTimeId);
+			var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAysn(showTimeId);
+			return Ok(result);
+		}
+
+		#endregion
+
+		#region Seat
+
+		[HttpGet("SeatByShowTime/{showTimeId}")]
+		public async Task<ActionResult<List<TicketTypeViewModel>>> SeatByShowTime(Guid showTimeId)
+		{
+			var result = await _uow.SeatRepository.GetSeatByShowTimeAysn(showTimeId);
 			return Ok(result);
 		}
 

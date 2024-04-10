@@ -78,25 +78,25 @@ INSERT MovieTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Hài hước', 1)
 INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where	Name=N'KUNG FU PANDA 4'), @NEW_GUID, 1)
 
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A1', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A1', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A2', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A2', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A3', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A3', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A4', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A4', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A5', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A5', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B1', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B1', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B2', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B2', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B3', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B3', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B4', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B4', 0)
 SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, RowSeat, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B5', 0)
+INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B5', 0)
 
 SET @NEW_GUID = NEWID();
 INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)

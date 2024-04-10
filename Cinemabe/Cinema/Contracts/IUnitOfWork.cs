@@ -8,6 +8,7 @@
 		IMovieRepository MovieRepository { get; }
 		IFoodAndDrinkRepository FoodAndDrinkRepository { get; }
 		ITicketTypeRepository TicketTypeRepository { get; }
+		ISeatRepository SeatRepository { get; }
 		Task<bool> SaveChangeAsync();
 	}
 }
