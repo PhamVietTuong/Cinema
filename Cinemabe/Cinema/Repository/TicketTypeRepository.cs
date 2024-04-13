@@ -16,24 +16,25 @@ namespace Cinema.Repository
 
 		public async Task<List<TicketTypeViewModel>> TicketTypeByShowTimeAysn(Guid showTimeId)
 		{
-			var ticketTypes = await _context.TicketTypes
-														.Include(x => x.ShowTime)
-														.Include(x => x.SeatType)
-														.Where(x => x.ShowTimeId == showTimeId)
-														.ToListAsync();
+			var ticketTypeList = await _context.TicketTypes.Include(x => x.SeatType).ToListAsync();
+			var seatTicketTypeIds = await _context.Seats.Where(x => x.ShowTimeId == showTimeId).Select(x => x.TicketTypeId).ToListAsync();
 			var rows = new List<TicketTypeViewModel>();
 
-			foreach (var ticketType in ticketTypes)
+			foreach (var ticketType in ticketTypeList)
 			{
-				rows.Add(new TicketTypeViewModel
+				if (seatTicketTypeIds.Contains(ticketType.Id))
 				{
-					Id = ticketType.Id,
-					Name = ticketType.Name,
-					Price = ticketType.Price,
-					SeatTypeName = ticketType.SeatType.Name
-				});
-			}
+					var vm = new TicketTypeViewModel
+					{
+						Id = ticketType.Id,
+						Name = ticketType.Name,
+						Price = ticketType.Price,
+						SeatTypeName = ticketType.SeatType.Name,
+					};
 
+					rows.Add(vm);
+				}
+			}
 			return rows;
 		}
 	}

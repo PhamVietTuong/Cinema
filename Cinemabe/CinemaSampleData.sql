@@ -52,17 +52,37 @@ INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'BHD Star 3/2', N
 SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE(), '2024-04-08 18:48:10.9266667', '2024-04-09 17:48:10.9266667', 1)
-INSERT TicketTypes(Id, ShowTimeId, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, @NEW_GUID, (select Id from SeatTypes where Name=N'Đơn'), N'Người lớn', 120000, 1)
+INSERT TicketTypes(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, (select Id from SeatTypes where Name=N'Đơn'), N'Người lớn', 120000, 1)
 SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE() + 1, '2024-04-10 17:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-INSERT TicketTypes(Id, ShowTimeId, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, @NEW_GUID, (select Id from SeatTypes where Name=N'Ðôi'), N'HSSV-Người Cao Tuổi', 95000, 1)
+INSERT TicketTypes(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, (select Id from SeatTypes where Name=N'Ðôi'), N'HSSV-Người Cao Tuổi', 95000, 1)
 SET @NEW_GUID = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='2'), GETDATE(),'2024-04-09 19:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
 SET @NEW_GUID = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'KUNG FU PANDA 4'), (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 3, '2024-04-10 20:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
 SET @NEW_GUID = NEWID();
 INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'KUNG FU PANDA 4'), (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 4, '2024-04-08 21:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, NULL, @NEW_GUID, 'A', 1, NULL, 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, NULL, @NEW_GUID, 'A', 2, NULL, 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'Người lớn'), @NEW_GUID, 'A', 3, 'A3', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'Người lớn'), @NEW_GUID, 'A', 4, 'A4', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'Người lớn'), @NEW_GUID, 'A', 5, 'A5', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 1, 'B1', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 2, 'B2', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 3, 'B3', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 4, 'B4', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 5, 'B5', 0)
 
 SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();
@@ -76,27 +96,6 @@ SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();
 INSERT MovieTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Hài hước', 1)
 INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where	Name=N'KUNG FU PANDA 4'), @NEW_GUID, 1)
-
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A1', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A2', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A3', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A4', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'Người lớn'), 'A', 'A5', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B1', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B2', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B3', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B4', 0)
-SET @NEW_GUID = NEWID();
-INSERT Seats(Id, TicketTypeId, RowName, Name, IsSold) VALUES (@NEW_GUID, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), 'B', 'B5', 0)
 
 SET @NEW_GUID = NEWID();
 INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
