@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.cinema_app-mergeDebugResources-9:/values-gu/values-gu.xml",
+            "outputFile": "com.example.cinema_app-mergeDebugResources-10:/values-gu/values-gu.xml",
             "map": [
                 {
                     "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\d08c73bfb05384f2e52578171dbd141e\\transformed\\core-1.6.0\\res\\values-gu\\values-gu.xml",

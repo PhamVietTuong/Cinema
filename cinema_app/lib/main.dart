@@ -1,4 +1,5 @@
-import 'package:cinema_app/views/HomePage.dart';
+import 'package:cinema_app/views/Account/sign_in.dart';
+import 'package:cinema_app/views/detail/Movie_detail.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: const SignIn(),
     );
   }
 }

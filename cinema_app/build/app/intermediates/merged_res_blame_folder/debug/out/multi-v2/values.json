@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.cinema_app-mergeDebugResources-9:/values/values.xml",
+            "outputFile": "com.example.cinema_app-mergeDebugResources-10:/values/values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-3\\076eb9235982ee06112d76594ea8585f\\transformed\\jetified-window-1.0.0-beta04\\res\\values\\values.xml",

@@ -10,4 +10,14 @@ class Styles {
       const TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
   var normalTextStyle = const TextStyle(fontSize: 15);
   var iconSizeInLineText = 18.0;
+  //nhu y
+   var gadientColorToptoBot= const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+            Color.fromARGB(150, 0, 87, 146),
+            Color.fromARGB(255, 7, 13, 45), 
+      ],
+   );
+
 }
