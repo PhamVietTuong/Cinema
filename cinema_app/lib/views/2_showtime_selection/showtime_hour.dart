@@ -1,10 +1,10 @@
 import 'package:cinema_app/style.dart';
-import 'package:cinema_app/views/seat_selection/seat_selection_screen.dart';
+import 'package:cinema_app/views/3_ticket_selection/ticket_type_screen.dart';
 import 'package:flutter/material.dart';
 
 class ShowTimeHour extends StatelessWidget {
-  const ShowTimeHour({super.key});
-
+  const ShowTimeHour({super.key, required this.title});
+  final String title;
   @override
   Widget build(BuildContext context) {
     var styles = Styles();
@@ -13,7 +13,7 @@ class ShowTimeHour extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const SeatSelectionScreen(),
+              builder: (context) => const TicketTypeScreen(),
             ));
       },
       child: Container(
@@ -24,7 +24,7 @@ class ShowTimeHour extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Center(
-            child: Text("23:40",
+            child: Text(title,
                 style: styles.titleTextStyle.copyWith(
                     fontWeight: FontWeight.normal, color: Colors.white))),
       ),
