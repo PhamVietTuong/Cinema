@@ -1,14 +1,15 @@
+import 'package:cinema_app/components/age_restriction_box.dart';
+import 'package:cinema_app/components/movie_type_box.dart';
+import 'package:cinema_app/components/showtime_type_box.dart';
+import 'package:cinema_app/data/data.dart';
+import 'package:cinema_app/data/models/theater.dart';
 import 'package:cinema_app/style.dart';
-import 'package:cinema_app/views/components/age_restriction_box.dart';
-import 'package:cinema_app/views/components/movie_type_box.dart';
-import 'package:cinema_app/views/components/showtime_type_box.dart';
-import 'package:cinema_app/views/detail/itemAddress.dart';
-import 'package:cinema_app/views/showtime/day_item_box.dart';
+import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
+import 'package:cinema_app/views/detail/list_threater.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 class MovieDetail extends StatefulWidget {
-  const MovieDetail({super.key});
-
+  const MovieDetail({super.key ,});
   @override
   State<MovieDetail> createState() => _MovieDetailState();
 }
@@ -20,6 +21,7 @@ class _MovieDetailState extends State<MovieDetail> {
   @override
   Widget build(BuildContext context) {
       var styles=Styles();
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -41,9 +43,9 @@ class _MovieDetailState extends State<MovieDetail> {
       // ignore: sized_box_for_whitespace
       : Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height / 3,
+          height: MediaQuery.of(context).size.height/3 ,
         child:const WebView(
-        initialUrl: 'https://www.youtube.com/embed/XDXgU6u3WXk',
+        initialUrl: 'https://www.youtube.com/embed/CCTDpYIHaPY',
         javascriptMode: JavascriptMode.unrestricted,
       ), 
       ) ,
@@ -89,11 +91,11 @@ class _MovieDetailState extends State<MovieDetail> {
                          const SizedBox(height: 5,),
                       const Text("Thời lượng: 115phút",style:TextStyle(color: Colors.grey),),
                          const SizedBox(height: 10,),
-                      const MovieTypeBox(fontSizeCus: 14,padding: 5),
+                      const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hành động',),
                       const SizedBox(height: 10,),
                       const Row(
                         children: [
-                      ShowtimeTypeBox(title: '2D',colorText: Colors.black,fontSizeCus: 15,),
+                      ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
                       AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
                         ],
                       )
@@ -109,23 +111,66 @@ class _MovieDetailState extends State<MovieDetail> {
         Container(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: const BoxDecoration(color: Colors.white),
-                child: SingleChildScrollView(
+                child:  SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      DayItemBox(),
-                      DayItemBox(),
-                      DayItemBox(),
-                      DayItemBox(),
-                      DayItemBox(),
-                      DayItemBox(),
-                      DayItemBox(),
-                      DayItemBox(),
+
+                 DayItemBox(
+                  date: DateTime(2024, 4, 19),
+                  selectDay: (selectedDate) {
+                    // Thực hiện các công việc cần thiết khi người dùng chọn ngày
+                    print("Ngày đã chọn: $selectedDate");
+                  },
+                  isSelected: true,
+                ),
+  DayItemBox(
+                  date: DateTime(2024, 4, 20),
+                  selectDay: (selectedDate) {
+                    // Thực hiện các công việc cần thiết khi người dùng chọn ngày
+                    print("Ngày đã chọn: $selectedDate");
+                  },
+                  isSelected: false,
+                ),
+                  DayItemBox(
+                  date: DateTime(2024, 4, 21),
+                  selectDay: (selectedDate) {
+                    // Thực hiện các công việc cần thiết khi người dùng chọn ngày
+                    print("Ngày đã chọn: $selectedDate");
+                  },
+                  isSelected: false,
+                ),
+   DayItemBox(
+                  date: DateTime(2024, 4, 22),
+                  selectDay: (selectedDate) {
+                    // Thực hiện các công việc cần thiết khi người dùng chọn ngày
+                    print("Ngày đã chọn: $selectedDate");
+                  },
+                  isSelected: false,
+                ),
+
+   DayItemBox(
+                  date: DateTime(2024, 4, 23),
+                  selectDay: (selectedDate) {
+                    // Thực hiện các công việc cần thiết khi người dùng chọn ngày
+                    print("Ngày đã chọn: $selectedDate");
+                  },
+                  isSelected: false,
+                ),
+
                     ],
                   ),
                 ),
               ),
-        const ItemAddress(),
+     Column(
+      children: [
+        ListThreater(data: Theater(id: 1, name: 'Cinestar Quốc Thanh', address: "271 Nguyễn Trãi", phone: '00', img: 'D')),
+                SizedBox(height: 10,),
+
+        ListThreater(data: Theater(id: 2, name: 'Cinestar Đà Lạt  ', address: "Quảng trường Lâm Viên", phone: '00', img: 'D')),
+
+      ],
+    ),
       ]),
     ));
   }

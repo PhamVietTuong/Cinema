@@ -1,6 +1,6 @@
-import 'package:cinema_app/models/theater.dart';
+import 'package:cinema_app/data/models/theater.dart';
 import 'package:cinema_app/style.dart';
-import 'package:cinema_app/views/showtime/showtime_screen.dart';
+import 'package:cinema_app/views/2_showtime_selection/showtime_screen.dart';
 import 'package:flutter/material.dart';
 
 class TheaterItem extends StatelessWidget {
@@ -16,7 +16,7 @@ class TheaterItem extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ShowTimeSceen(theaterName: data.name),
+              builder: (context) => ShowTimeSceen(theaterId: data.id),
             ));
       },
       child: Container(

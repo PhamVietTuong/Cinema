@@ -8,7 +8,8 @@ class MovieTypeBox extends StatelessWidget {
       this.maxBoxWith = 0.0,
       this.marginBottom = 0.0,
       this.padding = 0.0,
-      this.marginTop = 0.0});
+      this.marginTop = 0.0, required this.title});
+  final String title;
   final double fontSizeCus;
   final double maxBoxWith;
   final double marginTop;
@@ -19,17 +20,17 @@ class MovieTypeBox extends StatelessWidget {
   Widget build(BuildContext context) {
     var styles = Styles();
     return Container(
-      
       margin: EdgeInsets.only(top: marginTop, bottom: marginBottom),
       constraints: maxBoxWith != 0.0
           ? BoxConstraints(maxWidth: maxBoxWith)
           : const BoxConstraints(),
-      padding:  EdgeInsets.all(padding),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue ),
-          borderRadius: BorderRadius.circular(3.0), color: Colors.blue[100]),
+          border: Border.all(color: Colors.blue),
+          borderRadius: BorderRadius.circular(3.0),
+          color: Colors.blue[100]),
       child: Text(
-        "Khoa Học Viễn Tưởng",
+        title,
         style: fontSizeCus != 0.0
             ? styles.normalTextStyle.copyWith(fontSize: fontSizeCus)
             : styles.normalTextStyle,

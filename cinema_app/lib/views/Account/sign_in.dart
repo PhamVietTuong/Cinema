@@ -58,7 +58,7 @@ class _SignInState extends State<SignIn> {
 
           
             child:  TextField(
-            decoration: InputDecoration
+            decoration: const InputDecoration
             (
               hintText: "Nhập email của bạn vào đây",
               hintStyle: TextStyle(color: Colors.grey),

@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:cinema_app/components/age_restriction_box.dart';
+import 'package:cinema_app/components/movie_type_box.dart';
+import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/style.dart';
-import 'package:cinema_app/views/components/age_restriction_box.dart';
-import 'package:cinema_app/views/components/movie_type_box.dart';
-import 'package:cinema_app/views/components/showtime_type_box.dart';
+import 'package:cinema_app/views/1_threater_selection/theater_sceen.dart';
+import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -37,7 +39,7 @@ class _HomePageState extends State<HomePage> {
         ),
         title: const Text("Hi, Nhu Y!",
             style: TextStyle(fontSize: 20, color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 7, 13, 45),
+        backgroundColor: const Color.fromARGB(255, 102, 51, 153),
         actions: [
           IconButton(
               onPressed: () {},
@@ -50,16 +52,8 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/3, //chiếm 2 phần trên màn hình
-            decoration: BoxDecoration(
-              gradient: styles.gadientColorToptoBot,
-              boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), 
-              spreadRadius: 7,  // Độ lan rộng của bóng đổ
-              blurRadius: 7,    // Độ mờ của bóng đổ
-              offset: const Offset(0, 3), // Vị trí bóng đổ (ngang, dọc)
-            ),
-          ],
+            decoration: const BoxDecoration(
+             color: Color.fromARGB(255, 102, 51, 153),
             ),
             child: const MyCarousel(),
           ),
@@ -67,7 +61,8 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height , //chiếm 4 phần
-            decoration: BoxDecoration(gradient: styles.gadientColorToptoBot,
+                       decoration: const BoxDecoration(
+             color: Color.fromARGB(255, 102, 51, 153),
             ),
             child: const MySecondCarousel(),
           ),
@@ -76,9 +71,6 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/2,
-            decoration: BoxDecoration(
-              gradient: styles.gadientColorToptoBot,
-            ),
             child:  const CarouselThird(),
           ),
           Text("Ưu đãi",style: styles.titleTextStyle.copyWith(fontSize: 20),),
@@ -86,24 +78,12 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/3, //chiếm 2 phần trên màn hình
-            decoration: BoxDecoration(
-              gradient: styles.gadientColorToptoBot,
-              boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), 
-              spreadRadius: 7,  // Độ lan rộng của bóng đổ
-              blurRadius: 7,    // Độ mờ của bóng đổ
-              offset: const Offset(0, 3), // Vị trí bóng đổ (ngang, dọc)
-            ),
-          ],
-            ),
             child: const MyCarousel(),
           ),
       ]),)
     );
   }
 }
-
 //Banner top
 class MyCarousel extends StatefulWidget {
   const MyCarousel({super.key});
@@ -259,22 +239,24 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
                                  "KUNG FU PANDA 4 2D LT(P)",
                                  style:styles.titleTextStyle.copyWith(color: Colors.white,fontSize: 20) ,
                                   ),
-                    const MovieTypeBox(fontSizeCus: 14,padding: 5),
+                     const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hành động',),
                     const SizedBox(height:5),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                   const ShowtimeTypeBox(title: '2D',colorText: Colors.white,fontSizeCus: 15,),
-                   const SizedBox(width: 2,),
-                  const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
+                    const ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
+                   const SizedBox(width: 10,),
+                   const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
                   const SizedBox(width: 200,),
                   Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.blue),
                     borderRadius: BorderRadius.circular(10)
                   ),
-                  child: TextButton(onPressed: (){}, child: const Text("Đặt vé",style: TextStyle(color: Colors.white,fontSize: 16 ),), )
+                  child: TextButton(onPressed: (){
+
+                  }, child: const Text("Đặt vé",style: TextStyle(color: Colors.white,fontSize: 16 ),), )
                    
                   )
 
@@ -286,67 +268,82 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
             )
           ],
         ),
-         Column(
+    Column(
+  children: [
+    GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MovieDetail(),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Image.asset(
+          'assets/img/Banner2.jpg',
+          fit: BoxFit.cover,
+        ),
+      ),
+    ),
+    const SizedBox(height: 10,),
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "KUNG FU PANDA 4 2D LT(P)",
+          style: styles.titleTextStyle.copyWith(color: Colors.white,fontSize: 20),
+        ),
+        const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hài',),
+        const SizedBox(height:5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            const ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
+            const SizedBox(width: 2,),
+            const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
+            const SizedBox(width: 200,),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                border: Border.all(color: Colors.blue),
+                borderRadius: BorderRadius.circular(10)
               ),
-              child: Image.asset(
-                'assets/img/Banner2.jpg',
-                fit: BoxFit.cover,
+              child: TextButton(
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MovieDetail(),
+                    ),
+                  );
+                }, 
+                child: const Text("Đặt vé",style: TextStyle(color: Colors.white,fontSize: 16 ),
+                ),
               ),
             ),
-            const SizedBox(height: 10,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                                 "KUNG FU PANDA 4 2D LT(P)",
-                                 style:styles.titleTextStyle.copyWith(color: Colors.white,fontSize: 20) ,
-                                  ),
-                    const MovieTypeBox(fontSizeCus: 14,padding: 5),
-                    const SizedBox(height:5),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                   const ShowtimeTypeBox(title: '2D',colorText: Colors.white,fontSizeCus: 15,),
-                   const SizedBox(width: 2,),
-                  const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
-                  const SizedBox(width: 200,),
-                  Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: TextButton(onPressed: (){}, child: const Text("Đặt vé",style: TextStyle(color: Colors.white,fontSize: 16 ),), )
-                   
-                  )
-
-                ],),
-                          
-            
-              
-              ],
-            )
           ],
         ),
+      ],
+    ),
+  ],
+),
+
       ],
     );
   }
 }
 // banner body end
-
-
 //banner top 
 class CarouselThird extends StatefulWidget {
   const CarouselThird({super.key});
@@ -368,26 +365,42 @@ class _CarouselThirdState extends State<CarouselThird> {
   }
 
   @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
     return ListView.builder(
       controller: _scrollController,
       scrollDirection: Axis.horizontal,
-      itemCount: 10, 
+      itemCount: 10,
       itemBuilder: (BuildContext context, int index) {
         return Container(
-        width: MediaQuery.of(context).size.width * 0.5, // Đặt chiều rộng cho mỗi item
-        height: MediaQuery.of(context).size.height,
-        margin: const EdgeInsets.all(5),
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height,
+          margin: const EdgeInsets.all(5),
           child: Center(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              child: Column(children: [
-                Image.asset(
-                'assets/img_demo/banner3.jpg', 
-                fit: BoxFit.cover,
+            child: GestureDetector(
+              onTap: () {
+                  Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MovieDetail(),
+              
+            ));
+              },
+              
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/img_demo/banner3.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                    const Text(
+                      "19/5/2024",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    )
+                  ],
+                ),
               ),
-              const Text("19/5/2024", style:TextStyle(color: Colors.white,fontSize: 16),)
-              ],) 
             ),
           ),
         );

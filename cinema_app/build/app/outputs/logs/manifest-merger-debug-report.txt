@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 application
-INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:2:5-32:19
+INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:3:5-34:19
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\PC\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\PC\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.core:core:1.6.0] C:\Users\PC\.gradle\caches\transforms-3\d08c73bfb05384f2e52578171dbd141e\transformed\core-1.6.0\AndroidManifest.xml:24:5-89
@@ -12,11 +12,12 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\PC
 	android:name
 		INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml
 manifest
-ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
-INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
-INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
-INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
-MERGED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
+ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
+INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
+INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
+INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
+MERGED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
+MERGED from [:shared_preferences_android] E:\Cinema\cinema_app\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:webview_flutter_android] E:\Cinema\cinema_app\build\webview_flutter_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\PC\.gradle\caches\transforms-3\99750bb863b6fe460a7b5da8686e778d\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\PC\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:17:1-33:12
@@ -41,22 +42,30 @@ INJECTED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml:1:1
 INJECTED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 	package
 		INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml
-		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
+		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
 		INJECTED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml
 	android:versionName
 		INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml
-		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
+		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
 		INJECTED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml
 	android:versionCode
 		INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml
-		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-33:12
+		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:1-35:12
 		INJECTED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml
 	xmlns:android
 		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.INTERNET
+ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:2:1-62
+MERGED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:2:1-62
+MERGED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:2:1-62
+	android:name
+		ADDED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml:2:18-60
 uses-sdk
 INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml
 INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml
+MERGED from [:shared_preferences_android] E:\Cinema\cinema_app\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:shared_preferences_android] E:\Cinema\cinema_app\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:webview_flutter_android] E:\Cinema\cinema_app\build\webview_flutter_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:webview_flutter_android] E:\Cinema\cinema_app\build\webview_flutter_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\PC\.gradle\caches\transforms-3\99750bb863b6fe460a7b5da8686e778d\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:19:5-21:41
@@ -103,10 +112,6 @@ INJECTED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from E:\Cinema\cinema_app\android\app\src\main\AndroidManifest.xml
 		INJECTED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml
-uses-permission#android.permission.INTERNET
-ADDED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml:6:5-66
-	android:name
-		ADDED from E:\Cinema\cinema_app\android\app\src\debug\AndroidManifest.xml:6:22-64
 uses-library#androidx.window.extensions
 ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\PC\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
 	android:required
