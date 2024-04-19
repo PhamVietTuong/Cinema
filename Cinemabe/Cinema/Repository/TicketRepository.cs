@@ -16,25 +16,25 @@ namespace Cinema.Repository
 			_context = context;
 		}
 
-		public async Task<Ticket> Create(Ticket ticket)
-		{
-			await _context.Tickets.AddAsync(ticket);
-			return ticket;
-		}
+		//public async Task<BookTicket> Create(BookTicket ticket)
+		//{
+		//	await _context.Tickets.AddAsync(ticket);
+		//	return ticket;
+		//}
 
-		public async Task<bool> Exist(Guid id)
-		{
-			return await _context.Tickets.AnyAsync(b => b.Id == id);
-		}
+		//public async Task<bool> Exist(Guid id)
+		//{
+		//	return await _context.Tickets.AnyAsync(b => b.Id == id);
+		//}
 
-		public Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm)
-		{
-			return null;
-		}
+		//public Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm)
+		//{
+		//	return null;
+		//}
 
-		public Task<Ticket> Update(Ticket request)
-		{
-			throw new NotImplementedException();
-		}
+		//public Task<BookTicket> Update(BookTicket request)
+		//{
+		//	throw new NotImplementedException();
+		//}
 	}
 }

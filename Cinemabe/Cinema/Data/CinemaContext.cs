@@ -8,38 +8,44 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Cinema.Data
 {
-    public class CinemaContext : IdentityDbContext<User>
+    public class CinemaContext : DbContext
 	{
         public CinemaContext (DbContextOptions<CinemaContext> options) : base(options) { }
 
-		public DbSet<Cinema.Data.Models.Ticket> Tickets { get; set; } = default!;
+		public DbSet<Cinema.Data.Models.User> User { get; set; }
 
-        public DbSet<Cinema.Data.Models.Seat> Seats { get; set; }
+		public DbSet<Cinema.Data.Models.UserType> UserType { get; set; }
 
-        public DbSet<Cinema.Data.Models.ShowTime> ShowTimes { get; set; }
+		public DbSet<Cinema.Data.Models.Seat> Seat { get; set; }
 
-        public DbSet<Cinema.Data.Models.AgeRestriction> AgeRestrictions { get; set; }
+		public DbSet<Cinema.Data.Models.ShowTime> ShowTime { get; set; }
 
-        public DbSet<Cinema.Data.Models.TicketType> TicketTypes { get; set; }
+        public DbSet<Cinema.Data.Models.AgeRestriction> AgeRestriction { get; set; }
 
-        public DbSet<Cinema.Data.Models.FoodAndDrink> FoodAndDrinks { get; set; }
+        public DbSet<Cinema.Data.Models.TicketType> TicketType { get; set; }
 
-        public DbSet<Cinema.Data.Models.Invoice> Invoices { get; set; }
+        public DbSet<Cinema.Data.Models.FoodAndDrink> FoodAndDrink { get; set; }
 
-        public DbSet<Cinema.Data.Models.InvoiceDetail> InvoiceDetails { get; set; }
+        public DbSet<Cinema.Data.Models.Invoice> Invoice { get; set; }
 
-        public DbSet<Cinema.Data.Models.Movie> Movies { get; set; }
+        public DbSet<Cinema.Data.Models.InvoiceDetail> InvoiceDetail { get; set; }
 
-        public DbSet<Cinema.Data.Models.MovieType> MovieTypes { get; set; }
+        public DbSet<Cinema.Data.Models.Movie> Movie { get; set; }
 
-        public DbSet<Cinema.Data.Models.MovieTypeDetail> MovieTypeDetails { get; set; }
+        public DbSet<Cinema.Data.Models.MovieType> MovieType { get; set; }
 
-        public DbSet<Cinema.Data.Models.Room> Rooms { get; set; }
+        public DbSet<Cinema.Data.Models.MovieTypeDetail> MovieTypeDetail { get; set; }
 
-        public DbSet<Cinema.Data.Models.ShowTimeType> ShowTimeTypes { get; set; }
+        public DbSet<Cinema.Data.Models.Room> Room { get; set; }
 
-        public DbSet<Cinema.Data.Models.Theater> Theaters { get; set; }
+        public DbSet<Cinema.Data.Models.ShowTimeType> ShowTimeType { get; set; }
 
-        public DbSet<Cinema.Data.Models.SeatType> SeatTypes { get; set; }
+        public DbSet<Cinema.Data.Models.Theater> Theater { get; set; }
+
+        public DbSet<Cinema.Data.Models.SeatType> SeatType { get; set; }
+
+        public DbSet<Cinema.Data.Models.InvoiceSeat> InvoiceSeat { get; set; }
+
+        public DbSet<Cinema.Data.Models.InvoiceCombo> InvoiceCombo { get; set; }
 	}
 }

@@ -1,17 +1,31 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ReactDOM from 'react-dom';
+import Router from './Router';
+import { Provider } from 'react-redux';
+import { store } from './Redux/Store';
+import { DOMAIN } from './Ustil/Settings/Config';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import './index.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Theater from './Pages/User/Theater/Theater';
+import Detail from './Pages/User/Detail/Detail';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+export const connection = new HubConnectionBuilder()
+  .withUrl(`${DOMAIN}/cinema`, { withCredentials: true })
+  .configureLogging(LogLevel.Information)
+  .build();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+connection.start()
+  .then(() => {
+    ReactDOM.render(
+      <Provider store={store}>
+        {/* <Detail></Detail> */}
+        <Router />
+        {/* <Theater></Theater> */}
+      </Provider>,
+      document.getElementById("root")
+    );
+  })
+  .catch(error => {
+    console.error('Error establishing SignalR connection:', error);
+  });

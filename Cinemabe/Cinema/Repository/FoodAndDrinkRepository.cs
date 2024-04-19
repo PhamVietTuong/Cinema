@@ -16,7 +16,7 @@ namespace Cinema.Repository
 
 		public async Task<List<ComboViewModel>> Combo()
 		{
-			var combos = await _context.FoodAndDrinks.ToListAsync();
+			var combos = await _context.FoodAndDrink.ToListAsync();
 			
 			var rows = new List<ComboViewModel>();
 

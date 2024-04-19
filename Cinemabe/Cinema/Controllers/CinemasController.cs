@@ -65,25 +65,25 @@ namespace Cinema.Controllers
 
 		#region Ticket
 
-		[HttpPost]
-		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> CreateTicket(Ticket ticket)
-		{
-			var checkTicket = await _uow.TicketRepository.Exist(ticket.Id);
-			if (checkTicket == true)
-			{
-				return BadRequest();
-			}
-			_uow.TicketRepository.Create(ticket);
+		//[HttpPost]
+		//[Authorize(Roles = "Admin")]
+		//public async Task<IActionResult> CreateTicket(BookTicket ticket)
+		//{
+		//	var checkTicket = await _uow.TicketRepository.Exist(ticket.Id);
+		//	if (checkTicket == true)
+		//	{
+		//		return BadRequest();
+		//	}
+		//	_uow.TicketRepository.Create(ticket);
 
-			var result = await _uow.SaveChangeAsync();
+		//	var result = await _uow.SaveChangeAsync();
 
-			if (!result)
-			{
-				return BadRequest();
-			}
-			return Ok();
-		}
+		//	if (!result)
+		//	{
+		//		return BadRequest();
+		//	}
+		//	return Ok();
+		//}
 
 		#endregion
 
@@ -105,6 +105,17 @@ namespace Cinema.Controllers
 		public async Task<ActionResult<List<TicketTypeViewModel>>> TicketTypeByShowTime(Guid showTimeId)
 		{
 			var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAysn(showTimeId);
+			return Ok(result);
+		}
+
+		#endregion
+
+		#region Invoice
+
+		[HttpPost("Invoice")]
+		public async Task<ActionResult<BookingDTO>> CreateInvoice([FromBody] BookingDTO vm)
+		{
+			var result = await _uow.InvoiceRepository.CreateAysn(vm);
 			return Ok(result);
 		}
 

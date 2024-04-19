@@ -9,6 +9,7 @@
 		IFoodAndDrinkRepository FoodAndDrinkRepository { get; }
 		ITicketTypeRepository TicketTypeRepository { get; }
 		ISeatRepository SeatRepository { get; }
+		IInvoiceRepository InvoiceRepository { get; }
 		Task<bool> SaveChangeAsync();
 	}
 }

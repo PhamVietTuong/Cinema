@@ -4,102 +4,102 @@ DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 DECLARE @NEW_PREF UNIQUEIDENTIFIER;
 
 SET @NEW_GUID = NEWID();
-INSERT SeatTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Đơn', 1)
+INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Đơn', 1)
 SET @NEW_GUID = NEWID();
-INSERT SeatTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Ðôi', 1)
+INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Ðôi', 1)
 
 SET @NEW_GUID = NEWID();
-INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '1', '50', '50', 1)
+INSERT Room(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '01', '50', '50', 1)
 SET @NEW_GUID = NEWID();
-INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '2', '100', '100', 1)
+INSERT Room(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '2', '100', '100', 1)
 SET @NEW_GUID = NEWID();
-INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '3', '150', '150', 1)
+INSERT Room(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '3', '150', '150', 1)
 SET @NEW_GUID = NEWID();
-INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '4', '200', '200', 1)
+INSERT Room(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '4', '200', '200', 1)
 SET @NEW_GUID = NEWID();
-INSERT Rooms(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '5', '250', '250', 1)
+INSERT Room(Id, Name, [With], Length, Status) VALUES (@NEW_GUID, '5', '250', '250', 1)
 
 SET @NEW_GUID = NEWID();
-INSERT AgeRestrictions(Id, Name, Description, Status) VALUES (@NEW_GUID, 'T18', N'Phim dành cho khán giả từ đủ 18 tuổi trở lên.' , 1)
+INSERT AgeRestriction(Id, Name, Description, Status) VALUES (@NEW_GUID, 'T18', N'Phim dành cho khán giả từ đủ 18 tuổi trở lên.' , 1)
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTimeTypes(Id, Name, Status) VALUES (@NEW_GUID, '2D', 1)
+INSERT ShowTimeType(Id, Name, Status) VALUES (@NEW_GUID, '2D', 1)
 SET @NEW_GUID = NEWID();
-INSERT ShowTimeTypes(Id, Name, Status) VALUES (@NEW_GUID, '3D', 1)
+INSERT ShowTimeType(Id, Name, Status) VALUES (@NEW_GUID, '3D', 1)
 
 SET @NEW_GUID = NEWID();
-INSERT Movies(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestrictions where Name='T18'), (select Id from ShowTimeTypes where Name='3D'), N'GODZILLA X KONG', 'godzilla-x-kong.jpg', '125', GETDATE(), N'Kong và Godzilla - hai sinh vật vĩ đại huyền thoại, hai kẻ thủ truyền kiếp sẽ cùng bắt tay thực thi một sứ mệnh chung mang tính sống còn để bảo vệ nhân loại, và trận chiến gắn kết chúng với loài người mãi mãi sẽ bắt đầu.', N'Adam Wingard', N'Rebecca Hall, Dan Stevens, Rachel House', N'trailer', N'Tiếng việt', 1)
+INSERT Movie(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestriction where Name='T18'), (select Id from ShowTimeType where Name='3D'), N'GODZILLA X KONG', 'godzilla-x-kong.jpg', '125', GETDATE(), N'Kong và Godzilla - hai sinh vật vĩ đại huyền thoại, hai kẻ thủ truyền kiếp sẽ cùng bắt tay thực thi một sứ mệnh chung mang tính sống còn để bảo vệ nhân loại, và trận chiến gắn kết chúng với loài người mãi mãi sẽ bắt đầu.', N'Adam Wingard', N'Rebecca Hall, Dan Stevens, Rachel House', N'trailer', N'Tiếng việt', 1)
 SET @NEW_GUID = NEWID();
-INSERT Movies(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestrictions where Name='T18'), (select Id from ShowTimeTypes where Name='2D'), N'QUẬT MỘ TRÙNG MA', 'quat-mo-trung-ma.jpg', '150', GETDATE(), N'Hai pháp sư, một thầy phong thuỷ và một chuyên gia khâm liệm cùng hợp lực khai quật ngôi mộ bị nguyền rủa của một gia đình giàu có, nhằm cứu lấy sinh mạng hậu duệ cuối cùng trong dòng tộc. Bí mật hắc ám của tổ tiên được đánh thức.', N'Jang Jae Hyun', N'Choi Min Sik, Yoo Hai Jin, Kim Go Eun, Lee Do Hyun,...', N'trailer', N'Tiếng việt', 1)
+INSERT Movie(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestriction where Name='T18'), (select Id from ShowTimeType where Name='2D'), N'QUẬT MỘ TRÙNG MA', 'quat-mo-trung-ma.jpg', '150', GETDATE(), N'Hai pháp sư, một thầy phong thuỷ và một chuyên gia khâm liệm cùng hợp lực khai quật ngôi mộ bị nguyền rủa của một gia đình giàu có, nhằm cứu lấy sinh mạng hậu duệ cuối cùng trong dòng tộc. Bí mật hắc ám của tổ tiên được đánh thức.', N'Jang Jae Hyun', N'Choi Min Sik, Yoo Hai Jin, Kim Go Eun, Lee Do Hyun,...', N'trailer', N'Tiếng việt', 1)
 SET @NEW_GUID = NEWID();
-INSERT Movies(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestrictions where Name='T18'), (select Id from ShowTimeTypes where Name='3D'), N'KUNG FU PANDA 4', 'kungfu-panda-4-poster.jpg', '94', GETDATE(), N'Sau khi Po được chọn trở thành Thủ lĩnh tinh thần của Thung lũng Bình Yên, Po cần tìm và huấn luyện một Chiến binh Rồng mới, trong khi đó một mụ phù thủy độc ác lên kế hoạch triệu hồi lại tất cả những kẻ phản diện mà Po đã đánh bại về cõi linh hồn.', N'Mike Mitchell', N'Jack Black, Dustin Hoffman, James Hong, Awkwafina', N'trailer', N'Tiếng việt', 1)
+INSERT Movie(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestriction where Name='T18'), (select Id from ShowTimeType where Name='3D'), N'KUNG FU PANDA 4', 'kungfu-panda-4-poster.jpg', '94', GETDATE(), N'Sau khi Po được chọn trở thành Thủ lĩnh tinh thần của Thung lũng Bình Yên, Po cần tìm và huấn luyện một Chiến binh Rồng mới, trong khi đó một mụ phù thủy độc ác lên kế hoạch triệu hồi lại tất cả những kẻ phản diện mà Po đã đánh bại về cõi linh hồn.', N'Mike Mitchell', N'Jack Black, Dustin Hoffman, James Hong, Awkwafina', N'trailer', N'Tiếng việt', 1)
 SET @NEW_GUID = NEWID();
-INSERT Movies(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestrictions where Name='T18'), (select Id from ShowTimeTypes where Name='2D'), N'MAI', 'poster-mai.jpg', '131',  GETDATE(), N'"Mai" xoay quanh cuộc đời của một người phụ nữ đẹp tên Mai (do Phương Anh Đào thủ vai) có số phận rất đặc biệt. Bởi làm nghề mát xa, Mai thường phải đối mặt với ánh nhìn soi mói, phán xét từ những người xung quanh. Và rồi Mai gặp Dương (Tuấn Trần) - chàng trai đào hoa lãng tử. Những tưởng bản thân không còn thiết tha yêu đương và mưu cầu hạnh phúc cho riêng mình thì khao khát được sống một cuộc đời mới trong Mai trỗi dậy khi Dương tấn công cô không khoan nhượng. Họ cho mình những khoảnh khắc tự do, say đắm và tràn đầy tiếng cười. Liệu cặp đôi ấy có nắm giữ được niềm hạnh phúc đó dài lâu khi miệng đời lắm khi cay nghiệt, bất công? "Mai" - một câu chuyện tâm lý, tình cảm pha lẫn nhiều tràng cười vui nhộn với sự đầu tư mạnh tay nhất trong ba phim của Trấn Thành hứa hẹn sẽ đem đến cho khán giả những phút giây thật sự ý nghĩa trong mùa Tết năm nay.', 'Trấn Thành', 'Phương Anh Đào, Tuấn Trần, Trấn Thành, Uyển Ân, Hồng Đào, NSND Việt Anh, NSND Ngọc Giàu, Khả Như, Quốc Khánh, Anh Thư, Lý Hạo Mạnh Quỳnh, Anh Đức, Anh Phạm, Lộ Lộ, Kiều Linh, Ngọc Nga, Thanh Hằng, Ngọc Nguyễn, Hoàng Mèo, Mạnh Lân', N'trailer', N'Tiếng việt', 1)
+INSERT Movie(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestriction where Name='T18'), (select Id from ShowTimeType where Name='2D'), N'MAI', 'poster-mai.jpg', '131',  GETDATE(), N'"Mai" xoay quanh cuộc đời của một người phụ nữ đẹp tên Mai (do Phương Anh Đào thủ vai) có số phận rất đặc biệt. Bởi làm nghề mát xa, Mai thường phải đối mặt với ánh nhìn soi mói, phán xét từ những người xung quanh. Và rồi Mai gặp Dương (Tuấn Trần) - chàng trai đào hoa lãng tử. Những tưởng bản thân không còn thiết tha yêu đương và mưu cầu hạnh phúc cho riêng mình thì khao khát được sống một cuộc đời mới trong Mai trỗi dậy khi Dương tấn công cô không khoan nhượng. Họ cho mình những khoảnh khắc tự do, say đắm và tràn đầy tiếng cười. Liệu cặp đôi ấy có nắm giữ được niềm hạnh phúc đó dài lâu khi miệng đời lắm khi cay nghiệt, bất công? "Mai" - một câu chuyện tâm lý, tình cảm pha lẫn nhiều tràng cười vui nhộn với sự đầu tư mạnh tay nhất trong ba phim của Trấn Thành hứa hẹn sẽ đem đến cho khán giả những phút giây thật sự ý nghĩa trong mùa Tết năm nay.', N'Trấn Thành', N'Phương Anh Đào, Tuấn Trần, Trấn Thành, Uyển Ân, Hồng Đào, NSND Việt Anh, NSND Ngọc Giàu, Khả Như, Quốc Khánh, Anh Thư, Lý Hạo Mạnh Quỳnh, Anh Đức, Anh Phạm, Lộ Lộ, Kiều Linh, Ngọc Nga, Thanh Hằng, Ngọc Nguyễn, Hoàng Mèo, Mạnh Lân', N'trailer', N'Tiếng việt', 1)
 SET @NEW_GUID = NEWID();
-INSERT Movies(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestrictions where Name='T18'), (select Id from ShowTimeTypes where Name='3D'), N'ĐỀN MẠNG', 'den-mang.jpg', '93', GETDATE(), N'Người cha quá cố đã phản bội lời thề khiến cho hồn ma Nang Rum nổi giận, quyết trả báo ứng lên người August bắt cầu đền mạng để chuộc tội . August sẽ tìm ra được lời thề để hóa giải lỗi lầm hay phải trả giá bằng tính mạng của bản thân?', N'Ekachai Sriwichai', N'Ekachai Sriwichai, Siwat Chotichaicharin, Ratchanok Suwannaket', N'trailer',N'Tiếng việt', 1)
+INSERT Movie(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestriction where Name='T18'), (select Id from ShowTimeType where Name='3D'), N'ĐỀN MẠNG', 'den-mang.jpg', '93', GETDATE(), N'Người cha quá cố đã phản bội lời thề khiến cho hồn ma Nang Rum nổi giận, quyết trả báo ứng lên người August bắt cầu đền mạng để chuộc tội . August sẽ tìm ra được lời thề để hóa giải lỗi lầm hay phải trả giá bằng tính mạng của bản thân?', N'Ekachai Sriwichai', N'Ekachai Sriwichai, Siwat Chotichaicharin, Ratchanok Suwannaket', N'trailer',N'Tiếng việt', 1)
 
 SET @NEW_GUID = NEWID();
-INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'CINESTAR HAI BÀ TRƯNG', N'135 Hai Bà Trưng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'CINESTAR HAI BÀ TRƯNG', N'135 Hai Bà Trưng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh', 1)
 SET @NEW_GUID = NEWID();
-INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'Mega GS Cao Thắng', N'Lầu 6 - 7, 19 Cao Thắng, P.2, Q.3, Tp. Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'Mega GS Cao Thắng', N'Lầu 6 - 7, 19 Cao Thắng, P.2, Q.3, Tp. Hồ Chí Minh', 1)
 SET @NEW_GUID = NEWID();
-INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'Galaxy Nguyễn Du', N'116 Nguyễn Du, Q.1, Tp. Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'Galaxy Nguyễn Du', N'116 Nguyễn Du, Q.1, Tp. Hồ Chí Minh', 1)
 SET @NEW_GUID = NEWID();
-INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'CGV Hùng Vương Plaza ', N'Tầng 7, Hùng Vương Plaza, 126 Hùng Vương, Q.5, Tp. Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'CGV Hùng Vương Plaza ', N'Tầng 7, Hùng Vương Plaza, 126 Hùng Vương, Q.5, Tp. Hồ Chí Minh', 1)
 SET @NEW_GUID = NEWID();
-INSERT Theaters(Id, Name, Address, Status) VALUES (@NEW_GUID, N'BHD Star 3/2', N'Lầu 4, Siêu Thị Vincom 3/2, 3C Đường 3/2, Q. 10, Tp. Hồ Chí Minh', 1)
-
-SET @NEW_GUID = NEWID();
-SET @NEW_PREF = NEWID();
-INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE(), '2024-04-08 18:48:10.9266667', '2024-04-09 17:48:10.9266667', 1)
-INSERT TicketTypes(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, (select Id from SeatTypes where Name=N'Đơn'), N'Người lớn', 120000, 1)
-SET @NEW_GUID = NEWID();
-SET @NEW_PREF = NEWID();
-INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='1'), GETDATE() + 1, '2024-04-10 17:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-INSERT TicketTypes(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, (select Id from SeatTypes where Name=N'Ðôi'), N'HSSV-Người Cao Tuổi', 95000, 1)
-SET @NEW_GUID = NEWID();
-INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'GODZILLA X KONG'), (select Id from Theaters where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Rooms where Name='2'), GETDATE(),'2024-04-09 19:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-SET @NEW_GUID = NEWID();
-INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'KUNG FU PANDA 4'), (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 3, '2024-04-10 20:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-SET @NEW_GUID = NEWID();
-INSERT ShowTimes(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movies where Name=N'KUNG FU PANDA 4'), (select Id from Theaters where Name=N'Mega GS Cao Thắng'), (select Id from Rooms where Name='2'), GETDATE() + 4, '2024-04-08 21:48:10.9300000', '2024-04-11 17:48:10.9300000', 1)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, NULL, @NEW_GUID, 'A', 1, NULL, 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, NULL, @NEW_GUID, 'A', 2, NULL, 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'Người lớn'), @NEW_GUID, 'A', 3, 'A3', 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'Người lớn'), @NEW_GUID, 'A', 4, 'A4', 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'Người lớn'), @NEW_GUID, 'A', 5, 'A5', 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 1, 'B1', 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 2, 'B2', 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 3, 'B3', 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 4, 'B4', 0)
-SET @NEW_PREF = NEWID();
-INSERT Seats(Id, TicketTypeId, ShowTimeId, RowName, ColIndex, Name, IsSold) VALUES (@NEW_PREF, (select Id from TicketTypes where Name=N'HSSV-Người Cao Tuổi'), @NEW_GUID, 'B', 5, 'B5', 0)
+INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'BHD Star 3/2', N'Lầu 4, Siêu Thị Vincom 3/2, 3C Đường 3/2, Q. 10, Tp. Hồ Chí Minh', 1)
 
 SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();
-INSERT MovieTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Hành động', 1)
-INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where Name=N'GODZILLA X KONG'), @NEW_GUID, 1)
+INSERT ShowTime(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movie where Name=N'GODZILLA X KONG'), (select Id from Theater where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Room where Name='01'), GETDATE(), GETDATE(), GETDATE(), 1)
+INSERT TicketType(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, (select Id from SeatType where Name=N'Đơn'), N'Người lớn', 120000, 1)
 SET @NEW_GUID = NEWID();
 SET @NEW_PREF = NEWID();
-INSERT MovieTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Hoạt hình', 1)
-INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where Name=N'KUNG FU PANDA 4'), @NEW_GUID, 1)
+INSERT ShowTime(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movie where Name=N'GODZILLA X KONG'), (select Id from Theater where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Room where Name='01'), GETDATE() + 1, GETDATE(), GETDATE(), 1)
+INSERT TicketType(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_PREF, (select Id from SeatType where Name=N'Ðôi'), N'HSSV-Người Cao Tuổi', 95000, 1)
 SET @NEW_GUID = NEWID();
+INSERT ShowTime(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movie where Name=N'GODZILLA X KONG'), (select Id from Theater where Name=N'CINESTAR HAI BÀ TRƯNG'), (select Id from Room where Name='2'), GETDATE(),GETDATE(), GETDATE(), 1)
+SET @NEW_GUID = NEWID();
+INSERT ShowTime(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movie where Name=N'KUNG FU PANDA 4'), (select Id from Theater where Name=N'Mega GS Cao Thắng'), (select Id from Room where Name='2'), GETDATE() + 3, GETDATE(), GETDATE(), 1)
+SET @NEW_GUID = NEWID();
+INSERT ShowTime(Id, MovieId, TheaterId, RoomId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movie where Name=N'KUNG FU PANDA 4'), (select Id from Theater where Name=N'Mega GS Cao Thắng'), (select Id from Room where Name='2'), GETDATE() + 4, GETDATE(), GETDATE(), 1)
 SET @NEW_PREF = NEWID();
-INSERT MovieTypes(Id, Name, Status) VALUES (@NEW_GUID, N'Hài hước', 1)
-INSERT MovieTypeDetails(Id, MovieId, MovieTypeId, Status) VALUES (@NEW_PREF, (select Id from Movies where	Name=N'KUNG FU PANDA 4'), @NEW_GUID, 1)
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, NULL, (select Id from Room where Name='01'), 'A', 1, NULL, 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, NULL, (select Id from Room where Name='01'), 'A', 2, NULL, 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'Người lớn'), (select Id from Room where Name='01'), 'A', 3, 'A1', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'Người lớn'), (select Id from Room where Name='01'), 'A', 4, 'A2', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'Người lớn'), (select Id from Room where Name='01'), 'A', 5, 'A3', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'HSSV-Người Cao Tuổi'), (select Id from Room where Name='01'), 'B', 1, 'B1', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'HSSV-Người Cao Tuổi'), (select Id from Room where Name='01'), 'B', 2, 'B2', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'HSSV-Người Cao Tuổi'), (select Id from Room where Name='01'), 'B', 3, 'B3', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'HSSV-Người Cao Tuổi'), (select Id from Room where Name='01'), 'B', 4, 'B4', 0)
+SET @NEW_PREF = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_PREF, (select Id from TicketType where Name=N'HSSV-Người Cao Tuổi'), (select Id from Room where Name='01'), 'B', 5, 'B5', 0)
 
 SET @NEW_GUID = NEWID();
-INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+SET @NEW_PREF = NEWID();
+INSERT MovieType(Id, Name, Status) VALUES (@NEW_GUID, N'Hành động', 1)
+INSERT MovieTypeDetail(Id, MovieId, MovieTypeId) VALUES (@NEW_PREF, (select Id from Movie where Name=N'GODZILLA X KONG'), @NEW_GUID)
 SET @NEW_GUID = NEWID();
-INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Party 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-PARTY.png', 259000, N'4 Coke 22oz - V + 2 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+SET @NEW_PREF = NEWID();
+INSERT MovieType(Id, Name, Status) VALUES (@NEW_GUID, N'Hoạt hình', 1)
+INSERT MovieTypeDetail(Id, MovieId, MovieTypeId) VALUES (@NEW_PREF, (select Id from Movie where Name=N'KUNG FU PANDA 4'), @NEW_GUID)
 SET @NEW_GUID = NEWID();
-INSERT FoodAndDrinks(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Couple 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-COUPLE.png', 129000, N'2 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+SET @NEW_PREF = NEWID();
+INSERT MovieType(Id, Name, Status) VALUES (@NEW_GUID, N'Hài hước', 1)
+INSERT MovieTypeDetail(Id, MovieId, MovieTypeId) VALUES (@NEW_PREF, (select Id from Movie where	Name=N'KUNG FU PANDA 4'), @NEW_GUID)
+
+SET @NEW_GUID = NEWID();
+INSERT FoodAndDrink(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+SET @NEW_GUID = NEWID();
+INSERT FoodAndDrink(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Party 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-PARTY.png', 259000, N'4 Coke 22oz - V + 2 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+SET @NEW_GUID = NEWID();
+INSERT FoodAndDrink(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Couple 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-COUPLE.png', 129000, N'2 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)

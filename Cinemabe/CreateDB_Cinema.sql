@@ -1,0 +1,226 @@
+Use [Cinema];
+
+IF OBJECT_ID('dbo.InvoiceCombo', 'U') IS NOT NULL
+DROP TABLE dbo.InvoiceCombo;
+
+IF OBJECT_ID('dbo.InvoiceSeat', 'U') IS NOT NULL
+DROP TABLE dbo.InvoiceSeat;
+
+IF OBJECT_ID('dbo.MovieTypeDetail', 'U') IS NOT NULL
+DROP TABLE dbo.MovieTypeDetail;
+
+IF OBJECT_ID('dbo.Invoice', 'U') IS NOT NULL
+DROP TABLE dbo.Invoice;
+
+IF OBJECT_ID('dbo.Seat', 'U') IS NOT NULL
+DROP TABLE dbo.Seat;
+
+IF OBJECT_ID('dbo.ShowTime', 'U') IS NOT NULL
+DROP TABLE dbo.ShowTime;
+
+IF OBJECT_ID('dbo.Movie', 'U') IS NOT NULL
+DROP TABLE dbo.Movie;
+
+IF OBJECT_ID('dbo.User', 'U') IS NOT NULL
+DROP TABLE dbo.[User];
+
+IF OBJECT_ID('dbo.UserType', 'U') IS NOT NULL
+DROP TABLE [dbo].[UserType];
+
+IF OBJECT_ID('dbo.AgeRestriction', 'U') IS NOT NULL
+DROP TABLE dbo.AgeRestriction;
+
+IF OBJECT_ID('dbo.ShowTimeType', 'U') IS NOT NULL
+DROP TABLE dbo.ShowTimeType;
+
+IF OBJECT_ID('dbo.Room', 'U') IS NOT NULL
+DROP TABLE dbo.Room;
+
+IF OBJECT_ID('dbo.TicketType', 'U') IS NOT NULL
+DROP TABLE dbo.TicketType;
+
+IF OBJECT_ID('dbo.SeatType', 'U') IS NOT NULL
+DROP TABLE dbo.SeatType;
+
+IF OBJECT_ID('dbo.Theater', 'U') IS NOT NULL
+DROP TABLE dbo.Theater;
+
+IF OBJECT_ID('dbo.FoodAndDrink', 'U') IS NOT NULL
+DROP TABLE dbo.FoodAndDrink;
+
+IF OBJECT_ID('dbo.MovieType', 'U') IS NOT NULL
+DROP TABLE dbo.MovieType;
+
+
+CREATE TABLE [UserType] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] varchar(255) NOT NULL,
+    PRIMARY KEY (Id)
+)
+
+CREATE TABLE [User] (
+    [Id] uniqueidentifier NOT NULL,
+	[UserTypeId] uniqueidentifier NOT NULL,
+    [UserName] varchar(255) NOT NULL,
+    [FullName] varchar(255) NOT NULL,
+    [Email] varchar(255),
+    [Phone] varchar(255),
+	[BirthDay] datetime,
+	[Gender] bit,
+    [PasswordHash] varchar(512) NOT NULL,
+    [PasswordSalt] varchar(128) NOT NULL,
+    [Status] bit NOT NULL,
+    PRIMARY KEY (Id),
+	FOREIGN KEY (UserTypeId) REFERENCES UserType(Id)
+);
+
+CREATE TABLE [AgeRestriction] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[Description] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [ShowTimeType] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [Movie] (
+	[Id] uniqueidentifier NOT NULL,
+	[AgeRestrictionId] uniqueidentifier NOT NULL,
+	[ShowTimeTypeId] uniqueidentifier NOT NULL,
+	[Name] nvarchar(255) NOT NULL,
+	[Image] nvarchar(255) NOT NULL,
+	[Time] int NOT NULL,
+	[ReleaseDate] datetime NOT NULL,
+	[Description] nvarchar(max) NOT NULL,
+	[Director] nvarchar(max) NOT NULL,
+	[Actor] nvarchar(max) NOT NULL,
+	[Trailer] nvarchar(255) NOT NULL,
+	[Languages] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_Movie_AgeRestriction FOREIGN KEY ([AgeRestrictionId]) REFERENCES [AgeRestriction] (Id),
+	CONSTRAINT FK_Movie_ShowTimeType FOREIGN KEY ([ShowTimeTypeId]) REFERENCES [ShowTimeType] (Id),
+)
+
+CREATE TABLE [Room] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[With] float NOT NULL,
+	[Length] float NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [SeatType] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [TicketType] (
+	[Id] uniqueidentifier NOT NULL,
+	[SeatTypeId] uniqueidentifier NOT NULL,
+	[Name] nvarchar(255) NOT NULL,
+	[Price] float NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_TicketType_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES [SeatType] (Id),
+)
+
+CREATE TABLE [Seat] (
+	[Id] uniqueidentifier NOT NULL,
+	[RoomId] uniqueidentifier NOT NULL,
+	[TicketTypeId] uniqueidentifier NULL,
+	[Name] nvarchar(255) NULL,
+	[ColIndex] int NOT NULL,
+	[RowName] nvarchar(255) NOT NULL,
+	[IsSeat] bit NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_Seat_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
+	CONSTRAINT FK_Seat_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
+)
+
+CREATE TABLE [Theater] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[Address] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [ShowTime] (
+	[Id] uniqueidentifier NOT NULL,
+	[MovieId] uniqueidentifier NOT NULL,
+	[TheaterId] uniqueidentifier NOT NULL,
+	[RoomId] uniqueidentifier NOT NULL,
+	[Day] datetime NOT NULL,
+	[StartTime] datetime NOT NULL,
+	[EndTime] datetime NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_ShowTime_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
+	CONSTRAINT FK_ShowTime_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
+	CONSTRAINT FK_ShowTime_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
+)
+
+CREATE TABLE [Invoice] (
+	Id uniqueidentifier NOT NULL,
+	[ShowTimeId] uniqueidentifier NOT NULL,
+	[UserId] uniqueidentifier NOT NULL,
+	CreationTime datetime NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_Invoice_ShowTime FOREIGN KEY ([ShowTimeId]) REFERENCES [ShowTime] (Id),
+	CONSTRAINT FK_Invoice_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+)
+
+CREATE TABLE [FoodAndDrink] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[Description] nvarchar(255) NOT NULL,
+	[Image] nvarchar(255) NOT NULL,
+	[Price] float NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [InvoiceCombo] (
+	Id uniqueidentifier NOT NULL,
+	[InvoiceId] uniqueidentifier NOT NULL,
+	[FoodAndDrinkId] uniqueidentifier NOT NULL,
+	[Quantity] int NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_InvoiceCombo_InvoiceId FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
+	CONSTRAINT FK_InvoiceCombo_FoodAndDrinkId FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
+)
+
+CREATE TABLE [InvoiceSeat] (
+	[Id] uniqueidentifier NOT NULL,
+	[InvoiceId] uniqueidentifier NOT NULL,
+	[SeatId] uniqueidentifier NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_InvoiceSeat_InvoiceId FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
+	CONSTRAINT FK_InvoiceSeat_FoodAndDrinkId FOREIGN KEY ([SeatId]) REFERENCES [Seat] (Id),
+)
+
+CREATE TABLE [MovieType] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [MovieTypeDetail] (
+	[Id] uniqueidentifier NOT NULL,
+	[MovieId] uniqueidentifier NOT NULL,
+	[MovieTypeId] uniqueidentifier NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_MovieTypeDetail_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
+	CONSTRAINT FK_MovieTypeDetail_MovieType FOREIGN KEY ([MovieTypeId]) REFERENCES [MovieType] (Id),
+)

@@ -19,7 +19,7 @@ namespace Cinema.Repository
 
 		public async Task<List<MovieViewModel>> GetMovieList()
 		{
-			var movieList = await _context.Movies.ToListAsync();
+			var movieList = await _context.Movie.ToListAsync();
 
 			var rows = new List<MovieViewModel>();
 			foreach (var movie in movieList)
@@ -41,7 +41,7 @@ namespace Cinema.Repository
 
 		public async Task<MovieDetailViewModel> GetMovieDetail(Guid id)
 		{
-			var movieDetail = await _context.Movies
+			var movieDetail = await _context.Movie
 											.Include(a => a.AgeRestriction)
 											.Include(a => a.ShowTimeType)
 											.FirstOrDefaultAsync(x => x.Id == id);
@@ -51,13 +51,13 @@ namespace Cinema.Repository
 				return null;
 			}
 
-			var movieTypeDetails = await _context.MovieTypeDetails
+			var movieTypeDetails = await _context.MovieTypeDetail
 												.Include(x => x.MovieType)
 												.Where(x => x.MovieId == movieDetail.Id)
 												.ToListAsync();
 			string movieTypes = String.Join(", ", movieTypeDetails.Select(x => x.MovieType.Name));
 
-			var showTimes = await _context.ShowTimes
+			var showTimes = await _context.ShowTime
 												.Include(x => x.Theater)
 												.Include(x => x.Room)
 												.Where(x => x.MovieId == movieDetail.Id).ToListAsync();

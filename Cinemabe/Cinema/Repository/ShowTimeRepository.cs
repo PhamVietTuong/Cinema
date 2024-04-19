@@ -16,7 +16,7 @@ namespace Cinema.Repository
 
 		public async Task<bool> Exit(Guid id)
 		{
-			return await _context.ShowTimes.AnyAsync(e => e.Id == id);
+			return await _context.ShowTime.AnyAsync(e => e.Id == id);
 		}
 
 		//public async Task<InformationAboutBoxOfficeViewModel> GetInformationAboutBoxOffice(Guid showTimeId)

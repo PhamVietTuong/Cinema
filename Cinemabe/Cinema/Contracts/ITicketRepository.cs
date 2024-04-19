@@ -5,9 +5,9 @@ namespace Cinema.Contracts
 {
 	public interface ITicketRepository
 	{
-		Task<Ticket> Create(Ticket ticket);
-		Task<Ticket> Update(Ticket request);
-		Task<bool> Exist(Guid id);
-		Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm);
+		//Task<BookTicket> Create(BookTicket ticket);
+		//Task<BookTicket> Update(BookTicket request);
+		//Task<bool> Exist(Guid id);
+		//Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm);
 	}
 }

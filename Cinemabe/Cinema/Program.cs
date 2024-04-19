@@ -17,10 +17,10 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
 
-//Config cho Identity
-builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<CinemaContext>()
-                .AddDefaultTokenProviders();
+////Config cho Identity
+//builder.Services.AddIdentity<User, IdentityRole>()
+//                .AddEntityFrameworkStores<CinemaContext>()
+//                .AddDefaultTokenProviders();
 
 // Config cho Authentication
 builder.Services.AddAuthentication(options =>

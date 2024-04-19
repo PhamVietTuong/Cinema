@@ -7,6 +7,5 @@
         public Movie Movie { get; set; }
         public Guid MovieTypeId { get; set; }
         public MovieType MovieType { get; set; }
-        public bool Status { get; set; }
     }
 }
