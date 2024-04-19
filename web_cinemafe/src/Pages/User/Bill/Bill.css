@@ -1,0 +1,264 @@
+.bill-custom {
+    --gap: 16px;
+}
+
+@media (max-width: 700px) {
+    .bill-custom {
+        --gap: 0px;
+    }
+}
+
+.bill-custom .bill-wr {
+    gap: 16px;
+    align-items: center;
+}
+
+.bill-custom .bill-left {
+    flex: 1;
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    .bill-custom .bill-left {
+        width: 100%;
+    }
+}
+
+.bill-custom .bill-right {
+    padding-left: 0;
+    border-left: none;
+    flex: 1;
+}
+
+.bill-custom-right {
+    width: 380px;
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 700px) {
+    .bill-custom-right {
+        width: 100%;
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+.bill-fixed {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: calc(55 - 5);
+    background-color: #0f172a;
+    padding: 10px;
+    animation: fadeInUp .3s ease-in-out;
+    border-top: 1px solid rgba(248, 250, 252, .5);
+}
+
+.bill-fixed .container {
+    padding: 0;
+}
+
+.bill-fixed .bill-wr {
+    padding: 0;
+    width: 100%;
+    background-color: #0f172a;
+}
+
+.bill-fixed .bill-left {
+    justify-content: center;
+}
+
+@media (max-width: 700px) {
+    .bill-fixed .bill-left {
+        padding-bottom: 8px;
+    }
+
+    .bill-fixed .bill-left .name-combo.sub-title {
+        font-size: 24px;
+    }
+}
+
+.bill-fixed .bill-right {
+    justify-content: center;
+}
+
+.bill-fixed .bill-right .price {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.bill-fixed.show {
+    transform: translateY(0);
+    transition: .3s ease-in-out;
+}
+
+.bill-wr {
+    display: flex;
+    justify-content: space-between;
+    padding: 32px;
+    background: #639;
+    width: calc(9/12*100%);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 700px) {
+    .bill-wr {
+        width: calc(12/12*100%);
+        padding: 12px;
+    }
+}
+
+@media (max-width: 500px) {
+    .bill-wr {
+        flex-direction: column;
+    }
+}
+
+.bill-left,
+.bill-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bill-wr .name-combo {
+    text-transform: uppercase;
+    font-family: "Anton",
+        sans-serif;
+}
+
+.dt-bill .bill-wr .name-combo {
+    letter-spacing: 0.24px;
+    font-size: 24px;
+}
+
+@media (max-width: 1024px) {
+    .dt-bill .bill-wr .name-combo {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 700px) {
+    .dt-bill .bill-wr .name-combo {
+        font-size: 16px;
+    }
+}
+
+.dt-bill .list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+@media (max-width: 700px) {
+    .dt-bill .list {
+        gap: 4px;
+    }
+}
+
+.dt-bill .item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 700px) {
+    .dt-bill .item {
+        font-size: 12px;
+    }
+}
+
+.bill-coundown {
+    padding: 10px;
+    border: 1px solid rgba(248, 250, 252, .5);
+    border-radius: 4px;
+    background-color: #f3ea28;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 700px) {
+    .bill-coundown {
+        width: 100%;
+        flex-direction: row;
+        gap: 4px;
+        align-items: center;
+        padding: 4px 8px;
+        width: fit-content;
+    }
+}
+
+.bill-coundown .txt {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.bill-time {
+    display: flex;
+    align-items: center;
+    font-family: "Anton",
+        sans-serif;
+    letter-spacing: 1px;
+    font-size: 20px;
+}
+
+@media only screen and (max-width: 1200px) {.bill-time {
+    font-size: 18px;
+}
+}
+
+.bill-right {
+    width: calc(3/9*100%);
+    padding-left: 32px;
+    border-left: 01px solid rgba(241, 245, 249, 0.5);
+}
+
+@media (max-width: 1000px) {
+    .bill-right {
+        width: calc(4/9*100%);
+    }
+}
+
+@media (max-width: 700px) {
+    .bill-right {
+        width: calc(5/12*100%);
+        padding-left: 12px;
+    }
+}
+
+@media (max-width: 500px) {
+    .bill-right {
+        padding-top: 12px;
+        width: 100%;
+        padding-left: unset;
+        border-left: unset;
+        border-top: 01px solid rgba(241, 245, 249, 0.5);
+    }
+}
+
+.bill-right .price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bill-right .price .num {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .bill-right .price .num {
+        font-size: 18px;
+    }
+}
