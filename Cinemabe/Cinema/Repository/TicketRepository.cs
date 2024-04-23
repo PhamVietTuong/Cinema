@@ -1,4 +1,5 @@
-﻿using Cinema.Contracts;
+﻿using AutoMapper;
+using Cinema.Contracts;
 using Cinema.Data;
 using Cinema.Data.Models;
 using Cinema.DTOs;
@@ -10,31 +11,27 @@ namespace Cinema.Repository
     public class TicketRepository : ITicketRepository
 	{
 		private readonly CinemaContext _context;
+		private readonly IMapper _mapper;
 
-		public TicketRepository(CinemaContext context)
+        public TicketRepository(CinemaContext context, IMapper mapper)
 		{
 			_context = context;
-		}
+            _mapper = mapper;
+        }
 
-		//public async Task<BookTicket> Create(BookTicket ticket)
-		//{
-		//	await _context.Tickets.AddAsync(ticket);
-		//	return ticket;
-		//}
+        public async Task<BookingDTO> CreateAysn(BookingDTO entity)
+        {
+            var invoice = await _context.Ticket.AddAsync(new Ticket
+            {
+                ShowTimeId = entity.ShowTimeId,
+                UserId = entity.UserId,
+                SeatId = entity.SeatId,
+                CreationTime = DateTime.UtcNow
+            });
 
-		//public async Task<bool> Exist(Guid id)
-		//{
-		//	return await _context.Tickets.AnyAsync(b => b.Id == id);
-		//}
+            var invoiceDto = _mapper.Map<BookingDTO>(invoice);
 
-		//public Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm)
-		//{
-		//	return null;
-		//}
-
-		//public Task<BookTicket> Update(BookTicket request)
-		//{
-		//	throw new NotImplementedException();
-		//}
-	}
+            return invoiceDto;
+        }
+}
 }

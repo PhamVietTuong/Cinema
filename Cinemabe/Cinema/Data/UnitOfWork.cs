@@ -14,17 +14,16 @@ namespace Cinema.Data
 		public UnitOfWork(CinemaContext context, IMapper mapper)
         {
             _context = context;
-            this._mapper = mapper;
+            _mapper = mapper;
 		}
 
-		public ITicketRepository TicketRepository => new TicketRepository(_context);
+		public ITicketRepository TicketRepository => new TicketRepository(_context, _mapper);
         public IUserRepository UserRepository => new UserRepository(_context);
 		public IShowTimeRepository ShowTimeRepository => new ShowTimeRepository(_context);
 		public IMovieRepository MovieRepository => new MovieRepository(_context);
 		public IFoodAndDrinkRepository FoodAndDrinkRepository => new FoodAndDrinkRepository(_context);
 		public ITicketTypeRepository TicketTypeRepository => new TicketTypeRepository(_context);
 		public ISeatRepository SeatRepository => new SeatRepository(_context);
-		public IInvoiceRepository InvoiceRepository => new InvoiceRepository(_context, _mapper);
 
 		public async Task<bool> SaveChangeAsync()
         {

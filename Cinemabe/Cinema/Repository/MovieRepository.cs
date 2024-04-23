@@ -58,8 +58,8 @@ namespace Cinema.Repository
 			string movieTypes = String.Join(", ", movieTypeDetails.Select(x => x.MovieType.Name));
 
 			var showTimes = await _context.ShowTime
-												.Include(x => x.Theater)
 												.Include(x => x.Room)
+													.ThenInclude(x => x.Theater)
 												.Where(x => x.MovieId == movieDetail.Id).ToListAsync();
 			var schedules = showTimes
 										.GroupBy(x => new { x.Day })
@@ -67,7 +67,7 @@ namespace Cinema.Repository
 										{
 											Date = schedule.Key.Day,
 											Theater = schedule
-														.GroupBy(x => new { x.Theater.Name, x.Theater.Address })
+														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address })
 														.Select(theater => new Theaters {
 															TheaterName = theater.Key.Name,
 															TheaterAddress = theater.Key.Address,

@@ -3,8 +3,8 @@
     public class InvoiceDetail
     {
         public Guid Id { get; set; }
-        public Guid InvoiceId { get; set; }
-        public Invoice Invoice { get; set; }
+        public Guid TicketId { get; set; }
+        public Ticket Ticket { get; set; }
         public Guid FoodAndDrinkId { get; set; }
         public FoodAndDrink FoodAndDrink { get; set; }
         public int Quantity { get; set; }

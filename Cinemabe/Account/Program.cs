@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Cinema.Account
 {
-	public class Program
+    public class Program
 	{
 
 		static async Task Main(string[] args)

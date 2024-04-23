@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Repository
 {
-	public class SeatRepository : ISeatRepository
+    public class SeatRepository : ISeatRepository
 	{
 		private readonly CinemaContext _context;
 
@@ -27,9 +27,7 @@ namespace Cinema.Repository
 											.Where(x => x.RoomId == showTime.RoomId)
 											.ToListAsync();
 
-			var invoice = await _context.Invoice.Where(x => x.ShowTimeId == showTimeId).ToListAsync();
-			var invoiceIds = invoice.Select(x => x.Id).ToList();
-			var invoiceSeat = await _context.InvoiceSeat.Include(x => x.Seat).Where(x => invoiceIds.Contains(x.InvoiceId)).ToListAsync();
+			var ticket = await _context.Ticket.Where(x => x.ShowTimeId == showTimeId).ToListAsync();
 
 			var roomName = seats.FirstOrDefault()?.Room.Name;
 
@@ -47,7 +45,8 @@ namespace Cinema.Repository
 										TicketTypeId = rowSeatViewModel.TicketType?.Id ?? Guid.Empty,
 										TicketTypeName = rowSeatViewModel.TicketType?.Name,
 										Price = rowSeatViewModel.TicketType?.Price ?? 0.0,
-										IsSold = invoiceSeat.Any(x => x.SeatId == rowSeatViewModel.Id) ? true : false,
+										IsSold = ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? true : false,
+										//Đang Chọn
 									})
 									.OrderBy(x => x.ColIndex).ThenBy(x => x.Name)
 									.ToList()

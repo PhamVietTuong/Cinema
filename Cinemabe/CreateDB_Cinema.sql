@@ -1,22 +1,16 @@
 Use [Cinema];
 
-IF OBJECT_ID('dbo.InvoiceCombo', 'U') IS NOT NULL
-DROP TABLE dbo.InvoiceCombo;
-
-IF OBJECT_ID('dbo.InvoiceSeat', 'U') IS NOT NULL
-DROP TABLE dbo.InvoiceSeat;
-
 IF OBJECT_ID('dbo.MovieTypeDetail', 'U') IS NOT NULL
 DROP TABLE dbo.MovieTypeDetail;
 
-IF OBJECT_ID('dbo.Invoice', 'U') IS NOT NULL
-DROP TABLE dbo.Invoice;
-
-IF OBJECT_ID('dbo.Seat', 'U') IS NOT NULL
-DROP TABLE dbo.Seat;
+IF OBJECT_ID('dbo.Ticket', 'U') IS NOT NULL
+DROP TABLE dbo.Ticket;
 
 IF OBJECT_ID('dbo.ShowTime', 'U') IS NOT NULL
 DROP TABLE dbo.ShowTime;
+
+IF OBJECT_ID('dbo.Seat', 'U') IS NOT NULL
+DROP TABLE dbo.Seat;
 
 IF OBJECT_ID('dbo.Movie', 'U') IS NOT NULL
 DROP TABLE dbo.Movie;
@@ -108,13 +102,23 @@ CREATE TABLE [Movie] (
 	CONSTRAINT FK_Movie_ShowTimeType FOREIGN KEY ([ShowTimeTypeId]) REFERENCES [ShowTimeType] (Id),
 )
 
-CREATE TABLE [Room] (
+CREATE TABLE [Theater] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
     [Name] nvarchar(255) NOT NULL,
-	[With] float NOT NULL,
-	[Length] float NOT NULL,
+	[Address] nvarchar(255) NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id)
+);
+
+CREATE TABLE [Room] (
+    [Id] UNIQUEIDENTIFIER NOT NULL,
+	[TheaterId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(255) NOT NULL,
+	[Width] float NOT NULL,
+	[Length] float NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_Room_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
 );
 
 CREATE TABLE [SeatType] (
@@ -147,18 +151,9 @@ CREATE TABLE [Seat] (
 	CONSTRAINT FK_Seat_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
 )
 
-CREATE TABLE [Theater] (
-    [Id] UNIQUEIDENTIFIER NOT NULL,
-    [Name] nvarchar(255) NOT NULL,
-	[Address] nvarchar(255) NOT NULL,
-	[Status] bit NOT NULL,
-	PRIMARY KEY (Id)
-);
-
 CREATE TABLE [ShowTime] (
 	[Id] uniqueidentifier NOT NULL,
 	[MovieId] uniqueidentifier NOT NULL,
-	[TheaterId] uniqueidentifier NOT NULL,
 	[RoomId] uniqueidentifier NOT NULL,
 	[Day] datetime NOT NULL,
 	[StartTime] datetime NOT NULL,
@@ -166,18 +161,19 @@ CREATE TABLE [ShowTime] (
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_ShowTime_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
-	CONSTRAINT FK_ShowTime_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
 	CONSTRAINT FK_ShowTime_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
 )
 
-CREATE TABLE [Invoice] (
+CREATE TABLE [Ticket] (
 	Id uniqueidentifier NOT NULL,
 	[ShowTimeId] uniqueidentifier NOT NULL,
 	[UserId] uniqueidentifier NOT NULL,
+	[SeatId] uniqueidentifier NOT NULL,
 	CreationTime datetime NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Invoice_ShowTime FOREIGN KEY ([ShowTimeId]) REFERENCES [ShowTime] (Id),
 	CONSTRAINT FK_Invoice_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+	CONSTRAINT FK_Invoice_Seat FOREIGN KEY ([SeatId]) REFERENCES [Seat] (Id),
 )
 
 CREATE TABLE [FoodAndDrink] (
@@ -189,25 +185,6 @@ CREATE TABLE [FoodAndDrink] (
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id)
 );
-
-CREATE TABLE [InvoiceCombo] (
-	Id uniqueidentifier NOT NULL,
-	[InvoiceId] uniqueidentifier NOT NULL,
-	[FoodAndDrinkId] uniqueidentifier NOT NULL,
-	[Quantity] int NOT NULL,
-	PRIMARY KEY (Id),
-	CONSTRAINT FK_InvoiceCombo_InvoiceId FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
-	CONSTRAINT FK_InvoiceCombo_FoodAndDrinkId FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
-)
-
-CREATE TABLE [InvoiceSeat] (
-	[Id] uniqueidentifier NOT NULL,
-	[InvoiceId] uniqueidentifier NOT NULL,
-	[SeatId] uniqueidentifier NOT NULL,
-	PRIMARY KEY (Id),
-	CONSTRAINT FK_InvoiceSeat_InvoiceId FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
-	CONSTRAINT FK_InvoiceSeat_FoodAndDrinkId FOREIGN KEY ([SeatId]) REFERENCES [Seat] (Id),
-)
 
 CREATE TABLE [MovieType] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
