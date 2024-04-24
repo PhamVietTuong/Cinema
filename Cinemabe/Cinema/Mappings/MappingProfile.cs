@@ -7,11 +7,10 @@ namespace Cinema.Mappings
 	public class MappingProfile : Profile
 	{
 		public MappingProfile() {
-			CreateMap<Ticket, BookingDTO>()
+			CreateMap<Ticket, TicketDTO>()
 				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
 				.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
 				.ForMember(dest => dest.SeatId, opt => opt.MapFrom(src => src.SeatId));
-
         }
 	}
 }

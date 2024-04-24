@@ -5,6 +5,6 @@ namespace Cinema.Contracts
 {
 	public interface ITicketRepository
 	{
-        Task<BookingDTO> CreateAysn(BookingDTO entity);
+        Task<TicketDTO> CreateAysn(TicketDTO entity);
     }
 }
