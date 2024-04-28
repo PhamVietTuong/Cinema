@@ -43,5 +43,7 @@ namespace Cinema.Data
         public DbSet<Theater> Theater { get; set; }
 
         public DbSet<SeatType> SeatType { get; set; }
+
+        public DbSet<ShowTimeRoom> ShowTimeRoom { get; set; }
     }
 }

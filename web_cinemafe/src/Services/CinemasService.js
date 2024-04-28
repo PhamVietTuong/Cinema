@@ -1,4 +1,4 @@
-import { Booking } from "../Models/Booking";
+import { Ticket } from "../Models/Ticket";
 import { TicketBookingInformation } from "../Models/TicketBookingInformation";
 import { baseService } from "./BaseService";
 
@@ -27,8 +27,8 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/GetInformationAboutBoxOffice?showTimeId=${showTimeId}`);
     }
 
-    PostInvoice = (booking = new Booking()) => {
-        return this.post(`api/Cinemas/Invoice`, booking);
+    PostTicket = (ticket = new Ticket()) => {
+        return this.post(`api/Cinemas/Ticket`, ticket);
     }
 
     TicketBooking = (ticketBookingInformation = new TicketBookingInformation()) => {

@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Cinema.Data;
 using Cinema;
+using Cinema.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IDictionary<string, TicketBookingSuccess>>(options => new Dictionary<string, TicketBookingSuccess>());
 
 var app = builder.Build();
 

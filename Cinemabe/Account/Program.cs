@@ -1,5 +1,6 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data;
+using Cinema.Data.Models;
 using Cinema.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,8 +36,10 @@ namespace Cinema.Account
 				};
 				var registeredUser = await userRepository.CreateAsync(newUser);
 
-				Console.WriteLine($"Đã đăng ký thành công người dùng: {registeredUser.UserName}");
-			};
+                Console.WriteLine($"Register success: {"UserName: " + registeredUser.UserName }");
+                Console.ReadLine();
+            };
+
 		}
 	}
 }

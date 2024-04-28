@@ -18,13 +18,17 @@ namespace Cinema.Repository
 
 		public async Task<SeatViewModel> GetSeatByShowTimeAysn(Guid showTimeId)
 		{
-			var showTime = await _context.ShowTime.Include(x => x.Room).FirstOrDefaultAsync(x => x.Id == showTimeId);
+			var showTimeRoom = (await _context.ShowTimeRoom
+								.Include(x => x.ShowTime)
+								.Where(x => x.ShowTimeId == showTimeId)
+								.ToListAsync())
+								.FirstOrDefault();
 
 			var seats = await _context.Seat
 											.Include(x => x.TicketType)
 												.ThenInclude(x => x.SeatType)
 											.Include(x => x.Room)
-											.Where(x => x.RoomId == showTime.RoomId)
+											.Where(x => x.RoomId == showTimeRoom.RoomId)
 											.ToListAsync();
 
 			var ticket = await _context.Ticket.Where(x => x.ShowTimeId == showTimeId).ToListAsync();

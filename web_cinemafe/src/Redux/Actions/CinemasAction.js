@@ -1,6 +1,8 @@
+import { Ticket } from "../../Models/Ticket";
 import { TicketBookingInformation } from "../../Models/TicketBookingInformation";
 import { cinemasService } from "../../Services/CinemasService";
-import { SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_SHOWTIME_DETAIL, SET_TICKET_TYPE } from "./Type/CinemasType";
+import { SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_SHOWTIME_DETAIL, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "./Type/CinemasType";
+import { connection } from "../..";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -76,13 +78,21 @@ export const ComboAction = () => {
     }
 }
 
-export const TicketBooking = (ticketBookingInformation = new TicketBookingInformation()) => {
-    return async (dispatch, getState) => {
+export const TicketBooking = (ticket = new Ticket()) => {
+    return async (dispatch) => {
         try {
-            const result = await cinemasService.TicketBooking
+            const ticketBooking = await cinemasService.PostTicket(ticket)
 
+            if (ticketBooking.status === 200) {
+
+                await dispatch({
+                    type: TICKET_BOOKING_SUCCESSFUL,
+                });
+
+                await connection.invoke("TicketBookingSuccess", ticket)
+            }
         } catch (error) {
-            console.log("TicketBooking: ", error);
+            
         }
-    };
-};
+    }
+}

@@ -1,4 +1,4 @@
-import { BOOKING, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "../Actions/Type/CinemasType";
+import { BOOKING, SEATED, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL, UPDATE_SEATED } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -7,7 +7,8 @@ const stateDefault = {
     danhSachGheDangDat: [],
     ticketType: [],
     seat: [],
-    combo: []
+    combo: [],
+    listSeated: []
 }
 
 export const CinemasReducer = (state = stateDefault, action) => {
@@ -37,18 +38,9 @@ export const CinemasReducer = (state = stateDefault, action) => {
             return { ...state };
         }
 
-        case BOOKING: {
-            let updateListSeat = [...state.listSeatVailable];
-
-            let index = updateListSeat.findIndex(
-                (seatPlaced) => seatPlaced.maGhe === action.gheDuocChon.maGhe
-            );
-            if (index !== -1) {
-                updateListSeat.splice(index, 1);
-            } else {
-                updateListSeat.push(action.gheDuocChon);
-            }
-            return { ...state, listSeatVailable: updateListSeat };
+        case SEATED: {
+            state.listSeated = action.seatIds
+            return {...state}
         }
 
         case TICKET_BOOKING_SUCCESSFUL: {

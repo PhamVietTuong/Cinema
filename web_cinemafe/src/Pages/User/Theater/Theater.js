@@ -3,7 +3,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import './Theater.css'
 import { Nav, Tab, } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import classNames from "classnames";
 import { Collapse } from 'react-collapse';
 import moment from 'moment';
@@ -13,26 +13,38 @@ import Seat from '../Seat/Seat';
 import FoodAndDrink from '../FoodAndDrink/FoodAndDrink';
 import Bill from '../Bill/Bill';
 import { useDispatch, useSelector } from "react-redux";
-import { ComboAction, SeatlAction, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
+import { ComboAction, SeatlAction, TicketBooking, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
-import { Booking } from '../../../Models/Booking';
+import { Booking, Ticket } from '../../../Models/Ticket';
+import { CinemasReducer } from '../../../Redux/Reducers/CinemasReducer';
+import { connection } from '../../..';
+import { SEATED } from '../../../Redux/Actions/Type/CinemasType';
 
 const Theater = (props) => {
     const dispatch = useDispatch();
-    const { ticketType, seat, combo } = useSelector((state) => state.CinemasReducer);
+    const { ticketType, seat, combo, listSeated } = useSelector((state) => state.CinemasReducer);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [open, setOpen] = useState(false);
     const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [selectedheaterName, setSelectedTheaterName] = useState(null);
     const [selectedSeatName, setSelectedSeatName] = useState([]);
     const [selectedShowTimeId, setSelectedShowTimeId] = useState(null);
-    
+
     useEffect(() => {
-        
-    }, []);
+        connection.on("ListSeated", (seatIds) => {
+            dispatch({
+                type: SEATED,
+                seatIds
+            })
+        })
+    }, [dispatch]);
+
 
     const showTimeIdHandele = (showTimeId) => {
+        const ticket = new Ticket()
+        ticket.showTimeId = showTimeId
+        connection.invoke("JoinShowTime", ticket)
+
         dispatch(TicketTypeAction(showTimeId))
         dispatch(SeatlAction(showTimeId))
         dispatch(ComboAction())
@@ -55,8 +67,53 @@ const Theater = (props) => {
 
             setSelectedSeats(newSelectedSeats);
             setSelectedSeatName(newSelectedSeatName)
-
         }
+    }
+
+    const ticketBooking = (rowSeatItem) => {
+        const ticket = new Ticket()
+        ticket.showTimeId = selectedShowTimeId
+        ticket.seatIds = [rowSeatItem.id]
+        dispatch(TicketBooking(ticket))
+    }
+
+    const renderSeats = (seatItem) => {
+        return seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => {
+            let classSeated = rowSeatItem.isSold ? 'booked' : ''
+            let seated = listSeated.findIndex(x => x.some(y => y === rowSeatItem.id))
+
+            if (seated !== -1) {
+                classSeated = "booked";
+            }
+
+            return (
+                rowSeatItem.name
+                    ?
+                    (
+                        <td className="seat-td"
+                            disabled
+                            onClick={() => {
+                                // getInforSeat(rowSeatItem);
+                                if (!classSeated || !!seated) {
+                                    ticketBooking(rowSeatItem)
+                                }
+                            }}
+                        >
+                            <div className={`seat-wr seat-single ${classSeated} ${selectedSeats.includes(rowSeatItem.id) ? 'choosing' : ''}`} >
+                                <img
+                                    src="https://cinestar.com.vn/assets/images/seat-single.svg"
+                                    alt=""
+                                />
+                                <span className="seat-name">{rowSeatItem.name}</span>
+                            </div>
+                        </td>
+                    )
+                    :
+                    (
+                        <td />
+                    )
+            )
+        })
     }
 
     return (
@@ -73,7 +130,7 @@ const Theater = (props) => {
                                             <Nav variant="pills" className='swiper'>
                                                 {
                                                     props.MovieDetail.schedule?.map((scheduleItem, scheduleIndex) => (
-                                                        <Nav.Item onClick={()=> setShowTicketType_Seat_Combo(false)}>
+                                                        <Nav.Item onClick={() => setShowTicketType_Seat_Combo(false)}>
                                                             <Nav.Link eventKey={`tab-${scheduleIndex}`} className='swiper-slide'>
                                                                 <div class="box-time">
                                                                     <p class="date">{moment(scheduleItem.date).format("DD/MM")}</p>
@@ -113,7 +170,7 @@ const Theater = (props) => {
                                                                                 <ul className="list-time">
                                                                                     {theaterItem.showTime.map((timeItem, timeIndex) => (
                                                                                         <li key={timeIndex} className="item-time"
-                                                                                            onClick={() => { showTimeIdHandele(timeItem.showTimeId); setSelectedTheaterName(theaterItem.theaterName)}}>
+                                                                                            onClick={() => { showTimeIdHandele(timeItem.showTimeId); setSelectedTheaterName(theaterItem.theaterName) }}>
                                                                                             {moment(timeItem.startTime).format("HH:mm")}
                                                                                         </li>
                                                                                     ))}
@@ -145,9 +202,10 @@ const Theater = (props) => {
                     </div>
                 </div>
             </section>
-            {showTicketType_Seat_Combo &&  (
+            
+            {showTicketType_Seat_Combo && (
                 <>
-                    
+
                     {/* <section className="sec-ticket bill-fixed-start">
                         <div className="ticket">
                             <div className="container">
@@ -200,102 +258,87 @@ const Theater = (props) => {
                         </div>
                     </section> */}
 
-                    <section className="sec-seat">
-                        <div className="seat">
-                            <div className="container">
-                                <div className="seat-wr">
-                                    <div className="seat-heading sec-heading" data-aos="fade-up">
-                                        <h2 className="heading">Chọn ghế - Rạp {seat.roomName} </h2>
-                                    </div>
-                                    <div className="seat-indicator-scroll">
-                                        <div className="seat-block relative --full">
-                                            <div className="seat-screen" data-aos="fade-up">
-                                                <img src="https://cinestar.com.vn/assets/images/img-screen.png" />
-                                                <div className="txt">Màn hình</div>
-                                            </div>
-                                            <div className="seat-main" data-aos="fade-up">
-                                                <div className="minimap-container ">
-                                                    <div>
-                                                        <div className="seat-table">
-                                                            <table className="seat-table-inner">
-                                                                <tbody>
-                                                                    {
-                                                                        seat.rowName?.map((seatItem, seatIndex) => (
-                                                                            <tr>
-                                                                                <td className="seat-name-row">{seatItem.rowName}</td>
-                                                                                {
-                                                                                    seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => (
-                                                                                        rowSeatItem.name
-                                                                                            ?
-                                                                                            (
-                                                                                                <td className="seat-td" onClick={() => getInforSeat(rowSeatItem)}>
-                                                                                                    <div className={`seat-wr seat-single ${rowSeatItem.isSold ? 'booked' : ''} ${selectedSeats.includes(rowSeatItem.id) ? 'choosing' : ''}`} >
-                                                                                                        <img
-                                                                                                            src="https://cinestar.com.vn/assets/images/seat-single.svg"
-                                                                                                            alt=""
-                                                                                                        />
-                                                                                                        <span className="seat-name">{rowSeatItem.name}</span>
-                                                                                                    </div>
-                                                                                                </td>
-                                                                                            )
-                                                                                            :
-                                                                                            (
-                                                                                                <td />
-                                                                                            )
-                                                                                    ))
-                                                                                }
-                                                                            </tr>
-                                                                        ))
-                                                                    }
-                                                                </tbody>
-                                                            </table>
+                    {
+                        <section className="sec-seat">
+                            <div className="seat">
+                                <div className="container">
+                                    <div className="seat-wr">
+                                        <div className="seat-heading sec-heading" data-aos="fade-up">
+                                            <h2 className="heading">Chọn ghế - Rạp {seat.roomName} </h2>
+                                        </div>
+                                        <div className="seat-indicator-scroll">
+                                            <div className="seat-block relative --full">
+                                                <div className="seat-screen" data-aos="fade-up">
+                                                    <img src="https://cinestar.com.vn/assets/images/img-screen.png" />
+                                                    <div className="txt">Màn hình</div>
+                                                </div>
+                                                <div className="seat-main" data-aos="fade-up">
+                                                    <div className="minimap-container ">
+                                                        <div>
+                                                            <div className="seat-table">
+                                                                <table className="seat-table-inner">
+                                                                    <tbody>
+                                                                        {
+                                                                            seat.rowName?.map((seatItem, seatIndex) => (
+                                                                                <tr>
+                                                                                    <td className="seat-name-row">{seatItem.rowName}</td>
+                                                                                    {
+                                                                                        renderSeats(seatItem)
+                                                                                    }
+                                                                                </tr>
+                                                                            ))
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <ul className="seat-note">
+                                            <li className="note-it">
+                                                <div className="image">
+                                                    {" "}
+                                                    <img src="	https://cinestar.com.vn/assets/images/seat-single.svg" alt="" />
+                                                </div>
+                                                <span className="txt">Ghế Thường</span>
+                                            </li>
+                                            <li className="note-it note-it-couple">
+                                                <div className="image">
+                                                    {" "}
+                                                    <img src="https://cinestar.com.vn/assets/images/seat-couple.svg" alt="" />
+                                                </div>
+                                                <span className="txt">Ghế Đôi</span>
+                                            </li>
+                                            <li className="note-it">
+                                                <div className="image">
+                                                    {" "}
+                                                    <img src="https://cinestar.com.vn/assets/images/seat-vip.svg" alt="" />
+                                                </div>
+                                                <span className="txt">Ghế Vip</span>
+                                            </li>
+                                            <li className="note-it">
+                                                <div className="image">
+                                                    {" "}
+                                                    <img src="https://cinestar.com.vn/assets/images/seat-single-selecting.svg" alt="" />
+                                                </div>
+                                                <span className="txt">Ghế chọn</span>
+                                            </li>
+                                            <li className="note-it">
+                                                <div className="image">
+                                                    {" "}
+                                                    <img src="https://cinestar.com.vn/assets/images/seat-single-disable.svg" alt="" />
+                                                </div>
+                                                <span className="txt">Ghế đã đặt</span>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <ul className="seat-note">
-                                        <li className="note-it">
-                                            <div className="image">
-                                                {" "}
-                                                <img src="	https://cinestar.com.vn/assets/images/seat-single.svg" alt="" />
-                                            </div>
-                                            <span className="txt">Ghế Thường</span>
-                                        </li>
-                                        <li className="note-it note-it-couple">
-                                            <div className="image">
-                                                {" "}
-                                                <img src="https://cinestar.com.vn/assets/images/seat-couple.svg" alt="" />
-                                            </div>
-                                            <span className="txt">Ghế Đôi</span>
-                                        </li>
-                                        <li className="note-it">
-                                            <div className="image">
-                                                {" "}
-                                                <img src="https://cinestar.com.vn/assets/images/seat-vip.svg" alt="" />
-                                            </div>
-                                            <span className="txt">Ghế Vip</span>
-                                        </li>
-                                        <li className="note-it">
-                                            <div className="image">
-                                                {" "}
-                                                <img src="https://cinestar.com.vn/assets/images/seat-single-selecting.svg" alt="" />
-                                            </div>
-                                            <span className="txt">Ghế chọn</span>
-                                        </li>
-                                        <li className="note-it">
-                                            <div className="image">
-                                                {" "}
-                                                <img src="https://cinestar.com.vn/assets/images/seat-single-disable.svg" alt="" />
-                                            </div>
-                                            <span className="txt">Ghế đã đặt</span>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    }
+                    {/* {renderSeats()} */}
 
                     {/* <section className="sec-dt-food">
                         <div className="dt-food">
@@ -413,7 +456,7 @@ const Theater = (props) => {
                     </div> */}
                 </>
             )}
-            
+
         </>
     )
 }

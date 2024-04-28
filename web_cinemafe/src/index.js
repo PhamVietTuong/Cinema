@@ -17,13 +17,10 @@ export const connection = new HubConnectionBuilder()
 
 connection.start()
   .then(() => {
-    ReactDOM.render(
+    ReactDOM.createRoot(document.getElementById('root')).render(
       <Provider store={store}>
-        {/* <Detail></Detail> */}
         <Router />
-        {/* <Theater></Theater> */}
       </Provider>,
-      document.getElementById("root")
     );
   })
   .catch(error => {

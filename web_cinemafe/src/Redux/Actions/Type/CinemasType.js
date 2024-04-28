@@ -4,5 +4,5 @@ export const SET_SHOWTIME_DETAIL = "SET_SHOWTIME_DETAIL"
 export const SET_TICKET_TYPE = "SET_TICKET_TYPE"
 export const SET_SEAT = "SET_SEAT"
 export const SET_COMBO = "SET_COMBO"
-export const BOOKING = "BOOKING"
+export const SEATED = "SEATED"
 export const TICKET_BOOKING_SUCCESSFUL = "TICKET_BOOKING_SUCCESSFUL";

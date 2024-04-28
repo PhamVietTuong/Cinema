@@ -19,20 +19,27 @@ namespace Cinema.Repository
             _mapper = mapper;
         }
 
-        public async Task<TicketDTO> CreateAysn(TicketDTO entity)
+        public async Task<List<TicketDTO>> CreateAysn(TicketDTO entity)
         {
-            var ticket = await _context.Ticket.AddAsync(new Ticket
+            var ticketDTOs = new List<TicketDTO>();
+
+            foreach (var seatId in entity.SeatIds)
             {
-                ShowTimeId = entity.ShowTimeId,
-                UserId = entity.UserId,
-                SeatId = entity.SeatId,
-                CreationTime = DateTime.UtcNow
-            });
-            await _context.SaveChangesAsync();
+                var ticket = await _context.Ticket.AddAsync(new Ticket
+                {
+                    ShowTimeId = entity.ShowTimeId,
+                    UserId = entity.UserId,
+                    SeatId = seatId,
+                    CreationTime = DateTime.UtcNow
+                });
 
-            var ticketDto = _mapper.Map<TicketDTO>(ticket.Entity);
+                await _context.SaveChangesAsync();
 
-            return ticketDto;
+                var ticketDto = _mapper.Map<TicketDTO>(ticket.Entity);
+                ticketDTOs.Add(ticketDto);
+            }
+
+            return ticketDTOs;
         }
 }
 }

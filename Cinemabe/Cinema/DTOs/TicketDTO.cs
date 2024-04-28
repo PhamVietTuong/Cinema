@@ -5,9 +5,13 @@ namespace Cinema.DTOs
 {
 	public class TicketDTO
 	{
-		public Guid Id { get; set; }
+        public TicketDTO()
+        {
+            SeatIds = new List<Guid>();
+        }
+        public Guid Id { get; set; }
         public Guid ShowTimeId { get; set; }
         public Guid UserId { get; set; }
-		public Guid SeatId { get; set; }
+		public List<Guid> SeatIds { get; set; }
 	}
 }

@@ -55,31 +55,38 @@ namespace Cinema.Repository
 												.Include(x => x.MovieType)
 												.Where(x => x.MovieId == movieDetail.Id)
 												.ToListAsync();
+
 			string movieTypes = String.Join(", ", movieTypeDetails.Select(x => x.MovieType.Name));
 
-			var showTimes = await _context.ShowTime
-												.Include(x => x.Room)
-													.ThenInclude(x => x.Theater)
-												.Where(x => x.MovieId == movieDetail.Id).ToListAsync();
-			var schedules = showTimes
-										.GroupBy(x => new { x.Day })
+			var showTimes = await _context.ShowTime.Where(x => x.MovieId == movieDetail.Id).ToListAsync();
+			var showTimeRoom = await _context.ShowTimeRoom
+														.Include(x => x.ShowTime)
+														.Include(x => x.Room)
+															.ThenInclude(x => x.Theater)
+														.Where(x => x.ShowTime.MovieId == movieDetail.Id)
+														.ToListAsync();
+
+			var schedules = showTimeRoom
+                                        .GroupBy(x => new { x.ShowTime.Day })
 										.Select(schedule => new Schedules
 										{
 											Date = schedule.Key.Day,
 											Theater = schedule
 														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address })
-														.Select(theater => new Theaters {
+														.Select(theater => new Theaters
+														{
 															TheaterName = theater.Key.Name,
 															TheaterAddress = theater.Key.Address,
 															ShowTime = theater.Select(showTime => new ShowTimes
 															{
 																RoomName = showTime.Room.Name,
-																ShowTimeId = showTime.Id,
-																StartTime = showTime.StartTime,
-																EndTime = showTime.EndTime
+																ShowTimeId = showTime.ShowTime.Id,
+																StartTime = showTime.ShowTime.StartTime,
+																EndTime = showTime.ShowTime.EndTime
 															}).ToList()
 														}).ToList()
 										}).ToList();
+
 
 			var viewModel = new MovieDetailViewModel
 			{

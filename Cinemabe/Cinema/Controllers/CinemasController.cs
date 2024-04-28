@@ -65,8 +65,8 @@ namespace Cinema.Controllers
 
         #region Ticket
 
-        [HttpPost("Invoice")]
-        public async Task<ActionResult<TicketDTO>> CreateInvoice([FromBody] TicketDTO vm)
+        [HttpPost("Ticket")]
+        public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
         {
             var result = await _uow.TicketRepository.CreateAysn(vm);
             return Ok(result);

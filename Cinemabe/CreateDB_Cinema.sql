@@ -6,6 +6,9 @@ DROP TABLE dbo.MovieTypeDetail;
 IF OBJECT_ID('dbo.Ticket', 'U') IS NOT NULL
 DROP TABLE dbo.Ticket;
 
+IF OBJECT_ID('dbo.ShowTimeRoom', 'U') IS NOT NULL
+DROP TABLE dbo.ShowTimeRoom;
+
 IF OBJECT_ID('dbo.ShowTime', 'U') IS NOT NULL
 DROP TABLE dbo.ShowTime;
 
@@ -154,14 +157,21 @@ CREATE TABLE [Seat] (
 CREATE TABLE [ShowTime] (
 	[Id] uniqueidentifier NOT NULL,
 	[MovieId] uniqueidentifier NOT NULL,
-	[RoomId] uniqueidentifier NOT NULL,
 	[Day] datetime NOT NULL,
 	[StartTime] datetime NOT NULL,
 	[EndTime] datetime NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_ShowTime_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
-	CONSTRAINT FK_ShowTime_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
+)
+
+CREATE TABLE [ShowTimeRoom] (
+	[Id] uniqueidentifier NOT NULL,
+	[ShowTimeId] uniqueidentifier NOT NULL,
+	[RoomId] uniqueidentifier NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_ShowTimeRoom_ShowTime FOREIGN KEY ([ShowTimeId]) REFERENCES [ShowTime] (Id),
+	CONSTRAINT FK_ShowTimeRoom_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
 )
 
 CREATE TABLE [Ticket] (

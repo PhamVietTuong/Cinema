@@ -10,7 +10,7 @@ namespace Cinema.Mappings
 			CreateMap<Ticket, TicketDTO>()
 				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
 				.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-				.ForMember(dest => dest.SeatId, opt => opt.MapFrom(src => src.SeatId));
+				.ForMember(dest => dest.SeatIds, opt => opt.MapFrom(src => new List<Guid> { src.SeatId }));
         }
 	}
 }
