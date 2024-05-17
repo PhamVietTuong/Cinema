@@ -53,8 +53,8 @@ var data = {
       "id": 1,
       "name": "DUNE 2",
       "time": 180,
-      "ageRestrictionId": 4,
-      "releaseDate": "29/02/2024",
+      "age_restriction_id": 4,
+      "release_date": "29/02/2024",
       "description":
           "“Dune: Hành Tinh Cát – Phần 2” sẽ tiếp tục khám phá hành trình đậm chất thần thoại của Paul Atreides khi anh đồng hành cùng Chani và những người Fremen trên chặng đường trả thù những kẻ đã hủy hoại gia đình mình. Đối mặt với những lựa chọn giữa tình yêu của cuộc đời mình và số phận của vũ trụ, Paul phải ngăn chặn viễn cảnh tương lai tồi tệ chỉ mình anh nhìn thấy.",
       "director": "Denis Villeneuve",
@@ -62,7 +62,7 @@ var data = {
           "Timothee Chalamet, Zendaya, Rebecca Ferguson, Javier Bardem, Florence Pugh",
       "trailer": "https://www.youtube.com/watch?v=0ZqTYVYcx4k",
       "languages": "Mỹ",
-      "img": "assets/img_demo/movie_img_1.jpg"
+      "image": "assets/img_demo/movie_img_1.jpg"
     },
     {
       "id": 2,
@@ -141,7 +141,8 @@ var data = {
     {"id": 3, "name": "Hành Động"},
     {"id": 4, "name": "Tình Cảm"},
     {"id": 5, "name": "Hoạt Hình"},
-    {"id": 6, "name": "Hài Hước"}
+    {"id": 6, "name": "Hài Hước"},
+    
   ],
   "MovieTypeDetails": [
     {"movieId": 1, "movieTypeId": 1},
@@ -151,7 +152,8 @@ var data = {
     {"movieId": 4, "movieTypeId": 5},
     {"movieId": 4, "movieTypeId": 6},
     {"movieId": 5, "movieTypeId": 4},
-    {"movieId": 6, "movieTypeId": 2}
+    {"movieId": 6, "movieTypeId": 2},
+   
   ],
   "Rooms": [
     {"id": 1, "name": "01", "theaterId": 5},
@@ -207,17 +209,17 @@ var data = {
     {
       "id": 1,
       "movieId": 1,
-      "day": "19/04/2024",
+      "day": "08/05/2024",
       "startTime": "09:00",
       "endTime": "11:00",
       "theaterId": 5,
-      "roomId":1,
+      "roomId": 1,
       "showTimeTypeId": 1
     },
     {
       "id": 2,
       "movieId": 1,
-      "day": "19/04/2024",
+      "day": "08/05/2024",
       "startTime": "09:30",
       "endTime": "11:30",
       "theaterId": 5,
@@ -227,7 +229,7 @@ var data = {
     {
       "id": 3,
       "movieId": 1,
-      "day": "19/04/2024",
+      "day": "08/05/2024",
       "startTime": "11:00",
       "endTime": "13:00",
       "theaterId": 5,
@@ -237,7 +239,7 @@ var data = {
     {
       "id": 4,
       "movieId": 2,
-      "day": "19/04/2024",
+      "day": "08/05/2024",
       "startTime": "09:00",
       "endTime": "11:00",
       "theaterId": 5,
@@ -247,7 +249,7 @@ var data = {
     {
       "id": 5,
       "movieId": 2,
-      "day": "19/04/2024",
+      "day": "08/05/2024",
       "startTime": "10:00",
       "endTime": "12:00",
       "theaterId": 5,
@@ -257,7 +259,7 @@ var data = {
     {
       "id": 6,
       "movieId": 3,
-      "day": "19/04/2024",
+      "day": "08/05/2024",
       "startTime": "09:00",
       "endTime": "11:00",
       "theaterId": 5,
@@ -267,7 +269,7 @@ var data = {
     {
       "id": 6,
       "movieId": 4,
-      "day": "11/04/2024",
+      "day": "08/05/2024",
       "startTime": "09:00",
       "endTime": "11:00",
       "theaterId": 5,

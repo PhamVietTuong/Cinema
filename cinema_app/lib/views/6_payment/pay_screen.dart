@@ -1,4 +1,4 @@
-import 'package:cinema_app/style.dart';
+import 'package:cinema_app/constants.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/info_bar.dart';
 import 'package:cinema_app/components/movie_type_box.dart';

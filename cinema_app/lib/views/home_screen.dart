@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'package:cinema_app/components/age_restriction_box.dart';
+import 'package:cinema_app/components/movie_type_box.dart';
+import 'package:cinema_app/components/showtime_type_box.dart';
+import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -11,6 +15,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    var styles = Styles();
+
     return Scaffold(
       appBar: AppBar(
         leading: Container(
@@ -32,7 +38,7 @@ class _HomePageState extends State<HomePage> {
         ),
         title: const Text("Hi, Nhu Y!",
             style: TextStyle(fontSize: 20, color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 7, 13, 45),
+        backgroundColor: const Color.fromARGB(255, 102, 51, 153),
         actions: [
           IconButton(
               onPressed: () {},
@@ -40,48 +46,43 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white),
         ],
       ),
-      body: ListView(
-        children: [
-          Container(
+      body: SingleChildScrollView(child: Column(children: [
+      Container(
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height *
-                2 /
-                6, //chiếm 2 phần trên màn hình
+            height: MediaQuery.of(context).size.height/3, //chiếm 2 phần trên màn hình
             decoration: const BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromARGB(255, 7, 13, 45),
-                Color.fromARGB(200, 0, 28, 83),
-                Color.fromARGB(150, 0, 87, 146),
-              ],
-            )),
+             color: Color.fromARGB(255, 102, 51, 153),
+            ),
             child: const MyCarousel(),
           ),
           Container(
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 4 / 6, //chiếm 4 phần
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromARGB(150, 0, 87, 146),
-                Color.fromARGB(200, 0, 28, 83),
-                Color.fromARGB(255, 7, 13, 45),
-              ],
-            )),
+            height: MediaQuery.of(context).size.height , //chiếm 4 phần
+                       decoration: const BoxDecoration(
+             color: Color.fromARGB(255, 102, 51, 153),
+            ),
             child: const MySecondCarousel(),
           ),
-        ],
-      ),
+          Text("Phim sắp chiếu",style: styles.titleTextStyle.copyWith(fontSize: 20),),
+             Container(
+            padding: const EdgeInsets.all(5),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height/2,
+            child:  const CarouselThird(),
+          ),
+          Text("Ưu đãi",style: styles.titleTextStyle.copyWith(fontSize: 20),),
+               Container(
+            padding: const EdgeInsets.all(5),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height/3, //chiếm 2 phần trên màn hình
+            child: const MyCarousel(),
+          ),
+      ]),)
     );
   }
 }
-
 //Banner top
 class MyCarousel extends StatefulWidget {
   const MyCarousel({super.key});
@@ -89,7 +90,6 @@ class MyCarousel extends StatefulWidget {
   @override
   State<MyCarousel> createState() => _MyCarouselState();
 }
-
 class _MyCarouselState extends State<MyCarousel> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
@@ -117,7 +117,6 @@ class _MyCarouselState extends State<MyCarousel> {
       );
     });
   }
-
 // Hàm được gọi khi widget bị xóa khỏi cây widget
   @override
   void dispose() {
@@ -155,7 +154,7 @@ class _MyCarouselState extends State<MyCarousel> {
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
+          child: Image.asset(
               'assets/img_demo/Banner.png',
             ),
           ),
@@ -164,6 +163,7 @@ class _MyCarouselState extends State<MyCarousel> {
     );
   }
 }
+//banner top end
 
 // banner body
 class MySecondCarousel extends StatefulWidget {
@@ -172,7 +172,6 @@ class MySecondCarousel extends StatefulWidget {
   @override
   State<MySecondCarousel> createState() => _MySecondCarouselState();
 }
-
 class _MySecondCarouselState extends State<MySecondCarousel> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
@@ -203,6 +202,7 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    var styles=Styles();
     return PageView(
       controller: _pageController,
       onPageChanged: (int page) {
@@ -213,179 +213,198 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
       children: [
         Column(
           children: [
-            Expanded(
-                flex: 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
                   ),
-                  child: Image.asset(
-                    'assets/img_demo/Banner2.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                )),
-            Expanded(
-                flex: 1,
-                child: Column(
+                ],
+              ),
+              child: Image.asset(
+                'assets/img_demo/Banner2.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 10,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                                 "KUNG FU PANDA 4 2D LT(P)",
+                                 style:styles.titleTextStyle.copyWith(color: Colors.white,fontSize: 20) ,
+                                  ),
+                     const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hành động',),
+                    const SizedBox(height:5),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
-                          "KUNG FU PANDA 4 2D LT(P)",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                        OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 20),
-                            side: const BorderSide(color: Colors.white),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: const Text(
-                            "Đặt vé",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ))
+                    const ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
+                   const SizedBox(width: 10,),
+                   const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
+                  const SizedBox(width: 200,),
+                  Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: TextButton(onPressed: (){
+
+                  }, child: const Text("Đặt vé",style: TextStyle(color: Colors.white,fontSize: 16 ),), )
+                   
+                  )
+
+                ],),
+                          
+            
+              
+              ],
+            )
           ],
         ),
-        Column(
+    Column(
+  children: [
+    GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MovieDetail(),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Image.asset(
+          'assets/img_demo/Banner2.jpg',
+          fit: BoxFit.cover,
+        ),
+      ),
+    ),
+    const SizedBox(height: 10,),
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "KUNG FU PANDA 4 2D LT(P)",
+          style: styles.titleTextStyle.copyWith(color: Colors.white,fontSize: 20),
+        ),
+        const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hài',),
+        const SizedBox(height:5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
-                flex: 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Image.asset(
-                    'assets/img_demo/Banner2.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                )),
-            Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
-                          "KUNG FU PANDA 4 2D LT(P)",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                        OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 20),
-                            side: const BorderSide(color: Colors.white),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: const Text(
-                            "Đặt vé",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+            const ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
+            const SizedBox(width: 2,),
+            const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
+            const SizedBox(width: 200,),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue),
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: TextButton(
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MovieDetail(),
                     ),
-                  ],
-                ))
+                  );
+                }, 
+                child: const Text("Đặt vé",style: TextStyle(color: Colors.white,fontSize: 16 ),
+                ),
+              ),
+            ),
           ],
         ),
-        Column(
-          children: [
-            Expanded(
-                flex: 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Image.asset(
-                    'assets/img_demo/Banner2.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                )),
-            Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
-                          "KUNG FU PANDA 4 2D LT(P)",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                        OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 20),
-                            side: const BorderSide(color: Colors.white),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: const Text(
-                            "Đặt vé",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ))
-          ],
-        ),
+      ],
+    ),
+  ],
+),
+
       ],
     );
   }
 }
+// banner body end
+//banner top 
+class CarouselThird extends StatefulWidget {
+  const CarouselThird({super.key});
+
+  @override
+  State<CarouselThird>createState() => _CarouselThirdState();
+}
+
+class _CarouselThirdState extends State<CarouselThird> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+      });
+    });
+  }
+
+  @override
+ Widget build(BuildContext context) {
+    return ListView.builder(
+      controller: _scrollController,
+      scrollDirection: Axis.horizontal,
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height,
+          margin: const EdgeInsets.all(5),
+          child: Center(
+            child: GestureDetector(
+              onTap: () {
+                  Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MovieDetail(),
+              
+            ));
+              },
+              
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/img_demo/banner3.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                    const Text(
+                      "19/5/2024",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+//banner top end

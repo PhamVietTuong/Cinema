@@ -1,17 +1,28 @@
-import 'package:cinema_app/style.dart';
+// ignore_for_file: avoid_print
+
+import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/data/models/booking.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class BookingSummaryBox extends StatefulWidget {
-  const BookingSummaryBox({super.key, required this.nextScreen});
+class BookingSummaryBox extends StatelessWidget {
+  const BookingSummaryBox({
+    super.key,
+    required this.nextScreen,
+    required this.booking,
+    this.totalPrice,
+    this.totalTicket,
+  });
   final Widget nextScreen;
-  @override
-  State<BookingSummaryBox> createState() => _BookingSummaryBoxState();
-}
+  final Booking booking;
+  final int? totalTicket;
+  final int? totalPrice;
 
-class _BookingSummaryBoxState extends State<BookingSummaryBox> {
   @override
   Widget build(BuildContext context) {
     var styles = Styles();
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -26,10 +37,10 @@ class _BookingSummaryBoxState extends State<BookingSummaryBox> {
                     style: styles.normalTextStyle.copyWith(color: Colors.black),
                     children: [
                       TextSpan(
-                          text: "0 ",
+                          text: '${totalTicket ?? booking.getTotalTickets()}',
                           style: styles.titleTextStyle
                               .copyWith(color: styles.primaryColor)),
-                      const TextSpan(text: "Ghế"),
+                      const TextSpan(text: " Ghế"),
                     ]),
               ),
               const SizedBox(
@@ -39,9 +50,10 @@ class _BookingSummaryBoxState extends State<BookingSummaryBox> {
                 text: TextSpan(
                     style: styles.normalTextStyle.copyWith(color: Colors.black),
                     children: [
-                      const TextSpan(text: "Tổng cộng"),
+                      const TextSpan(text: "Tổng cộng "),
                       TextSpan(
-                          text: ": 0 đ",
+                          text: formatter
+                              .format(totalPrice ?? booking.getTotalPrice()),
                           style: styles.titleTextStyle
                               .copyWith(color: styles.primaryColor)),
                     ]),
@@ -51,10 +63,14 @@ class _BookingSummaryBoxState extends State<BookingSummaryBox> {
         ),
         GestureDetector(
           onTap: () {
+            if (totalTicket == 0 && booking.getTotalTickets() == 0) {
+              print("stop");
+              return;
+            }
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => widget.nextScreen,
+                  builder: (context) => nextScreen,
                 ));
           },
           child: Container(

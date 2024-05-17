@@ -1,4 +1,4 @@
-import 'package:cinema_app/style.dart';
+import 'package:cinema_app/constants.dart';
 import 'package:flutter/material.dart';
 
 class TicketBox extends StatelessWidget {
