@@ -3,8 +3,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import './Theater.css'
 import { Nav, Tab, } from 'react-bootstrap';
-import React, { useEffect, useReducer, useState } from 'react';
-import classNames from "classnames";
+import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import moment from 'moment';
 import 'moment/locale/vi';
@@ -13,78 +12,154 @@ import Seat from '../Seat/Seat';
 import FoodAndDrink from '../FoodAndDrink/FoodAndDrink';
 import Bill from '../Bill/Bill';
 import { useDispatch, useSelector } from "react-redux";
-import { ComboAction, SeatlAction, TicketBooking, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
+import { ComboAction, SeatAction, SeatBeingSelected, TicketBooking, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
-import { Booking, Ticket } from '../../../Models/Ticket';
+import { Booking, Ticket, TicketBookingSuccess } from '../../../Models/TicketBookingSuccess';
 import { CinemasReducer } from '../../../Redux/Reducers/CinemasReducer';
-import { connection } from '../../..';
-import { SEATED } from '../../../Redux/Actions/Type/CinemasType';
+import { LIST_OF_SEAT_THE_USER_IS_CURRENTLY_SELECTING, SEATED, SEAT_BEING_SELECTED, SEAT_DIS_CONNECTION, SEAT_DIS_CONNECTION_NULL, SEAT_HAS_BEEN_CHOSEN } from '../../../Redux/Actions/Type/CinemasType';
+import { connection } from '../../../connectionSignalR';
+import { TicketTypeByShowTimeAndRoomDTO, TicketTypeByShowTimeDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
+import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
 
 const Theater = (props) => {
     const dispatch = useDispatch();
-    const { ticketType, seat, combo, listSeated } = useSelector((state) => state.CinemasReducer);
+    const {
+        ticketType,
+        seat,
+        combo,
+        listSeated,
+        seatYour,
+        listOfSeatTheUserIsCurrentlySelecting,
+        seatHasBeenChosen,
+        listSeatDisconnection
+    } = useSelector((state) => state.CinemasReducer);
     const [activeIndex, setActiveIndex] = useState(0);
     const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
-    const [selectedSeats, setSelectedSeats] = useState([]);
     const [selectedheaterName, setSelectedTheaterName] = useState(null);
     const [selectedSeatName, setSelectedSeatName] = useState([]);
     const [selectedShowTimeId, setSelectedShowTimeId] = useState(null);
+    const [countdown, setCountdown] = useState(300);
+    const [timerRunning, setTimerRunning] = useState(false);
 
     useEffect(() => {
+        if (timerRunning && countdown > 0) {
+            const timer = setTimeout(() => {
+                setCountdown(prevCountdown => prevCountdown - 1);
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        } else if (countdown === 0) {
+            window.location.reload();
+        }
+    }, [timerRunning, countdown]);
+
+    useEffect(() => {
+        console.log("listOfSeatTheUserIsCurrentlySelecting", listOfSeatTheUserIsCurrentlySelecting, "seatYour", seatYour);
+    }, [listOfSeatTheUserIsCurrentlySelecting, seatYour]);
+
+    const minutes = Math.floor(countdown / 60);
+    const seconds = countdown % 60;
+
+    const handleSeatSelect = (seatId, showTimeId) => {
+        setTimerRunning(false);
+        setCountdown(300);
+        setTimerRunning(true);
+        dispatch(SeatBeingSelected(seatId, showTimeId));
+    }
+
+    const showTimeIdHandele = async (showTimeId, roomId) => {
+        if (connection) {
+            await connection.stop();
+            await dispatch({
+                type: SEAT_BEING_SELECTED,
+                here: false
+            });
+        }
+
         connection.on("ListSeated", (seatIds) => {
             dispatch({
                 type: SEATED,
                 seatIds
             })
         })
-    }, [dispatch]);
 
+        connection.on("SeatDisconnection", (seatIds) => {
+            dispatch({
+                type: SEAT_DIS_CONNECTION,
+                seatIds
+            })
+        })
 
-    const showTimeIdHandele = (showTimeId) => {
-        const ticket = new Ticket()
-        ticket.showTimeId = showTimeId
-        connection.invoke("JoinShowTime", ticket)
+        connection.on("ListOfSeatTheUserIsCurrentlySelecting", (seatIds, seatHasBeenChosen) => {
+            console.log("ListOfSeatTheUserIsCurrentlySelecting", seatIds);
+            dispatch({
+                type: LIST_OF_SEAT_THE_USER_IS_CURRENTLY_SELECTING,
+                seatIds, seatHasBeenChosen
+            })
+        })
+        await connection.start();
 
-        dispatch(TicketTypeAction(showTimeId))
-        dispatch(SeatlAction(showTimeId))
+        const ticketBookingSuccess = new TicketBookingSuccess()
+        ticketBookingSuccess.showTimeId = showTimeId
+        ticketBookingSuccess.roomId = roomId
+        await connection.invoke("JoinShowTime", ticketBookingSuccess)
+
+        const ticketTypeByShowTimeAndRoomDTO = new TicketTypeByShowTimeAndRoomDTO();
+        ticketTypeByShowTimeAndRoomDTO.showTimeId = showTimeId;
+        ticketTypeByShowTimeAndRoomDTO.roomId = roomId;
+
+        dispatch(TicketTypeAction(ticketTypeByShowTimeAndRoomDTO))
+
+        const seatByShowTimeAndRoomDTO = new SeatByShowTimeAndRoomDTO();
+        seatByShowTimeAndRoomDTO.showTimeId = showTimeId;
+        seatByShowTimeAndRoomDTO.roomId = roomId;
+
+        dispatch(SeatAction(seatByShowTimeAndRoomDTO))
+
         dispatch(ComboAction())
         setShowTicketType_Seat_Combo(true)
         setSelectedShowTimeId(showTimeId)
     }
 
-
-    const getInforSeat = (rowSeatItem) => {
-        const seatIndex = selectedSeats.indexOf(rowSeatItem.id);
-        if (seatIndex === -1) {
-            setSelectedSeats([...selectedSeats, rowSeatItem.id]);
-            setSelectedSeatName([...selectedSeatName, rowSeatItem.name + ", "])
-        } else {
-            const newSelectedSeats = [...selectedSeats];
-            const newSelectedSeatName = [...selectedSeatName];
-
-            newSelectedSeats.splice(seatIndex, 1);
-            newSelectedSeatName.splice(seatIndex, 1);
-
-            setSelectedSeats(newSelectedSeats);
-            setSelectedSeatName(newSelectedSeatName)
-        }
-    }
-
-    const ticketBooking = (rowSeatItem) => {
-        const ticket = new Ticket()
-        ticket.showTimeId = selectedShowTimeId
-        ticket.seatIds = [rowSeatItem.id]
-        dispatch(TicketBooking(ticket))
-    }
-
     const renderSeats = (seatItem) => {
         return seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => {
-            let classSeated = rowSeatItem.isSold ? 'booked' : ''
-            let seated = listSeated.findIndex(x => x.some(y => y === rowSeatItem.id))
 
-            if (seated !== -1) {
-                classSeated = "booked";
-            }
+            const classSeated = rowSeatItem.isSold ? 'booked' : '';
+            const classSeatBeingSelected = seatYour.includes(rowSeatItem.id) ? 'choosing' : '';
+            const classTheUserIsCurrentlySelecting = listOfSeatTheUserIsCurrentlySelecting.includes(rowSeatItem.id) ? 'booked' : '';
+            const classSeatDisconnection = listSeatDisconnection.includes(rowSeatItem.id) ? '' : '';
+
+            // let seated = listSeated.findIndex(x => x === rowSeatItem.id)
+            // let seastBeingSelected = seatYour.findIndex(x => x === rowSeatItem.id)
+            // let theUserIsCurrentlySelecting = listOfSeatTheUserIsCurrentlySelecting.findIndex(x => x === rowSeatItem.id)
+            // let seatDisconnection = listSeatDisconnection.findIndex(x => x === rowSeatItem.id)
+
+            // if (seated !== -1) {
+            //     classSeated = "booked";
+            // }
+
+            // if (seastBeingSelected !== -1) {
+            //     classSeatBeingSelected = "choosing";
+            // }
+
+            // if (theUserIsCurrentlySelecting !== -1) {
+            //     classTheUserIsCurrentlySelecting = "booked";
+            // }
+
+            // if (seatDisconnection !== -1) {
+            //     classSeatDisconnection = "";
+            //     classTheUserIsCurrentlySelecting = ""
+            //     dispatch({
+            //         type: SEAT_DIS_CONNECTION_NULL,
+            //     })
+            // }
+
+            // if (seatHasBeenChosen !== null && seatHasBeenChosen.includes(rowSeatItem.id)) {
+            //     dispatch({
+            //         type: SEAT_HAS_BEEN_CHOSEN,
+            //         seatHasBeenChosen: ''
+            //     })
+            // }
 
             return (
                 rowSeatItem.name
@@ -93,13 +168,12 @@ const Theater = (props) => {
                         <td className="seat-td"
                             disabled
                             onClick={() => {
-                                // getInforSeat(rowSeatItem);
-                                if (!classSeated || !!seated) {
-                                    ticketBooking(rowSeatItem)
+                                if (!rowSeatItem.isSold && !classTheUserIsCurrentlySelecting) {
+                                    handleSeatSelect(rowSeatItem.id, selectedShowTimeId)
                                 }
                             }}
                         >
-                            <div className={`seat-wr seat-single ${classSeated} ${selectedSeats.includes(rowSeatItem.id) ? 'choosing' : ''}`} >
+                            <div className={`seat-wr seat-single ${classSeated} ${classSeatBeingSelected} ${classTheUserIsCurrentlySelecting} ${classSeatDisconnection}`} >
                                 <img
                                     src="https://cinestar.com.vn/assets/images/seat-single.svg"
                                     alt=""
@@ -130,7 +204,9 @@ const Theater = (props) => {
                                             <Nav variant="pills" className='swiper'>
                                                 {
                                                     props.MovieDetail.schedule?.map((scheduleItem, scheduleIndex) => (
-                                                        <Nav.Item onClick={() => setShowTicketType_Seat_Combo(false)}>
+                                                        <Nav.Item onClick={() => {
+                                                            setShowTicketType_Seat_Combo(false);
+                                                        }}>
                                                             <Nav.Link eventKey={`tab-${scheduleIndex}`} className='swiper-slide'>
                                                                 <div class="box-time">
                                                                     <p class="date">{moment(scheduleItem.date).format("DD/MM")}</p>
@@ -168,12 +244,17 @@ const Theater = (props) => {
                                                                             <li className="item-info">
                                                                                 <div className="tt">Standard</div>
                                                                                 <ul className="list-time">
-                                                                                    {theaterItem.showTime.map((timeItem, timeIndex) => (
-                                                                                        <li key={timeIndex} className="item-time"
-                                                                                            onClick={() => { showTimeIdHandele(timeItem.showTimeId); setSelectedTheaterName(theaterItem.theaterName) }}>
-                                                                                            {moment(timeItem.startTime).format("HH:mm")}
-                                                                                        </li>
-                                                                                    ))}
+                                                                                    {
+                                                                                        theaterItem.showTime.map((timeItem, timeIndex) => (
+                                                                                            <li key={timeIndex} className="item-time"
+                                                                                                onClick={() => {
+                                                                                                    showTimeIdHandele(timeItem.showTimeId, timeItem.roomId);
+                                                                                                    setSelectedTheaterName(theaterItem.theaterName);
+                                                                                                }}>
+                                                                                                {moment(timeItem.startTime).format("HH:mm")}
+                                                                                            </li>
+                                                                                        ))
+                                                                                    }
                                                                                     <li className="disable item-time">08:15</li>
                                                                                 </ul>
                                                                             </li>
@@ -202,7 +283,7 @@ const Theater = (props) => {
                     </div>
                 </div>
             </section>
-            
+
             {showTicketType_Seat_Combo && (
                 <>
 
@@ -404,7 +485,7 @@ const Theater = (props) => {
                         </div>
                     </section> */}
 
-                    {/* <div className="dt-bill bill-fixed bill-custom">
+                    <div className="dt-bill bill-fixed bill-custom">
                         <div className="container">
                             <div className="bill-wr" data-aos="fade-up">
                                 <div className="bill-left">
@@ -433,7 +514,7 @@ const Theater = (props) => {
                                         <p className="txt">Thời gian giữ vé:</p>
                                         <div className="bill-time">
                                             <span className="item" id="timer">
-                                                04: 49{" "}
+                                                {minutes < 10 ? `0${minutes}` : minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                                             </span>
                                         </div>
                                     </div>
@@ -442,18 +523,19 @@ const Theater = (props) => {
                                             <span className="txt">Tạm tính </span>
                                             <span className="num">90,000 đ</span>
                                         </div>
-                                        <button className="btn btn--pri  opacity-100"
+                                        <button className="btn btn-warning opacity-100"
                                             onClick={() => {
-                                                const booking = new Booking();
-                                                booking.ShowTimeId = selectedShowTimeId
-                                                dispatch(TicketTypeAction())
+                                                const ticketBookingSuccess = new TicketBookingSuccess();
+                                                ticketBookingSuccess.showTimeId = selectedShowTimeId
+                                                ticketBookingSuccess.seatIds = seatYour
+                                                dispatch(TicketBooking(ticketBookingSuccess))
                                             }}
                                         >ĐẶT VÉ</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div> */}
+                    </div>
                 </>
             )}
 

@@ -16,11 +16,11 @@ namespace Cinema.Repository
 			_context = context;
 		}
 
-		public async Task<SeatViewModel> GetSeatByShowTimeAysn(Guid showTimeId)
+		public async Task<SeatViewModel> GetSeatByShowTimeAndRoomIdAysn(SeatByShowTimeAndRoomDTO vm)
 		{
 			var showTimeRoom = (await _context.ShowTimeRoom
 								.Include(x => x.ShowTime)
-								.Where(x => x.ShowTimeId == showTimeId)
+								.Where(x => x.ShowTimeId == vm.ShowTimeId && x.RoomId == vm.RoomId)
 								.ToListAsync())
 								.FirstOrDefault();
 
@@ -31,7 +31,7 @@ namespace Cinema.Repository
 											.Where(x => x.RoomId == showTimeRoom.RoomId)
 											.ToListAsync();
 
-			var ticket = await _context.Ticket.Where(x => x.ShowTimeId == showTimeId).ToListAsync();
+			var ticket = await _context.Ticket.Include(x => x.Seat).Where(x => x.ShowTimeId == vm.ShowTimeId && x.Seat.RoomId == vm.RoomId).ToListAsync();
 
 			var roomName = seats.FirstOrDefault()?.Room.Name;
 

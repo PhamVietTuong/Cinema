@@ -70,8 +70,8 @@ namespace Cinema.Repository
                                         .GroupBy(x => new { x.ShowTime.Day })
 										.Select(schedule => new Schedules
 										{
-											Date = schedule.Key.Day,
-											Theater = schedule
+                                            Date = schedule.Key.Day,
+                                            Theater = schedule
 														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address })
 														.Select(theater => new Theaters
 														{
@@ -79,7 +79,8 @@ namespace Cinema.Repository
 															TheaterAddress = theater.Key.Address,
 															ShowTime = theater.Select(showTime => new ShowTimes
 															{
-																RoomName = showTime.Room.Name,
+                                                                RoomId = showTime.Room.Id,
+                                                                RoomName = showTime.Room.Name,
 																ShowTimeId = showTime.ShowTime.Id,
 																StartTime = showTime.ShowTime.StartTime,
 																EndTime = showTime.ShowTime.EndTime

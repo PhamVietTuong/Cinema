@@ -69,13 +69,15 @@ INSERT Movie(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDat
 
 SET @NEW_GUID = NEWID();
 SET @NEW_GUID1 = NEWID();
+SET @NEW_GUID2 = NEWID();
 INSERT ShowTime(Id, MovieId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movie where Name=N'GODZILLA X KONG'), GETDATE(), GETDATE(), GETDATE(), 1)
 INSERT ShowTimeRoom(Id, ShowTimeId, RoomId) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'))
+INSERT ShowTimeRoom(Id, ShowTimeId, RoomId) VALUES (@NEW_GUID2, @NEW_GUID, (select Id from Room where Name='02'))
 
 SET @NEW_GUID = NEWID();
 SET @NEW_GUID1 = NEWID();
 INSERT ShowTime(Id, MovieId, [Day], StartTime, EndTime, Status) VALUES (@NEW_GUID, (select Id from Movie where Name=N'GODZILLA X KONG'), GETDATE() + 1, GETDATE(), GETDATE(), 1)
-INSERT ShowTimeRoom(Id, ShowTimeId, RoomId) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'))
+INSERT ShowTimeRoom(Id, ShowTimeId, RoomId) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'))
 
 SET @NEW_GUID = NEWID();
 SET @NEW_GUID1 = NEWID();
@@ -103,6 +105,11 @@ SET @NEW_GUID = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='01'), 'A', 2, NULL, 0)
 
 SET @NEW_GUID = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='02'), 'A', 1, NULL, 0)
+SET @NEW_GUID = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='02'), 'A', 2, 'A1', 0)
+
+SET @NEW_GUID = NEWID();
 INSERT TicketType(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_GUID, (select Id from SeatType where Name=N'Đơn'), N'Người lớn', 70000, 1)
 
 SET @NEW_GUID1 = NEWID();
@@ -111,6 +118,13 @@ SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'A', 4, 'A2', 0)
 SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'A', 5, 'A3', 0)
+
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'A', 3, 'A2', 0)
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'A', 4, 'A3', 0)
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'A', 5, 'A4', 0)
 
 SET @NEW_GUID = NEWID();
 INSERT TicketType(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_GUID, (select Id from SeatType where Name=N'Ðôi'), N'HSSV-Người Cao Tuổi', 90000, 1)
@@ -125,6 +139,17 @@ SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 4, 'B4', 0)
 SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 5, 'B5', 0)
+
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 1, 'B1', 0)
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 2, 'B2', 0)
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 3, 'B3', 0)
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 4, 'B4', 0)
+SET @NEW_GUID1 = NEWID();
+INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 5, 'B5', 0)
 
 SET @NEW_GUID = NEWID();
 SET @NEW_GUID1 = NEWID();

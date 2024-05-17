@@ -1,8 +1,7 @@
-import { Ticket } from "../../Models/Ticket";
-import { TicketBookingInformation } from "../../Models/TicketBookingInformation";
+import { TicketBookingSuccess } from "../../Models/TicketBookingSuccess";
 import { cinemasService } from "../../Services/CinemasService";
-import { SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_SHOWTIME_DETAIL, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "./Type/CinemasType";
-import { connection } from "../..";
+import { connection } from "../../connectionSignalR";
+import { SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "./Type/CinemasType";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -33,10 +32,10 @@ export const MovieDetailAction = (id) => {
     }
 }
 
-export const TicketTypeAction = (showTimeId) => {
+export const TicketTypeAction = (ticketTypeByShowTimeDTO) => {
     return async (dispatch) => {
         try {
-            const ticketType = await cinemasService.GetTicketTypeByShowTimeId(showTimeId);
+            const ticketType = await cinemasService.GetTicketTypeByShowTimeAndRoomId(ticketTypeByShowTimeDTO);
 
             dispatch({
                 type: SET_TICKET_TYPE,
@@ -48,17 +47,17 @@ export const TicketTypeAction = (showTimeId) => {
     }
 }
 
-export const SeatlAction = (showTimeId) => {
+export const SeatAction = (seatByShowTimeAndRoomDTO) => {
     return async (dispatch) => {
         try {
-            const seat = await cinemasService.GetSeatByShowTimeId(showTimeId);
+            const seat = await cinemasService.GetSeatByShowTimeAndRoomId(seatByShowTimeAndRoomDTO);
 
             dispatch({
                 type: SET_SEAT,
                 seat: seat.data,
             });
         } catch (errors) {
-            console.log("SeatlAction", errors);
+            console.log("SeatAction", errors);
         }
     }
 }
@@ -78,7 +77,30 @@ export const ComboAction = () => {
     }
 }
 
-export const TicketBooking = (ticket = new Ticket()) => {
+export const SeatBeingSelected = (seatId, showTimeId) => {
+    return async (dispatch, getState) => {
+        try {
+            await dispatch({
+                type: SEAT_BEING_SELECTED,
+                seatId,
+                here: true
+            });
+
+            // let seatYour = getState().CinemasReducer.seatYour;
+            const { seatYour } = getState().CinemasReducer;
+
+            let ticketBookingSuccess = new TicketBookingSuccess()
+            ticketBookingSuccess.seatIds = seatYour
+            ticketBookingSuccess.showTimeId = showTimeId
+            await connection.invoke("SeatBeingSelected", ticketBookingSuccess)
+
+        } catch (error) {
+            console.log("SeatBeingSelected", error);
+        }
+    }
+}
+
+export const TicketBooking = (ticket) => {
     return async (dispatch) => {
         try {
             const ticketBooking = await cinemasService.PostTicket(ticket)
@@ -90,6 +112,8 @@ export const TicketBooking = (ticket = new Ticket()) => {
                 });
 
                 await connection.invoke("TicketBookingSuccess", ticket)
+                window.location.reload();
+                alert("Đặt vé thành công")
             }
         } catch (error) {
             

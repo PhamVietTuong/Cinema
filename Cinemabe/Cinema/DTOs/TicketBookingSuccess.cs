@@ -8,5 +8,6 @@
         }
         public List<string> SeatIds { get; set; }
         public string ShowTimeId { get; set; }
+        public string RoomId { get; set; }
     }
 }

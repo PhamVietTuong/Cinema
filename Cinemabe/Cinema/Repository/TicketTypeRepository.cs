@@ -14,11 +14,11 @@ namespace Cinema.Repository
 			_context = context;
 		}
 
-		public async Task<List<TicketTypeViewModel>> TicketTypeByShowTimeAysn(Guid showTimeId)
+		public async Task<List<TicketTypeViewModel>> TicketTypeByShowTimeAndRoomAysn(TicketTypeByShowTimeAndRoomDTO ticketTypeByShowTimeDTO)
 		{
-			var showTimeRoom = (await _context.ShowTimeRoom.Where(x => x.ShowTimeId == showTimeId).ToListAsync()).FirstOrDefault();
+			var showTimeRoom = (await _context.ShowTimeRoom.Where(x => x.ShowTimeId == ticketTypeByShowTimeDTO.ShowTimeId && x.RoomId == ticketTypeByShowTimeDTO.RoomId).ToListAsync()).FirstOrDefault();
 			var ticketTypeList = await _context.TicketType.Include(x => x.SeatType).ToListAsync();
-			var seatTicketTypeIds = await _context.Seat.Where(x => x.RoomId == showTimeRoom.RoomId).Select(x => x.TicketTypeId).ToListAsync();
+			var seatTicketTypeIds = await _context.Seat.Where(x => x.RoomId == showTimeRoom.RoomId).Select(x => x.TicketTypeId).Distinct().ToListAsync();
 			var rows = new List<TicketTypeViewModel>();
 
 			foreach (var ticketType in ticketTypeList)

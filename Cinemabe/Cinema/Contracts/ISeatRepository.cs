@@ -4,6 +4,6 @@ namespace Cinema.Contracts
 {
 	public interface ISeatRepository
 	{
-		Task<SeatViewModel> GetSeatByShowTimeAysn(Guid showTimeId);
+		Task<SeatViewModel> GetSeatByShowTimeAndRoomIdAysn(SeatByShowTimeAndRoomDTO vm);
 	}
 }

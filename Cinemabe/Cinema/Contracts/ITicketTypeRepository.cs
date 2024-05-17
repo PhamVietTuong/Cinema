@@ -4,6 +4,6 @@ namespace Cinema.Contracts
 {
 	public interface ITicketTypeRepository
 	{
-		Task<List<TicketTypeViewModel>> TicketTypeByShowTimeAysn(Guid showTimeId);
+		Task<List<TicketTypeViewModel>> TicketTypeByShowTimeAndRoomAysn(TicketTypeByShowTimeAndRoomDTO vm);
 	}
 }

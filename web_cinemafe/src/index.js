@@ -9,20 +9,13 @@ import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Theater from './Pages/User/Theater/Theater';
 import Detail from './Pages/User/Detail/Detail';
+import { connection } from './connectionSignalR';
 
-export const connection = new HubConnectionBuilder()
-  .withUrl(`${DOMAIN}/cinema`, { withCredentials: true })
-  .configureLogging(LogLevel.Information)
-  .build();
 
-connection.start()
-  .then(() => {
+
     ReactDOM.createRoot(document.getElementById('root')).render(
       <Provider store={store}>
         <Router />
       </Provider>,
     );
-  })
-  .catch(error => {
-    console.error('Error establishing SignalR connection:', error);
-  });
+  

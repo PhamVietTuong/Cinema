@@ -1,5 +1,3 @@
-import { Ticket } from "../Models/Ticket";
-import { TicketBookingInformation } from "../Models/TicketBookingInformation";
 import { baseService } from "./BaseService";
 
 export class CinemasService extends baseService {
@@ -11,12 +9,12 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/MovieDetail/${id}`)
     }
 
-    GetTicketTypeByShowTimeId = (showTimeId) => {
-        return this.get(`api/Cinemas/TicketTypeByShowTime/${showTimeId}`);
+    GetTicketTypeByShowTimeAndRoomId = (ticketTypeByShowTimeDTO) => {
+        return this.post(`api/Cinemas/TicketTypeByShowTimeAndRoomId`, ticketTypeByShowTimeDTO);
     }
 
-    GetSeatByShowTimeId = (showTimeId) => {
-        return this.get(`api/Cinemas/SeatByShowTime/${showTimeId}`);
+    GetSeatByShowTimeAndRoomId = (seatByShowTimeAndRoomDTO) => {
+        return this.post(`api/Cinemas/SeatByShowTimeAndRoomId`, seatByShowTimeAndRoomDTO);
     }
 
     GetCombo = () => {
@@ -27,11 +25,8 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/GetInformationAboutBoxOffice?showTimeId=${showTimeId}`);
     }
 
-    PostTicket = (ticket = new Ticket()) => {
-        return this.post(`api/Cinemas/Ticket`, ticket);
-    }
-
-    TicketBooking = (ticketBookingInformation = new TicketBookingInformation()) => {
+    PostTicket = (ticketBookingSuccess) => {
+        return this.post(`api/Cinemas/Ticket`, ticketBookingSuccess);
     }
 }
 
