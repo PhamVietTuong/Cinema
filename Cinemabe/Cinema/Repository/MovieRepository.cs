@@ -67,18 +67,18 @@ namespace Cinema.Repository
 														.ToListAsync();
 
 			var schedules = showTimeRoom
-                                        .GroupBy(x => new { x.ShowTime.Day })
-										.Select(schedule => new Schedules
+                                        .GroupBy(x => x.ShowTime.StartTime.Date )
+										.Select(schedule => new ScheduleRowViewModel
 										{
-                                            Date = schedule.Key.Day,
-                                            Theater = schedule
+                                            Date = schedule.Key,
+                                            Theaters = schedule
 														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address })
-														.Select(theater => new Theaters
+														.Select(theater => new TheaterRowViewModel
 														{
 															TheaterName = theater.Key.Name,
 															TheaterAddress = theater.Key.Address,
-															ShowTime = theater.Select(showTime => new ShowTimes
-															{
+															ShowTimes = theater.Select(showTime => new ShowTimeRowViewModel
+                                                            {
                                                                 RoomId = showTime.Room.Id,
                                                                 RoomName = showTime.Room.Name,
 																ShowTimeId = showTime.ShowTime.Id,
@@ -105,7 +105,7 @@ namespace Cinema.Repository
 				Languages = movieDetail.Languages,
 				ShowTimeTypeName = movieDetail.ShowTimeType.Name,
 				MovieType = movieTypes,
-				Schedule = schedules
+				Schedules = schedules
 			};
 			return viewModel;
 		}

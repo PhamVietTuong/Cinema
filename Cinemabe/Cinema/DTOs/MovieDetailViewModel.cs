@@ -18,23 +18,23 @@ namespace Cinema.DTOs
 		public string Languages { get; set; }
         public string MovieType { get; set; }
         public string ShowTimeTypeName { get; set; }
-        public List<Schedules> Schedule { get; set; }
+        public List<ScheduleRowViewModel> Schedules { get; set; }
     }
 
-	public class Schedules
+	public class ScheduleRowViewModel
 	{
 		public DateTime Date { get; set; }
-		public List<Theaters> Theater { get; set; }
+		public List<TheaterRowViewModel> Theaters { get; set; }
 	}
 
-	public class Theaters
+	public class TheaterRowViewModel
 	{
 		public string TheaterName { get; set; }
 		public string TheaterAddress { get; set; }
-		public List<ShowTimes> ShowTime { get; set; }
+		public List<ShowTimeRowViewModel> ShowTimes { get; set; }
 	}
 
-	public class ShowTimes
+	public class ShowTimeRowViewModel
 	{
         public Guid RoomId { get; set; }
         public string RoomName { get; set; }

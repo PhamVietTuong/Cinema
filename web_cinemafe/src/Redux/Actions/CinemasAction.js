@@ -1,7 +1,8 @@
+import { SeatStatus } from "../../Enum/SeatStatus";
 import { TicketBookingSuccess } from "../../Models/TicketBookingSuccess";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "./Type/CinemasType";
+import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "./Type/CinemasType";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -77,7 +78,7 @@ export const ComboAction = () => {
     }
 }
 
-export const SeatBeingSelected = (seatId, showTimeId) => {
+export const SeatBeingSelected = (seatId, showTimeId, roomId) => {
     return async (dispatch, getState) => {
         try {
             await dispatch({
@@ -86,12 +87,12 @@ export const SeatBeingSelected = (seatId, showTimeId) => {
                 here: true
             });
 
-            // let seatYour = getState().CinemasReducer.seatYour;
             const { seatYour } = getState().CinemasReducer;
 
             let ticketBookingSuccess = new TicketBookingSuccess()
             ticketBookingSuccess.seatIds = seatYour
             ticketBookingSuccess.showTimeId = showTimeId
+            ticketBookingSuccess.roomId = roomId
             await connection.invoke("SeatBeingSelected", ticketBookingSuccess)
 
         } catch (error) {
@@ -103,20 +104,32 @@ export const SeatBeingSelected = (seatId, showTimeId) => {
 export const TicketBooking = (ticket) => {
     return async (dispatch) => {
         try {
-            const ticketBooking = await cinemasService.PostTicket(ticket)
+            const handleInforTicket = async (tickets, seatStatus) => {
+                if (seatStatus === SeatStatus.Sold) {
+                    const seatNames = tickets.map(x => x.seat.name).join(", ");
+                    let seatIds = tickets.map(x => x.seat.id);
 
-            if (ticketBooking.status === 200) {
+                    alert("Đã có người mua: " + seatNames);
 
-                await dispatch({
-                    type: TICKET_BOOKING_SUCCESSFUL,
-                });
+                    dispatch({
+                        type: REMOVE_SEAT_BEING_SELECTED,
+                        seatIds, seatStatus
+                    });
+                } else {
+                    const ticketBooking = await cinemasService.PostTicket(ticket);
 
-                await connection.invoke("TicketBookingSuccess", ticket)
-                window.location.reload();
-                alert("Đặt vé thành công")
-            }
+                    if (ticketBooking.status === 200) {
+                        await connection.invoke("TicketBookingSuccess", ticket);
+                        window.location.reload();
+                        alert("Đặt vé thành công");
+                    }
+                }
+            };
+
+            await connection.on("InforTicket", handleInforTicket);
+            await connection.invoke("CheckTheSeatBeforeBooking", ticket)
         } catch (error) {
-            
+            console.log("TicketBooking", error);
         }
     }
 }

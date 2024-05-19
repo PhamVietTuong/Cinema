@@ -4,10 +4,10 @@
     {
         public TicketBookingSuccess()
         {
-            SeatIds = new List<string>();
+            SeatIds = new List<Guid>();
         }
-        public List<string> SeatIds { get; set; }
-        public string ShowTimeId { get; set; }
-        public string RoomId { get; set; }
+        public List<Guid> SeatIds { get; set; }
+        public Guid ShowTimeId { get; set; }
+        public Guid RoomId { get; set; }
     }
 }

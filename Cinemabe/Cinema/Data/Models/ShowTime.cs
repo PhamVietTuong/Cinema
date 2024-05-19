@@ -5,7 +5,6 @@
         public Guid Id { get; set; }
         public Guid MovieId { get; set; }
         public Movie Movie { get; set; }
-		public DateTime Day { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public bool Status { get; set; }

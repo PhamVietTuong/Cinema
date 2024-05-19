@@ -1,4 +1,5 @@
-import { BOOKING, LIST_OF_SEAT_THE_USER_IS_CURRENTLY_SELECTING, SEATED, SEAT_BEING_SELECTED, SEAT_DIS_CONNECTION, SEAT_DIS_CONNECTION_NULL, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL, UPDATE_SEATED } from "../Actions/Type/CinemasType";
+import { SeatStatus } from "../../Enum/SeatStatus";
+import { CHECK_FOR_EMPTY_SEAT, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEATED, SEAT_BEING_SELECTED, SEAT_DELETE_SEAT, SEAT_DESELECTED, SEAT_DESELECTED_NULL, SEAT_DIS_CONNECTION, SEAT_DIS_CONNECTION_NULL, SEAT_HAS_BEEN_CHOSEN, SEAT_UPDATE_SEAT, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL, UPDATE_SEAT, UPDATE_SEATED } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -8,11 +9,14 @@ const stateDefault = {
     ticketType: [],
     seat: [],
     combo: [],
-    listSeated: [],
+    listOfSeatSold: [],
     seatYour: [],
     listOfSeatTheUserIsCurrentlySelecting: [],
     seatHasBeenChosen: '',
     listSeatDisconnection: [],
+    seatState: 0,
+    listWattingSeat: [],
+    updateSeat: []
 }
 
 export const CinemasReducer = (state = stateDefault, action) => {
@@ -43,23 +47,6 @@ export const CinemasReducer = (state = stateDefault, action) => {
         }
 
         case SEAT_BEING_SELECTED: {
-            // let updateSeatBeingSelectedList
-            // if (!action.here) {
-            //     updateSeatBeingSelectedList = []
-            // }
-            // if (action.here) {
-            //     updateSeatBeingSelectedList = [...state.seatYour]
-
-            //     let index = updateSeatBeingSelectedList.findIndex(x => x === action.seatId);
-            //     console.log("SEAT_BEING_SELECTED", index);
-            //     if (index !== -1) {
-            //         updateSeatBeingSelectedList.splice(index, 1);
-            //     }
-            //     else {
-            //         updateSeatBeingSelectedList.push(action.seatId);
-            //     }
-            // }
-
             const updatedSeatYour = action.here
                 ? state.seatYour.includes(action.seatId)
                     ? state.seatYour.filter(id => id !== action.seatId)
@@ -73,88 +60,54 @@ export const CinemasReducer = (state = stateDefault, action) => {
             return { ...state, seatHasBeenChosen: action.seatHasBeenChosen };
         }
 
-        case LIST_OF_SEAT_THE_USER_IS_CURRENTLY_SELECTING: {
-            const seatHasBeenChosen = action.seatHasBeenChosen;
-            const seatIds = action.seatIds
+        case UPDATE_SEAT: {
+            const { seatId, seatStatus } = action;
+            let updatedSeats = [...state.updateSeat];
 
-            // Update the list of seats that the user has selected
-            let updatedListOfSeatTheUserIsCurrentlySelecting = state.listOfSeatTheUserIsCurrentlySelecting.slice();
-
-            // Handle seat selection
-            if (seatIds.length > 0) {
-                updatedListOfSeatTheUserIsCurrentlySelecting = [
-                    ...new Set([
-                        ...updatedListOfSeatTheUserIsCurrentlySelecting,
-                        ...seatIds,
-                    ])
-                ];
+            if (seatStatus === SeatStatus.Waiting || seatStatus === SeatStatus.Sold) {
+                updatedSeats = [...new Set([...updatedSeats, ...seatId])];
+            } else if (seatStatus === 1) {
+                updatedSeats = updatedSeats.filter(id => !seatId.includes(id));
             }
 
-            // Handle seat deselection
-            if (seatHasBeenChosen) {
-                updatedListOfSeatTheUserIsCurrentlySelecting = updatedListOfSeatTheUserIsCurrentlySelecting.filter(id => id !== seatHasBeenChosen);
+            return {
+                ...state,
+                updateSeat: updatedSeats
             }
+        } 
 
-            // Update the user's own seat list
-            const updatedSeatYour = seatHasBeenChosen
-                ? state.seatYour.filter(id => id !== seatHasBeenChosen)
-                : [...state.seatYour, ...seatIds];
-
-            // let updatedSeatBeingSelectedList = [...state.seatYour];
-
-            // if (seatHasBeenChosen) {
-            //     let index = updatedSeatBeingSelectedList.findIndex(x => x === seatHasBeenChosen);
-
-            //     if (index !== -1) {
-            //         updatedSeatBeingSelectedList.splice(index, 1);
-            //     }
-            // }
-
-            console.log("state.listOfSeatTheUserIsCurrentlySelecting",state.listOfSeatTheUserIsCurrentlySelecting);
-            console.log("action.seatIds", action.seatIds);
-
-            // const updatedList = [
-            //     ...new Set([
-            //         ...state.listOfSeatTheUserIsCurrentlySelecting,
-            //         ...action.seatIds,
-            //     ]),
-            // ];
-            // const filteredList = updatedList.filter(id => id !== seatHasBeenChosen );
-
-            //1, 2, 3 + 4
-            // const updatedListOfSeatTheUserIsCurrentlySelecting = [...new Set([...state.listOfSeatTheUserIsCurrentlySelecting, ...seatIds])];
-            // //1,2,3,4 tìm 4 có trong đó không
-            // const filteredListOfSeatTheUserIsCurrentlySelecting = updatedListOfSeatTheUserIsCurrentlySelecting.filter(seatId => seatIds.includes(seatId));
-
-            return { ...state,
-                listOfSeatTheUserIsCurrentlySelecting: updatedListOfSeatTheUserIsCurrentlySelecting,
-                seatHasBeenChosen: seatHasBeenChosen, 
-                seatYour: updatedSeatYour
+        case GET_WAITING_SEAT: {
+            return {
+                ...state,
+                updateSeat: [...new Set([...state.updateSeat, ...action.seatIds])],
             }
         }
 
-        case SEATED: {
-            state.listSeated = [...new Set([...state.listSeated, ...action.seatIds])]
+        case LIST_OF_SEATS_SOLD: {
+            state.listOfSeatSold = [...new Set([...state.listOfSeatSold, ...action.seatIds])]
             return { ...state }
         }
 
-        case TICKET_BOOKING_SUCCESSFUL: {
-            return { ...state, listSeatVailable: [] };
+        case CHECK_FOR_EMPTY_SEAT: {
+            const { seatId, seatStatus } = action;
+            let updatedSeatsYour = [...state.seatYour];
+
+            if (seatStatus === SeatStatus.Waiting || seatStatus === SeatStatus.Sold) {
+                updatedSeatsYour = updatedSeatsYour.filter(id => !seatId.includes(id))
+            }
+
+            return { ...state, seatYour: updatedSeatsYour };
         }
 
-        case SEAT_DIS_CONNECTION: {
-            const updatedList = state.listOfSeatTheUserIsCurrentlySelecting.filter(
-                id => !action.seatIds.includes(id)
-            );
-            return {
-                ...state,
-                listSeatDisconnection: action.seatIds,
-                listOfSeatTheUserIsCurrentlySelecting: updatedList,
-            };
-        }
+        case REMOVE_SEAT_BEING_SELECTED: {
+            const { seatIds, seatStatus } = action;
+            let updatedSeatsYour = [...state.seatYour];
 
-        case SEAT_DIS_CONNECTION_NULL: {
-            return { ...state, listSeatDisconnection: [] };
+            if (seatStatus === SeatStatus.Waiting || seatStatus === SeatStatus.Sold) {
+                updatedSeatsYour = updatedSeatsYour.filter(id => !seatIds.includes(id))
+            }
+
+            return { ...state, seatYour: updatedSeatsYour };
         }
 
         default: return { ...state };

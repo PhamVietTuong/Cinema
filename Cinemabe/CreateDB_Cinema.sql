@@ -157,7 +157,6 @@ CREATE TABLE [Seat] (
 CREATE TABLE [ShowTime] (
 	[Id] uniqueidentifier NOT NULL,
 	[MovieId] uniqueidentifier NOT NULL,
-	[Day] datetime NOT NULL,
 	[StartTime] datetime NOT NULL,
 	[EndTime] datetime NOT NULL,
 	[Status] bit NOT NULL,

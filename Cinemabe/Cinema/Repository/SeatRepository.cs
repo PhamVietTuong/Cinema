@@ -49,8 +49,7 @@ namespace Cinema.Repository
 										TicketTypeId = rowSeatViewModel.TicketType?.Id ?? Guid.Empty,
 										TicketTypeName = rowSeatViewModel.TicketType?.Name,
 										Price = rowSeatViewModel.TicketType?.Price ?? 0.0,
-										IsSold = ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? true : false,
-										//Đang Chọn
+										SeatStatus = (int)(ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? SeatStatus.Sold : SeatStatus.Empty),
 									})
 									.OrderBy(x => x.ColIndex).ThenBy(x => x.Name)
 									.ToList()

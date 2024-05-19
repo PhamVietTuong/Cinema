@@ -22,6 +22,6 @@
 		public Guid? TicketTypeId { get; set; }
 		public string? TicketTypeName { get; set; }
 		public double? Price { get; set; }
-        public bool IsSold { get; set; }    
+        public int SeatStatus { get; set; }    
     }
 }

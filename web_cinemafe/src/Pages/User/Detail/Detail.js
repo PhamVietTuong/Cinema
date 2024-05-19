@@ -32,14 +32,14 @@ const Detail = () => {
                                             <div class="web-movie-box">
                                                 <div className="web-movie-box">
                                                     <div className="image">
-                                                        <img src={`${DOMAIN}/Images/${movieDetail.image}`} alt=""></img>
+                                                        <img src={`${DOMAIN}/Images/${movieDetail?.image}`} alt=""></img>
                                                         <div className="attach">
                                                             <div className="type-movie">
-                                                                <span className="txt">{movieDetail.showTimeTypeName}</span>
+                                                                <span className="txt">{movieDetail?.showTimeTypeName}</span>
                                                             </div>
                                                             <div className="age">
                                                                 <span className="number">
-                                                                    {movieDetail.ageRestrictionName}
+                                                                    {movieDetail?.ageRestrictionName}
                                                                 </span>
                                                                 <span className="txt">
                                                                     TEEN
@@ -54,20 +54,20 @@ const Detail = () => {
                                             <div className='detail-ct'>
                                                 <div className='detail-ct-h'>
                                                     <h1 className='heading'>
-                                                        {movieDetail.name} ({movieDetail.ageRestrictionName})
+                                                        {movieDetail?.name} ({movieDetail?.ageRestrictionName})
                                                     </h1>
                                                     <ul className='info-detail'>
                                                         <li className='info-item'>
                                                             <span class="ic">
                                                                 <img src="https://cinestar.com.vn/assets/images/icon-tag.svg" alt="" />
                                                             </span>
-                                                            <span class="txt">{movieDetail.movieType}</span>
+                                                            <span class="txt">{movieDetail?.movieType}</span>
                                                         </li>
                                                         <li className='info-item'>
                                                             <span class="ic">
                                                                 <img src="https://cinestar.com.vn/assets/images/icon-clock.svg" alt="" />
                                                             </span>
-                                                            <span class="txt">{movieDetail.time}'</span>
+                                                            <span class="txt">{movieDetail?.time}'</span>
                                                         </li>
                                                         <li className='info-item'>
                                                             <span class="ic">
@@ -77,7 +77,7 @@ const Detail = () => {
                                                         </li>
                                                         <li className='info-item'>
                                                             <span class="ic"><i class="fa-regular fa-user-check" style={{ color: "#ede12d" }}></i></span>
-                                                            <span class="txt">{movieDetail.ageRestrictionName}: {movieDetail.ageRestrictionDescription}</span>
+                                                            <span class="txt">{movieDetail?.ageRestrictionName}: {movieDetail?.ageRestrictionDescription}</span>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -86,9 +86,9 @@ const Detail = () => {
                                                         Mô tả
                                                     </h3>
                                                     <ul className='font-family-actor'>
-                                                        <li>Đạo diễn: {movieDetail.director}</li>
-                                                        <li>Diễn viên: {movieDetail.actor}</li>
-                                                        <li>Khởi chiếu: {moment(movieDetail.releaseDate).format("DD/MM/YYYY")}</li>
+                                                        <li>Đạo diễn: {movieDetail?.director}</li>
+                                                        <li>Diễn viên: {movieDetail?.actor}</li>
+                                                        <li>Khởi chiếu: {moment(movieDetail?.releaseDate).format("DD/MM/YYYY")}</li>
                                                     </ul>
                                                 </div>
                                                 <div className='detail-ct-bd'>
@@ -97,7 +97,7 @@ const Detail = () => {
                                                     </h3>
                                                     <div className='ct'>
                                                         <div className='dt'>
-                                                            <p class="txt line-clamp-6 description">{movieDetail.description}</p>
+                                                            <p class="txt line-clamp-6 description">{movieDetail?.description}</p>
                                                         </div>
                                                     </div>
                                                 </div>
