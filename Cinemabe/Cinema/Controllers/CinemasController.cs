@@ -28,10 +28,10 @@ namespace Cinema.Controllers
 			return Ok(result);
 		}
 
-		[HttpGet("MovieDetail/{id}")]
-		public async Task<ActionResult<List<MovieViewModel>>> GetMovieDetail(Guid id)
+		[HttpPost("MovieDetail")]
+		public async Task<ActionResult<List<MovieViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
 		{
-			var result = await _uow.MovieRepository.GetMovieDetail(id);
+			var result = await _uow.MovieRepository.GetMovieDetail(movieDetailDTO);
 			return Ok(result);
 		}
 

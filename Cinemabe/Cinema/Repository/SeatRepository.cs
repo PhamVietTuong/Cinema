@@ -1,5 +1,6 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data;
+using Cinema.Data.Enum;
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -25,31 +26,42 @@ namespace Cinema.Repository
 								.FirstOrDefault();
 
 			var seats = await _context.Seat
-											.Include(x => x.TicketType)
-												.ThenInclude(x => x.SeatType)
+											.Include(x => x.SeatType)
 											.Include(x => x.Room)
 											.Where(x => x.RoomId == showTimeRoom.RoomId)
 											.ToListAsync();
 
 			var ticket = await _context.Ticket.Include(x => x.Seat).Where(x => x.ShowTimeId == vm.ShowTimeId && x.Seat.RoomId == vm.RoomId).ToListAsync();
 
-			var roomName = seats.FirstOrDefault()?.Room.Name;
+            var seatTypeTicketTypes = await _context.SeatTypeTicketType
+											.Include(x => x.TicketType)
+											.Include(x => x.SeatType)
+											.ToListAsync();
+
+            var roomName = seats.FirstOrDefault()?.Room.Name;
 
 			var rowName = seats.GroupBy(x => new { x.RowName })
 								.Select(rowNameViewModel => new RowNameViewModel
 								{
 									RowName = rowNameViewModel.Key.RowName,
-									RowSeats = rowNameViewModel.Select(rowSeatViewModel => new RowSeatViewModel
-									{
-										Id = rowSeatViewModel.Id,
-										ColIndex = rowSeatViewModel.ColIndex,
-										IsSeat = rowSeatViewModel.IsSeat,
-										Name = rowSeatViewModel.Name,
-										SeatTypeName = rowSeatViewModel.TicketType?.SeatType.Name,
-										TicketTypeId = rowSeatViewModel.TicketType?.Id ?? Guid.Empty,
-										TicketTypeName = rowSeatViewModel.TicketType?.Name,
-										Price = rowSeatViewModel.TicketType?.Price ?? 0.0,
-										SeatStatus = (int)(ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? SeatStatus.Sold : SeatStatus.Empty),
+									RowSeats = rowNameViewModel.Select(rowSeatViewModel => {
+
+                                        var seatTypeTicketType = rowSeatViewModel.SeatTypeId.HasValue
+																					? seatTypeTicketTypes.FirstOrDefault(x => x.SeatTypeId == rowSeatViewModel.SeatTypeId.Value)
+																					: null;
+                                        return new RowSeatViewModel
+										{
+											Id = rowSeatViewModel.Id,
+											ColIndex = rowSeatViewModel.ColIndex,
+											IsSeat = rowSeatViewModel.IsSeat,
+											Name = rowSeatViewModel.Name,
+											SeatTypeId = rowSeatViewModel.SeatTypeId,
+                                            SeatTypeName = rowSeatViewModel.SeatType?.Name,
+											TicketTypeId = seatTypeTicketType?.TicketType?.Id ?? Guid.Empty,
+											TicketTypeName = seatTypeTicketType?.TicketType?.Name,
+											Price = seatTypeTicketType?.Price ?? 0.0,
+											SeatStatus = (int)(ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? SeatStatus.Sold : SeatStatus.Empty),
+										};
 									})
 									.OrderBy(x => x.ColIndex).ThenBy(x => x.Name)
 									.ToList()

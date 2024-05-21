@@ -18,10 +18,10 @@ export const MovieListAction = () => {
     }
 }
 
-export const MovieDetailAction = (id) => {
+export const MovieDetailAction = (movieDetailDTO) => {
     return async (dispatch) => {
         try {
-            const result = await cinemasService.GetMovieDetail(id);
+            const result = await cinemasService.GetMovieDetail(movieDetailDTO);
 
             dispatch({
                 type: SET_MOVIE_DETAIL,

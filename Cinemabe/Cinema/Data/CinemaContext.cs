@@ -12,6 +12,18 @@ namespace Cinema.Data
     {
         public CinemaContext(DbContextOptions<CinemaContext> options) : base(options) { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MovieTypeDetail>()
+                .HasKey(mtd => new { mtd.MovieId, mtd.MovieTypeId });
+
+            modelBuilder.Entity<ShowTimeRoom>()
+                .HasKey(mtd => new { mtd.ShowTimeId, mtd.RoomId });
+
+            modelBuilder.Entity<SeatTypeTicketType>()
+                .HasKey(mtd => new { mtd.SeatTypeId, mtd.TicketTypeId });
+        }
+
         public DbSet<User> User { get; set; }
 
         public DbSet<UserType> UserType { get; set; }
@@ -38,12 +50,12 @@ namespace Cinema.Data
 
         public DbSet<Room> Room { get; set; }
 
-        public DbSet<ShowTimeType> ShowTimeType { get; set; }
-
         public DbSet<Theater> Theater { get; set; }
 
         public DbSet<SeatType> SeatType { get; set; }
 
         public DbSet<ShowTimeRoom> ShowTimeRoom { get; set; }
+
+        public DbSet<SeatTypeTicketType> SeatTypeTicketType { get; set; }
     }
 }

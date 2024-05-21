@@ -1,4 +1,6 @@
-﻿namespace Cinema.Data.Models
+﻿using Cinema.Data.Enum;
+
+namespace Cinema.Data.Models
 {
     public class ShowTime
     {
@@ -7,6 +9,7 @@
         public Movie Movie { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-		public bool Status { get; set; }
+		public int ProjectionForm { get; set; }
+        public bool Status { get; set; }
 	}
 }

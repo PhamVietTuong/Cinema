@@ -282,7 +282,7 @@ const Theater = (props) => {
                                                                     <div className="content">
                                                                         <div className="content-top">
                                                                             <p className="name sub-title cursor-pointer">
-                                                                                {ticketItem.name}
+                                                                                {ticketItem.ticketTypeName}
                                                                             </p>
                                                                             <div className="desc">
                                                                                 <p>{ticketItem.seatTypeName}</p>

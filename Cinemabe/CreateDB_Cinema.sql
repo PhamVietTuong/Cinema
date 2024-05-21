@@ -33,6 +33,9 @@ DROP TABLE dbo.ShowTimeType;
 IF OBJECT_ID('dbo.Room', 'U') IS NOT NULL
 DROP TABLE dbo.Room;
 
+IF OBJECT_ID('dbo.SeatTypeTicketType', 'U') IS NOT NULL
+DROP TABLE dbo.SeatTypeTicketType;
+
 IF OBJECT_ID('dbo.TicketType', 'U') IS NOT NULL
 DROP TABLE dbo.TicketType;
 
@@ -75,6 +78,7 @@ CREATE TABLE [AgeRestriction] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
     [Name] nvarchar(255) NOT NULL,
 	[Description] nvarchar(255) NOT NULL,
+	[Abbreviation] nvarchar(255) NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id)
 );
@@ -92,7 +96,8 @@ CREATE TABLE [Movie] (
 	[ShowTimeTypeId] uniqueidentifier NOT NULL,
 	[Name] nvarchar(255) NOT NULL,
 	[Image] nvarchar(255) NOT NULL,
-	[Time] int NOT NULL,
+	[Time2D] int NULL,
+	[Time3D] int NULL,
 	[ReleaseDate] datetime NOT NULL,
 	[Description] nvarchar(max) NOT NULL,
 	[Director] nvarchar(max) NOT NULL,
@@ -133,30 +138,37 @@ CREATE TABLE [SeatType] (
 
 CREATE TABLE [TicketType] (
 	[Id] uniqueidentifier NOT NULL,
-	[SeatTypeId] uniqueidentifier NOT NULL,
 	[Name] nvarchar(255) NOT NULL,
-	[Price] float NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
-	CONSTRAINT FK_TicketType_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES [SeatType] (Id),
+)
+
+CREATE TABLE [SeatTypeTicketType] (
+	[SeatTypeId] uniqueidentifier NOT NULL,
+	[TicketTypeId] uniqueidentifier NOT NULL,
+	[Price] float NOT NULL,
+	CONSTRAINT PK_SeatTypeTicketType PRIMARY KEY ([SeatTypeId], [TicketTypeId]),
+	CONSTRAINT FK_SeatTypeTicketType_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES [SeatType] (Id),
+	CONSTRAINT FK_SeatTypeTicketType_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
 )
 
 CREATE TABLE [Seat] (
 	[Id] uniqueidentifier NOT NULL,
 	[RoomId] uniqueidentifier NOT NULL,
-	[TicketTypeId] uniqueidentifier NULL,
+	[SeatTypeId] uniqueidentifier NULL,
 	[Name] nvarchar(255) NULL,
 	[ColIndex] int NOT NULL,
 	[RowName] nvarchar(255) NOT NULL,
 	[IsSeat] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Seat_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
-	CONSTRAINT FK_Seat_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
+	CONSTRAINT FK_Seat_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES SeatType(Id),
 )
 
 CREATE TABLE [ShowTime] (
 	[Id] uniqueidentifier NOT NULL,
 	[MovieId] uniqueidentifier NOT NULL,
+	[ProjectionForm] int NOT NULL,
 	[StartTime] datetime NOT NULL,
 	[EndTime] datetime NOT NULL,
 	[Status] bit NOT NULL,
@@ -165,10 +177,9 @@ CREATE TABLE [ShowTime] (
 )
 
 CREATE TABLE [ShowTimeRoom] (
-	[Id] uniqueidentifier NOT NULL,
 	[ShowTimeId] uniqueidentifier NOT NULL,
 	[RoomId] uniqueidentifier NOT NULL,
-	PRIMARY KEY (Id),
+	CONSTRAINT PK_ShowTimeRoom PRIMARY KEY ([ShowTimeId], [RoomId]),
 	CONSTRAINT FK_ShowTimeRoom_ShowTime FOREIGN KEY ([ShowTimeId]) REFERENCES [ShowTime] (Id),
 	CONSTRAINT FK_ShowTimeRoom_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
 )
@@ -203,10 +214,9 @@ CREATE TABLE [MovieType] (
 );
 
 CREATE TABLE [MovieTypeDetail] (
-	[Id] uniqueidentifier NOT NULL,
 	[MovieId] uniqueidentifier NOT NULL,
 	[MovieTypeId] uniqueidentifier NOT NULL,
-	PRIMARY KEY (Id),
+	CONSTRAINT PK_ShowTimeRoom PRIMARY KEY (MovieId, MovieTypeId),
 	CONSTRAINT FK_MovieTypeDetail_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
 	CONSTRAINT FK_MovieTypeDetail_MovieType FOREIGN KEY ([MovieTypeId]) REFERENCES [MovieType] (Id),
 )

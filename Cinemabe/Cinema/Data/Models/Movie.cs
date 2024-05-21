@@ -5,11 +5,10 @@
         public Guid Id { get; set; }
 		public Guid AgeRestrictionId { get; set; }
 		public AgeRestriction AgeRestriction { get; set; }
-        public Guid ShowTimeTypeId { get; set; }
-        public ShowTimeType ShowTimeType { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
-        public int Time { get; set; }
+        public int? Time2D { get; set; }
+        public int? Time3D { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Description { get; set; }
         public string Director { get; set; }

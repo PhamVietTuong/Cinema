@@ -1,5 +1,6 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data;
+using Cinema.Data.Enum;
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Microsoft.EntityFrameworkCore;
@@ -19,32 +20,54 @@ namespace Cinema.Repository
 
 		public async Task<List<MovieViewModel>> GetMovieList()
 		{
-			var movieList = await _context.Movie.ToListAsync();
+			var movieList = await _context.Movie.Include(x => x.AgeRestriction).ToListAsync();
 
 			var rows = new List<MovieViewModel>();
 			foreach (var movie in movieList)
 			{
-				rows.Add(new MovieViewModel
+				if (movie.Time2D != -1)
 				{
-					Id = movie.Id,
-					Name = movie.Name,
-					Image = movie.Image,
-					Time = movie.Time,
-					ReleaseDate = movie.ReleaseDate,
-					Description = movie.Description,
-					Trailer = movie.Trailer,
-				});
-			}
+                    rows.Add(new MovieViewModel
+                    {
+                        Id = movie.Id,
+                        Name = movie.Name,
+                        Image = movie.Image,
+                        Time = movie.Time2D,
+                        ReleaseDate = movie.ReleaseDate,
+                        Description = movie.Description,
+                        Trailer = movie.Trailer,
+                        ProjectionForm = (int)ProjectionForm.Time2D,
+                        AgeRestrictionName = movie.AgeRestriction.Name,
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation
+                    });
+                }
+
+                if (movie.Time3D != -1)
+                {
+                    rows.Add(new MovieViewModel
+                    {
+                        Id = movie.Id,
+                        Name = movie.Name,
+                        Image = movie.Image,
+                        Time = movie.Time3D,
+                        ReleaseDate = movie.ReleaseDate,
+                        Description = movie.Description,
+                        Trailer = movie.Trailer,
+                        ProjectionForm = (int)ProjectionForm.Time3D,
+                        AgeRestrictionName = movie.AgeRestriction.Name,
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation
+                    });
+                }
+            }
 
 			return rows;
 		}
 
-		public async Task<MovieDetailViewModel> GetMovieDetail(Guid id)
+		public async Task<MovieDetailViewModel> GetMovieDetail(MovieDetailDTO movieDetailDTO)
 		{
 			var movieDetail = await _context.Movie
 											.Include(a => a.AgeRestriction)
-											.Include(a => a.ShowTimeType)
-											.FirstOrDefaultAsync(x => x.Id == id);
+											.FirstOrDefaultAsync(x => x.Id == movieDetailDTO.Id);
 
 			if (movieDetail == null)
 			{
@@ -58,7 +81,6 @@ namespace Cinema.Repository
 
 			string movieTypes = String.Join(", ", movieTypeDetails.Select(x => x.MovieType.Name));
 
-			var showTimes = await _context.ShowTime.Where(x => x.MovieId == movieDetail.Id).ToListAsync();
 			var showTimeRoom = await _context.ShowTimeRoom
 														.Include(x => x.ShowTime)
 														.Include(x => x.Room)
@@ -96,14 +118,14 @@ namespace Cinema.Repository
 				AgeRestrictionDescription = movieDetail.AgeRestriction.Description,
 				Name = movieDetail.Name,
 				Image = movieDetail.Image,
-				Time = movieDetail.Time,
-				ReleaseDate = movieDetail.ReleaseDate,
+				Time = (int)(movieDetailDTO.ProjectionForm == (int)ProjectionForm.Time2D ? movieDetail.Time2D : movieDetail.Time3D),
+                ReleaseDate = movieDetail.ReleaseDate,
 				Description = movieDetail.Description,
 				Director = movieDetail.Director,
 				Actor = movieDetail.Actor,
 				Trailer = movieDetail.Trailer,
 				Languages = movieDetail.Languages,
-				ShowTimeTypeName = movieDetail.ShowTimeType.Name,
+				ShowTimeTypeName = movieDetailDTO.ProjectionForm == (int)ProjectionForm.Time2D ? "2D" : "3D",
 				MovieType = movieTypes,
 				Schedules = schedules
 			};
