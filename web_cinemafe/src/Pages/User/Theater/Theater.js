@@ -132,11 +132,13 @@ const Theater = (props) => {
 
     const renderSeats = (seatItem) => {
         return seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => {
-            let classUpdateSeat = updateSeat.includes(rowSeatItem.id) ? 'booked' : ''
             let classSeated = rowSeatItem.seatStatus === SeatStatus.Sold ? 'booked' : '';
             let classSeatBeingSelected = seatYour.includes(rowSeatItem.id) ? 'choosing' : '';
+            
             let classSeatSold = listOfSeatSold.includes(rowSeatItem.id) ? 'booked' : ''
-            let classWattingSeat = listWattingSeat && listWattingSeat.includes(rowSeatItem.id) ? 'booked' : '';
+
+            let classUpdateSeat = updateSeat.includes(rowSeatItem.id) ? 'update' : ''
+            let classWattingSeat = listWattingSeat && listWattingSeat.includes(rowSeatItem.id) ? 'update' : '';
 
             return (
                 rowSeatItem.name
