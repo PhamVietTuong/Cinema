@@ -1,40 +1,38 @@
-import 'package:cinema_app/style.dart';
+import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/data/models/showtime.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class ShowtimeDropDown extends StatefulWidget {
-  const ShowtimeDropDown({super.key, this.marginLeft = 0.0});
+  const ShowtimeDropDown(
+      {super.key,
+      this.marginLeft = 0.0,
+      required this.showtimes,
+      required this.showtime,
+      required this.selectShowtime});
+
   final double marginLeft;
+  final List<Showtime> showtimes;
+  final Showtime showtime;
+  final Function(Showtime) selectShowtime;
 
   @override
   State<ShowtimeDropDown> createState() => _ShowtimeDropDownState();
 }
 
 class _ShowtimeDropDownState extends State<ShowtimeDropDown> {
-  final List<String> items = [
-    '00:00',
-    '00:01',
-    '00:02',
-    '00:03',
-    '00:04',
-    '00:05',
-    '00:06',
-    '00:07',
-    '00:08',
-    '00:09',
-    '00:10',
-    '00:11'
-  ];
+  late Showtime selectedItem;
 
-  String selectedItem = '00:00';
+  @override
+  void initState() {
+    super.initState();
+    selectedItem = widget.showtime;
+  }
 
   @override
   Widget build(BuildContext context) {
     var styles = Styles();
     return Container(
-      margin: widget.marginLeft != 0.0
-          ? EdgeInsets.only(left: widget.marginLeft)
-          : const EdgeInsets.all(0),
+      margin: EdgeInsets.only(left: widget.marginLeft),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
           border: styles.borderWith, borderRadius: BorderRadius.circular(4)),
@@ -45,18 +43,19 @@ class _ShowtimeDropDownState extends State<ShowtimeDropDown> {
           icon: const Icon(Icons.keyboard_arrow_down_outlined),
           value: selectedItem,
           menuMaxHeight: 400,
-          items: items.map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
+          items: widget.showtimes.map((value) {
+            return DropdownMenuItem(
               value: value,
-              child: Text(value),
+              child: Text(value.getFormatTime()),
             );
           }).toList(),
-          onChanged: (String? newValue) {
+          onChanged: (newValue) {
             if (newValue != null) {
               // Khi người dùng chọn một mục mới từ dropdown
               setState(() {
                 selectedItem = newValue;
               });
+              widget.selectShowtime(newValue);
             }
           }),
     );

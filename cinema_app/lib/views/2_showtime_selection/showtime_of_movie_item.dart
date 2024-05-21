@@ -1,68 +1,27 @@
-import 'package:cinema_app/data/data.dart';
-import 'package:cinema_app/data/models/age_restriction.dart';
+import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/data/models/movie_type.dart';
-import 'package:cinema_app/data/models/showtime_type.dart';
-import 'package:cinema_app/style.dart';
+import 'package:cinema_app/constants.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
-import 'package:cinema_app/views/2_showtime_selection/showtime_hour.dart';
+import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/movie_type_box.dart';
 
 class ShowTimeOfMovieItem extends StatelessWidget {
   const ShowTimeOfMovieItem(
-      {super.key,
-      required this.movieId,
-      required this.showTimeTypeId,
-      required this.theaterId, required this.day});
-  final int movieId;
-  final int showTimeTypeId;
-  final int theaterId;
-  final String day;
-  void loadData() {}
+      {super.key, required this.movie, required this.booking});
+
+  final Movie movie;
+  final Booking booking;
+
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
     var styles = Styles();
-    //load data movie
-    Movie movie = Movie.fromJson(
-        data["Movies"]!.singleWhere((element) => element["id"] == movieId));
-    //load showtimeType
-    ShowTimeType showtimeType = ShowTimeType.fromJson(data["ShowTimeTypes"]
-        ?.singleWhere((element) => element["id"] == showTimeTypeId));
-    //load movie type
-    List<MovieType> movieTypes = List.filled(0, MovieType(), growable: true);
-    data["MovieTypeDetails"]!
-        .where((movieTypeDetail) => movieTypeDetail["movieId"] == movieId)
-        .forEach((movieTypeDetail) {
-      movieTypes.add(MovieType.fromJson(data["MovieTypes"]!.singleWhere(
-          (element) => element["id"] == movieTypeDetail["movieTypeId"])));
-    });
-    String movieTypeString = "";
-    for (var element in movieTypes) {
-      element != movieTypes.last
-          ? movieTypeString += "${element.name}, "
-          : movieTypeString += element.name;
-    }
-    //load ageRestriction
-    AgeRestriction ageRestriction = AgeRestriction.fromJson(
-        data["AgeRestrictions"]!
-            .singleWhere((element) => element["id"] == movie.ageRestrictionId));
-    //load showtime hour
-    List<ShowTimeHour> showtimeHours =
-        List.filled(0, const ShowTimeHour(title: ""), growable: true);
-    data["ShowTimes"]!
-        .where((showtime) =>
-            showtime["theaterId"] == theaterId &&
-            showtime["movieId"] == movieId&&
-            showtime["day"]==day)
-        .forEach((element) {
-      showtimeHours.add(ShowTimeHour(title: element["startTime"]));
-    });
-    
-    return showtimeHours.isEmpty?const SizedBox(): Container(
+    var types = movie.types.join(", ");
+
+    return Container(
         padding: const EdgeInsets.symmetric(
           vertical: 10,
           horizontal: 15,
@@ -102,11 +61,11 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            movie.name,
+                            '${movie.name} ${movie.showtimes[0].type.name} (${movie.ageRestriction.name})',
                             style: styles.titleTextStyle,
                           ),
                           MovieTypeBox(
-                            title: movieTypeString,
+                            title: types,
                             marginTop: 5,
                             marginBottom: 10,
                             padding: 5,
@@ -114,9 +73,12 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                           Row(
                             children: [
                               ShowtimeTypeBox(
-                                  title: showtimeType.name.split("-")[0]),
+                                title: movie.showtimes[0].type.name,
+                              ),
                               AgeRestrictionBox(
-                                  title: ageRestriction.name, marginLeft: 20),
+                                title: movie.ageRestriction.name,
+                                marginLeft: 5,
+                              ),
                             ],
                           )
                         ]),
@@ -130,7 +92,13 @@ class ShowTimeOfMovieItem extends StatelessWidget {
             child: Wrap(
               spacing: 5,
               runSpacing: 5,
-              children: showtimeHours,
+              children: movie.showtimes
+                  .map((e) => ShowtimeItem(
+                        showtime: e,
+                        booking: booking,
+                        movie:  movie,
+                      ))
+                  .toList(),
             ),
           ),
         ]));

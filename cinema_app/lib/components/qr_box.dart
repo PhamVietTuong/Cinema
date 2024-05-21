@@ -7,12 +7,10 @@ class QrBox extends StatelessWidget {
   final String value;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: QrImageView(
-        data: value,
-        size: size,
-        version: QrVersions.auto,
-      ),
+    return QrImageView(
+      data: value,
+      size: size,
+      version: QrVersions.auto,
     );
   }
 }

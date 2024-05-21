@@ -1,3 +1,4 @@
+import 'package:cinema_app/views/Account/user_screen.dart';
 import 'package:cinema_app/views/home_screen.dart';
 import 'package:cinema_app/views/1_threater_selection/theater_sceen.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
@@ -20,7 +21,7 @@ class _BottomNavState extends State<BottomNav> {
       child: Text("News"),
     ),
     const Center(
-      child: Text("Profile"),
+      child: User(),
     )
   ];
   @override

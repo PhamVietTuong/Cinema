@@ -1,11 +1,20 @@
+import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/style.dart';
+import 'package:cinema_app/constants.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_screen.dart';
 import 'package:flutter/material.dart';
 
 class TheaterItem extends StatelessWidget {
   const TheaterItem({super.key, required this.data});
   final Theater data;
+
+  String formatPhoneNumber(String phoneNumber) {
+    String formattedNumber = phoneNumber.replaceAllMapped(
+        RegExp(r'^(\d{3})(\d{3})(\d{4,})$'),
+        (match) => '${match[1]} ${match[2]} ${match[3]}');
+    return formattedNumber;
+  }
+
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
@@ -16,7 +25,7 @@ class TheaterItem extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ShowTimeSceen(theaterId: data.id),
+              builder: (context) => ShowTimeSceen(booking: Booking(theater: data)),
             ));
       },
       child: Container(
@@ -87,7 +96,7 @@ class TheaterItem extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.only(left: 5),
                             child: Text(
-                              data.phone,
+                              formatPhoneNumber(data.phone),
                               style: styles.normalTextStyle,
                             ),
                           )

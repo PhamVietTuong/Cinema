@@ -1,6 +1,9 @@
+import 'package:cinema_app/data/models/booking.dart';
+import 'package:cinema_app/data/models/movie.dart';
+import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/style.dart';
-import 'package:cinema_app/views/2_showtime_selection/showtime_hour.dart';
+import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';
 import 'package:flutter/material.dart';
 
 class ListThreater extends StatefulWidget {
@@ -51,20 +54,19 @@ class _ListThreaterState extends State<ListThreater> {
           ),
         ),
         isShow
-            ? Column(
-               children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ?  Column(
                 children: [
-                ShowTimeHour(title: '08:30'),
-                ShowTimeHour(title: '10:00'),
- ShowTimeHour(title: '11:50'),
-                ShowTimeHour(title: '13:30'),
-                 ShowTimeHour(title: '19:40'),
-              
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
+                    ],
+                  )
                 ],
-              )
-               ],
               )
             : const SizedBox(),
       ],

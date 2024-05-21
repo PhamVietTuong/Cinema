@@ -1,19 +1,35 @@
-import 'package:cinema_app/style.dart';
+// ignore_for_file: avoid_print
+
+import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/data/models/booking.dart';
+import 'package:cinema_app/data/models/movie.dart';
+import 'package:cinema_app/data/models/showtime.dart';
+import 'package:cinema_app/presenters/showtime_presenter.dart';
 import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_of_movie_item.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/data.dart';
+import '../../presenters/movie_presenter.dart';
 
 class ShowTimeSceen extends StatefulWidget {
-  const ShowTimeSceen({super.key, required this.theaterId});
-  final int theaterId;
-
+  const ShowTimeSceen({
+    super.key,
+    required this.booking,
+  });
+  final Booking booking;
   @override
   State<ShowTimeSceen> createState() => _ShowTimeSceenState();
 }
 
-class _ShowTimeSceenState extends State<ShowTimeSceen> {
+class _ShowTimeSceenState extends State<ShowTimeSceen>
+    implements MovieViewContract, ShowtimeViewContract {
+  late MoviePresenter moviePr;
+  late ShowtimePresenter showtimePr;
+
+  bool isLoadingData = true;
+
+  Set<int> movieIds = Set.identity();
+  List<Showtime> showtimeOfDate = List.filled(0, Showtime(), growable: true);
   List<DayItemBox> days = List.filled(
       0,
       DayItemBox(
@@ -22,51 +38,28 @@ class _ShowTimeSceenState extends State<ShowTimeSceen> {
         isSelected: false,
       ),
       growable: true);
-  late String theaterName;
   List<ShowTimeOfMovieItem> lstShowTimeMovie = List.filled(
       0,
-      const ShowTimeOfMovieItem(
-        movieId: 1,
-        showTimeTypeId: 1,
-        theaterId: 1,
-        day: "",
+      ShowTimeOfMovieItem(
+        movie: Movie(),
+        booking: Booking(),
       ),
       growable: true);
+
   var today = DateTime.now();
   var spaceBottom = 6.0;
+
   late DateTime selectedDay;
-  late String dayString;
 
   void _selectDay(DateTime day) {
     setState(() {
       selectedDay = day;
-      loadData();
+      showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
     });
   }
 
   void loadData() {
     //creat dayString
-    dayString =
-        "${selectedDay.day.toString().padLeft(2, '0')}/${selectedDay.month.toString().padLeft(2, '0')}/${selectedDay.year.toString().padLeft(2, "0")}";
-    // load theaterName
-    theaterName = data["Theaters"]!
-        .singleWhere((e) => e["id"] == widget.theaterId)["name"];
-    //load movie
-    lstShowTimeMovie.clear();
-    List<int> movieIds = List.filled(0, 0, growable: true);
-    data["ShowTimes"]!
-        .where((e) => e["theaterId"] == widget.theaterId)
-        .forEach((e) {
-      if (!movieIds.contains(e["movieId"])) {
-        lstShowTimeMovie.add(ShowTimeOfMovieItem(
-          movieId: e["movieId"],
-          showTimeTypeId: e["showTimeTypeId"],
-          theaterId: widget.theaterId,
-          day: dayString,
-        ));
-        movieIds.add(e["movieId"]);
-      }
-    });
   }
 
   @override
@@ -74,6 +67,10 @@ class _ShowTimeSceenState extends State<ShowTimeSceen> {
     super.initState();
     selectedDay = today;
     loadData();
+    moviePr = MoviePresenter(this);
+    showtimePr = ShowtimePresenter(this);
+
+    showtimePr.fetchShowtimesByDate(today, widget.booking.theater.id);
   }
 
   @override
@@ -87,6 +84,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen> {
           date: today.add(Duration(days: i)),
           selectDay: _selectDay));
     }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -101,7 +99,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen> {
           icon: const Icon(Icons.arrow_back_ios_new),
         ),
         title: Text(
-          theaterName,
+          widget.booking.theater.name,
           style: styles.appBarTextStyle,
         ),
         bottom: PreferredSize(
@@ -132,14 +130,83 @@ class _ShowTimeSceenState extends State<ShowTimeSceen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            decoration: const BoxDecoration(color: Colors.grey),
-            child: Column(children: lstShowTimeMovie),
-          ),
-        ),
-      ),
+      body: isLoadingData
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Đang tải...",
+                    style: styles.titleTextStyle,
+                  )
+                ],
+              ),
+            )
+          : SingleChildScrollView(
+              child: Center(
+                child: Container(
+                  decoration: const BoxDecoration(color: Colors.grey),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: lstShowTimeMovie.isNotEmpty?lstShowTimeMovie:[const Text("Trống")]),
+                ),
+              ),
+            ),
     );
+  }
+
+  @override
+  void onLoadMovieComplete(List<Movie> movies) {
+    setState(() {
+      lstShowTimeMovie.clear();
+      for (var movie in movies) {
+  
+        movie.showtimes = showtimeOfDate
+            .where((showtime) => showtime.movieId == movie.id)
+            .toList();
+      }
+
+      lstShowTimeMovie = movies
+          .map((movie) => ShowTimeOfMovieItem(
+                movie: movie,
+                booking: widget.booking,
+              ))
+          .toList();
+      
+      isLoadingData = false;
+    });
+  }
+
+  @override
+  void onLoadMovieError() {
+    isLoadingData = false;
+  }
+
+  @override
+  void onLoadShowtimeComplete(List<Showtime> showtimes) {
+    setState(() {
+      showtimeOfDate = showtimes;
+      movieIds.clear();
+      for (var showtime in showtimes) {
+        movieIds.add(showtime.movieId);
+      }
+    });
+    //  print(movieIds.toList());
+    if (movieIds.toList().isNotEmpty) {
+      moviePr.fetchMoviesByIds(movieIds.toList());
+    } else {
+      onLoadMovieComplete([]);
+    }
+  }
+
+  @override
+  void onLoadShowtimeError() {
+    isLoadingData = false;
   }
 }

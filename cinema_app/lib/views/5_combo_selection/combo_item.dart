@@ -1,4 +1,4 @@
-import 'package:cinema_app/style.dart';
+import 'package:cinema_app/constants.dart';
 import 'package:cinema_app/components/btn_up_down.dart';
 import 'package:flutter/material.dart';
 
@@ -48,8 +48,8 @@ class _ComboItemState extends State<ComboItem> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const BtnUpDown(
-                isUp: true,
+               BtnUpDown(
+                isUp: true,upDown: (bool i){},
               ),
               Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -57,7 +57,7 @@ class _ComboItemState extends State<ComboItem> {
                     "000",
                     style: styles.titleTextStyle,
                   )),
-              const BtnUpDown()
+               BtnUpDown(upDown: (bool i){},)
             ],
           )
         ],

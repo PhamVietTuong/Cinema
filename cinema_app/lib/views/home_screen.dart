@@ -2,8 +2,7 @@ import 'dart:async';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
-import 'package:cinema_app/style.dart';
-import 'package:cinema_app/views/1_threater_selection/theater_sceen.dart';
+import 'package:cinema_app/constants.dart';
 import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget {
@@ -20,26 +19,26 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Container(
-          margin: const EdgeInsets.all(2),
-          width: 200,
-          height: 200,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(40),
-            child: Image.asset(
-              'assets/img/User.JPG',
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        title: const Text("Hi, Nhu Y!",
-            style: TextStyle(fontSize: 20, color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 102, 51, 153),
+        // leading: Container(
+        //   margin: const EdgeInsets.all(2),
+        //   width: 200,
+        //   height: 200,
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(40),
+        //   ),
+        //   child: ClipRRect(
+        //     borderRadius: BorderRadius.circular(40),
+        //     child: Image.asset(
+        //       'assets/img/User.JPG',
+        //       width: double.infinity,
+        //       height: double.infinity,
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        // ),
+        // title: const Text("Hi, Nhu Y!",
+        //     style: TextStyle(fontSize: 20, color: Colors.white)),
+         backgroundColor: const Color.fromARGB(255, 102, 51, 153),
         actions: [
           IconButton(
               onPressed: () {},
@@ -156,7 +155,7 @@ class _MyCarouselState extends State<MyCarousel> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
           child: Image.asset(
-              'assets/img/Banner.png',
+              'assets/img_demo/Banner.png',
             ),
           ),
         )
@@ -227,7 +226,7 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
                 ],
               ),
               child: Image.asset(
-                'assets/img/Banner2.jpg',
+                'assets/img_demo/Banner2.jpg',
                 fit: BoxFit.cover,
               ),
             ),
@@ -275,7 +274,7 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MovieDetail(),
+            builder: (context) => const MovieDetail(),
           ),
         );
       },
@@ -292,7 +291,7 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
           ],
         ),
         child: Image.asset(
-          'assets/img/Banner2.jpg',
+          'assets/img_demo/Banner2.jpg',
           fit: BoxFit.cover,
         ),
       ),
@@ -324,7 +323,7 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MovieDetail(),
+                      builder: (context) => const MovieDetail(),
                     ),
                   );
                 }, 
@@ -381,7 +380,7 @@ class _CarouselThirdState extends State<CarouselThird> {
                   Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MovieDetail(),
+              builder: (context) => const MovieDetail(),
               
             ));
               },

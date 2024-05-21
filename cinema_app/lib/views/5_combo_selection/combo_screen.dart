@@ -1,4 +1,5 @@
-import 'package:cinema_app/style.dart';
+import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_title.dart';
 import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/views/6_payment/pay_screen.dart';
@@ -61,7 +62,7 @@ class _ComboScreenState extends State<ComboScreen> {
                           spreadRadius: 1,
                           offset: const Offset(1, 1))
                     ]),
-                child: const BookingSummaryBox(nextScreen: PayScreen()))
+                child:  BookingSummaryBox(nextScreen: const PayScreen(), booking: Booking(),))
           ],
         ),
       ),
