@@ -101,6 +101,19 @@ namespace Cinema.Controllers
 			return Ok(result);
 		}
 
+        [HttpPost("GetShowTimeByDateAndTheaterId")]
+        public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByDateAndTheaterId(ShowTimeByDateAndTheaterId showTimeByDateAndTheaterId)
+        {
+            var result = await _uow.TheaterRepository.GetShowTimeByDateAndTheaterId(showTimeByDateAndTheaterId);
+
+            if (result.Count == 0)
+            {
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+
+            return Ok(result);
+        }
+
         #endregion
     }
 }
