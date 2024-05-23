@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Net;
 
 namespace Cinema.Controllers
 {
@@ -85,15 +86,21 @@ namespace Cinema.Controllers
 
 		#endregion
 
-		#region TicketType
+		#region Theater
 
-		[HttpPost("TicketTypeByShowTimeAndRoomId")]
-		public async Task<ActionResult<List<TicketTypeViewModel>>> TicketTypeByShowTimeAndRoomId(TicketTypeByShowTimeAndRoomDTO vm)
+		[HttpGet("GetTheaterList")]
+		public async Task<ActionResult<List<TheaterDTO>>> GetTheaterList()
 		{
-			var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAysn(vm);
+			var result = await _uow.TheaterRepository.GetAllTheater();
+
+			if(result.Count == 0)
+			{
+				return StatusCode(StatusCodes.Status204NoContent);
+            }
+
 			return Ok(result);
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }
