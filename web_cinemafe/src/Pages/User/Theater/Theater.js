@@ -132,11 +132,13 @@ const Theater = (props) => {
 
     const renderSeats = (seatItem) => {
         return seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => {
-            let classUpdateSeat = updateSeat.includes(rowSeatItem.id) ? 'booked' : ''
             let classSeated = rowSeatItem.seatStatus === SeatStatus.Sold ? 'booked' : '';
             let classSeatBeingSelected = seatYour.includes(rowSeatItem.id) ? 'choosing' : '';
+            
             let classSeatSold = listOfSeatSold.includes(rowSeatItem.id) ? 'booked' : ''
-            let classWattingSeat = listWattingSeat && listWattingSeat.includes(rowSeatItem.id) ? 'booked' : '';
+
+            let classUpdateSeat = updateSeat.includes(rowSeatItem.id) ? 'update' : ''
+            let classWattingSeat = listWattingSeat && listWattingSeat.includes(rowSeatItem.id) ? 'update' : '';
 
             return (
                 rowSeatItem.name
@@ -282,7 +284,7 @@ const Theater = (props) => {
                                                                     <div className="content">
                                                                         <div className="content-top">
                                                                             <p className="name sub-title cursor-pointer">
-                                                                                {ticketItem.name}
+                                                                                {ticketItem.ticketTypeName}
                                                                             </p>
                                                                             <div className="desc">
                                                                                 <p>{ticketItem.seatTypeName}</p>

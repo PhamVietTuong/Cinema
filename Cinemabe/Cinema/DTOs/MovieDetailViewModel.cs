@@ -10,7 +10,7 @@ namespace Cinema.DTOs
 		public string Name { get; set; }
 		public string Image { get; set; }
 		public int Time { get; set; }
-		public DateTime ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }
 		public string Description { get; set; }
 		public string Director { get; set; }
 		public string Actor { get; set; }

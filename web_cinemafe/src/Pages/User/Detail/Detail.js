@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -10,14 +10,21 @@ import { useEffect } from 'react';
 import { MovieDetailAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
 import moment from 'moment';
+import { MovieDetailDTO } from '../../../Models/MovieDetailDTO';
 const Detail = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const { movieDetail } = useSelector((state) => state.CinemasReducer)
-    
+    let location = useLocation();
+    let projectionForm = location.state?.projectionForm; 
+
     useEffect(() => {
-        dispatch(MovieDetailAction(id))
-    }, [dispatch, id]);
+        let movieDetailDTO = new MovieDetailDTO();
+        movieDetailDTO.id = id;
+        movieDetailDTO.projectionForm = projectionForm
+
+        dispatch(MovieDetailAction(movieDetailDTO))
+    }, [dispatch, id, projectionForm]);
 
     return (
         <>

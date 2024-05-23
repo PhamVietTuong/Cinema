@@ -5,8 +5,8 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/GetMovieList`)
     }
 
-    GetMovieDetail = (id) => {
-        return this.get(`api/Cinemas/MovieDetail/${id}`)
+    GetMovieDetail = (movieDetailDTO) => {
+        return this.post(`api/Cinemas/MovieDetail`, movieDetailDTO)
     }
 
     GetTicketTypeByShowTimeAndRoomId = (ticketTypeByShowTimeDTO) => {

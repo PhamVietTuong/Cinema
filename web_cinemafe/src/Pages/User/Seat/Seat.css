@@ -19,7 +19,7 @@
 }
 
 .seat-wr.choosing {
-    color: #f3ea28;;
+    color: #f3ea28;
 }
 
 .seat-wr.choosing img {
@@ -34,6 +34,14 @@
 
 .seat-wr.booked img {
     filter: brightness(0) saturate(100%) invert(32%) sepia(9%) saturate(1380%) hue-rotate(176deg) brightness(94%) contrast(88%);
+}
+
+.seat-wr.update {
+    color: red;
+}
+
+.seat-wr.update img {
+    filter: brightness(0) saturate(100%) invert(19%) sepia(91%) saturate(7480%) hue-rotate(359deg) brightness(102%) contrast(107%);
 }
 
 .sec-heading {

@@ -1,0 +1,29 @@
+.web-movie-list {
+    position: relative;
+}
+
+/* .swiper {
+    width: 100%;
+    height: 100%;
+} */
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+a {
+    color: rgb(2, 67, 132);
+    text-decoration: none;
+}

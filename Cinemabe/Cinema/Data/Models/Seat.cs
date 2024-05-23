@@ -5,8 +5,8 @@
 		public Guid Id { get; set; }
 		public Guid RoomId { get; set; }
 		public Room Room { get; set; }
-		public Guid? TicketTypeId { get; set; }
-		public TicketType TicketType { get; set; }
+		public Guid? SeatTypeId { get; set; }
+		public SeatType SeatType { get; set; }
         public int ColIndex { get; set; }
         public string RowName { get; set; }
 		public string Name { get; set; }

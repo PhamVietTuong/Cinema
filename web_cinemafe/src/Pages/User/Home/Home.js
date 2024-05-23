@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Film from "../../../Components/Film/Film";
 import './Home.css'
 import { MovieListAction } from "../../../Redux/Actions/CinemasAction";
+import Slide from "../../../Components/Slide/Slide";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const Home = () => {
                 <section className="web-movie-slide">
                     <div className="movie-showing ht">
                         <div className="container">
-                            <Film movieList={movieList} />
+                            <Slide movieList={movieList} />
                         </div>
                     </div>
                 </section>
