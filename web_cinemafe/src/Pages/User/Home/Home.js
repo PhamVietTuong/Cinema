@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import Film from "../../../Components/Film/Film";
 import './Home.css'
-import { MovieListAction } from "../../../Redux/Actions/CinemasAction";
 import Slide from "../../../Components/Slide/Slide";
+import { MovieListAction } from "../../../Redux/Actions/CinemasAction";
 
 const Home = () => {
     const dispatch = useDispatch();

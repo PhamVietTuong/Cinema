@@ -40,7 +40,7 @@ namespace Cinema.Repository
                                                 .Include(x => x.Room)
                                                 .Include(x => x.ShowTime)
                                                     .ThenInclude(x => x.Movie)
-                                                .Where(x => x.Room.TheaterId == showTimeByDateAndTheaterId.TheaterId && x.ShowTime.StartTime.Date == showTimeByDateAndTheaterId.Date).ToListAsync();
+                                                .Where(x => x.Room.TheaterId == showTimeByDateAndTheaterId.TheaterId && x.ShowTime.StartTime.Date == showTimeByDateAndTheaterId.Date.Date).ToListAsync();
 
             var result = new List<ShowTimeDTO>();
 
