@@ -1,0 +1,76 @@
+.ticket {
+    padding-bottom: 40px;
+}
+
+@media (min-width: 701px) {
+    .sec-ticket .food-box .content {
+        flex-direction: column !important;
+        border: 1px solid rgba(248, 250, 252, .5);
+        border-radius: 4px;
+        padding: 20px !important;
+    }
+
+    .sec-ticket .food-box .content .desc {
+        color: #f3ea28;
+        font-size: 14px !important;
+    }
+}
+
+.ticket .food-box .content {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px;
+    align-items: center;
+    text-align: center;
+}
+
+@media (max-width: 1200px) {
+    .ticket .food-box .content {
+        padding: unset;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 700px) {
+    .ticket .food-box .content {
+        flex-direction: row;
+    }
+}
+
+.ticket .food-box .content-top {
+    align-items: center;
+    text-align: left;
+}
+
+@media (max-width: 1200px) {
+    .ticket .food-box .content-top {
+        align-items: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 700px) {
+    .ticket .food-box .content-top {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+.ticket .food-box .content-top .name {
+    text-transform: uppercase;
+}
+
+.ticket .food-box .content-top .desc {
+    font-size: 10px;
+}
+
+.ticket .ticket-ft {
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.ticket .ticket-ft .dot {
+    color: #F03;
+}

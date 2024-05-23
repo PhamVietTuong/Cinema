@@ -1,19 +1,15 @@
-﻿namespace Cinema.Data.Models
+﻿using Cinema.Data.Enum;
+
+namespace Cinema.Data.Models
 {
     public class ShowTime
     {
-        public int Id { get; set; }
-        public int MovieId { get; set; }
+        public Guid Id { get; set; }
+        public Guid MovieId { get; set; }
         public Movie Movie { get; set; }
-		public int TheaterId { get; set; }
-		public Theater Theater { get; set; }
-		public int ShowTimeTypeId { get; set; }
-		public ShowTimeType ShowTimeType { get; set; }
-        public int RoomId { get; set; }
-        public Room Room { get; set; }
-		public DateTime Day { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-		public bool Status { get; set; }
+		public int ProjectionForm { get; set; }
+        public bool Status { get; set; }
 	}
 }

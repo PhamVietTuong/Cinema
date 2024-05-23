@@ -2,14 +2,12 @@
 {
     public class Room
     {
-        public int Id { get; set; }
-
+        public Guid Id { get; set; }
+        public Guid TheaterId { get; set; }
+        public Theater Theater { get; set; }
         public string Name { get; set; }
-
-		public double With { get; set; }
-
+		public double Width { get; set; }
 		public double Length { get; set; }
-
 		public bool Status { get; set; }
     }
 }

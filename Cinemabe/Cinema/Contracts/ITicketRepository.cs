@@ -5,9 +5,6 @@ namespace Cinema.Contracts
 {
 	public interface ITicketRepository
 	{
-		Task<Ticket> Create(Ticket ticket);
-		Task<Ticket> Update(Ticket request);
-		Task<bool> Exist(int id);
-		Task<TicketBookingViewModel> TicketBooking(TicketBookingViewModel vm);
-	}
+        Task<List<TicketDTO>> CreateAysn(TicketDTO entity);
+    }
 }
