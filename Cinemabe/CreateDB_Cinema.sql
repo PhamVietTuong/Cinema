@@ -204,7 +204,7 @@ CREATE TABLE [MovieType] (
 CREATE TABLE [MovieTypeDetail] (
 	[MovieId] uniqueidentifier NOT NULL,
 	[MovieTypeId] uniqueidentifier NOT NULL,
-	CONSTRAINT PK_ShowTimeRoom PRIMARY KEY (MovieId, MovieTypeId),
+	CONSTRAINT PK_MovieTypeDetail PRIMARY KEY (MovieId, MovieTypeId),
 	CONSTRAINT FK_MovieTypeDetail_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
 	CONSTRAINT FK_MovieTypeDetail_MovieType FOREIGN KEY ([MovieTypeId]) REFERENCES [MovieType] (Id),
 )
