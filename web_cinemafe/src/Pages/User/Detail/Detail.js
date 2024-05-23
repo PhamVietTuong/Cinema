@@ -49,7 +49,7 @@ const Detail = () => {
                                                                     {movieDetail?.ageRestrictionName}
                                                                 </span>
                                                                 <span className="txt">
-                                                                    TEEN
+                                                                    {movieDetail?.ageRestrictionAbbreviation ? movieDetail?.ageRestrictionAbbreviation.toUpperCase() : ''}
                                                                 </span>
                                                             </div>
                                                         </div>
