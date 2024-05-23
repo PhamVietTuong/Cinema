@@ -115,5 +115,22 @@ namespace Cinema.Controllers
         }
 
         #endregion
+
+        #region SeatType
+
+        [HttpPost("GetSeatTypeTicketTypeByListSeatTypeId")]
+        public async Task<ActionResult<List<SeatTypeTicketTypeRowViewModel>>> GetSeatTypeTicketTypeByListSeatTypeId(List<Guid> seatTypeIds)
+        {
+            var result = await _uow.SeatTypeRepository.GetSeatTypeTicketTypeByListSeatTypeId(seatTypeIds);
+
+            if (result.Count == 0)
+            {
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+
+            return Ok(result);
+        }
+
+        #endregion
     }
 }

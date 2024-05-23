@@ -7,7 +7,8 @@ namespace Cinema.DTOs
         public Guid Id { get; set; }
         public string AgeRestrictionName { get; set; }
         public string AgeRestrictionDescription { get; set; }
-		public string Name { get; set; }
+        public string AgeRestrictionAbbreviation { get; set; }
+        public string Name { get; set; }
 		public string Image { get; set; }
 		public int Time { get; set; }
         public DateTime ReleaseDate { get; set; }
