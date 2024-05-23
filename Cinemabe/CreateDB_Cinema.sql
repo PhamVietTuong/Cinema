@@ -27,9 +27,6 @@ DROP TABLE [dbo].[UserType];
 IF OBJECT_ID('dbo.AgeRestriction', 'U') IS NOT NULL
 DROP TABLE dbo.AgeRestriction;
 
-IF OBJECT_ID('dbo.ShowTimeType', 'U') IS NOT NULL
-DROP TABLE dbo.ShowTimeType;
-
 IF OBJECT_ID('dbo.Room', 'U') IS NOT NULL
 DROP TABLE dbo.Room;
 
@@ -83,17 +80,9 @@ CREATE TABLE [AgeRestriction] (
 	PRIMARY KEY (Id)
 );
 
-CREATE TABLE [ShowTimeType] (
-    [Id] UNIQUEIDENTIFIER NOT NULL,
-    [Name] nvarchar(255) NOT NULL,
-	[Status] bit NOT NULL,
-	PRIMARY KEY (Id)
-);
-
 CREATE TABLE [Movie] (
 	[Id] uniqueidentifier NOT NULL,
 	[AgeRestrictionId] uniqueidentifier NOT NULL,
-	[ShowTimeTypeId] uniqueidentifier NOT NULL,
 	[Name] nvarchar(255) NOT NULL,
 	[Image] nvarchar(255) NOT NULL,
 	[Time2D] int NULL,
@@ -107,7 +96,6 @@ CREATE TABLE [Movie] (
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Movie_AgeRestriction FOREIGN KEY ([AgeRestrictionId]) REFERENCES [AgeRestriction] (Id),
-	CONSTRAINT FK_Movie_ShowTimeType FOREIGN KEY ([ShowTimeTypeId]) REFERENCES [ShowTimeType] (Id),
 )
 
 CREATE TABLE [Theater] (
