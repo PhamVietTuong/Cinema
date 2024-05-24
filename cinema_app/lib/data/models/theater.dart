@@ -4,20 +4,20 @@ import 'package:cinema_app/constants.dart';
 import 'package:http/http.dart' as http;
 
 class Theater {
-  int id;
+  String id;
   String name;
   String address;
   String phone;
   String img;
-  int status;
+  bool status;
 
   Theater(
-      {this.id = 0,
+      {this.id = "",
       this.name = "",
       this.address = "",
       this.phone = "",
       this.img = "",
-      this.status = 0});
+      this.status = false});
 
   Theater.copy(Theater other)
       : id = other.id,
@@ -33,7 +33,7 @@ class Theater {
         name = json['name'] ?? "",
         img = json['image'] ?? "",
         phone = json['phone'] ?? "",
-        status = json['status'] ?? 0;
+        status = json['status'] ?? false;
 }
 
 abstract class TheaterRepository {
@@ -43,7 +43,7 @@ abstract class TheaterRepository {
 class TheaterRepositoryIml implements TheaterRepository {
   @override
   Future<List<Theater>> fetchTheaters() async {
-    String api = '$serverUrl/theater';
+    String api = '$serverUrl/GetTheaterList';
     print("API fetch theates: $api");
 
     final response = await http.get(Uri.parse(api));

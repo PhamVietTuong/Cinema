@@ -239,7 +239,7 @@ class _SeatScreenState extends State<SeatScreen>
       setState(() {
         waitingSeatIds = data.map((e) => e as int).toList();
       });
-      seatPr.fetchSeatsInTicketsByShowtimeId(selectedShowtime.id);
+     // seatPr.fetchSeatsInTicketsByShowtimeId(selectedShowtime.id);
     });
 
     socket.on('checkForEmptySeats', (_) {
@@ -368,7 +368,7 @@ class _SeatScreenState extends State<SeatScreen>
                       padding: 5,
                     ),
                     ShowtimeTypeBox(
-                        title: selectedShowtime.type.name,
+                        title: selectedShowtime.projectionForm.toString(),
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     AgeRestrictionBox(

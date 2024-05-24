@@ -22,9 +22,11 @@ class ShowTimeSceen extends StatefulWidget {
 }
 
 class _ShowTimeSceenState extends State<ShowTimeSceen>
-    implements MovieViewContract, ShowtimeViewContract {
-  late MoviePresenter moviePr;
-  late ShowtimePresenter showtimePr;
+    //implements MovieViewContract
+    //, ShowtimeViewContract
+     {
+ // late MoviePresenter moviePr;
+ // late ShowtimePresenter showtimePr;
 
   bool isLoadingData = true;
 
@@ -54,7 +56,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
   void _selectDay(DateTime day) {
     setState(() {
       selectedDay = day;
-      showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
+    //  showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
     });
   }
 
@@ -67,10 +69,10 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
     super.initState();
     selectedDay = today;
     loadData();
-    moviePr = MoviePresenter(this);
-    showtimePr = ShowtimePresenter(this);
+    //moviePr = MoviePresenter(this);
+    //showtimePr = ShowtimePresenter(this);
 
-    showtimePr.fetchShowtimesByDate(today, widget.booking.theater.id);
+   // showtimePr.fetchShowtimesByDate(today, widget.booking.theater.id);
   }
 
   @override
@@ -161,52 +163,52 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
     );
   }
 
-  @override
-  void onLoadMovieComplete(List<Movie> movies) {
-    setState(() {
-      lstShowTimeMovie.clear();
-      for (var movie in movies) {
+  // @override
+  // void onLoadMovieComplete(List<Movie> movies) {
+  //   setState(() {
+  //     lstShowTimeMovie.clear();
+  //     for (var movie in movies) {
   
-        movie.showtimes = showtimeOfDate
-            .where((showtime) => showtime.movieId == movie.id)
-            .toList();
-      }
+  //       movie.showtimes = showtimeOfDate
+  //           .where((showtime) => showtime.movieId == movie.id)
+  //           .toList();
+  //     }
 
-      lstShowTimeMovie = movies
-          .map((movie) => ShowTimeOfMovieItem(
-                movie: movie,
-                booking: widget.booking,
-              ))
-          .toList();
+  //     lstShowTimeMovie = movies
+  //         .map((movie) => ShowTimeOfMovieItem(
+  //               movie: movie,
+  //               booking: widget.booking,
+  //             ))
+  //         .toList();
       
-      isLoadingData = false;
-    });
-  }
+  //     isLoadingData = false;
+  //   });
+  // }
 
-  @override
-  void onLoadMovieError() {
-    isLoadingData = false;
-  }
+  // @override
+  // void onLoadMovieError() {
+  //   isLoadingData = false;
+  // }
 
-  @override
-  void onLoadShowtimeComplete(List<Showtime> showtimes) {
-    setState(() {
-      showtimeOfDate = showtimes;
-      movieIds.clear();
-      for (var showtime in showtimes) {
-        movieIds.add(showtime.movieId);
-      }
-    });
-    //  print(movieIds.toList());
-    if (movieIds.toList().isNotEmpty) {
-      moviePr.fetchMoviesByIds(movieIds.toList());
-    } else {
-      onLoadMovieComplete([]);
-    }
-  }
+  // @override
+  // void onLoadShowtimeComplete(List<Showtime> showtimes) {
+  //   setState(() {
+  //     showtimeOfDate = showtimes;
+  //     movieIds.clear();
+  //     for (var showtime in showtimes) {
+  //       movieIds.add(showtime.movieId);
+  //     }
+  //   });
+  //   //  print(movieIds.toList());
+  //   if (movieIds.toList().isNotEmpty) {
+  //     moviePr.fetchMoviesByIds(movieIds.toList());
+  //   } else {
+  //     onLoadMovieComplete([]);
+  //   }
+  // }
 
-  @override
-  void onLoadShowtimeError() {
-    isLoadingData = false;
-  }
+  // @override
+  // void onLoadShowtimeError() {
+  //   isLoadingData = false;
+  // }
 }

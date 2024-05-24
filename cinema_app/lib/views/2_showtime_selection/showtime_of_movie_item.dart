@@ -61,7 +61,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${movie.name} ${movie.showtimes[0].type.name} (${movie.ageRestriction.name})',
+                            '${movie.name} ${movie.showtimes[0].projectionForm} (${movie.ageRestriction.name})',
                             style: styles.titleTextStyle,
                           ),
                           MovieTypeBox(
@@ -73,7 +73,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                           Row(
                             children: [
                               ShowtimeTypeBox(
-                                title: movie.showtimes[0].type.name,
+                                title: movie.showtimes[0].projectionForm.toString(),
                               ),
                               AgeRestrictionBox(
                                 title: movie.ageRestriction.name,

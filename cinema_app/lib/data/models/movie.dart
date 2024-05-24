@@ -44,7 +44,7 @@ class Movie {
         img = json["image"] ?? "",
         languages = json["languages"] ?? "",
         name = json["name"] ?? "",
-        releaseDate = DateTime.parse(json["release_date"]),
+        releaseDate = DateTime.parse(json["releaseDate"]),
         time = json["time"] ?? 0,
         trailer = json["trailer"] ?? "",
         status = json["status"] ?? 0,

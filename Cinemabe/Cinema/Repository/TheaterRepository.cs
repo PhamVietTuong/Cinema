@@ -1,4 +1,5 @@
-﻿using Cinema.Contracts;
+﻿using System.Drawing.Printing;
+using Cinema.Contracts;
 using Cinema.Data;
 using Cinema.Data.Models;
 using Cinema.DTOs;
@@ -18,9 +19,9 @@ namespace Cinema.Repository
         public async Task<List<TheaterDTO>> GetAllTheater()
         {
             var theaters = await _context.Theater.Where(x => x.Status).ToListAsync();
-            var result = new List<TheaterDTO>();    
+            var result = new List<TheaterDTO>();
 
-            foreach(var theater in theaters)
+            foreach (var theater in theaters)
             {
                 result.Add(new TheaterDTO
                 {
@@ -34,30 +35,50 @@ namespace Cinema.Repository
             return result;
         }
 
-        public async Task<List<ShowTimeDTO>> GetShowTimeByDateAndTheaterId(ShowTimeByDateAndTheaterId showTimeByDateAndTheaterId)
+        //24/05/2024 tienn changed method
+        public async Task<List<ShowtimeRoomDTO>> GetShowTimeByDateAndTheaterId(ShowTimeByDateAndTheaterId showTimeByDateAndTheaterId)
         {
             var showTimeRooms = await _context.ShowTimeRoom
-                                                .Include(x => x.Room)
-                                                .Include(x => x.ShowTime)
-                                                    .ThenInclude(x => x.Movie)
-                                                .Where(x => x.Room.TheaterId == showTimeByDateAndTheaterId.TheaterId && x.ShowTime.StartTime.Date == showTimeByDateAndTheaterId.Date.Date).ToListAsync();
-
-            var result = new List<ShowTimeDTO>();
-
-            foreach (var showTimeRoom in showTimeRooms)
+            .Include(x => x.Room)
+            .Include(x => x.ShowTime)
+                .ThenInclude(x => x.Movie)
+            .Where(x => x.Room.TheaterId == showTimeByDateAndTheaterId.TheaterId &&
+                     x.ShowTime.StartTime.Date == showTimeByDateAndTheaterId.Date.Date)
+            .Select(x => new
             {
-                result.Add(new ShowTimeDTO
-                {
-                    Id = showTimeRoom.ShowTimeId,
-                    MovieId = showTimeRoom.ShowTime.MovieId,
-                    MovieName = showTimeRoom.ShowTime.Movie.Name,
-                    StartTime = showTimeRoom.ShowTime.StartTime,
-                    EndTime = showTimeRoom.ShowTime.EndTime,
-                    ProjectionForm = showTimeRoom.ShowTime.ProjectionForm,
-                });
-            }
+                ShowTime = x.ShowTime,
+                Room = x.Room,
+                SeatTypeIds = _context.Seat
+                    .Where(s => s.RoomId == x.Room.Id && s.SeatTypeId.HasValue)
+                    .Select(s => s.SeatTypeId.Value)
+                    .Distinct()
+                    .ToList()
+            })
+            .ToListAsync();
+            
+            var result = showTimeRooms.Select( x => new ShowtimeRoomDTO
+            {
+                ShowTime = x.ShowTime,
+                Room = x.Room,
+                SeatTypeTicketTypes = _context.SeatTypeTicketType
+                                                    .Include(y => y.SeatType)
+                                                    .Include(y => y.TicketType)
+                                                    .Where(y => x.SeatTypeIds.Contains(y.SeatTypeId))
+                                                    .Select(y => new SeatTypeTicketTypeRowViewModel
+                                                    {
+                                                        SeatTypeId = y.SeatTypeId,
+                                                        TicketTypeId = y.TicketTypeId,
+                                                        SeatTypeName = y.SeatType.Name,
+                                                        TicketTypeName = y.TicketType.Name,
+                                                        Price = y.Price,
+                                                    }).ToList()
+
+            }).ToList();
 
             return result;
         }
+
+
+
     }
 }

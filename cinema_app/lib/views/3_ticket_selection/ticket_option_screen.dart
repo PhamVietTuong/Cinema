@@ -132,7 +132,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                       padding: 5,
                     ),
                     ShowtimeTypeBox(
-                        title: selectedShowtime.type.name,
+                        title: selectedShowtime.projectionForm.toString(),
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     AgeRestrictionBox(
@@ -173,7 +173,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                               Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 child: Text(
-                                  '${widget.movie.name} ${selectedShowtime.type.name} (${widget.movie.ageRestriction.name})',
+                                  '${widget.movie.name} ${selectedShowtime.projectionForm} (${widget.movie.ageRestriction.name})',
                                   style: styles.titleTextStyle,
                                 ),
                               ),

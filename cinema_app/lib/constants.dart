@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var serverUrl = 'http://192.168.1.4:3000';
+var serverUrl = 'https://10.0.2.2:7209/api/Cinemas';
 
 class Styles {
   var primaryColor = Colors.purple[700];
@@ -9,7 +9,6 @@ class Styles {
   var singleSeatColor = Colors.amber;
   var selectedSeatColor = Colors.lightBlue;
   var waitingSeatColor = Colors.deepOrangeAccent;
-
 
   var borderWith = Border.all(width: 1);
   var appBarTextStyle = const TextStyle(

@@ -17,27 +17,27 @@ class ShowtimePresenter {
     repository = Injector().getShowtimeRepository();
   }
 
-  Future<void> fetchShowtimes() async {
-    try {
-      List<Showtime> showtimes = await repository.fetchShowtimes();
-      _view.onLoadShowtimeComplete(showtimes);
-    } catch (error) {
-      // Xử lý lỗi
-      print('Error fetching Showtimes: $error');
-      _view.onLoadShowtimeError();
-    }
-  }
+  // Future<void> fetchShowtimes() async {
+  //   try {
+  //     List<Showtime> showtimes = await repository.fetchShowtimes();
+  //     _view.onLoadShowtimeComplete(showtimes);
+  //   } catch (error) {
+  //     // Xử lý lỗi
+  //     print('Error fetching Showtimes: $error');
+  //     _view.onLoadShowtimeError();
+  //   }
+  // }
 
-  Future<void> fetchShowtimesByDate(DateTime date, int theaterId) async {
-    String dayString = '${date.year}-${date.month}-${date.day}';
-    try {
-      List<Showtime> showtimes =
-          await repository.fetchShowtimesByDate(dayString, theaterId);
-      _view.onLoadShowtimeComplete(showtimes);
-    } catch (error) {
-      // Xử lý lỗi
-      print('Error fetching Showtimes by Date: $error');
-      _view.onLoadShowtimeError();
-    }
-  }
+  // Future<void> fetchShowtimesByDate(DateTime date, String theaterId) async {
+  //   String dayString = '${date.year}-${date.month}-${date.day}';
+  //   try {
+  //     List<Showtime> showtimes =
+  //         await repository.fetchShowtimesByDate(dayString, theaterId);
+  //     _view.onLoadShowtimeComplete(showtimes);
+  //   } catch (error) {
+  //     // Xử lý lỗi
+  //     print('Error fetching Showtimes by Date: $error');
+  //     _view.onLoadShowtimeError();
+  //   }
+  // }
 }

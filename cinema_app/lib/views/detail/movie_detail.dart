@@ -163,10 +163,10 @@ class _MovieDetailState extends State<MovieDetail> {
               ),
      Column(
       children: [
-        ListThreater(data: Theater(id: 1, name: 'Cinestar Quốc Thanh', address: "271 Nguyễn Trãi", phone: '00', img: 'D')),
+        ListThreater(data: Theater(id: "", name: 'Cinestar Quốc Thanh', address: "271 Nguyễn Trãi", phone: '00', img: 'D')),
                 SizedBox(height: 10,),
 
-        ListThreater(data: Theater(id: 2, name: 'Cinestar Đà Lạt  ', address: "Quảng trường Lâm Viên", phone: '00', img: 'D')),
+        ListThreater(data: Theater(id: "", name: 'Cinestar Đà Lạt  ', address: "Quảng trường Lâm Viên", phone: '00', img: 'D')),
 
       ],
     ),
