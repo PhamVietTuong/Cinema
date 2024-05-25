@@ -1,10 +1,11 @@
-﻿using Cinema.DTOs;
+﻿using Cinema.Data.Models;
+using Cinema.DTOs;
 
 namespace Cinema.Contracts
 {
     public interface ITheaterRepository
     {
         Task<List<TheaterDTO>> GetAllTheater();
-        Task<List<ShowTimeDTO>> GetShowTimeByDateAndTheaterId(ShowTimeByDateAndTheaterId showTimeByDateAndTheaterId);
+        Task<List<ShowtimeRoomDTO>> GetShowTimeByDateAndTheaterId(ShowTimeByDateAndTheaterId showTimeByDateAndTheaterId);
     }
 }

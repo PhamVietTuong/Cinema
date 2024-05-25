@@ -62,22 +62,21 @@ namespace Cinema.Controllers
 			return Ok(result);
 		}
 
-        #endregion
+		#endregion
 
-        #region Ticket
+		#region Ticket
 
-        [HttpPost("Ticket")]
-        public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
-        {
-            var result = await _uow.TicketRepository.CreateAysn(vm);
-            return Ok(result);
-        }
+		[HttpPost("Ticket")]
+		public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
+		{
+			var result = await _uow.TicketRepository.CreateAysn(vm);
+			return Ok(result);
+		}
 
-        #endregion
+		#endregion
 
-        #region Seat
-
-        [HttpPost("SeatByShowTimeAndRoomId")]
+		#region Seat
+		[HttpPost("SeatByShowTimeAndRoomId")]
 		public async Task<ActionResult<List<SeatViewModel>>> SeatByShowTimeAndRoomId(SeatByShowTimeAndRoomDTO vm)
 		{
 			var result = await _uow.SeatRepository.GetSeatByShowTimeAndRoomIdAysn(vm);
@@ -93,31 +92,54 @@ namespace Cinema.Controllers
 		{
 			var result = await _uow.TheaterRepository.GetAllTheater();
 
-			if(result.Count == 0)
+			if (result.Count == 0)
 			{
 				return StatusCode(StatusCodes.Status204NoContent);
-            }
+			}
 
 			return Ok(result);
 		}
 
-        [HttpPost("GetShowTimeByDateAndTheaterId")]
-        public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByDateAndTheaterId(ShowTimeByDateAndTheaterId showTimeByDateAndTheaterId)
-        {
-            var result = await _uow.TheaterRepository.GetShowTimeByDateAndTheaterId(showTimeByDateAndTheaterId);
+		//[HttpPost("GetShowTimeByDateAndTheaterId")]
 
-            if (result.Count == 0)
-            {
-                return StatusCode(StatusCodes.Status204NoContent);
-            }
+		//24/05/2024 tienn: HttpPost - > HttpGet, changed api name, added 2 para in route, changed para of method
+		[HttpGet("GetShowTimeByDate{date}/TheaterId{theaterId}")]
+		public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByDateAndTheaterId(DateTime date, Guid theaterId)
+		{
+			//add line from 112 to 116
+			var showTimeByDateAndTheaterId = new ShowTimeByDateAndTheaterId
+			{
+				Date = date,
+				TheaterId = theaterId
+			};
 
-            return Ok(result);
-        }
+			var result = await _uow.TheaterRepository.GetShowTimeByDateAndTheaterId(showTimeByDateAndTheaterId);
 
-        #endregion
+			if (result.Count == 0)
+			{
+				return StatusCode(StatusCodes.Status204NoContent);
+			}
 
+			return Ok(result);
+		}
+
+		#endregion
+
+		#region SeatType
 		#region TicketType
 
+		[HttpPost("GetSeatTypeTicketTypeByListSeatTypeId")]
+		public async Task<ActionResult<List<SeatTypeTicketTypeRowViewModel>>> GetSeatTypeTicketTypeByListSeatTypeId(List<Guid> seatTypeIds)
+		{
+			var result = await _uow.SeatTypeRepository.GetSeatTypeTicketTypeByListSeatTypeId(seatTypeIds);
+
+			if (result.Count == 0)
+			{
+				return StatusCode(StatusCodes.Status204NoContent);
+			}
+
+			return Ok(result);
+		}
         [HttpPost("TicketTypeByShowTimeAndRoomId")]
         public async Task<ActionResult<List<TicketTypeViewModel>>> TicketTypeByShowTimeAndRoomId(TicketTypeByShowTimeAndRoomDTO vm)
         {
@@ -125,6 +147,6 @@ namespace Cinema.Controllers
             return Ok(result);
         }
 
-        #endregion
-    }
+		#endregion
+	}
 }
