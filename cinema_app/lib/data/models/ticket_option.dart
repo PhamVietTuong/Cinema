@@ -16,8 +16,8 @@ class TicketOption {
         quantity = quantity ?? 0,
         count = 0;
   TicketOption.fromJson(Map<String, dynamic> json)
-      : seatType = SeatType(id: json["seat_type_id"] ?? 0),
-        ticketType = TicketType(id: json["ticket_type_id"] ?? 0),
+      : seatType = SeatType.fromJson(json["seatType"]),
+        ticketType = TicketType.fromJson(json["ticketType"]),
         price = json["price"] ?? 0,
         quantity = 0,
         count = 0;

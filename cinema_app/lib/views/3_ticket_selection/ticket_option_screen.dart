@@ -8,12 +8,8 @@ import 'package:cinema_app/components/showtime_dropdow.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/data/models/room.dart';
-import 'package:cinema_app/data/models/seat_type.dart';
 import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/data/models/ticket_option.dart';
-import 'package:cinema_app/data/models/ticket_type.dart';
-import 'package:cinema_app/presenters/room_presenter.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_screen.dart';
 import 'package:cinema_app/views/3_ticket_selection/ticket_option.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +30,7 @@ class TicketOptionScreen extends StatefulWidget {
 }
 
 class _TicketOptionScreenState extends State<TicketOptionScreen>
-    implements RoomViewContract {
-  late RoomPresenter roomPr;
+   {
   bool isLoadingData = true;
   late final String date;
   late String time;
@@ -49,7 +44,6 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
   void selectShowtime(Showtime showtime) {
     setState(() {
       selectedShowtime = showtime;
-      roomPr.fetchRoomById(selectedShowtime.room.id);
       totalTicket = 0;
       totalPrice = 0;
     });
@@ -88,8 +82,6 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
     selectedShowtime = widget.showtime;
     widget.booking.movie = widget.movie;
 
-    roomPr = RoomPresenter(this);
-    roomPr.fetchRoomById(selectedShowtime.room.id);
   }
 
   @override
@@ -126,13 +118,13 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                 child: Row(
                   children: [
                     MovieTypeBox(
-                      title: widget.movie.types.join(', '),
+                      title: widget.movie.types.map((e) => e.name).toList().join(", "),
                       maxBoxWith: wS * 0.5 - 10,
                       fontSizeCus: 15,
                       padding: 5,
                     ),
                     ShowtimeTypeBox(
-                        title: selectedShowtime.projectionForm.toString(),
+                        title: selectedShowtime.type.name,
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     AgeRestrictionBox(
@@ -173,7 +165,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                               Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 child: Text(
-                                  '${widget.movie.name} ${selectedShowtime.projectionForm} (${widget.movie.ageRestriction.name})',
+                                  '${widget.movie.name} ${selectedShowtime.type.name} (${widget.movie.ageRestriction.name})',
                                   style: styles.titleTextStyle,
                                 ),
                               ),
@@ -253,39 +245,5 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
             ]),
           ),
         ));
-  }
-
-  @override
-  void onLoadRoomComplete(List<Room> rooms) {
-    setState(() {
-      selectedShowtime.room =
-          rooms.firstWhere((room) => room.id == selectedShowtime.room.id);
-      roomPr.fetchTicketOptionsBySeatIds(selectedShowtime.room.seatTypeIds);
-    });
-  }
-
-  @override
-  void onLoadRoomError() {}
-
-  @override
-  Future<void> onLoadTicketOptionComplete(
-      List<TicketOption> ticketOptions) async {
-    List<TicketType> ticketTypes = await TicketType.fetchTicketTypes();
-    List<SeatType> seatTypes = await SeatType.fetchSeatTypes();
-
-    for (var option in ticketOptions) {
-      option.seatType = seatTypes
-          .singleWhere((seatType) => seatType.id == option.seatType.id);
-      option.ticketType = ticketTypes
-          .singleWhere((ticketType) => ticketType.id == option.ticketType.id);
-    }
-    setState(() {
-      options = ticketOptions
-          .map((ticketOption) => TicketOptionItem(
-                option: ticketOption,
-                upDownQuantity: upDownOptionQuantity,
-              ))
-          .toList();
-    });
   }
 }

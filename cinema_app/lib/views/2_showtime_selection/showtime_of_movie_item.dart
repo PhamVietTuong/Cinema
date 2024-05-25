@@ -50,7 +50,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image(
-                        fit: BoxFit.fitHeight, image: AssetImage(movie.img)),
+                        fit: BoxFit.fitHeight, image: NetworkImage("$serverUrl/Images/${movie.img}")),
                   ),
                 ),
                 Expanded(
@@ -61,11 +61,11 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${movie.name} ${movie.showtimes[0].projectionForm} (${movie.ageRestriction.name})',
+                            '${movie.name} ${movie.showtimes[0].type.name} (${movie.ageRestriction.name})',
                             style: styles.titleTextStyle,
                           ),
                           MovieTypeBox(
-                            title: types,
+                            title: movie.types.map((e) => e.name).toList().join(", "),
                             marginTop: 5,
                             marginBottom: 10,
                             padding: 5,
@@ -73,7 +73,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                           Row(
                             children: [
                               ShowtimeTypeBox(
-                                title: movie.showtimes[0].projectionForm.toString(),
+                                title: movie.showtimes[0].type.name,
                               ),
                               AgeRestrictionBox(
                                 title: movie.ageRestriction.name,

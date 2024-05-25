@@ -43,7 +43,7 @@ abstract class TheaterRepository {
 class TheaterRepositoryIml implements TheaterRepository {
   @override
   Future<List<Theater>> fetchTheaters() async {
-    String api = '$serverUrl/GetTheaterList';
+    String api = '$serverUrl/api/Cinemas/GetTheaterList';
     print("API fetch theates: $api");
 
     final response = await http.get(Uri.parse(api));

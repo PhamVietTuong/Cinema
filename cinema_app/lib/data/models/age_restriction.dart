@@ -1,13 +1,18 @@
+
 class AgeRestriction {
-  int id;
+  String id;
   String name;
   String description;
-  int status;
+  String abbreviation;
+  bool status;
 
-  AgeRestriction({this.id = 0, this.name = "", this.status = 0, this.description=""});
+  AgeRestriction(
+      {this.id = "", this.name = "", this.status = false, this.description = "", this.abbreviation=""});
 
   AgeRestriction.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        name = json["name"], description=json["description"]??"",
-        status = json["status"] ?? 0;
+      : id = json["id"]??"",
+        name = json["name"]??"",
+        description = json["description"] ?? "",
+        abbreviation=json["abbreviation"]??"",
+        status = json["status"] ?? false;
 }

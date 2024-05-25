@@ -2,11 +2,8 @@
 
 import 'package:cinema_app/constants.dart';
 import 'package:cinema_app/data/models/booking.dart';
-import 'package:cinema_app/data/models/room.dart';
 import 'package:cinema_app/data/models/seat.dart';
 import 'package:cinema_app/data/models/showtime.dart';
-import 'package:cinema_app/data/models/ticket_option.dart';
-import 'package:cinema_app/presenters/room_presenter.dart';
 import 'package:cinema_app/presenters/seat_presenter.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_screen.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
@@ -30,10 +27,9 @@ class SeatScreen extends StatefulWidget {
 }
 
 class _SeatScreenState extends State<SeatScreen>
-    implements RoomViewContract, SeatViewContract {
+    implements  SeatViewContract {
   late io.Socket socket;
   late Showtime selectedShowtime;
-  late RoomPresenter roomPr;
   late SeatPresenter seatPr;
 
   List<Seat> seats = List.filled(0, Seat(), growable: true);
@@ -128,7 +124,6 @@ class _SeatScreenState extends State<SeatScreen>
       selectedSeats.clear();
       widget.booking.resetCount();
     });
-    await roomPr.fetchRoomById(selectedShowtime.room.id);
     socket.emit('changeShowtime', {
       "showtime_id": selectedShowtime.id,
       "room_id": selectedShowtime.room.id
@@ -158,22 +153,7 @@ class _SeatScreenState extends State<SeatScreen>
     return true;
   }
 
-  @override
-  void onLoadRoomComplete(List<Room> rooms) {
-    //  setState(() {
-    selectedShowtime.room =
-        rooms.firstWhere((room) => room.id == selectedShowtime.room.id);
-    //});
-
-    seatPr.fetchSeatsByRoomId(selectedShowtime.room.id);
-  }
-
-  @override
-  void onLoadRoomError() {}
-
-  @override
-  void onLoadTicketOptionComplete(List<TicketOption> ticketOptions) {}
-
+ 
   @override
   void onLoadSeatComplete(List<Seat> seatLst) {
     setState(() {
@@ -208,10 +188,9 @@ class _SeatScreenState extends State<SeatScreen>
     super.initState();
     selectedShowtime = widget.showtime;
 
-    roomPr = RoomPresenter(this);
     seatPr = SeatPresenter(this);
 
-    seatPr.fetchSeatsByRoomId(selectedShowtime.room.id);
+    //seatPr.fetchSeatsByRoomId(selectedShowtime.room.id);
 
     socket = io.io(serverUrl, <String, dynamic>{
       'transports': ['websocket'],
@@ -368,7 +347,7 @@ class _SeatScreenState extends State<SeatScreen>
                       padding: 5,
                     ),
                     ShowtimeTypeBox(
-                        title: selectedShowtime.projectionForm.toString(),
+                        title: selectedShowtime.type.name,
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     AgeRestrictionBox(

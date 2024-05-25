@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var serverUrl = 'https://10.0.2.2:7209/api/Cinemas';
+var serverUrl = 'https://10.0.2.2:7209';
 
 class Styles {
   var primaryColor = Colors.purple[700];

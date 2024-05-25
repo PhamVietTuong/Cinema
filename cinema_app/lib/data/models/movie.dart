@@ -2,39 +2,42 @@
 
 import 'dart:convert';
 import 'package:cinema_app/data/models/age_restriction.dart';
+import 'package:cinema_app/data/models/movie_type.dart';
 import 'package:cinema_app/data/models/showtime.dart';
 import 'package:http/http.dart' as http;
 import '../../constants.dart';
 
 class Movie {
-  int id;
+  String id;
   String name;
-  int time;
+  int time2D;
+  int time3D;
   String description;
   String director;
   String actor;
   String trailer;
   String languages;
   String img;
-  int status;
+  bool status;
 
   AgeRestriction ageRestriction = AgeRestriction();
   DateTime releaseDate = DateTime.now();
 
-  List<String> types = List.filled(0, "", growable: true);
+  List<MovieType> types = List.filled(0, MovieType(), growable: true);
   List<Showtime> showtimes = List.filled(0, Showtime(), growable: true);
 
   Movie(
-      {this.id = 0,
+      {this.id = "",
       this.actor = "",
       this.description = "",
       this.director = "",
       this.img = "",
       this.languages = "",
       this.name = "",
-      this.time = 0,
+      this.time2D = 0,
+      this.time3D = 0,
       this.trailer = "",
-      this.status = 0});
+      this.status = false});
 
   Movie.fromJson(Map<String, dynamic> json)
       : id = json["id"],
@@ -45,15 +48,10 @@ class Movie {
         languages = json["languages"] ?? "",
         name = json["name"] ?? "",
         releaseDate = DateTime.parse(json["releaseDate"]),
-        time = json["time"] ?? 0,
+        time2D = json["time2D"] ?? -1,
+        time3D = json["time3D"] ?? -1,
         trailer = json["trailer"] ?? "",
-        status = json["status"] ?? 0,
-        ageRestriction = AgeRestriction(
-          id: json["ar_id"] ?? 0,
-          name: json["ar_name"] ?? "",
-          description: json["ar_description"] ?? 0,
-        ),
-        types = json["movie_types"].split(',');
+        status = json["status"] ?? false;
 }
 
 abstract class MovieRepository {

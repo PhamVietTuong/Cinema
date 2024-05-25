@@ -42,6 +42,7 @@ namespace Cinema.Repository
             .Include(x => x.Room)
             .Include(x => x.ShowTime)
                 .ThenInclude(x => x.Movie)
+                    .ThenInclude(m => m.AgeRestriction)
             .Where(x => x.Room.TheaterId == showTimeByDateAndTheaterId.TheaterId &&
                      x.ShowTime.StartTime.Date == showTimeByDateAndTheaterId.Date.Date)
             .Select(x => new
@@ -55,8 +56,8 @@ namespace Cinema.Repository
                     .ToList()
             })
             .ToListAsync();
-            
-            var result = showTimeRooms.Select( x => new ShowtimeRoomDTO
+
+            var result = showTimeRooms.Select(x => new ShowtimeRoomDTO
             {
                 ShowTime = x.ShowTime,
                 Room = x.Room,
@@ -64,15 +65,16 @@ namespace Cinema.Repository
                                                     .Include(y => y.SeatType)
                                                     .Include(y => y.TicketType)
                                                     .Where(y => x.SeatTypeIds.Contains(y.SeatTypeId))
-                                                    .Select(y => new SeatTypeTicketTypeRowViewModel
-                                                    {
-                                                        SeatTypeId = y.SeatTypeId,
-                                                        TicketTypeId = y.TicketTypeId,
-                                                        SeatTypeName = y.SeatType.Name,
-                                                        TicketTypeName = y.TicketType.Name,
-                                                        Price = y.Price,
-                                                    }).ToList()
-
+                                                    .ToList(),
+                MovieTypes = _context.MovieTypeDetail
+                    .Include(mt => mt.MovieType)
+                    .Where(mt => mt.MovieId == x.ShowTime.Movie.Id)
+                    .Select(mt => new MovieType
+                    {
+                        Id = mt.MovieTypeId,
+                        Name = mt.MovieType.Name
+                    })
+                    .ToList()
             }).ToList();
 
             return result;
