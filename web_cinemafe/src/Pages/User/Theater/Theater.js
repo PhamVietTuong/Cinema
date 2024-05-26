@@ -17,6 +17,7 @@ import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShow
 import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
 import { SeatStatus } from '../../../Enum/SeatStatus';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
+import { ShowTimeType } from '../../../Enum/ShowTimeType';
 
 const Theater = (props) => {
     const dispatch = useDispatch();
@@ -216,7 +217,7 @@ const Theater = (props) => {
                                                                                 <div className="tt">Standard</div>
                                                                                 <ul className="list-time">
                                                                                     {
-                                                                                        theaterItem.showTimes.map((timeItem, timeIndex) => (
+                                                                                        theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map((timeItem, timeIndex) => (
                                                                                             <li key={timeIndex} className="item-time"
                                                                                                 onClick={() => {
                                                                                                     showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
@@ -232,6 +233,17 @@ const Theater = (props) => {
                                                                             <li className="item-info">
                                                                                 <div className="tt">Deluxe</div>
                                                                                 <ul className="list-time">
+                                                                                    {
+                                                                                        theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map((timeItem, timeIndex) => (
+                                                                                            <li key={timeIndex} className="item-time"
+                                                                                                onClick={() => {
+                                                                                                    showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
+                                                                                                    setSelectedTheaterName(theaterItem.theaterName);
+                                                                                                }}>
+                                                                                                {moment(timeItem.startTime).format("HH:mm")}
+                                                                                            </li>
+                                                                                        ))
+                                                                                    }
                                                                                     <li className="disable item-time">18:15</li>
                                                                                 </ul>
                                                                             </li>
