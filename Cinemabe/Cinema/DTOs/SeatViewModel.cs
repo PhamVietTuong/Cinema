@@ -20,9 +20,6 @@
         public string Name { get; set; }
 		public Guid? SeatTypeId { get; set; }
         public string SeatTypeName { get; set; }
-        public Guid TicketTypeId { get; set; }
-        public string TicketTypeName { get; set; }
-		public double Price { get; set; }
         public int SeatStatus { get; set; }    
     }
 }

@@ -57,9 +57,6 @@ namespace Cinema.Repository
 											Name = rowSeatViewModel.Name,
 											SeatTypeId = rowSeatViewModel.SeatTypeId,
                                             SeatTypeName = rowSeatViewModel.SeatType?.Name,
-											TicketTypeId = seatTypeTicketType?.TicketType?.Id ?? Guid.Empty,
-											TicketTypeName = seatTypeTicketType?.TicketType?.Name,
-											Price = seatTypeTicketType?.Price ?? 0.0,
 											SeatStatus = (int)(ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? SeatStatus.Sold : SeatStatus.Empty),
 										};
 									})

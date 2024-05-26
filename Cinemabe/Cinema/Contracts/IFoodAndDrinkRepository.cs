@@ -4,6 +4,6 @@ namespace Cinema.Contracts
 {
 	public interface IFoodAndDrinkRepository
 	{
-		Task<List<ComboViewModel>> Combo();
+		Task<List<ComboViewModel>> ComboByTheaterIdAsync(Guid theaterId);
 	}
 }

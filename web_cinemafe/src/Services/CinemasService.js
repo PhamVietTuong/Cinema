@@ -5,20 +5,20 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/GetMovieList`)
     }
 
-    GetMovieDetail = (movieDetailDTO) => {
+    PostMovieDetail = (movieDetailDTO) => {
         return this.post(`api/Cinemas/MovieDetail`, movieDetailDTO)
     }
 
-    GetTicketTypeByShowTimeAndRoomId = (ticketTypeByShowTimeDTO) => {
+    PostTicketTypeByShowTimeAndRoomId = (ticketTypeByShowTimeDTO) => {
         return this.post(`api/Cinemas/TicketTypeByShowTimeAndRoomId`, ticketTypeByShowTimeDTO);
     }
 
-    GetSeatByShowTimeAndRoomId = (seatByShowTimeAndRoomDTO) => {
+    PostSeatByShowTimeAndRoomId = (seatByShowTimeAndRoomDTO) => {
         return this.post(`api/Cinemas/SeatByShowTimeAndRoomId`, seatByShowTimeAndRoomDTO);
     }
 
-    GetCombo = () => {
-        return this.get(`api/Cinemas/Combo`);
+    GetComboByTheaterId = (theaterId) => {
+        return this.get(`api/Cinemas/ComboByTheaterId/${theaterId}`);
     }
 
     GetInformationAboutBoxOffice = (showTimeId) => {
