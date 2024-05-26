@@ -25,42 +25,48 @@ namespace Cinema.Controllers
 		[HttpGet("GetMovieList")]
 		public async Task<ActionResult<List<MovieViewModel>>> GetMovieList()
 		{
-			var result = await _uow.MovieRepository.GetMovieList();
-			return Ok(result);
+            try
+            {
+                var result = await _uow.MovieRepository.GetMovieList();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
 		}
 
 		[HttpPost("MovieDetail")]
 		public async Task<ActionResult<List<MovieViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
 		{
-			var result = await _uow.MovieRepository.GetMovieDetail(movieDetailDTO);
-			return Ok(result);
-		}
-
-		#endregion
-
-		#region ShowTime
-
-		//[HttpGet("GetInformationAboutBoxOffice")]
-		//public async Task<ActionResult<InformationAboutBoxOfficeViewModel>> GetInformationAboutBoxOffice(Guid showTimeId)
-		//{
-		//	if (!await _uow.ShowTimeRepository.Exit(showTimeId))
-		//	{
-		//		return NotFound();
-		//	}
-		//	var result = await _uow.ShowTimeRepository.GetInformationAboutBoxOffice(showTimeId);
-		//	return Ok(result);
-		//}
+            try
+            {
+                var result = await _uow.MovieRepository.GetMovieDetail(movieDetailDTO);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
 		#endregion
 
 		#region FoodAndDrink
 
-		[HttpGet("Combo")]
-		public async Task<ActionResult<List<InformationAboutBoxOfficeViewModel>>> Combo()
+		[HttpGet("ComboByTheaterId/{id}")]
+        public async Task<ActionResult<List<ComboViewModel>>> ComboByTheaterId(Guid id)
 		{
-			var result = await _uow.FoodAndDrinkRepository.Combo();
-			return Ok(result);
-		}
+			try
+			{
+                var result = await _uow.FoodAndDrinkRepository.ComboByTheaterIdAsync(id);
+                return Ok(result);
+
+            } catch(Exception e)
+			{
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
 		#endregion
 
@@ -69,9 +75,16 @@ namespace Cinema.Controllers
 		[HttpPost("Ticket")]
 		public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
 		{
-			var result = await _uow.TicketRepository.CreateAysn(vm);
-			return Ok(result);
-		}
+            try
+            {
+                var result = await _uow.TicketRepository.CreateAysn(vm);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
 		#endregion
 
@@ -79,9 +92,16 @@ namespace Cinema.Controllers
 		[HttpPost("SeatByShowTimeAndRoomId")]
 		public async Task<ActionResult<List<SeatViewModel>>> SeatByShowTimeAndRoomId(SeatByShowTimeAndRoomDTO vm)
 		{
-			var result = await _uow.SeatRepository.GetSeatByShowTimeAndRoomIdAysn(vm);
-			return Ok(result);
-		}
+            try
+            {
+                var result = await _uow.SeatRepository.GetSeatByShowTimeAndRoomIdAysn(vm);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
 		#endregion
 
@@ -90,61 +110,65 @@ namespace Cinema.Controllers
 		[HttpGet("GetTheaterList")]
 		public async Task<ActionResult<List<TheaterDTO>>> GetTheaterList()
 		{
-			var result = await _uow.TheaterRepository.GetAllTheater();
+            try
+            {
+                var result = await _uow.TheaterRepository.GetAllTheater();
 
-			if (result.Count == 0)
-			{
-				return StatusCode(StatusCodes.Status204NoContent);
-			}
+                if (result.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status204NoContent);
+                }
 
-			return Ok(result);
-		}
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
-		//[HttpPost("GetShowTimeByDateAndTheaterId")]
-
-		//24/05/2024 tienn: HttpPost - > HttpGet, changed api name, added 2 para in route, changed para of method
 		[HttpGet("GetShowTimeByDate{date}/TheaterId{theaterId}")]
 		public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByDateAndTheaterId(DateTime date, Guid theaterId)
 		{
-			//add line from 112 to 116
-			var showTimeByDateAndTheaterId = new ShowTimeByDateAndTheaterId
-			{
-				Date = date,
-				TheaterId = theaterId
-			};
+            try
+            {
+                var showTimeByDateAndTheaterId = new ShowTimeByDateAndTheaterId
+                {
+                    Date = date,
+                    TheaterId = theaterId
+                };
 
-			var result = await _uow.TheaterRepository.GetShowTimeByDateAndTheaterId(showTimeByDateAndTheaterId);
+                var result = await _uow.TheaterRepository.GetShowTimeByDateAndTheaterId(showTimeByDateAndTheaterId);
 
-			if (result.Count == 0)
-			{
-				return StatusCode(StatusCodes.Status204NoContent);
-			}
+                if (result.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status204NoContent);
+                }
 
-			return Ok(result);
-		}
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
 		#endregion
 
-		#region SeatType
-		#region TicketType
+        #region TicketType
 
-		[HttpPost("GetSeatTypeTicketTypeByListSeatTypeId")]
-		public async Task<ActionResult<List<SeatTypeTicketTypeRowViewModel>>> GetSeatTypeTicketTypeByListSeatTypeId(List<Guid> seatTypeIds)
-		{
-			var result = await _uow.SeatTypeRepository.GetSeatTypeTicketTypeByListSeatTypeId(seatTypeIds);
-
-			if (result.Count == 0)
-			{
-				return StatusCode(StatusCodes.Status204NoContent);
-			}
-
-			return Ok(result);
-		}
         [HttpPost("TicketTypeByShowTimeAndRoomId")]
         public async Task<ActionResult<List<TicketTypeViewModel>>> TicketTypeByShowTimeAndRoomId(TicketTypeByShowTimeAndRoomDTO vm)
         {
-            var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAysn(vm);
-            return Ok(result);
+            try
+            {
+                var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAysn(vm);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
         }
 
 		#endregion

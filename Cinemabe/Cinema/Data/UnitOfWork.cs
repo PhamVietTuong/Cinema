@@ -19,7 +19,6 @@ namespace Cinema.Data
 
 		public ITicketRepository TicketRepository => new TicketRepository(_context, _mapper);
         public IUserRepository UserRepository => new UserRepository(_context);
-		public IShowTimeRepository ShowTimeRepository => new ShowTimeRepository(_context);
 		public IMovieRepository MovieRepository => new MovieRepository(_context);
 		public IFoodAndDrinkRepository FoodAndDrinkRepository => new FoodAndDrinkRepository(_context);
 		public ITicketTypeRepository TicketTypeRepository => new TicketTypeRepository(_context);

@@ -14,9 +14,9 @@ namespace Cinema.Repository
 			_context = context;
 		}
 
-		public async Task<List<ComboViewModel>> Combo()
+		public async Task<List<ComboViewModel>> ComboByTheaterIdAsync(Guid theaterId)
 		{
-			var combos = await _context.FoodAndDrink.ToListAsync();
+			var combos = await _context.FoodAndDrink.Where(x => x.TheaterId == theaterId).ToListAsync();
 			
 			var rows = new List<ComboViewModel>();
 

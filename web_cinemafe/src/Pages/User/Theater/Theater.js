@@ -1,6 +1,3 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
 import './Theater.css'
 import { Nav, Tab, } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
@@ -19,6 +16,7 @@ import { connection } from '../../../connectionSignalR';
 import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
 import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
 import { SeatStatus } from '../../../Enum/SeatStatus';
+import { DOMAIN } from '../../../Ustil/Settings/Config';
 
 const Theater = (props) => {
     const dispatch = useDispatch();
@@ -53,11 +51,6 @@ const Theater = (props) => {
         }
     }, [timerRunning, countdown]);
 
-
-    useEffect(() => {
-        console.log("listWattingSeat", listWattingSeat, "seatYour", seatYour);
-    }, [listWattingSeat, seatYour]);
-
     const minutes = Math.floor(countdown / 60);
     const seconds = countdown % 60;
 
@@ -68,7 +61,7 @@ const Theater = (props) => {
         dispatch(SeatBeingSelected(seatId, showTimeId, roomId));
     }
 
-    const showTimeIdHandele = async (showTimeId, roomId) => {
+    const showTimeIdHandele = async (showTimeId, roomId, theaterId) => {
         if (connection) {
             await connection.stop();
             await dispatch({
@@ -123,8 +116,7 @@ const Theater = (props) => {
         seatByShowTimeAndRoomDTO.roomId = roomId;
 
         dispatch(SeatAction(seatByShowTimeAndRoomDTO))
-
-        dispatch(ComboAction())
+        dispatch(ComboAction(theaterId))
         setShowTicketType_Seat_Combo(true)
         setSelectedShowTimeId(showTimeId)
         setselectedRoomId(roomId)
@@ -227,7 +219,7 @@ const Theater = (props) => {
                                                                                         theaterItem.showTimes.map((timeItem, timeIndex) => (
                                                                                             <li key={timeIndex} className="item-time"
                                                                                                 onClick={() => {
-                                                                                                    showTimeIdHandele(timeItem.showTimeId, timeItem.roomId);
+                                                                                                    showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
                                                                                                     setSelectedTheaterName(theaterItem.theaterName);
                                                                                                 }}>
                                                                                                 {moment(timeItem.startTime).format("HH:mm")}
@@ -265,8 +257,7 @@ const Theater = (props) => {
 
             {showTicketType_Seat_Combo && (
                 <>
-
-                    {/* <section className="sec-ticket bill-fixed-start">
+                    <section className="sec-ticket bill-fixed-start">
                         <div className="ticket">
                             <div className="container">
                                 <div className="tickett-wr">
@@ -316,8 +307,7 @@ const Theater = (props) => {
                                 </div>
                             </div>
                         </div>
-                    </section> */}
-
+                    </section>
                     {
                         <section className="sec-seat">
                             <div className="seat">
@@ -329,7 +319,7 @@ const Theater = (props) => {
                                         <div className="seat-indicator-scroll">
                                             <div className="seat-block relative --full">
                                                 <div className="seat-screen" data-aos="fade-up">
-                                                    <img src="https://cinestar.com.vn/assets/images/img-screen.png" />
+                                                    <img src="https://cinestar.com.vn/assets/images/img-screen.png" alt=''/>
                                                     <div className="txt">Màn hình</div>
                                                 </div>
                                                 <div className="seat-main" data-aos="fade-up">
@@ -398,9 +388,8 @@ const Theater = (props) => {
                             </div>
                         </section>
                     }
-                    {/* {renderSeats()} */}
 
-                    {/* <section className="sec-dt-food">
+                    <section className="sec-dt-food">
                         <div className="dt-food">
                             <div className="container">
                                 <div className="dt-food-wr">
@@ -419,7 +408,6 @@ const Theater = (props) => {
                                                             <div className="food-box">
                                                                 <div className="img">
                                                                     <div className="image">
-                                                                        {" "}
                                                                         <img
                                                                             src={`${DOMAIN}/Images/${comboItem.image}`}
                                                                             alt=""
@@ -462,7 +450,7 @@ const Theater = (props) => {
                                 </div>
                             </div>
                         </div>
-                    </section> */}
+                    </section>
 
                     <div className="dt-bill bill-fixed bill-custom">
                         <div className="container">
@@ -518,7 +506,6 @@ const Theater = (props) => {
                     </div>
                 </>
             )}
-
         </>
     )
 }

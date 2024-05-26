@@ -94,12 +94,14 @@ namespace Cinema.Repository
 										{
                                             Date = schedule.Key,
                                             Theaters = schedule
-														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address })
+														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address, x.Room.TheaterId })
 														.Select(theater => new TheaterRowViewModel
 														{
 															TheaterName = theater.Key.Name,
 															TheaterAddress = theater.Key.Address,
-															ShowTimes = theater.Select(showTime => new ShowTimeRowViewModel
+                                                            TheaterId = theater.Key.TheaterId,
+
+                                                            ShowTimes = theater.Select(showTime => new ShowTimeRowViewModel
                                                             {
                                                                 RoomId = showTime.Room.Id,
                                                                 RoomName = showTime.Room.Name,

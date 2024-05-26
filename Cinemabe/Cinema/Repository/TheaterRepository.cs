@@ -28,14 +28,14 @@ namespace Cinema.Repository
                     Id = theater.Id,
                     Name = theater.Name,
                     Address = theater.Address,
-                    Status = theater.Status,
+                    Image = theater.Image,
+                    Phone = theater.Phone,
                 });
             }
 
             return result;
         }
 
-        //24/05/2024 tienn changed method
         public async Task<List<ShowtimeRoomDTO>> GetShowTimeByDateAndTheaterId(ShowTimeByDateAndTheaterId showTimeByDateAndTheaterId)
         {
             var showTimeRooms = await _context.ShowTimeRoom
@@ -79,8 +79,5 @@ namespace Cinema.Repository
 
             return result;
         }
-
-
-
     }
 }

@@ -30,7 +30,8 @@ namespace Cinema.DTOs
 
 	public class TheaterRowViewModel
 	{
-		public string TheaterName { get; set; }
+        public Guid TheaterId { get; set; }
+        public string TheaterName { get; set; }
 		public string TheaterAddress { get; set; }
 		public List<ShowTimeRowViewModel> ShowTimes { get; set; }
 	}
