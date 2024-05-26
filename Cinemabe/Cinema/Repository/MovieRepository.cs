@@ -101,14 +101,19 @@ namespace Cinema.Repository
 															TheaterAddress = theater.Key.Address,
                                                             TheaterId = theater.Key.TheaterId,
 
-                                                            ShowTimes = theater.Select(showTime => new ShowTimeRowViewModel
-                                                            {
-                                                                RoomId = showTime.Room.Id,
-                                                                RoomName = showTime.Room.Name,
-																ShowTimeId = showTime.ShowTime.Id,
-																StartTime = showTime.ShowTime.StartTime,
-																EndTime = showTime.ShowTime.EndTime
-															}).ToList()
+                                                            ShowTimes = theater.Select(showTime =>
+															{
+																bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == showTime.RoomId).Any(x => x.SeatType.Name == "Nằm");
+                                                                return new ShowTimeRowViewModel
+																{
+																	RoomId = showTime.Room.Id,
+																	RoomName = showTime.Room.Name,
+																	ShowTimeId = showTime.ShowTime.Id,
+																	StartTime = showTime.ShowTime.StartTime,
+																	EndTime = showTime.ShowTime.EndTime,
+                                                                    ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
+                                                                };
+                                                            }).ToList()
 														}).ToList()
 										}).ToList();
 

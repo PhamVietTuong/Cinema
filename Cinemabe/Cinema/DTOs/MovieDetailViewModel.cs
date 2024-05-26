@@ -1,4 +1,5 @@
-﻿using Cinema.Data.Models;
+﻿using Cinema.Data.Enum;
+using Cinema.Data.Models;
 
 namespace Cinema.DTOs
 {
@@ -38,6 +39,7 @@ namespace Cinema.DTOs
 
 	public class ShowTimeRowViewModel
 	{
+        public ShowTimeType ShowTimeType { get; set; }
         public Guid RoomId { get; set; }
         public string RoomName { get; set; }
         public Guid ShowTimeId { get; set; }
