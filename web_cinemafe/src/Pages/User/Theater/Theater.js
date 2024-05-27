@@ -18,6 +18,9 @@ import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomD
 import { SeatStatus } from '../../../Enum/SeatStatus';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
 import { ShowTimeType } from '../../../Enum/ShowTimeType';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
 
 const Theater = (props) => {
     const dispatch = useDispatch();
@@ -38,6 +41,38 @@ const Theater = (props) => {
     const [countdown, setCountdown] = useState(300);
     const [timerRunning, setTimerRunning] = useState(false);
     const [selectedRoomId, setselectedRoomId] = useState(null);
+    const [counts, setCounts] = useState(ticketType.map(() => 0));
+    const increment = (index) => {
+        setCounts(prevCounts => {
+            const newCounts = [...prevCounts];
+
+            if (newCounts[index] === 8) {
+                Swal.fire({
+                    title: `Vui lòng chọn tối đa <span class="c-second">8</span> ghế`,
+                    padding: "24px",
+                    width: "400px",
+                    customClass: {
+                        confirmButton: 'custom-ok-button'
+                    }
+                });
+
+                return newCounts
+            }
+
+            newCounts[index] = (newCounts[index] || 0) + 1;
+
+            return newCounts;
+        });
+    };
+
+    const decrement = (index) => {
+        setCounts(prevCounts => {
+            const newCounts = [...prevCounts];
+            newCounts[index] = (newCounts[index] > 0) ? newCounts[index] - 1 : 0;
+            return newCounts;
+        });
+    };
+
 
     useEffect(() => {
         if (timerRunning && countdown > 0) {
@@ -282,7 +317,7 @@ const Theater = (props) => {
                                                 <div className="combo-list row" data-aos="fade-up">
                                                     {
                                                         ticketType.map((ticketItem, ticketIndex) => (
-                                                            <div className="combo-item col col-4">
+                                                            <div className="combo-item col col-4" key={ticketIndex}>
                                                                 <div className="food-box">
                                                                     <div className="content">
                                                                         <div className="content-top">
@@ -298,12 +333,12 @@ const Theater = (props) => {
                                                                         </div>
                                                                         <div className="content-bottom">
                                                                             <div className="count">
-                                                                                <div className="count-btn count-minus">
-                                                                                    <i className="fas fa-minus icon" />
+                                                                                <div className="count-btn count-minus" onClick={() => decrement(ticketIndex)}>
+                                                                                    <FontAwesomeIcon icon={faMinus} />
                                                                                 </div>
-                                                                                <p className="count-number">0</p>
-                                                                                <div className="count-btn count-plus">
-                                                                                    <i className="fas fa-plus icon" />
+                                                                                <p className="count-number">{counts[ticketIndex] || 0}</p>
+                                                                                <div className="count-btn count-plus" onClick={() => increment(ticketIndex)}>
+                                                                                    <FontAwesomeIcon icon={faPlus} />
                                                                                 </div>
                                                                             </div>
                                                                         </div>

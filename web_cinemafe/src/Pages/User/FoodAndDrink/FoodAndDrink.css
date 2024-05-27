@@ -1,5 +1,11 @@
 .dt-food {
-    padding-bottom: 40px;
+    padding-bottom: 100px;
+}
+
+@media (max-width: 1200px) {
+    .dt-food {
+        padding-bottom: 40px;
+    }
 }
 
 .food-box .content .content-top {
@@ -90,7 +96,7 @@
     transform: translate(-50%, -50%) scale(1.05) rotate(3deg);
 } */
 
-.food-box .name:hover {
+.food-box:hover .name{
     color: #f3ea28;
 }
 

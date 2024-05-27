@@ -1,12 +1,11 @@
 body {
-  font-family: "Josefin Sans",
-    sans-serif;
-  font-size: 16px !important;
-  line-height: 1.55 !important;
-  font-weight: 400 !important;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 400;
   color: #f8fafc !important;
-  overflow: hidden auto !important;
-  min-height: 100vh !important;
+  overflow: hidden auto;
+  min-height: 100vh;
 }
 
 body::before {
@@ -145,7 +144,11 @@ img {
   cursor: pointer;
 }
 
-.food-box .content .content-bottom {
+.ticket .content-bottom {
+  margin-bottom: auto;
+}
+
+.content .content-bottom {
   display: flex;
   justify-content: space-between;
   gap: 8px;
@@ -153,23 +156,27 @@ img {
 }
 
 @media (max-width: 700px) {
-  .food-box .content .content-bottom {
+  .content .content-bottom {
     flex-direction: column;
   }
 }
 
-.dt-food .count {
+.count {
   transition: all .3s ease;
 }
 
 @media (max-width: 1024px) {
-  .dt-food .count {
+  .count {
     padding: 8px 8px 4px;
     width: 100%;
   }
 }
 
-.dt-food .count:hover {
+.ticket .count {
+  width: 100px;
+}
+
+.ticket .count:hover {
   background: #f3ea28;
 }
 
@@ -196,11 +203,11 @@ img {
 .count .count-btn {
   font-size: 12px;
   font-weight: 300;
-  transition: all .2s;
+  transition: all 0.2s;
   position: relative;
   z-index: 2;
 }
-/* 
+
 .count .count-btn::after {
   content: "";
   position: absolute;
@@ -208,24 +215,39 @@ img {
   top: 50%;
   transform: translate(-50%, -60%);
   border-radius: 100%;
-  width: 1.8rem;
-  height: 1.8rem;
-  background-color: $color-pri;
+  width: 18px;
+  height: 18px;
+  background-color: #639;
   z-index: 1;
-  transition: all .2s;
+  transition: all 0.2s;
   opacity: 0;
-} */
+}
 
-.count .count-btn i {
-  transition: all .2s;
+.count-btn {
+  user-select: none;
+}
+
+.count .count-number {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+@media (max-width: 600px) {
+  .count .count-number {
+    font-size: 16px;
+  }
+}
+
+.count .count-btn svg {
+  transition: all 0.2s;
   position: relative;
   z-index: 2;
 }
 
-/* .count .count-btn:hover {
+.count .count-btn:hover {
   cursor: pointer;
-  color: $color-second;
-} */
+  color: #f3ea28;
+}
 
 .count .count-btn:hover::after {
   opacity: 1;
@@ -247,4 +269,79 @@ ul {
 p {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+.swal2-popup {
+  background: linear-gradient(106deg,#639,#36c 102.69%);
+  font-family: "Josefin Sans", sans-serif;
+  border-radius: 6px
+}
+
+.swal2-title {
+  color: #f8fafc;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.swal2-actions .swal2-confirm {
+  margin: 0 auto;
+    max-width: 40rem;
+    border: .1rem solid #f3ea28;
+      color: #f3ea28;
+      position: relative;
+      transition: all .4s ease-in-out;
+      z-index: 1;
+      background-color: transparent;
+      font-family: "Anton", sans-serif;
+}
+
+.swal2-confirm {
+  color: #f3ea28;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease-in-out;
+  border: 0.1rem solid #f3ea28;
+}
+
+.swal2-confirm::before,
+.swal2-confirm::after {
+  content: '';
+  height: 100%;
+  width: 0.1rem;
+  transition: all 0.4s ease-in-out;
+  position: absolute;
+  top: 0;
+}
+
+.swal2-confirm::before {
+  width: 100%;
+  background: transparent;
+  z-index: -2;
+  right: 0;
+}
+
+.swal2-confirm::after {
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #FF6D00 0%, #FFC107 100%);
+  z-index: -1;
+}
+
+.swal2-confirm:hover {
+  color: #fff;
+}
+
+.swal2-confirm:hover img {
+  transition: all .2s;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
+}
+
+.swal2-confirm:hover::before {
+  width: 0;
+}
+
+.swal2-confirm:hover::after {
+  width: 100%;
 }
