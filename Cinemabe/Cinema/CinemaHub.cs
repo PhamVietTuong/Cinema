@@ -117,7 +117,7 @@ namespace Cinema
 
             _seatBeingSelected[Context.ConnectionId] = entity;
 
-            await GetWaitingSeat(entity.ShowTimeId);
+            await GetWaitingSeat(entity.ShowTimeId, entity.RoomId);
         }
 
         public async Task CheckTheSeatBeforeBooking(TicketBookingSuccess entity)
@@ -152,9 +152,9 @@ namespace Cinema
             }
         }
 
-        public Task GetWaitingSeat(Guid showTimeId)
+        public Task GetWaitingSeat(Guid showTimeId, Guid roomId)
         {
-            var seatIds = _seatBeingSelected.Values.Where(x => x.ShowTimeId == showTimeId).SelectMany(x => x.SeatIds);
+            var seatIds = _seatBeingSelected.Values.Where(x => x.ShowTimeId == showTimeId && x.RoomId == roomId).SelectMany(x => x.SeatIds);
             return Clients.Caller.SendAsync("GetWaitingSeat", seatIds.ToList());
         }
     }

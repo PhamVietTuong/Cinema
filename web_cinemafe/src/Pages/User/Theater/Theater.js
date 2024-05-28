@@ -1,13 +1,13 @@
 import './Theater.css'
+import './SeatType.css'
+import './Seat.css'
+import './FoodAndDrink.css'
+import './Bill.css'
 import { Nav, Tab, } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import moment from 'moment';
 import 'moment/locale/vi';
-import SeatType from '../SeatType/SeatType';
-import Seat from '../Seat/Seat';
-import FoodAndDrink from '../FoodAndDrink/FoodAndDrink';
-import Bill from '../Bill/Bill';
 import { useDispatch, useSelector } from "react-redux";
 import { ComboAction, SeatAction, SeatBeingSelected, TicketBooking, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
 import { TicketBookingSuccess } from '../../../Models/TicketBookingSuccess';
@@ -18,6 +18,9 @@ import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomD
 import { SeatStatus } from '../../../Enum/SeatStatus';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
 import { ShowTimeType } from '../../../Enum/ShowTimeType';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
 
 const Theater = (props) => {
     const dispatch = useDispatch();
@@ -38,6 +41,58 @@ const Theater = (props) => {
     const [countdown, setCountdown] = useState(300);
     const [timerRunning, setTimerRunning] = useState(false);
     const [selectedRoomId, setselectedRoomId] = useState(null);
+    const [countTicketTypes, setCountTicketTypes] = useState(ticketType.map(() => 0) || 0);
+    const [countCombos, setCountCombos] = useState(ticketType.map(() => 0) || 0);
+    
+    const incrementTicketType = (index) => {
+        setCountTicketTypes(prevCounts => {
+            const newCounts = [...prevCounts];
+
+            if (newCounts[index] === 8) {
+                Swal.fire({
+                    title: `Vui lòng chọn tối đa <span class="c-second">8</span> ghế`,
+                    padding: "24px",
+                    width: "400px",
+                    customClass: {
+                        confirmButton: 'custom-ok-button'
+                    }
+                });
+
+                return newCounts
+            }
+
+            newCounts[index] = (newCounts[index] || 0) + 1;
+
+            return newCounts;
+        });
+    };
+
+    const decrementTicketType = (index) => {
+        setCountCombos(prevCounts => {
+            const newCounts = [...prevCounts];
+            newCounts[index] = (newCounts[index] > 0) ? newCounts[index] - 1 : 0;
+            return newCounts;
+        });
+    };
+
+    const incrementCombo = (index) => {
+        setCountCombos(prevCounts => {
+            const newCounts = [...prevCounts];
+
+            newCounts[index] = (newCounts[index] || 0) + 1;
+
+            return newCounts;
+        });
+    };
+
+    const decrementCombo = (index) => {
+        setCountTicketTypes(prevCounts => {
+            const newCounts = [...prevCounts];
+            newCounts[index] = (newCounts[index] > 0) ? newCounts[index] - 1 : 0;
+            return newCounts;
+        });
+    };
+
 
     useEffect(() => {
         if (timerRunning && countdown > 0) {
@@ -282,7 +337,7 @@ const Theater = (props) => {
                                                 <div className="combo-list row" data-aos="fade-up">
                                                     {
                                                         ticketType.map((ticketItem, ticketIndex) => (
-                                                            <div className="combo-item col col-4">
+                                                            <div className="combo-item col col-4" key={ticketIndex}>
                                                                 <div className="food-box">
                                                                     <div className="content">
                                                                         <div className="content-top">
@@ -298,12 +353,12 @@ const Theater = (props) => {
                                                                         </div>
                                                                         <div className="content-bottom">
                                                                             <div className="count">
-                                                                                <div className="count-btn count-minus">
-                                                                                    <i className="fas fa-minus icon" />
+                                                                                <div className="count-btn count-minus" onClick={() => decrementTicketType(ticketIndex)}>
+                                                                                    <FontAwesomeIcon icon={faMinus} />
                                                                                 </div>
-                                                                                <p className="count-number">0</p>
-                                                                                <div className="count-btn count-plus">
-                                                                                    <i className="fas fa-plus icon" />
+                                                                                <p className="count-number">{countTicketTypes[ticketIndex] || 0}</p>
+                                                                                <div className="count-btn count-plus" onClick={() => incrementTicketType(ticketIndex)}>
+                                                                                    <FontAwesomeIcon icon={faPlus} />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -420,10 +475,7 @@ const Theater = (props) => {
                                                             <div className="food-box">
                                                                 <div className="img">
                                                                     <div className="image">
-                                                                        <img
-                                                                            src={`${DOMAIN}/Images/${comboItem.image}`}
-                                                                            alt=""
-                                                                        />
+                                                                        <img src={`${DOMAIN}/Images/${comboItem.image}`} alt={`${comboItem.image}`} />
                                                                     </div>
                                                                 </div>
                                                                 <div className="content">
@@ -442,12 +494,12 @@ const Theater = (props) => {
                                                                     </div>
                                                                     <div className="content-bottom">
                                                                         <div className="count">
-                                                                            <div className="count-btn count-minus">
-                                                                                <i className="fas fa-minus icon" />
+                                                                            <div className="count-btn count-minus" onClick={() => decrementCombo(comboIndex)}>
+                                                                                <FontAwesomeIcon icon={faMinus} />
                                                                             </div>
-                                                                            <p className="count-number">0</p>
-                                                                            <div className="count-btn count-plus">
-                                                                                <i className="fas fa-plus icon" />
+                                                                            <p className="count-number">{countCombos[comboIndex] || 0}</p>
+                                                                            <div className="count-btn count-plus" onClick={() => incrementCombo(comboIndex)}>
+                                                                                <FontAwesomeIcon icon={faPlus} />
                                                                             </div>
                                                                         </div>
                                                                     </div>

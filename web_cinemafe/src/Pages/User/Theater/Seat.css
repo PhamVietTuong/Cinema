@@ -1,5 +1,11 @@
 .seat {
-    padding-bottom: 40px;
+    padding-bottom: 100px;
+}
+
+@media (max-width: 1200px) {
+    .seat {
+        padding-bottom: 40px;
+    }
 }
 
 .seat-wr {

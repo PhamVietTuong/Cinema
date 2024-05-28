@@ -1,5 +1,11 @@
 .ticket {
-    padding-bottom: 40px;
+    padding-bottom: 100px;
+}
+
+@media (max-width: 1200px) {
+    .ticket {
+        padding-bottom: 40px;
+    }
 }
 
 @media (min-width: 701px) {
