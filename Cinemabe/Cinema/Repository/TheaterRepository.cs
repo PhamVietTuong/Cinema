@@ -30,7 +30,8 @@ namespace Cinema.Repository
                     Id = theater.Id,
                     Name = theater.Name,
                     Address = theater.Address,
-                    Status = theater.Status,
+                    Image = theater.Image,
+                    Phone = theater.Phone,
                 });
             }
 
@@ -113,8 +114,5 @@ namespace Cinema.Repository
             }
             return rows;
         }
-
-
-
     }
 }

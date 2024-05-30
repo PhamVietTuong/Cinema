@@ -102,6 +102,8 @@ CREATE TABLE [Theater] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
     [Name] nvarchar(255) NOT NULL,
 	[Address] nvarchar(255) NOT NULL,
+	[Image] nvarchar(255) NOT NULL,
+	[Phone] nvarchar(255)NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id)
 );
@@ -110,8 +112,6 @@ CREATE TABLE [Room] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
 	[TheaterId] uniqueidentifier NOT NULL,
     [Name] nvarchar(255) NOT NULL,
-	[Width] float NOT NULL,
-	[Length] float NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Room_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
@@ -186,12 +186,14 @@ CREATE TABLE [Ticket] (
 
 CREATE TABLE [FoodAndDrink] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
+	[TheaterId] [uniqueidentifier] NOT NULL,
     [Name] nvarchar(255) NOT NULL,
 	[Description] nvarchar(255) NOT NULL,
 	[Image] nvarchar(255) NOT NULL,
 	[Price] float NOT NULL,
 	[Status] bit NOT NULL,
-	PRIMARY KEY (Id)
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_FoodAndDrink_Theater FOREIGN KEY (TheaterId) REFERENCES Theater(Id)
 );
 
 CREATE TABLE [MovieType] (

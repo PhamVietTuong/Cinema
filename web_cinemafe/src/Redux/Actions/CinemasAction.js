@@ -21,7 +21,7 @@ export const MovieListAction = () => {
 export const MovieDetailAction = (movieDetailDTO) => {
     return async (dispatch) => {
         try {
-            const result = await cinemasService.GetMovieDetail(movieDetailDTO);
+            const result = await cinemasService.PostMovieDetail(movieDetailDTO);
 
             dispatch({
                 type: SET_MOVIE_DETAIL,
@@ -36,7 +36,7 @@ export const MovieDetailAction = (movieDetailDTO) => {
 export const TicketTypeAction = (ticketTypeByShowTimeDTO) => {
     return async (dispatch) => {
         try {
-            const ticketType = await cinemasService.GetTicketTypeByShowTimeAndRoomId(ticketTypeByShowTimeDTO);
+            const ticketType = await cinemasService.PostTicketTypeByShowTimeAndRoomId(ticketTypeByShowTimeDTO);
 
             dispatch({
                 type: SET_TICKET_TYPE,
@@ -51,7 +51,7 @@ export const TicketTypeAction = (ticketTypeByShowTimeDTO) => {
 export const SeatAction = (seatByShowTimeAndRoomDTO) => {
     return async (dispatch) => {
         try {
-            const seat = await cinemasService.GetSeatByShowTimeAndRoomId(seatByShowTimeAndRoomDTO);
+            const seat = await cinemasService.PostSeatByShowTimeAndRoomId(seatByShowTimeAndRoomDTO);
 
             dispatch({
                 type: SET_SEAT,
@@ -63,10 +63,10 @@ export const SeatAction = (seatByShowTimeAndRoomDTO) => {
     }
 }
 
-export const ComboAction = () => {
+export const ComboAction = (theaterId) => {
     return async (dispatch) => {
         try {
-            const combo = await cinemasService.GetCombo();
+            const combo = await cinemasService.GetComboByTheaterId(theaterId);
 
             dispatch({
                 type: SET_COMBO,

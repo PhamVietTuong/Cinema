@@ -1,5 +1,11 @@
 .shtime {
-    padding-bottom: 40px;
+    padding-bottom: 100px;
+}
+
+@media (max-width: 1200px) {
+    .shtime {
+        padding-bottom: 40px;
+    }
 }
 
 .shtime-heading {
@@ -309,4 +315,16 @@
 .cinestar-item {
     font-family: "Josefin Sans",
         sans-serif;
+}
+
+.ticket {
+    padding-bottom: 40px;
+}
+
+.c-second {
+    color: #f3ea28;
+}
+
+.custom-ok-button {
+    width: 350.4px;
 }

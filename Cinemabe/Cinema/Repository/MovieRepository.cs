@@ -18,16 +18,16 @@ namespace Cinema.Repository
 			_context = context;
 		}
 
-		public async Task<List<MovieViewModel>> GetMovieList()
+		public async Task<List<MovieDetailViewModel>> GetMovieList()
 		{
 			var movieList = await _context.Movie.Include(x => x.AgeRestriction).ToListAsync();
 
-			var rows = new List<MovieViewModel>();
+			var rows = new List<MovieDetailViewModel>();
 			foreach (var movie in movieList)
 			{
 				if (movie.Time2D != -1)
 				{
-                    rows.Add(new MovieViewModel
+                    rows.Add(new MovieDetailViewModel
                     {
                         Id = movie.Id,
                         Name = movie.Name,
@@ -44,7 +44,7 @@ namespace Cinema.Repository
 
                 if (movie.Time3D != -1)
                 {
-                    rows.Add(new MovieViewModel
+                    rows.Add(new MovieDetailViewModel
                     {
                         Id = movie.Id,
                         Name = movie.Name,
@@ -94,19 +94,26 @@ namespace Cinema.Repository
 										{
                                             Date = schedule.Key,
                                             Theaters = schedule
-														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address })
+														.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address, x.Room.TheaterId })
 														.Select(theater => new TheaterRowViewModel
 														{
 															TheaterName = theater.Key.Name,
 															TheaterAddress = theater.Key.Address,
-															ShowTimes = theater.Select(showTime => new ShowTimeRowViewModel
-                                                            {
-                                                                RoomId = showTime.Room.Id,
-                                                                RoomName = showTime.Room.Name,
-																ShowTimeId = showTime.ShowTime.Id,
-																StartTime = showTime.ShowTime.StartTime,
-																EndTime = showTime.ShowTime.EndTime
-															}).ToList()
+                                                            TheaterId = theater.Key.TheaterId,
+
+                                                            ShowTimes = theater.Select(showTime =>
+															{
+																bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == showTime.RoomId).Any(x => x.SeatType.Name == "Nằm");
+                                                                return new ShowTimeRowViewModel
+																{
+																	RoomId = showTime.Room.Id,
+																	RoomName = showTime.Room.Name,
+																	ShowTimeId = showTime.ShowTime.Id,
+																	StartTime = showTime.ShowTime.StartTime,
+																	EndTime = showTime.ShowTime.EndTime,
+                                                                    ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
+                                                                };
+                                                            }).ToList()
 														}).ToList()
 										}).ToList();
 
