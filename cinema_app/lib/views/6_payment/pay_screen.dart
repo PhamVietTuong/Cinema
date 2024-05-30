@@ -4,13 +4,15 @@ import 'package:cinema_app/components/info_bar.dart';
 import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/components/title_bar.dart';
+import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/views/6_payment/payment_options.dart';
 import 'package:cinema_app/views/6_payment/ticket_box.dart';
 import 'package:cinema_app/views/7_ticket_info/ticket_info_screen.dart';
 import 'package:flutter/material.dart';
 
 class PayScreen extends StatefulWidget {
-  const PayScreen({super.key});
+  const PayScreen({super.key, required this.booking});
+  final Booking booking;
 
   @override
   State<PayScreen> createState() => _PayScreenState();
@@ -50,7 +52,7 @@ class _PayScreenState extends State<PayScreen> {
                 Container(
                   margin: const EdgeInsets.only(left: 5),
                   child: Text(
-                    "Cinestar Đà Lạt",
+                    widget.booking.theater.name,
                     style: styles.titleTextStyle,
                   ),
                 ),

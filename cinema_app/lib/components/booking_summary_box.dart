@@ -10,6 +10,7 @@ class BookingSummaryBox extends StatelessWidget {
     super.key,
     required this.nextScreen,
     required this.booking,
+    required this.handle,
     this.totalPrice,
     this.totalTicket,
   });
@@ -17,6 +18,7 @@ class BookingSummaryBox extends StatelessWidget {
   final Booking booking;
   final int? totalTicket;
   final int? totalPrice;
+  final bool Function() handle;
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +65,7 @@ class BookingSummaryBox extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            if (totalTicket == 0 && booking.getTotalTickets() == 0) {
-              print("stop");
-              return;
-            }
+            if (!handle()) return;
             Navigator.push(
                 context,
                 MaterialPageRoute(

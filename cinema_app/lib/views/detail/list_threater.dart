@@ -59,11 +59,11 @@ class _ListThreaterState extends State<ListThreater> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
                     ],
                   )
                 ],

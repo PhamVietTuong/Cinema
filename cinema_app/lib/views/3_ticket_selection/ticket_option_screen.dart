@@ -8,7 +8,6 @@ import 'package:cinema_app/components/showtime_dropdow.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/data/models/ticket_option.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_screen.dart';
 import 'package:cinema_app/views/3_ticket_selection/ticket_option.dart';
@@ -18,34 +17,32 @@ class TicketOptionScreen extends StatefulWidget {
   const TicketOptionScreen(
       {super.key,
       required this.booking,
-      required this.showtime,
+      required this.showtimeRoom,
       required this.movie});
 
   final Booking booking;
   final Movie movie;
-  final Showtime showtime;
+  final ShowtimeRoom showtimeRoom;
 
   @override
   State<TicketOptionScreen> createState() => _TicketOptionScreenState();
 }
 
-class _TicketOptionScreenState extends State<TicketOptionScreen>
-   {
+class _TicketOptionScreenState extends State<TicketOptionScreen> {
   bool isLoadingData = true;
-  late final String date;
-  late String time;
-  late Showtime selectedShowtime;
+  late ShowtimeRoom selectedShowtime;
   int totalPrice = 0;
   int totalTicket = 0;
   List<TicketOptionItem> options = List.filled(0,
       TicketOptionItem(option: TicketOption(), upDownQuantity: (bool i, ti) {}),
       growable: true);
 
-  void selectShowtime(Showtime showtime) {
+  void selectShowtime(ShowtimeRoom showtime) {
     setState(() {
       selectedShowtime = showtime;
       totalTicket = 0;
       totalPrice = 0;
+      loadData();
     });
   }
 
@@ -67,6 +64,14 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
     });
   }
 
+  bool handle() {
+    if (totalTicket == 0 && widget.booking.getTotalTickets() == 0) {
+      print("stop");
+      return false;
+    }
+    return true;
+  }
+
   Widget nextScreen() {
     widget.booking.tickets = options.map((e) => e.option).toList();
     return SeatScreen(
@@ -75,13 +80,17 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
     );
   }
 
+  void loadData() {
+    
+  }
+
   @override
   void initState() {
     super.initState();
 
-    selectedShowtime = widget.showtime;
+    selectedShowtime = widget.showtimeRoom;
     widget.booking.movie = widget.movie;
-
+    loadData();
   }
 
   @override
@@ -118,23 +127,23 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                 child: Row(
                   children: [
                     MovieTypeBox(
-                      title: widget.movie.types.map((e) => e.name).toList().join(", "),
+                      title: widget.movie.movieType,
                       maxBoxWith: wS * 0.5 - 10,
                       fontSizeCus: 15,
                       padding: 5,
                     ),
                     ShowtimeTypeBox(
-                        title: selectedShowtime.type.name,
+                        title: widget.movie.showTimeTypeName,
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     AgeRestrictionBox(
-                        title: widget.movie.ageRestriction.name,
+                        title: widget.movie.ageRestrictionName,
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,
-                      showtimes: widget.movie.showtimes,
+                      showtimes: widget.movie.schedules[0].showtimes,
                       selectShowtime: selectShowtime,
                     )
                   ],
@@ -152,7 +161,9 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                         width: wS * 0.13,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: Image(image: AssetImage(widget.movie.img)),
+                          child: Image(
+                              image: NetworkImage(
+                                  "$serverUrl/Images/${widget.movie.img}")),
                         ),
                       ),
                       Expanded(
@@ -165,7 +176,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                               Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 child: Text(
-                                  '${widget.movie.name} ${selectedShowtime.type.name} (${widget.movie.ageRestriction.name})',
+                                  '${widget.movie.name} ${widget.movie.showTimeTypeName} (${widget.movie.ageRestrictionName})',
                                   style: styles.titleTextStyle,
                                 ),
                               ),
@@ -181,7 +192,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                       child: Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          "${widget.booking.theater.name} - Phòng: ${selectedShowtime.room.name}",
+                                          "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
                                           style: styles.normalTextStyle,
                                         ),
                                       ),
@@ -237,6 +248,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                             offset: const Offset(1, 1))
                       ]),
                   child: BookingSummaryBox(
+                    handle: handle,
                     nextScreen: nextScreen(),
                     booking: widget.booking,
                     totalPrice: totalPrice,

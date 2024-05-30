@@ -18,11 +18,11 @@ class ShowtimePresenter {
     repository = Injector().getShowtimeRepository();
   }
 
-  Future<void> fetchShowtimesByDate(DateTime date, String theaterId) async {
-    String dayString = '${date.year}-${date.month}-${date.day}';
+  Future<void> fetchShowtimesByDate( String theaterId) async {
+ //   String dayString = '${date.year}-${date.month}-${date.day}';
     try {
       List<Movie> movies =
-          await repository.fetchShowtimesAndMoviesByDate(dayString, theaterId);
+          await repository.fetchShowtimesAndMoviesByDate( theaterId);
       _view.onLoadShowtimeAndMovieComplete(movies);
     } catch (error) {
       // Xử lý lỗi

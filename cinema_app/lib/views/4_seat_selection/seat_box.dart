@@ -9,13 +9,11 @@ class SeatBox extends StatefulWidget {
       {super.key,
       required this.seat,
       required this.name,
-      required this.index,
       required this.selectSeat});
 
   final Seat seat;
   final String name;
-  final int index;
-  final bool Function(int id, bool state) selectSeat;
+  final bool Function(String id, bool state) selectSeat;
 
   @override
   State<SeatBox> createState() => _SeatBoxState();
@@ -32,7 +30,7 @@ class _SeatBoxState extends State<SeatBox> {
 
     //trạng thái trống
     if (widget.seat.status == 1) {
-      return widget.seat.seatTypeId;
+      return widget.seat.seatTypeName.compareTo("Đơn")==0?1:2;
     }
     // trạng thái đang chọn
     if (widget.seat.status == 2) {
@@ -50,8 +48,8 @@ class _SeatBoxState extends State<SeatBox> {
 
   @override
   Widget build(BuildContext context) {
-    String seatName =
-        '${widget.name}${widget.index.toString().padLeft(2, '0')}';
+    //String seatName =
+    //  '${widget.name}${widget.index.toString().padLeft(2, '0')}';
     Map<int, Color> colorMap = {
       1: styles.singleSeatColor,
       2: styles.coupleSeatColor,
@@ -83,8 +81,8 @@ class _SeatBoxState extends State<SeatBox> {
         children: [
           Expanded(
             child: AspectRatio(
-              aspectRatio: widget.seat.seatTypeId == 1 ? 1 : 2,
-              child: widget.seat.isSeat != 0
+              aspectRatio: widget.seat.seatTypeName.compareTo("Đơn")==0 ? 1 : 2,
+              child: widget.seat.isSeat
                   ? Container(
                       margin: const EdgeInsets.only(right: 3, bottom: 3),
                       decoration: BoxDecoration(
@@ -96,7 +94,7 @@ class _SeatBoxState extends State<SeatBox> {
                         decoration:
                             BoxDecoration(color: colorMap[loadSeatColor()]!),
                         child: Text(
-                          seatName,
+                          widget.seat.name,
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
