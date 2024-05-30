@@ -11,7 +11,7 @@ namespace Cinema.DTOs
         public string AgeRestrictionAbbreviation { get; set; }
         public string Name { get; set; }
 		public string Image { get; set; }
-		public int Time { get; set; }
+		public int? Time { get; set; }
         public DateTime ReleaseDate { get; set; }
 		public string Description { get; set; }
 		public string Director { get; set; }
@@ -20,6 +20,7 @@ namespace Cinema.DTOs
 		public string Languages { get; set; }
         public string MovieType { get; set; }
         public string ShowTimeTypeName { get; set; }
+        public int ProjectionForm { get; set; }
         public List<ScheduleRowViewModel> Schedules { get; set; }
     }
 

@@ -95,3 +95,7 @@ CONSTRAINT FK_FoodAndDrink_Theater FOREIGN KEY (TheaterId) REFERENCES Theater(Id
 ALTER TABLE Theater
 ADD Image nvarchar(255) NULL,
 Phone nvarchar(255) NULL
+
+ALTER TABLE Room
+DROP COLUMN Width,
+COLUMN Length

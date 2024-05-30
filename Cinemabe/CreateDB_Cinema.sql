@@ -112,8 +112,6 @@ CREATE TABLE [Room] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
 	[TheaterId] uniqueidentifier NOT NULL,
     [Name] nvarchar(255) NOT NULL,
-	[Width] float NOT NULL,
-	[Length] float NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Room_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
