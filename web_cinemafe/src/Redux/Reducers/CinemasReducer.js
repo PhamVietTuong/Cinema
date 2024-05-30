@@ -1,5 +1,5 @@
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { CHECK_FOR_EMPTY_SEAT, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -108,6 +108,10 @@ export const CinemasReducer = (state = stateDefault, action) => {
             }
 
             return { ...state, seatYour: updatedSeatsYour };
+        }
+
+        case CLEAN: {
+            return { ...state, listOfSeatSold: [], updateSeat: [], listWattingSeat: [] };
         }
 
         default: return { ...state };

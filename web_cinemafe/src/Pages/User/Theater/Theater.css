@@ -328,3 +328,9 @@
 .custom-ok-button {
     width: 350.4px;
 }
+
+.shtime-ft .cinestar-item .item-time.active {
+    border: .5px solid #f3ea28;
+    color: #f3ea28;
+    pointer-events: none;
+}
