@@ -48,7 +48,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
   void _selectDay(DateTime day) {
     setState(() {
       selectedDay = day;
-      showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
+      //showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
     });
   }
 
@@ -62,7 +62,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
     selectedDay = today;
     loadData();
     showtimePr = ShowtimePresenter(this);
-    showtimePr.fetchShowtimesByDate(today, widget.booking.theater.id);
+    showtimePr.fetchShowtimesByDate(widget.booking.theater.id);
   }
 
   @override

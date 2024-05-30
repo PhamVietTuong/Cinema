@@ -103,17 +103,12 @@ namespace Cinema.Controllers
 		//[HttpPost("GetShowTimeByDateAndTheaterId")]
 
 		//24/05/2024 tienn: HttpPost - > HttpGet, changed api name, added 2 para in route, changed para of method
-		[HttpGet("GetShowTimeByDate{date}/TheaterId{theaterId}")]
-		public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByDateAndTheaterId(DateTime date, Guid theaterId)
+		[HttpGet("GetShowTimeByTheaterId{theaterId}")]
+		public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByTheaterId(Guid theaterId)
 		{
-			//add line from 112 to 116
-			var showTimeByDateAndTheaterId = new ShowTimeByDateAndTheaterId
-			{
-				Date = date,
-				TheaterId = theaterId
-			};
+			
 
-			var result = await _uow.TheaterRepository.GetShowTimeByDateAndTheaterId(showTimeByDateAndTheaterId);
+			var result = await _uow.TheaterRepository.GetShowTimeByTheaterId(theaterId);
 
 			if (result.Count == 0)
 			{
