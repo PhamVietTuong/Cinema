@@ -4,7 +4,7 @@ namespace Cinema.Contracts
 {
 	public interface IMovieRepository
 	{
-		Task<List<MovieViewModel>> GetMovieList();
+		Task<List<MovieDetailViewModel>> GetMovieList();
 		Task<MovieDetailViewModel> GetMovieDetail(MovieDetailDTO movieDetailDTO);
 	}
 }

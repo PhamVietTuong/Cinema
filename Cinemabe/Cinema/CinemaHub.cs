@@ -96,7 +96,7 @@ namespace Cinema
                     {
                         seatIds.Add(seatId);
                         seatsToAdd.Add(seatId);
-                    }
+                    };
                 }
 
                 if (seatsToAdd.Any())

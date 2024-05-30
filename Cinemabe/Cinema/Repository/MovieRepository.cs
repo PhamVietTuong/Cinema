@@ -18,16 +18,16 @@ namespace Cinema.Repository
 			_context = context;
 		}
 
-		public async Task<List<MovieViewModel>> GetMovieList()
+		public async Task<List<MovieDetailViewModel>> GetMovieList()
 		{
 			var movieList = await _context.Movie.Include(x => x.AgeRestriction).ToListAsync();
 
-			var rows = new List<MovieViewModel>();
+			var rows = new List<MovieDetailViewModel>();
 			foreach (var movie in movieList)
 			{
 				if (movie.Time2D != -1)
 				{
-                    rows.Add(new MovieViewModel
+                    rows.Add(new MovieDetailViewModel
                     {
                         Id = movie.Id,
                         Name = movie.Name,
@@ -44,7 +44,7 @@ namespace Cinema.Repository
 
                 if (movie.Time3D != -1)
                 {
-                    rows.Add(new MovieViewModel
+                    rows.Add(new MovieDetailViewModel
                     {
                         Id = movie.Id,
                         Name = movie.Name,

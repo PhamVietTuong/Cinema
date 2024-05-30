@@ -23,7 +23,7 @@ namespace Cinema.Controllers
 		#region Movie
 
 		[HttpGet("GetMovieList")]
-		public async Task<ActionResult<List<MovieViewModel>>> GetMovieList()
+		public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()
 		{
             try
             {
@@ -37,7 +37,7 @@ namespace Cinema.Controllers
 		}
 
 		[HttpPost("MovieDetail")]
-		public async Task<ActionResult<List<MovieViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
+		public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
 		{
             try
             {
