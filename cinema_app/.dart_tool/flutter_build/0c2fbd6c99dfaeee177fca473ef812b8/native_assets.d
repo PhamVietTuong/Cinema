@@ -1,1 +1,0 @@
- E:\\Cinema\\cinema_app\\.dart_tool\\flutter_build\\0c2fbd6c99dfaeee177fca473ef812b8\\native_assets.yaml: 
