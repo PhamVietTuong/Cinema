@@ -1,7 +1,7 @@
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:cinema_app/components/info_bar.dart';
 import 'package:cinema_app/components/qr_box.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class TicketInfoScreen extends StatefulWidget {
@@ -20,7 +20,6 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
       appBar: AppBar(
         title: Text(
           "THANH TOÁN",
-          style: styles.titleTextStyle,
         ),
         leading: const SizedBox(),
         centerTitle: true,
@@ -32,12 +31,11 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
               width: sW - 30,
               padding: const EdgeInsets.symmetric(vertical: 15),
               decoration: BoxDecoration(
-                color: styles.primaryColor,
+                color: Styles.primaryColor,
               ),
               child: Center(
                   child: Text(
                 "Thông Tin Giao Dịch",
-                style: styles.normalTextStyle.copyWith(color: Colors.white),
               )),
             ),
             InfoBar(
@@ -106,9 +104,8 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                 children: [
                   Text(
                     "Mã vé",
-                    style: styles.titleTextStyle,
                   ),
-                  Text("111850955", style: styles.normalTextStyle),
+                  Text("111850955",),
                   const SizedBox(
                     height: 15,
                   ),
@@ -137,12 +134,11 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 20),
                         decoration: BoxDecoration(
-                            color: styles.primaryColor,
+                            color: Styles.primaryColor,
                             borderRadius: BorderRadius.circular(8)),
                         child: Text(
                           "XÁC NHẬN",
-                          style: styles.normalTextStyle
-                              .copyWith(color: Colors.white),
+                  
                         ))),
               ],
             )

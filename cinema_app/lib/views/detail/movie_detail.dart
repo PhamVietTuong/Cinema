@@ -2,7 +2,7 @@ import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
 import 'package:cinema_app/views/detail/list_threater.dart';
 import 'package:flutter/material.dart';
@@ -86,15 +86,15 @@ class _MovieDetailState extends State<MovieDetail> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("BIỆT ĐỘI SĂN MA",style:styles.titleTextStyle.copyWith(color: Colors.black,fontSize: 20)) ,
+                      Text("BIỆT ĐỘI SĂN MA",style:TextStyle(color: Colors.black,fontSize: 20)) ,
                          const SizedBox(height: 5,),
                       const Text("Thời lượng: 115phút",style:TextStyle(color: Colors.grey),),
                          const SizedBox(height: 10,),
-                      const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hành động',),
+                      const MovieTypeBox(padding: 5, title: 'Hành động',),
                       const SizedBox(height: 10,),
                       const Row(
                         children: [
-                      ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
+                      ShowtimeTypeBox(title: '2D',),
                       AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
                         ],
                       )

@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class PaymentOption extends StatelessWidget {
@@ -16,7 +16,7 @@ var styles=Styles();
           margin: const EdgeInsets.only(right: 8),
           width: (wS-30)*0.09,
           child: Image(image: AssetImage(img))),
-        Expanded(child: Text(title, style: styles.titleTextStyle,)),
+        Expanded(child: Text(title, )),
       ],
     );
   }

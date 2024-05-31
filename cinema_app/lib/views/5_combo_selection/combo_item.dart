@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/btn_up_down.dart';
 import 'package:flutter/material.dart';
 
@@ -31,16 +31,12 @@ class _ComboItemState extends State<ComboItem> {
               children: [
                 Text(
                   "Combo Couple 2 Ngăn - VOL",
-                  style: styles.titleTextStyle,
                 ),
                 Text(
                   "1 Coke 32oz - v + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN",
-                  style: styles.normalTextStyle,
                 ),
                 Text(
                   "119,000 đ",
-                  style: styles.titleTextStyle
-                      .copyWith(color: styles.primaryColor),
                 ),
               ],
             ),
@@ -55,7 +51,6 @@ class _ComboItemState extends State<ComboItem> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     "000",
-                    style: styles.titleTextStyle,
                   )),
                BtnUpDown(upDown: (bool i){},)
             ],

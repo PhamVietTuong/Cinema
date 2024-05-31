@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class TicketBox extends StatelessWidget {
@@ -16,8 +16,8 @@ class TicketBox extends StatelessWidget {
           border: Border.all(width: 2, color: Colors.purple), borderRadius: BorderRadius.circular(5)),
       child:  Column(
         children: [
-          Text("E07", style: TextStyle(color: styles.primaryColor),),
-          Text("70,000", style: TextStyle(color: styles.primaryColor),),
+          Text("E07", style: TextStyle(color: Styles.primaryColor),),
+          Text("70,000", style: TextStyle(color: Styles.primaryColor),),
         ],
       ),
     );

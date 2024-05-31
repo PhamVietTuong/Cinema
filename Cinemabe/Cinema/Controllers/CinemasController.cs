@@ -128,7 +128,7 @@ namespace Cinema.Controllers
         }
 
 		[HttpGet("GetShowTimeByTheaterId{theaterId}")]
-		public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByTheaterId(Guid theaterId)
+		public async Task<ActionResult<List<MovieDetailViewModel>>> GetShowTimeByTheaterId(Guid theaterId)
 		{
 			
 

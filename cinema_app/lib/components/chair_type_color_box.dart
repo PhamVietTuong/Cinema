@@ -1,4 +1,3 @@
-import 'package:cinema_app/constants.dart';
 import 'package:flutter/material.dart';
 
 class ChairTypeColorBox extends StatelessWidget {
@@ -7,7 +6,6 @@ class ChairTypeColorBox extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) {
-    var styles=Styles();
     return Row(
       children: [Container(
         width: 12,
@@ -17,7 +15,7 @@ class ChairTypeColorBox extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(50)
         ),
-      ), Text(title, style: styles.normalTextStyle,)],
+      ), Text(title,style: TextStyle(color: color),)],
     );
   }
 }

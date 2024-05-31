@@ -1,6 +1,7 @@
+import 'package:cinema_app/components/time_box.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';
@@ -18,15 +19,14 @@ class ShowTimeOfMovieItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
-    var styles = Styles();
-
     return Container(
         padding: const EdgeInsets.symmetric(
           vertical: 10,
           horizontal: 15,
         ),
         margin: const EdgeInsets.only(bottom: 6),
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration:
+            BoxDecoration(color: Styles.backgroundContent["dark_purple"]),
         child: Column(children: [
           Container(
             margin: const EdgeInsets.only(bottom: 8),
@@ -43,13 +43,17 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                           blurRadius: 1,
                           spreadRadius: -1,
                           offset: const Offset(
-                              1, 4), // Độ dịch chuyển của bóng (ngang, dọc)
+                              2, 4), // Độ dịch chuyển của bóng (ngang, dọc)
                         ),
                       ]),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image(
-                        fit: BoxFit.fitHeight, image: NetworkImage("$serverUrl/Images/${movie.img}")),
+                        fit: BoxFit.fitHeight,
+                        image: movie.img.isEmpty
+                            ? const AssetImage("assets/img/movie_white.png")
+                                as ImageProvider
+                            : NetworkImage("$serverUrl/Images/${movie.img}")),
                   ),
                 ),
                 Expanded(
@@ -60,8 +64,9 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${movie.name} ${movie.showTimeTypeName} (${movie.ageRestrictionName})',
-                            style: styles.titleTextStyle,
+                            '${movie.name} ${movie.showTimeTypeName} (${movie.ageRestrictionName})', style: TextStyle(
+                              color: Styles.boldTextColor["dark_purple"], fontSize: Styles.titleFontSize, fontWeight: FontWeight.bold
+                            ),
                           ),
                           MovieTypeBox(
                             title: movie.movieType,
@@ -79,6 +84,10 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                                 marginLeft: 5,
                               ),
                             ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            child: TimeBox(time: movie.time),
                           )
                         ]),
                   ),
@@ -88,16 +97,43 @@ class ShowTimeOfMovieItem extends StatelessWidget {
           ),
           SizedBox(
             width: wS - 30,
-            child: Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              children: movie.schedules
-                  .map((e) => ShowtimeItem(
-                        showtimeRoom: e.showtimes[0],
-                        booking: booking,
-                        movie:  movie,
-                      ))
-                  .toList(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Standard", style: TextStyle(fontWeight:  FontWeight.bold, fontSize: Styles.titleFontSize, color: Styles.boldTextColor["dark_purple"]),
+                ),
+                Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  children: movie.schedules[0].showtimes
+                      .where((element) => element.showtimeType == 0)
+                      .map((e) => ShowtimeItem(
+                            showtimeRoom: e,
+                            booking: booking,
+                            movie: movie,
+                          ))
+                      .toList(),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Deluxe",style: TextStyle(fontWeight:  FontWeight.bold, fontSize: Styles.titleFontSize, color: Styles.boldTextColor["dark_purple"])
+                ),
+                Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  children: movie.schedules[0].showtimes
+                      .where((element) => element.showtimeType == 1)
+                      .map((e) => ShowtimeItem(
+                            showtimeRoom: e,
+                            booking: booking,
+                            movie: movie,
+                          ))
+                      .toList(),
+                ),
+              ],
             ),
           ),
         ]));

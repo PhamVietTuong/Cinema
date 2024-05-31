@@ -45,7 +45,7 @@ namespace Cinema.Repository
             .Include(x => x.ShowTime)
                 .ThenInclude(x => x.Movie)
                     .ThenInclude(m => m.AgeRestriction)
-            .Where(x => x.Room.TheaterId == theaterId)
+            .Where(x => x.Room.TheaterId == theaterId && x.ShowTime.Status == true)
             .ToListAsync();
 
             var movies = showTimeRooms.Select(sRoom => sRoom.ShowTime.Movie).Distinct().ToList();
@@ -90,13 +90,19 @@ namespace Cinema.Repository
                             .Select(st => new ScheduleRowViewModel
                             {
                                 Date = st.Key,
-                                Showtimes = st.Select(x => new ShowTimeRowViewModel
+                                Showtimes = st.Select(x =>
                                 {
-                                    RoomId = x.RoomId,
-                                    RoomName = x.Room.Name,
-                                    ShowTimeId = x.ShowTime.Id,
-                                    StartTime = x.ShowTime.StartTime,
-                                    EndTime = x.ShowTime.EndTime,
+                                    bool isDulexe = _context.Seat.Include(seat => seat.SeatType).Where(seat => seat.RoomId == x.RoomId).Any(x => x.SeatType.Name == "Nằm");
+
+                                    return new ShowTimeRowViewModel
+                                    {
+                                        RoomId = x.RoomId,
+                                        RoomName = x.Room.Name,
+                                        ShowTimeId = x.ShowTime.Id,
+                                        StartTime = x.ShowTime.StartTime,
+                                        EndTime = x.ShowTime.EndTime,
+                                        ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
+                                    };
                                 }).ToList()
                             }).ToList()
 

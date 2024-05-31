@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,7 +17,6 @@ class DayItemBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     titleDay = switch (DateFormat("EEEE").format(date)) {
       "Monday" => "Thứ 2",
       "Tuesday" => "Thứ 3",
@@ -36,20 +35,27 @@ class DayItemBox extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 6),
         margin: const EdgeInsets.only(right: 8),
         decoration: BoxDecoration(
-            color: isSelected ? Colors.yellow : styles.primaryColor,
+            color: isSelected?null: Styles.btnColor["dark_purple"],
+            gradient:isSelected? LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors:[
+              Styles.gradientTop["dark_purple"]!,
+              Styles.gradientBot["dark_purple"]!
+            ]):null,
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         child: Column(
           children: [
             Text(
               titleDay!,
-              style: styles.titleTextStyle.copyWith(
-                  color: isSelected ? Colors.black : Colors.white,
-                  fontWeight: FontWeight.normal),
+              style:   TextStyle(
+                  color: Styles.boldTextColor["dark_purple"],
+                  fontWeight: FontWeight.bold, fontSize: Styles.titleFontSize),
             ),
             Text(
               "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}",
-              style: styles.titleTextStyle.copyWith(
-                  color: isSelected ? Colors.black : Colors.yellow[400]),
+              style:TextStyle( fontWeight: FontWeight.bold, fontSize: Styles.titleFontSize,
+                  color: !isSelected ? Styles.boldTextColor["dark_purple"] : Styles.textSelectionColor["dark_purple"]),
             )
           ],
         ),

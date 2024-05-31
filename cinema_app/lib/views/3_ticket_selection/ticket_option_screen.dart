@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/components/movie_type_box.dart';
@@ -9,9 +9,13 @@ import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/ticket_option.dart';
+import 'package:cinema_app/data/models/tickets.dart';
+import 'package:cinema_app/presenters/ticket_presenter.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_screen.dart';
 import 'package:cinema_app/views/3_ticket_selection/ticket_option.dart';
 import 'package:flutter/material.dart';
+
+import '../../data/models/showtime.dart';
 
 class TicketOptionScreen extends StatefulWidget {
   const TicketOptionScreen(
@@ -28,11 +32,16 @@ class TicketOptionScreen extends StatefulWidget {
   State<TicketOptionScreen> createState() => _TicketOptionScreenState();
 }
 
-class _TicketOptionScreenState extends State<TicketOptionScreen> {
+class _TicketOptionScreenState extends State<TicketOptionScreen>
+    implements TicketViewContract {
+  late TicketPresenter ticketPre;
+
   bool isLoadingData = true;
   late ShowtimeRoom selectedShowtime;
+
   int totalPrice = 0;
   int totalTicket = 0;
+
   List<TicketOptionItem> options = List.filled(0,
       TicketOptionItem(option: TicketOption(), upDownQuantity: (bool i, ti) {}),
       growable: true);
@@ -42,7 +51,8 @@ class _TicketOptionScreenState extends State<TicketOptionScreen> {
       selectedShowtime = showtime;
       totalTicket = 0;
       totalPrice = 0;
-      loadData();
+      ticketPre.fetchTicketOptions(
+          selectedShowtime.showTimeId, selectedShowtime.roomId);
     });
   }
 
@@ -80,62 +90,67 @@ class _TicketOptionScreenState extends State<TicketOptionScreen> {
     );
   }
 
-  void loadData() {
-    
-  }
-
   @override
   void initState() {
     super.initState();
+    ticketPre = TicketPresenter(this);
 
     selectedShowtime = widget.showtimeRoom;
     widget.booking.movie = widget.movie;
-    loadData();
+
+    ticketPre.fetchTicketOptions(
+        selectedShowtime.showTimeId, selectedShowtime.roomId);
   }
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     var wS = MediaQuery.of(context).size.width;
     var marginLeft = 10.0;
     var marginHorizontalScreen = 15.0;
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Styles.backgroundContent["dark_purple"],
           leading: IconButton(
             alignment: Alignment.center,
             onPressed: () {
               Navigator.pop(this.context);
             },
-            icon: const Icon(Icons.arrow_back_ios_new),
+            icon: Icon(
+              Icons.arrow_back_ios_new,
+              color: Styles.boldTextColor["dark_purple"],
+            ),
           ),
           titleSpacing: 0,
           leadingWidth: 45,
           title: Text(
             'CHỌN VÉ',
-            style: styles.appBarTextStyle,
+            style: TextStyle(
+                fontSize: Styles.appbarFontSize,
+                color: Styles.boldTextColor["dark_purple"]),
           ),
         ),
         body: Center(
-          child: SizedBox(
+          child: Container(
+            decoration:
+                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
               Container(
                 padding:
                     EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
-                margin: const EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10, top: 10),
                 child: Row(
                   children: [
                     MovieTypeBox(
                       title: widget.movie.movieType,
                       maxBoxWith: wS * 0.5 - 10,
-                      fontSizeCus: 15,
                       padding: 5,
                     ),
                     ShowtimeTypeBox(
-                        title: widget.movie.showTimeTypeName,
-                        marginLeft: marginLeft,
-                        fontSizeCus: 15),
+                      title: widget.movie.showTimeTypeName,
+                      marginLeft: marginLeft,
+                    ),
                     AgeRestrictionBox(
                         title: widget.movie.ageRestrictionName,
                         marginLeft: marginLeft,
@@ -162,8 +177,12 @@ class _TicketOptionScreenState extends State<TicketOptionScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: Image(
-                              image: NetworkImage(
-                                  "$serverUrl/Images/${widget.movie.img}")),
+                              image: widget.movie.img.isEmpty
+                                  ? const AssetImage(
+                                          "assets/img/movie_white.png")
+                                      as ImageProvider
+                                  : NetworkImage(
+                                      "$serverUrl/Images/${widget.movie.img}")),
                         ),
                       ),
                       Expanded(
@@ -176,25 +195,35 @@ class _TicketOptionScreenState extends State<TicketOptionScreen> {
                               Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 child: Text(
-                                  '${widget.movie.name} ${widget.movie.showTimeTypeName} (${widget.movie.ageRestrictionName})',
-                                  style: styles.titleTextStyle,
-                                ),
+                                    '${widget.movie.name} ${widget.movie.showTimeTypeName} (${widget.movie.ageRestrictionName})',
+                                    style: TextStyle(
+                                        color:
+                                            Styles.boldTextColor["dark_purple"],
+                                        fontSize: Styles.titleFontSize,
+                                        fontWeight: FontWeight.bold)),
                               ),
                               Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(Icons.location_on,
-                                        size: styles.iconSizeInLineText),
+                                    Icon(
+                                      Icons.location_on,
+                                      size: Styles.iconSizeInLineText,
+                                      color:
+                                          Styles.boldTextColor["dark_purple"],
+                                    ),
                                     Expanded(
                                       flex: 1,
                                       child: Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
-                                          style: styles.normalTextStyle,
-                                        ),
+                                            "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
+                                            style: TextStyle(
+                                              color: Styles
+                                                  .textColor["dark_purple"],
+                                              fontSize: Styles.textSize,
+                                            )),
                                       ),
                                     ),
                                   ],
@@ -203,19 +232,26 @@ class _TicketOptionScreenState extends State<TicketOptionScreen> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(Icons.av_timer_rounded,
-                                      size: styles.iconSizeInLineText),
+                                  Icon(
+                                    Icons.av_timer_rounded,
+                                    size: Styles.iconSizeInLineText,
+                                    color: Styles.boldTextColor["dark_purple"],
+                                  ),
                                   Expanded(
                                     flex: 1,
                                     child: Container(
                                       margin: const EdgeInsets.only(left: 5),
                                       child: Text(
                                         "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
-                                        style: styles.normalTextStyle,
                                         softWrap: true,
+                                         style: TextStyle(
+                                              color: Styles
+                                                  .textColor["dark_purple"],
+                                              fontSize: Styles.textSize,
+                                            )),
                                       ),
                                     ),
-                                  ),
+                                
                                 ],
                               ),
                             ],
@@ -238,7 +274,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen> {
               Container(
                   margin: const EdgeInsets.only(bottom: 25, left: 8, right: 8),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+  
                       borderRadius: BorderRadius.circular(2),
                       boxShadow: [
                         BoxShadow(
@@ -257,5 +293,22 @@ class _TicketOptionScreenState extends State<TicketOptionScreen> {
             ]),
           ),
         ));
+  }
+
+  @override
+  void onLoadTicketComplete(List<Ticket> tickets) {}
+
+  @override
+  void onLoadTicketError() {}
+
+  @override
+  void onLoadTicketOptionComplete(List<TicketOption> ticketOptions) {
+    setState(() {
+      ticketOptions.sort((a, b) => a.price.compareTo(b.price));
+      options = ticketOptions
+          .map((e) =>
+              TicketOptionItem(option: e, upDownQuantity: upDownOptionQuantity))
+          .toList();
+    });
   }
 }
