@@ -2,7 +2,7 @@ import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';
 import 'package:flutter/material.dart';
 
@@ -59,11 +59,11 @@ class _ListThreaterState extends State<ListThreater> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtime: Showtime(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
                     ],
                   )
                 ],

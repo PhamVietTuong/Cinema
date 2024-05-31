@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/presenters/theater_presenter.dart';
 import 'package:cinema_app/views/1_threater_selection/theater_item.dart';
 import 'package:flutter/material.dart';

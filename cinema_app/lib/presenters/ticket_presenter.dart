@@ -17,15 +17,5 @@ class TicketPresenter {
     repository = Injector().getTicketRepository();
   }
 
-  Future<void> fetchTickets() async {
-    try {
-      List<Ticket> tickets = await repository.fetchTickets();
-      _view.onLoadTicketComplete(tickets);
-      //  _view.onLoadTheaterError();
-    } catch (error) {
-      // Xử lý lỗi
-      print('Error fetching Tickets: $error');
-      _view.onLoadTicketError();
-    }
-  }
+
 }

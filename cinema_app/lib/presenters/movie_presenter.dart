@@ -1,41 +1,26 @@
-// ignore_for_file: avoid_print
-
-import '../data/injector.dart';
-import '../data/models/movie.dart';
+import 'package:cinema_app/data/injector.dart';
+import 'package:cinema_app/data/models/movie.dart';
 
 abstract class MovieViewContract {
-  void onLoadMovieComplete(List<Movie> movies);
-  void onLoadMovieError();
+  void onLoadMoviesComplete(List<Movie> movies);
+  void onLoadMoviesError();
 }
 
 class MoviePresenter {
   final MovieViewContract _view;
-  late MovieRepository repository;
+  late MovieRepository _repository;
 
   MoviePresenter(this._view) {
-    repository = Injector().getMovieRepository();
+    _repository = Injector().getMovieRepository();
   }
 
   Future<void> fetchMovies() async {
     try {
-      List<Movie> movies = await repository.fetchMovies();
-      _view.onLoadMovieComplete(movies);
+      List<Movie> movies = await _repository.fetchMovies();
+      _view.onLoadMoviesComplete(movies);
     } catch (error) {
-      // Xử lý lỗi
       print('Error fetching movies: $error');
-      _view.onLoadMovieError();
-    }
-  }
-
-  Future<void> fetchMoviesByIds(List<int> ids) async {
-    String idsString = ids.join(',');
-    try {
-      List<Movie> movies = await repository.fetchMoviesByIds(idsString);
-      _view.onLoadMovieComplete(movies);
-    } catch (error) {
-      // Xử lý lỗi
-      print('Error fetching movies: $error');
-      _view.onLoadMovieError();
+      _view.onLoadMoviesError();
     }
   }
 }

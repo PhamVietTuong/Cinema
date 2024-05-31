@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class ShowtimeTypeBox extends StatelessWidget {
@@ -19,13 +19,14 @@ class ShowtimeTypeBox extends StatelessWidget {
       padding:  EdgeInsets.all(padding),
       margin: EdgeInsets.only(left: marginLeft),
       decoration: BoxDecoration(
-        border: styles.borderWith,
+         border: Border.all(color: Colors.white),
+         color: Colors.white,
         borderRadius: BorderRadius.circular(3.0),
       ),
       child: Text(
         title,
         style: fontSizeCus != 0.0
-            ? styles.titleTextStyle.copyWith(fontSize: fontSizeCus)
+            ? styles.titleTextStyle.copyWith(fontSize: fontSizeCus,color: Colors.black)
             : styles.titleTextStyle,
       ),
     );

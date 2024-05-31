@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/Account/registration_screen.dart';
 import 'package:flutter/material.dart';
 

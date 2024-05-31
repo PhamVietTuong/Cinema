@@ -1,13 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-import 'package:cinema_app/data/models/age_restriction.dart';
-import 'package:cinema_app/data/models/showtime.dart';
 import 'package:http/http.dart' as http;
-import '../../constants.dart';
+import '../../config.dart';
 
 class Movie {
-  int id;
+  String id;
+  String ageRestrictionName;
+  String ageRestrictionDescription;
+  String ageRestrictionAbbreviation;
   String name;
   int time;
   String description;
@@ -16,71 +17,112 @@ class Movie {
   String trailer;
   String languages;
   String img;
-  int status;
+  String movieType;
+  String showTimeTypeName;
 
-  AgeRestriction ageRestriction = AgeRestriction();
   DateTime releaseDate = DateTime.now();
 
-  List<String> types = List.filled(0, "", growable: true);
-  List<Showtime> showtimes = List.filled(0, Showtime(), growable: true);
+  List<Schedule> schedules = List.filled(0, Schedule(), growable: true);
 
-  Movie(
-      {this.id = 0,
-      this.actor = "",
-      this.description = "",
-      this.director = "",
-      this.img = "",
-      this.languages = "",
-      this.name = "",
-      this.time = 0,
-      this.trailer = "",
-      this.status = 0});
+  Movie({
+    this.id = "",
+    this.ageRestrictionAbbreviation = "",
+    this.ageRestrictionDescription = "",
+    this.ageRestrictionName = "",
+    this.actor = "",
+    this.description = "",
+    this.director = "",
+    this.img = "",
+    this.languages = "",
+    this.name = "",
+    this.movieType = "",
+    this.showTimeTypeName = "",
+    this.time = 0,
+    this.trailer = "",
+  });
 
   Movie.fromJson(Map<String, dynamic> json)
       : id = json["id"],
         actor = json["actor"] ?? "",
+        ageRestrictionAbbreviation = json["ageRestrictionAbbreviation"] ?? "",
+        ageRestrictionDescription = json["ageRestrictionDescription"] ?? "",
+        ageRestrictionName = json["ageRestrictionName"] ?? "",
         description = json["description"] ?? "",
         director = json["director"] ?? "",
         img = json["image"] ?? "",
+        movieType = json["movieType"]??"",
+        showTimeTypeName = json["showTimeTypeName"]??"",
         languages = json["languages"] ?? "",
         name = json["name"] ?? "",
-        releaseDate = DateTime.parse(json["release_date"]),
-        time = json["time"] ?? 0,
-        trailer = json["trailer"] ?? "",
-        status = json["status"] ?? 0,
-        ageRestriction = AgeRestriction(
-          id: json["ar_id"] ?? 0,
-          name: json["ar_name"] ?? "",
-          description: json["ar_description"] ?? 0,
-        ),
-        types = json["movie_types"].split(',');
+        releaseDate = DateTime.parse(json["releaseDate"]),
+        time = json["time"] ?? -1,
+        trailer = json["trailer"] ?? "";
+}
+
+class Schedule {
+  DateTime date = DateTime.now();
+  List<TheaterShowtime> theaters =
+      List.filled(0, TheaterShowtime(), growable: true);
+  List<ShowtimeRoom> showtimes = List.filled(0, ShowtimeRoom(), growable: true);
+
+  Schedule();
+  Schedule.fromJson(Map<String, dynamic> json)
+      : date = DateTime.parse(json["date"]),
+        theaters = (json["theaters"] as List<TheaterShowtime>)
+            .map((e) => TheaterShowtime.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        showtimes = (json["showTimes"] as List<ShowtimeRoom>)
+            .map((e) => ShowtimeRoom.fromJson(e as Map<String, dynamic>))
+            .toList();
+}
+
+class TheaterShowtime {
+  String theaterName;
+  String theaterAddress;
+  List<ShowtimeRoom> showtimes = List.filled(0, ShowtimeRoom(), growable: true);
+
+  TheaterShowtime({this.theaterName = "", this.theaterAddress = ""});
+  TheaterShowtime.fromJson(Map<String, dynamic> json)
+      : theaterAddress = json["theaterAddress"] ?? "",
+        theaterName = json["theaterName"] ?? "",
+        showtimes = (json["showTimes"] as List<ShowtimeRoom>)
+            .map((e) => ShowtimeRoom.fromJson(e as Map<String, dynamic>))
+            .toList();
+}
+
+class ShowtimeRoom {
+  String roomId;
+  String roomName;
+  String showTimeId;
+  DateTime startTime = DateTime.now();
+  DateTime endTime = DateTime.now();
+
+  ShowtimeRoom({this.roomId = "", this.roomName = "", this.showTimeId = ""});
+  ShowtimeRoom.fromJson(Map<String, dynamic> json)
+      : roomId = json["roomId"],
+        roomName = json["roomName"],
+        showTimeId = json["showTimeId"],
+        startTime = DateTime.parse(json["startTime"]),
+        endTime = DateTime.parse(json["endTime"]);
+
+  String getFormatTime() {
+    return '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  String getFormatDate() {
+    return '${startTime.day.toString().padLeft(2, '0')}/${startTime.month.toString().padLeft(2, '0')}';
+  }
 }
 
 abstract class MovieRepository {
   Future<List<Movie>> fetchMovies();
-  Future<List<Movie>> fetchMoviesByIds(String ids);
 }
 
 class MovieRepositoryIml implements MovieRepository {
   @override
   Future<List<Movie>> fetchMovies() async {
-    String api = '$serverUrl/movie/showing';
+    String api ='$serverUrl/api/Cinemas/GetMovieList';
     print("API fetch movies: $api");
-
-    final response = await http.get(Uri.parse(api));
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to fetch movies');
-    }
-
-    final List<dynamic> movieJsonList = jsonDecode(response.body);
-    return movieJsonList.map((json) => Movie.fromJson(json)).toList();
-  }
-
-  @override
-  Future<List<Movie>> fetchMoviesByIds(String ids) async {
-    String api = '$serverUrl/movie/ids$ids';
-    print("API fetch movies by ids: $api");
 
     final response = await http.get(Uri.parse(api));
 

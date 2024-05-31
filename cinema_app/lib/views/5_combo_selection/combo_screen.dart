@@ -1,18 +1,30 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
+import 'package:cinema_app/data/models/movie.dart';
+import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_title.dart';
 import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/views/6_payment/pay_screen.dart';
 import 'package:flutter/material.dart';
 
 class ComboScreen extends StatefulWidget {
-  const ComboScreen({super.key});
+  const ComboScreen(
+      {super.key, required this.booking, required this.selectedSeatIds, required this.showtime});
+  final Booking booking;
+  final List<String> selectedSeatIds;
+  final ShowtimeRoom showtime;
 
   @override
   State<ComboScreen> createState() => _ComboScreenState();
 }
 
 class _ComboScreenState extends State<ComboScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.booking.seatIds = widget.selectedSeatIds;
+  }
+
   @override
   Widget build(BuildContext context) {
     var styles = Styles();
@@ -62,7 +74,13 @@ class _ComboScreenState extends State<ComboScreen> {
                           spreadRadius: 1,
                           offset: const Offset(1, 1))
                     ]),
-                child:  BookingSummaryBox(nextScreen: const PayScreen(), booking: Booking(),))
+                child: BookingSummaryBox(
+                  handle: () {
+                    return true;
+                  },
+                  nextScreen: PayScreen(booking: widget.booking),
+                  booking: widget.booking,
+                ))
           ],
         ),
       ),

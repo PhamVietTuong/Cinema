@@ -1,12 +1,11 @@
 // ignore_for_file: avoid_print
 
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
-import 'package:cinema_app/data/models/room.dart';
+import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/seat.dart';
+import 'package:cinema_app/data/models/seat_row.dart';
 import 'package:cinema_app/data/models/showtime.dart';
-import 'package:cinema_app/data/models/ticket_option.dart';
-import 'package:cinema_app/presenters/room_presenter.dart';
 import 'package:cinema_app/presenters/seat_presenter.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_screen.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
@@ -16,127 +15,119 @@ import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_dropdow.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_row.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
+import 'package:signalr_netcore/signalr_client.dart';
 
 class SeatScreen extends StatefulWidget {
   const SeatScreen({super.key, required this.booking, required this.showtime});
 
   final Booking booking;
-  final Showtime showtime;
+  final ShowtimeRoom showtime;
 
   @override
   State<SeatScreen> createState() => _SeatScreenState();
 }
 
-class _SeatScreenState extends State<SeatScreen>
-    implements RoomViewContract, SeatViewContract {
-  late io.Socket socket;
-  late Showtime selectedShowtime;
-  late RoomPresenter roomPr;
+class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
+  late ShowtimeRoom selectedShowtime;
   late SeatPresenter seatPr;
+  late int countSignle;
+  late int countCouple;
+  final hubConnection = HubConnectionBuilder()
+      .withUrl("$serverUrl/cinema")
+      .build();
 
-  List<Seat> seats = List.filled(0, Seat(), growable: true);
-  List<int> waitingSeatIds = List.filled(0, 0, growable: true);
-  List<int> selectedSeats = List.filled(0, 0, growable: true);
-  Map<int, String> abcMap = {
-    1: 'A',
-    2: 'B',
-    3: 'C',
-    4: 'D',
-    5: 'E',
-    6: 'F',
-    7: 'G',
-    8: 'H',
-    9: 'I',
-    10: 'J',
-    11: 'K',
-    12: 'L',
-    13: 'M',
-    14: 'N',
-    15: 'O',
-    16: 'P',
-    17: 'Q',
-    18: 'R',
-    19: 'S',
-    20: 'T',
-  };
+  List<SeatRowData> seatRows = List.filled(0, SeatRowData(), growable: true);
+  List waitingSeatIds = List.filled(0, "", growable: true);
+  List<String> selectedSeats = List.filled(0, "", growable: true);
 
-  bool coutSeat(int seatId, bool state) {
-    for (var seat in seats) {
-      if (seat.id == seatId) {
-        //tìm được đúng ghế cần xử lý -> lấy ra id loại ghế
-        int seatType = seat.seatTypeId;
-        print(seatType);
-        //kiểm tra ghế có đúng với từng loại vé đã chọn
-        for (var item in widget.booking.tickets) {
-          // print('item seat type: ${item.seatType.id}');
-          // print('item num seat : ${item.quantity}');
-          if (item.seatType.id == seatType) {
-            //có chọn số lượng mới xử lý
-            if (item.quantity > 0) {
-              //trường hợp bỏ chọn ghế
-              if (state && item.count > 0) {
-                setState(() {
-                  item.count--;
-                });
-                return true;
-              }
+  bool handel(){
+    if(selectedSeats.isEmpty||countCouple!=0||countSignle!=0) {
+      return false;
+    }
+    return true;
+  }
 
-              //trường hợp chọn
-              if (!state && item.count < item.quantity) {
-                setState(() {
-                  item.count++;
-                });
-                return true;
-              }
+  Widget nextScreen() {
+    return ComboScreen(
+      booking: widget.booking,
+     selectedSeatIds: selectedSeats,
+     showtime: selectedShowtime
+    );
+  }
+
+  bool coutSeat(String seatId, bool state) {
+    for (var row in seatRows) {
+      for (var seat in row.seats) {
+        if (seat.id == seatId) {
+          //tìm được đúng ghế cần xử lý
+          if (seat.seatTypeName.compareTo("Đôi") == 0) {
+            //state ==true thì xử lý bỏ chọn.
+            if (state == true) {
+              setState(() {
+                countCouple++;
+              });
+              return true;
+            }
+
+            //state = false và số lượng vé cho loại ghế này đang còn
+            if (countCouple > 0) {
+              setState(() {
+                countCouple--;
+              });
+              return true;
+            }
+          } else {
+            if (state == true) {
+              setState(() {
+                countSignle++;
+              });
+              return true;
+            }
+
+            if (countSignle > 0 && state == false) {
+              setState(() {
+                countSignle--;
+              });
+              return true;
             }
           }
-        }
 
-        break;
+          break;
+        }
       }
     }
-    print("Chọn sai loại ghế");
+    print("Chọn sai loại ghế hoặc đã đủ loại ghế này");
     return false;
   }
 
   List<SeatRow> renderSeatRow() {
-    List<SeatRow> results = List.filled(
-        0,
-        SeatRow(
-            seats: const [],
-            name: "name",
-            selelctSeat: (i, a) {
-              return true;
-            }),
-        growable: true);
-
-    for (int i = 1; i <= selectedShowtime.room.maxRow; i++) {
-      results.add(SeatRow(
-          selelctSeat: selectSeat,
-          name: abcMap[i]!,
-          seats: seats.where((element) => element.rowIndex == i).toList()));
-    }
-
-    return results;
+    return seatRows
+        .map((e) => SeatRow(
+              selelctSeat: selectSeat,
+              name: e.rowName,
+              seats: e.seats,
+            ))
+        .toList();
   }
 
-  Future<void> selectShowtime(Showtime showtime) async {
+  Future<void> selectShowtime(ShowtimeRoom showtime) async {
     setState(() {
       selectedShowtime = showtime;
       selectedSeats.clear();
-      widget.booking.resetCount();
+      countSignle = widget.booking.countingSignle();
+      countCouple = widget.booking.countingCouple();
     });
-    await roomPr.fetchRoomById(selectedShowtime.room.id);
-    socket.emit('changeShowtime', {
-      "showtime_id": selectedShowtime.id,
-      "room_id": selectedShowtime.room.id
-    });
+    if (hubConnection.state == HubConnectionState.Connected) {
+      await hubConnection.stop();
+    }
+    await joinShowTime();
+
+    //seatPr.fetchSeatsByRoomId(selectedShowtime.room.id, selectedShowtime.id);
   }
 
 //truyền vào mã và trạng thái hiện tại
-  bool selectSeat(int seatId, bool state) {
+  bool selectSeat(String seatId, bool state) {
     if (state == false &&
         selectedSeats.length >= widget.booking.getTotalTickets()) {
       print("Đã chọn đủ số lượng ghế!");
@@ -147,144 +138,164 @@ class _SeatScreenState extends State<SeatScreen>
     if (!coutSeat(seatId, state)) {
       return false;
     }
-    socket.emit(state ? 'deSelectSeat' : 'selectSeat',
-        {"seat_id": seatId, "showtime_id": selectedShowtime.id});
-
     setState(() {
       state ? selectedSeats.remove(seatId) : selectedSeats.add(seatId);
     });
+    hubConnection.invoke("SeatBeingSelected", args: [
+      {
+        "showTimeId": selectedShowtime.showTimeId,
+        "roomId": selectedShowtime.roomId,
+        "seatIds": selectedSeats,
+      }
+    ]);
 
-    print(selectedSeats);
     return true;
   }
 
-  @override
-  void onLoadRoomComplete(List<Room> rooms) {
-    //  setState(() {
-    selectedShowtime.room =
-        rooms.firstWhere((room) => room.id == selectedShowtime.room.id);
-    //});
+  void connectToHub() async {
+    try {
+      hubConnection.on("CheckForEmptySeats", handleCheckForEmptySeats);
+      hubConnection.on("ListOfSeatsSold", handleListOfSeatsSold);
+      hubConnection.on("UpdateSeat", (data) {
+        List ids = data![0] as List;
+        int state = data[1] as int;
 
-    seatPr.fetchSeatsByRoomId(selectedShowtime.room.id);
+        for (var row in seatRows) {
+          for (var seat in row.seats) {
+            if (ids.contains(seat.id)) {
+              setState(() {
+                seat.status = state;
+                ids.remove(seat.id);
+              });
+              if (ids.isEmpty) break;
+            }
+          }
+          if (ids.isEmpty) break;
+        }
+      });
+      hubConnection.on("GetWaitingSeat", handleGetWaitingSeat);
+      hubConnection.onclose(({error}) => print("Connection Closed"));
+
+      print("Starting connection...");
+      print('hubConnectionState: ${hubConnection.state}');
+      await joinShowTime();
+    } catch (e) {
+      print("Connection error: $e");
+    }
+  }
+
+  Future<void> joinShowTime() async {
+    try {
+      await hubConnection.start();
+
+      hubConnection.invoke("JoinShowTime", args: [
+        {
+          "showTimeId": selectedShowtime.showTimeId,
+          "roomId": selectedShowtime.roomId,
+          "seatIds": [],
+        }
+      ]);
+    } catch (e) {
+      print("Error joining showtime: $e");
+    }
+  }
+
+  void handleCheckForEmptySeats(data) {
+    String id = data![0] as String;
+    int state = data[1] as int;
+
+    if (state == 0 || state == 3) {
+      print("Ghế đã được người khác mua hoặc chọn trước rồi!");
+      var seat = findSeatById(id);
+      if (seat != null) {
+        setState(() {
+          seat.status = state;
+          selectedSeats.remove(seat.id);
+          seat.seatTypeName.compareTo("Đơn") == 0
+              ? countSignle++
+              : countCouple++;
+        });
+      }
+    }
+  }
+
+  void handleListOfSeatsSold(data) {
+    List ids = (data![0] as List);
+    int state = data[1] as int;
+
+    setState(() {
+      for (var row in seatRows) {
+        for (var seat in row.seats) {
+          if (ids.contains(seat.id)) {
+            seat.status = state;
+            ids.remove(seat.id);
+            if (ids.isEmpty) break;
+          }
+        }
+        if (ids.isEmpty) break;
+      }
+    });
+  }
+
+  void handleGetWaitingSeat(data) {
+    if (hubConnection.state == HubConnectionState.Connected) {
+      setState(() {
+        waitingSeatIds = data[0];
+        seatPr.fetchSeatsByRoomId(
+            selectedShowtime.roomId, selectedShowtime.showTimeId);
+      });
+    }
+  }
+
+  Seat? findSeatById(String seatId) {
+    for (var row in seatRows) {
+      for (var seat in row.seats) {
+        if (seat.id == seatId) {
+          return seat;
+        }
+      }
+    }
+    return null;
   }
 
   @override
-  void onLoadRoomError() {}
-
-  @override
-  void onLoadTicketOptionComplete(List<TicketOption> ticketOptions) {}
-
-  @override
-  void onLoadSeatComplete(List<Seat> seatLst) {
+  void onLoadSeatComplete(List<SeatRowData> seatLst) {
     setState(() {
-      seats = seatLst;
+      seatRows = seatLst;
+
+      bool shouldBreak = false;
+      for (var row in seatRows) {
+        for (var seat in row.seats) {
+          if (waitingSeatIds.contains(seat.id)) {
+            seat.status = 3;
+
+            waitingSeatIds.remove(seat.id);
+            if (waitingSeatIds.isEmpty) {
+              shouldBreak = true;
+              break;
+            }
+          }
+        }
+        if (shouldBreak) {
+          break;
+        }
+      }
     });
-    print("onLoadSeatComplete");
   }
 
   @override
   void onLoadSeatError() {}
 
   @override
-  void onLoadSeatIsSoldComplete(List<Seat> seatLst) {
-    List<int> seatIdsIsSold = seatLst.map((e) => e.id).toList();
-
-    setState(() {
-      for (var seat in seats) {
-        if (seatIdsIsSold.contains(seat.id)) {
-          seat.status = 0;
-          continue;
-        }
-        if (waitingSeatIds.contains(seat.id)) {
-          seat.status = 3;
-        }
-      }
-    });
-    print("onLoadSeatIsSoldComplete");
-  }
-
-  @override
   void initState() {
     super.initState();
+    countSignle = widget.booking.countingSignle();
+    countCouple = widget.booking.countingCouple();
+
+    connectToHub();
+
     selectedShowtime = widget.showtime;
-
-    roomPr = RoomPresenter(this);
     seatPr = SeatPresenter(this);
-
-    seatPr.fetchSeatsByRoomId(selectedShowtime.room.id);
-
-    socket = io.io(serverUrl, <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': false,
-    });
-    socket.connect();
-    socket.onConnectError((data) {
-      print(data);
-    });
-
-    //xử lý khi kết nối: gửi thông tin room và showtime
-    socket.on('connect', (_) {
-      print('Connected to hub booking');
-      socket.emit("userConnected", {
-        "showtime_id": selectedShowtime.id,
-        "room_id": selectedShowtime.room.id
-      });
-    });
-
-    //lấy danh sách các ghế đang được các kết nối khác lựa chọn
-    socket.on('getWaitingSeat', (_) {
-      List<dynamic> data = _;
-      print("getWaitingSeat");
-      print(_);
-      setState(() {
-        waitingSeatIds = data.map((e) => e as int).toList();
-      });
-      seatPr.fetchSeatsInTicketsByShowtimeId(selectedShowtime.id);
-    });
-
-    socket.on('checkForEmptySeats', (_) {
-      var result = _;
-      //print(result);
-
-      if (result["state"] == 0 || result["state"] == 3) {
-        print("Ghế đã được người khác mua hoặc chọn trước rồi!");
-        for (var seat in seats) {
-          if (seat.id == result["seat_id"]) {
-            setState(() {
-              seat.status = result["state"];
-
-              selectedSeats.remove(result["seat_id"]);
-              print(selectedSeats);
-            });
-            break;
-          }
-        }
-      }
-    });
-
-    socket.on("updateSeat", (_) {
-      var result = _;
-      List<dynamic> ids = result["seat_id"];
-      setState(() {
-        for (var e in seats) {
-          print(e.id);
-          if (ids.contains(e.id)) {
-            e.status = result["state"];
-            ids.remove(e.id);
-            if (ids.isEmpty) {
-              break;
-            }
-          }
-        }
-      });
-    });
-    socket.on("resetScreen", (_) {
-      widget.booking.resetCount();
-      Navigator.pop(context);
-    });
-    socket.onDisconnect((_) {
-      print("disconnected from hub booking");
-    });
   }
 
   @override
@@ -293,14 +304,14 @@ class _SeatScreenState extends State<SeatScreen>
     var wS = MediaQuery.of(context).size.width;
     var marginLeft = 10.0;
     var marginHorizontalScreen = 15.0;
-    //print(widget.booking.getTotalTickets());
+
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 50,
           leading: IconButton(
             alignment: Alignment.center,
             onPressed: () {
-              widget.booking.resetCount();
+              // widget.booking.resetCount();
               Navigator.pop(this.context);
             },
             icon: const Icon(Icons.arrow_back_ios_new),
@@ -324,7 +335,7 @@ class _SeatScreenState extends State<SeatScreen>
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: Text(
-                          "${widget.booking.theater.name} - Phòng: ${selectedShowtime.room.name}",
+                          "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
                           style: styles.normalTextStyle,
                         ),
                       ),
@@ -362,23 +373,23 @@ class _SeatScreenState extends State<SeatScreen>
                 child: Row(
                   children: [
                     MovieTypeBox(
-                      title: widget.booking.movie.types.join(', '),
+                      title: widget.booking.movie.movieType,
                       maxBoxWith: wS * 0.5 - 10,
                       fontSizeCus: 15,
                       padding: 5,
                     ),
                     ShowtimeTypeBox(
-                        title: selectedShowtime.type.name,
+                        title: widget.booking.movie.showTimeTypeName,
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     AgeRestrictionBox(
-                        title: widget.booking.movie.ageRestriction.name,
+                        title: widget.booking.movie.ageRestrictionName,
                         marginLeft: marginLeft,
                         fontSizeCus: 15),
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,
-                      showtimes: widget.booking.movie.showtimes,
+                      showtimes: widget.booking.movie.schedules[0].showtimes,
                       selectShowtime: selectShowtime,
                     )
                   ],
@@ -445,7 +456,8 @@ class _SeatScreenState extends State<SeatScreen>
                             offset: const Offset(1, 1))
                       ]),
                   child: BookingSummaryBox(
-                    nextScreen: const ComboScreen(),
+                    handle: handel,
+                    nextScreen: nextScreen(),
                     booking: widget.booking,
                   ))
             ]),
@@ -455,8 +467,7 @@ class _SeatScreenState extends State<SeatScreen>
 
   @override
   void dispose() {
-    socket.disconnect();
-    socket.dispose();
+    hubConnection.stop();
     super.dispose();
   }
 }

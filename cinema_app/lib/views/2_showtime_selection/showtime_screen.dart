@@ -1,15 +1,12 @@
 // ignore_for_file: avoid_print
 
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/presenters/showtime_presenter.dart';
 import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_of_movie_item.dart';
 import 'package:flutter/material.dart';
-
-import '../../presenters/movie_presenter.dart';
 
 class ShowTimeSceen extends StatefulWidget {
   const ShowTimeSceen({
@@ -22,14 +19,11 @@ class ShowTimeSceen extends StatefulWidget {
 }
 
 class _ShowTimeSceenState extends State<ShowTimeSceen>
-    implements MovieViewContract, ShowtimeViewContract {
-  late MoviePresenter moviePr;
+    implements ShowtimeViewContract {
   late ShowtimePresenter showtimePr;
 
   bool isLoadingData = true;
 
-  Set<int> movieIds = Set.identity();
-  List<Showtime> showtimeOfDate = List.filled(0, Showtime(), growable: true);
   List<DayItemBox> days = List.filled(
       0,
       DayItemBox(
@@ -54,7 +48,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
   void _selectDay(DateTime day) {
     setState(() {
       selectedDay = day;
-      showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
+      //showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
     });
   }
 
@@ -67,10 +61,8 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
     super.initState();
     selectedDay = today;
     loadData();
-    moviePr = MoviePresenter(this);
     showtimePr = ShowtimePresenter(this);
-
-    showtimePr.fetchShowtimesByDate(today, widget.booking.theater.id);
+    showtimePr.fetchShowtimesByDate(widget.booking.theater.id);
   }
 
   @override
@@ -153,8 +145,10 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                 child: Container(
                   decoration: const BoxDecoration(color: Colors.grey),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: lstShowTimeMovie.isNotEmpty?lstShowTimeMovie:[const Text("Trống")]),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: lstShowTimeMovie.isNotEmpty
+                          ? lstShowTimeMovie
+                          : [const Text("Trống")]),
                 ),
               ),
             ),
@@ -162,51 +156,19 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
   }
 
   @override
-  void onLoadMovieComplete(List<Movie> movies) {
+  void onLoadShowtimeAndMovieComplete(List<Movie> movies) {
     setState(() {
-      lstShowTimeMovie.clear();
-      for (var movie in movies) {
-  
-        movie.showtimes = showtimeOfDate
-            .where((showtime) => showtime.movieId == movie.id)
-            .toList();
-      }
-
       lstShowTimeMovie = movies
-          .map((movie) => ShowTimeOfMovieItem(
-                movie: movie,
-                booking: widget.booking,
-              ))
+          .map((e) => ShowTimeOfMovieItem(movie: e, booking: widget.booking))
           .toList();
-      
       isLoadingData = false;
     });
   }
 
   @override
-  void onLoadMovieError() {
-    isLoadingData = false;
-  }
-
-  @override
-  void onLoadShowtimeComplete(List<Showtime> showtimes) {
-    setState(() {
-      showtimeOfDate = showtimes;
-      movieIds.clear();
-      for (var showtime in showtimes) {
-        movieIds.add(showtime.movieId);
-      }
-    });
-    //  print(movieIds.toList());
-    if (movieIds.toList().isNotEmpty) {
-      moviePr.fetchMoviesByIds(movieIds.toList());
-    } else {
-      onLoadMovieComplete([]);
-    }
-  }
-
-  @override
   void onLoadShowtimeError() {
-    isLoadingData = false;
+    setState(() {
+      isLoadingData = false;
+    });
   }
 }

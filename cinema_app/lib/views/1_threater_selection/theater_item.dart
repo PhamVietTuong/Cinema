@@ -1,6 +1,6 @@
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -51,11 +51,12 @@ class TheaterItem extends StatelessWidget {
               width: wS * 0.3,
               height: 110,
               decoration: BoxDecoration(
+                color: Colors.amber,
                   borderRadius: BorderRadius.circular(borderRadius)),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius),
                 child:
-                    Image(fit: BoxFit.fitHeight, image: AssetImage(data.img)),
+                    Image(fit: BoxFit.fitHeight, image: AssetImage(data.img.isEmpty?"assets/img/theater_white.png":data.img)),
               ),
             ),
             //phần thông tin riêng của từng rạp: địa chỉ, tên, sdt
@@ -96,7 +97,7 @@ class TheaterItem extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.only(left: 5),
                             child: Text(
-                              formatPhoneNumber(data.phone),
+                             data.phone.isNotEmpty?formatPhoneNumber(data.phone):"Đang cập nhật",
                               style: styles.normalTextStyle,
                             ),
                           )

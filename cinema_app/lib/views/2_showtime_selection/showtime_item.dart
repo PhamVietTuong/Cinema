@@ -1,20 +1,19 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/views/3_ticket_selection/ticket_option_screen.dart';
 import 'package:flutter/material.dart';
 
 class ShowtimeItem extends StatelessWidget {
   const ShowtimeItem(
       {super.key,
-      required this.showtime,
+      required this.showtimeRoom,
       required this.booking,
       required this.movie});
 
   final Booking booking;
   final Movie movie;
-  final Showtime showtime;
+  final ShowtimeRoom showtimeRoom;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class ShowtimeItem extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => TicketOptionScreen(
                 booking: booking,
-                showtime: showtime,
+                showtimeRoom: showtimeRoom,
                 movie: movie,
               ),
             ));
@@ -39,7 +38,7 @@ class ShowtimeItem extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Center(
-            child: Text(showtime.getFormatTime(),
+            child: Text(showtimeRoom.getFormatTime(),
                 style: styles.titleTextStyle.copyWith(
                     fontWeight: FontWeight.normal, color: Colors.white))),
       ),

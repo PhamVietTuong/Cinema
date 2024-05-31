@@ -1,7 +1,7 @@
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:cinema_app/components/info_bar.dart';
 import 'package:cinema_app/components/qr_box.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class TicketInfoScreen extends StatefulWidget {

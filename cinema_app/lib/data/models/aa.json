@@ -1,0 +1,135 @@
+{
+    "roomName": "01",
+    "rowName": [
+        {
+            "rowName": "A",
+            "rowSeats": [
+                {
+                    "id": "c4ef0c35-ee65-414a-8cf3-452d80c375ec",
+                    "colIndex": 1,
+                    "isSeat": false,
+                    "name": null,
+                    "seatTypeId": null,
+                    "seatTypeName": null,
+                    "ticketTypeId": "00000000-0000-0000-0000-000000000000",
+                    "ticketTypeName": null,
+                    "price": 0,
+                    "seatStatus": 1
+                },
+                {
+                    "id": "fa5574f3-70a6-4eaf-a6ca-070d965b3212",
+                    "colIndex": 2,
+                    "isSeat": false,
+                    "name": null,
+                    "seatTypeId": null,
+                    "seatTypeName": null,
+                    "ticketTypeId": "00000000-0000-0000-0000-000000000000",
+                    "ticketTypeName": null,
+                    "price": 0,
+                    "seatStatus": 1
+                },
+                {
+                    "id": "b07a196a-3c9f-4644-8d09-753a769404d3",
+                    "colIndex": 3,
+                    "isSeat": false,
+                    "name": "A1",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 0
+                },
+                {
+                    "id": "7926e7e4-7602-4973-8ceb-a70f0a7867f4",
+                    "colIndex": 4,
+                    "isSeat": false,
+                    "name": "A2",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 0
+                },
+                {
+                    "id": "e01ef2cb-0d28-4f23-a226-b1b23b1cb564",
+                    "colIndex": 5,
+                    "isSeat": false,
+                    "name": "A3",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 1
+                }
+            ]
+        },
+        {
+            "rowName": "B",
+            "rowSeats": [
+                {
+                    "id": "02597417-0601-43f7-92a5-2671a0480452",
+                    "colIndex": 1,
+                    "isSeat": false,
+                    "name": "B1",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 1
+                },
+                {
+                    "id": "c41e6fb3-88b9-4c9f-a6a3-b6af093ac832",
+                    "colIndex": 2,
+                    "isSeat": false,
+                    "name": "B2",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 1
+                },
+                {
+                    "id": "1a5faad3-5f9d-4623-ad20-cb619b95ebab",
+                    "colIndex": 3,
+                    "isSeat": false,
+                    "name": "B3",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 1
+                },
+                {
+                    "id": "b2415c81-4a8b-48b8-8e81-d761c4e5f8c2",
+                    "colIndex": 4,
+                    "isSeat": false,
+                    "name": "B4",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 1
+                },
+                {
+                    "id": "60e0a429-46b5-45c6-a8ec-0d7e1ff032b3",
+                    "colIndex": 5,
+                    "isSeat": false,
+                    "name": "B5",
+                    "seatTypeId": "ee5868fc-551c-4990-99e1-cddff3dfce74",
+                    "seatTypeName": "Đơn",
+                    "ticketTypeId": "ae4ef66e-b280-432b-87d3-7e5f8f359f68",
+                    "ticketTypeName": "Hssv - Người cao tuổi",
+                    "price": 45000,
+                    "seatStatus": 1
+                }
+            ]
+        }
+    ]
+}

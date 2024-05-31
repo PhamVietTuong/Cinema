@@ -1,6 +1,6 @@
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';
@@ -19,7 +19,6 @@ class ShowTimeOfMovieItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
     var styles = Styles();
-    var types = movie.types.join(", ");
 
     return Container(
         padding: const EdgeInsets.symmetric(
@@ -50,7 +49,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image(
-                        fit: BoxFit.fitHeight, image: AssetImage(movie.img)),
+                        fit: BoxFit.fitHeight, image: NetworkImage("$serverUrl/Images/${movie.img}")),
                   ),
                 ),
                 Expanded(
@@ -61,11 +60,11 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${movie.name} ${movie.showtimes[0].type.name} (${movie.ageRestriction.name})',
+                            '${movie.name} ${movie.showTimeTypeName} (${movie.ageRestrictionName})',
                             style: styles.titleTextStyle,
                           ),
                           MovieTypeBox(
-                            title: types,
+                            title: movie.movieType,
                             marginTop: 5,
                             marginBottom: 10,
                             padding: 5,
@@ -73,10 +72,10 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                           Row(
                             children: [
                               ShowtimeTypeBox(
-                                title: movie.showtimes[0].type.name,
+                                title: movie.showTimeTypeName,
                               ),
                               AgeRestrictionBox(
-                                title: movie.ageRestriction.name,
+                                title: movie.ageRestrictionName,
                                 marginLeft: 5,
                               ),
                             ],
@@ -92,9 +91,9 @@ class ShowTimeOfMovieItem extends StatelessWidget {
             child: Wrap(
               spacing: 5,
               runSpacing: 5,
-              children: movie.showtimes
+              children: movie.schedules
                   .map((e) => ShowtimeItem(
-                        showtime: e,
+                        showtimeRoom: e.showtimes[0],
                         booking: booking,
                         movie:  movie,
                       ))
