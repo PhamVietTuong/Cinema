@@ -5,7 +5,7 @@
 // import 'package:cinema_app/data/models/ticket_type.dart';
 // import 'package:http/http.dart' as http;
 
-import '../../config.dart';
+// import '../../constants.dart';
 
 class Ticket {
   int id;

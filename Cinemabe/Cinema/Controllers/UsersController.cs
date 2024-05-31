@@ -19,19 +19,9 @@ namespace Cinema.Controllers
 	{
 		private readonly IUnitOfWork _uow;
 
-		public UsersController(
-			IUnitOfWork uow
-			)
+		public UsersController( IUnitOfWork uow )
 		{
 			_uow = uow;
-		}
-
-		[HttpPost]
-		[Route("register")]
-		public async Task<IActionResult> Register(RegisterViewModel re)
-		{
-
-			return await _uow.UserRepository.Register(re);
 		}
 	}
 }

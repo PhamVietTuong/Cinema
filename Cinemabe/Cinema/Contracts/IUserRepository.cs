@@ -1,10 +1,11 @@
-﻿using Cinema.DTOs;
+﻿using Cinema.Data.Models;
+using Cinema.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Contracts
 {
 	public interface IUserRepository
 	{
-		Task<IActionResult> Register(RegisterViewModel model); 
+		Task<User> CreateAsync(User entity); 
 	}
 }

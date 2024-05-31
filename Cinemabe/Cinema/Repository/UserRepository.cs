@@ -2,69 +2,130 @@
 using Cinema.Data;
 using Cinema.Data.Models;
 using Cinema.DTOs;
+using Cinema.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Repository
 {
 	public class UserRepository : IUserRepository
 	{
 		private readonly CinemaContext _context;
-		private readonly UserManager<User> _userManager;
-		private readonly RoleManager<IdentityRole> _roleManager;
 
-		public UserRepository(CinemaContext context, 
-						UserManager<User> userManager,
-						 RoleManager<IdentityRole> roleManager
-		)
+		public UserRepository(CinemaContext context)
         {
             _context = context;
-			_userManager = userManager;
-			_roleManager = roleManager;
         }
 
-		public CinemaContext Context { get; }
 
-		public async Task<IActionResult> Register(RegisterViewModel vm)
+		public async Task<User> CreateAsync(User entity)
 		{
-			var userExists = await _userManager.FindByNameAsync(vm.UserName);
-			if (userExists != null)
+			PasswordHashSalt passwordHashSalt = PasswordUtils.EncryptPassword(entity.PasswordHash);
+			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "User");
+
+			var userTypes = await _context.UserType.ToListAsync();
+
+
+			if (!userTypeExit)
 			{
-				var error = new { Message = "User already exists" };
-				return new BadRequestObjectResult(error);
+				var newUserTypes = new UserType
+				{
+					Name = "User",
+				};
+
+				await _context.AddAsync(newUserTypes);
+
+				entity.UserTypeId = newUserTypes.Id;
+				entity.PasswordHash = passwordHashSalt.Hash;
+				entity.PasswordSalt = passwordHashSalt.Salt;
+				await _context.AddAsync(entity);
 			}
-
-			User user = new User()
+			else
 			{
-				Email = vm.Email,
-				SecurityStamp = Guid.NewGuid().ToString(),
-				UserName = vm.UserName,
-				Status = true
-
-			};
-
-			var result = await _userManager.CreateAsync(user, vm.PassWord);
-
-			if (!result.Succeeded)
-			{
-				var errorResponse = new { Message = "Something went wrong!" };
-				return new BadRequestObjectResult(errorResponse);
+				entity.UserTypeId = userTypes.First(x => x.Name == "User").Id;
+				entity.PasswordHash = passwordHashSalt.Hash;
+				entity.PasswordSalt = passwordHashSalt.Salt;
+				await _context.AddAsync(entity);
 			}
-			if (!await _roleManager.RoleExistsAsync("Admin"))
-			{
-				await _roleManager.CreateAsync(new IdentityRole("Admin"));
+			
+			await _context.SaveChangesAsync();
 
-			}
-			if (!await _roleManager.RoleExistsAsync("User"))
-			{
-				await _roleManager.CreateAsync(new IdentityRole("User"));
+			return entity;
 
-			}
-			if (await _roleManager.RoleExistsAsync("User"))
-			{
-				await _userManager.AddToRoleAsync(user, "User");
-			}
-			return new OkResult();
+
+			//if (!userTypeExit)
+			//{
+			//	var newUserTypes = new UserType
+			//	{
+			//		Name = "User",
+			//	};
+
+			//	await _context.AddAsync(newUserTypes);
+
+			//	await _context.AddAsync(new User
+			//	{
+			//		UserTypeId = newUserTypes.Id,
+			//		UserName = entity.UserName,
+			//		FullName = entity.FullName,
+			//		Email = entity.Email,
+			//		PasswordHash = passwordHashSalt.Hash,
+			//		PasswordSalt = passwordHashSalt.Salt,
+			//		Status = true,
+			//	});
+			//}
+			//else
+			//{
+			//	var existingUserType = await _context.UserType.FirstOrDefaultAsync(x => x.Name == "User");
+			//	await _context.AddAsync(new User
+			//	{
+			//		UserTypeId = existingUserType.Id,
+			//		UserName = entity.UserName,
+			//		FullName = entity.FullName,
+			//		Email = entity.Email,
+			//		PasswordHash = passwordHashSalt.Hash,
+			//		PasswordSalt = passwordHashSalt.Salt,
+			//		Status = true,
+			//	});
+			//}
+			//var userExists = await _userManager.FindByNameAsync(vm.UserName);
+			//if (userExists != null)
+			//{
+			//	var error = new { Message = "User already exists" };
+			//	return new BadRequestObjectResult(error);
+			//}
+
+			//User user = new User()
+			//{
+			//	Email = vm.Email,
+			//	//SecurityStamp = Guid.NewGuid().ToString(),
+			//	//UserName = vm.UserName,
+			//	Status = true
+
+			//};
+
+			//var result = await _userManager.CreateAsync(user, vm.PassWord);
+
+			//if (!result.Succeeded)
+			//{
+			//	var errorResponse = new { Message = "Something went wrong!" };
+			//	return new BadRequestObjectResult(errorResponse);
+			//}
+			//if (!await _roleManager.RoleExistsAsync("Admin"))
+			//{
+			//	await _roleManager.CreateAsync(new IdentityRole("Admin"));
+
+			//}
+			//if (!await _roleManager.RoleExistsAsync("User"))
+			//{
+			//	await _roleManager.CreateAsync(new IdentityRole("User"));
+
+			//}
+			//if (await _roleManager.RoleExistsAsync("User"))
+			//{
+			//	await _userManager.AddToRoleAsync(user, "User");
+			//}
+			//return new OkResult();
 		}
 	}
 }
