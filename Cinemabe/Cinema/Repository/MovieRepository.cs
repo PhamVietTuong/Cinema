@@ -139,5 +139,57 @@ namespace Cinema.Repository
 			};
 			return viewModel;
 		}
-	}
+
+        public async Task<List<MovieDetailViewModel>> GetMovieTheaterId(Guid theaterId)
+        {
+            var showTimeRooms = await _context.ShowTimeRoom
+            .Include(x => x.Room)
+            .Include(x => x.ShowTime)
+                .ThenInclude(x => x.Movie)
+                    .ThenInclude(m => m.AgeRestriction)
+            .Where(x => x.Room.TheaterId == theaterId)
+            .ToListAsync();
+
+            var movies = showTimeRooms.Select(sRoom => sRoom.ShowTime.Movie).Distinct().ToList();
+
+            var rows = new List<MovieDetailViewModel>();
+            foreach (var movie in movies)
+            {
+                if (movie.Time2D != -1)
+                {
+                    rows.Add(new MovieDetailViewModel
+                    {
+                        Id = movie.Id,
+                        Name = movie.Name,
+                        Image = movie.Image,
+                        Time = movie.Time2D,
+                        ReleaseDate = movie.ReleaseDate,
+                        Description = movie.Description,
+                        Trailer = movie.Trailer,
+                        ProjectionForm = (int)ProjectionForm.Time2D,
+                        AgeRestrictionName = movie.AgeRestriction.Name,
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation
+                    });
+                }
+
+                if (movie.Time3D != -1)
+                {
+                    rows.Add(new MovieDetailViewModel
+                    {
+                        Id = movie.Id,
+                        Name = movie.Name,
+                        Image = movie.Image,
+                        Time = movie.Time3D,
+                        ReleaseDate = movie.ReleaseDate,
+                        Description = movie.Description,
+                        Trailer = movie.Trailer,
+                        ProjectionForm = (int)ProjectionForm.Time3D,
+                        AgeRestrictionName = movie.AgeRestriction.Name,
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation
+                    });
+                }
+            }
+            return rows;
+        }
+    }
 }
