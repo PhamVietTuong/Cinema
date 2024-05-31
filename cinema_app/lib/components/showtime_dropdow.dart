@@ -1,10 +1,7 @@
-import 'package:cinema_app/constants.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:flutter/material.dart';
-
 import '../config.dart';
 import '../data/models/movie.dart';
-
 class ShowtimeDropDown extends StatefulWidget {
   const ShowtimeDropDown(
       {super.key,

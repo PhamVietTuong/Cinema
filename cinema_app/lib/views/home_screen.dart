@@ -386,21 +386,21 @@ class _SlideShowState extends State<SlideShow> {
         Center(
           child: ClipRRect(
             child: Image.asset(
-              'assets/img/Banner.png',
+              'assets/img_demo/Banner.png',
             ),
           ),
         ),
          Center(
           child: ClipRRect(
             child: Image.asset(
-              'assets/img/Banner.png',
+              'assets/img_demo/Banner.png',
             ),
           ),
         ),
          Center(
           child: ClipRRect(
             child: Image.asset(
-              'assets/img/Banner.png',
+              'assets/img_demo/Banner.png',
             ),
           ),
         ),

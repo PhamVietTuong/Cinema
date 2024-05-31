@@ -21,10 +21,40 @@ class _MovieDetailState extends State<MovieDetail> {
   bool _showImage = true;
   bool _statusPlay = true;
   bool isExpanded = false;
+  List<DayItemBox> days = List.filled(
+      0,
+      DayItemBox(
+        date: DateTime.now(),
+        selectDay: (DateTime value) {},
+        isSelected: false,
+      ),
+      growable: true);
+  var today = DateTime.now();
+  late DateTime selectedDay;
+
+  void _selectDay(DateTime day) {
+    setState(() {
+      selectedDay = day;
+      //showtimePr.fetchShowtimesByDate(selectedDay, widget.booking.theater.id);
+    });
+  }
+ @override
+  void initState() {
+    // TODO: implement initState
+      selectedDay = today;
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     var styles = Styles();
-
+    days.clear();
+     for (int i = 0; i < 7; i++) {
+      days.add(DayItemBox(
+          isSelected: today.add(Duration(days: i)) == selectedDay,
+          date: today.add(Duration(days: i)),
+          selectDay: _selectDay));
+    }
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -265,50 +295,10 @@ class _MovieDetailState extends State<MovieDetail> {
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                decoration: const BoxDecoration(color: Colors.white),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
-                      DayItemBox(
-                        date: DateTime(2024, 4, 19),
-                        selectDay: (selectedDate) {
-                        },
-                        isSelected: true,
-                      ),
-                      DayItemBox(
-                        date: DateTime(2024, 4, 20),
-                        selectDay: (selectedDate) {
-                          // Thực hiện các công việc cần thiết khi người dùng chọn ngày
-                          // print("Ngày đã chọn: $selectedDate");
-                        },
-                        isSelected: false,
-                      ),
-                      DayItemBox(
-                        date: DateTime(2024, 4, 21),
-                        selectDay: (selectedDate) {
-                          // Thực hiện các công việc cần thiết khi người dùng chọn ngày
-                          //  print("Ngày đã chọn: $selectedDate");
-                        },
-                        isSelected: false,
-                      ),
-                      DayItemBox(
-                        date: DateTime(2024, 4, 22),
-                        selectDay: (selectedDate) {
-                          // Thực hiện các công việc cần thiết khi người dùng chọn ngày
-                          //  print("Ngày đã chọn: $selectedDate");
-                        },
-                        isSelected: false,
-                      ),
-                      DayItemBox(
-                        date: DateTime(2024, 4, 23),
-                        selectDay: (selectedDate) {
-                          // Thực hiện các công việc cần thiết khi người dùng chọn ngày
-                          // print("Ngày đã chọn: $selectedDate");
-                        },
-                        isSelected: false,
-                      ),
-                    ],
+                    children: days,
                   ),
                 ),
               ),
