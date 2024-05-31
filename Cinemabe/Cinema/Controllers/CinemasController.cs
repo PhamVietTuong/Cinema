@@ -127,31 +127,20 @@ namespace Cinema.Controllers
             }
         }
 
-		[HttpGet("GetShowTimeByDate{date}/TheaterId{theaterId}")]
-		public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByDateAndTheaterId(DateTime date, Guid theaterId)
+		[HttpGet("GetShowTimeByTheaterId{theaterId}")]
+		public async Task<ActionResult<List<TheaterDTO>>> GetShowTimeByTheaterId(Guid theaterId)
 		{
-            try
-            {
-                var showTimeByDateAndTheaterId = new ShowTimeByDateAndTheaterId
-                {
-                    Date = date,
-                    TheaterId = theaterId
-                };
+			
 
-                var result = await _uow.TheaterRepository.GetShowTimeByDateAndTheaterId(showTimeByDateAndTheaterId);
+			var result = await _uow.TheaterRepository.GetShowTimeByTheaterId(theaterId);
 
-                if (result.Count == 0)
-                {
-                    return StatusCode(StatusCodes.Status204NoContent);
-                }
+			if (result.Count == 0)
+			{
+				return StatusCode(StatusCodes.Status204NoContent);
+			}
 
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e);
-            }
-        }
+			return Ok(result);
+		}
 
 		#endregion
 

@@ -5,11 +5,11 @@ namespace Cinema.DTOs
 {
 	public class MovieDetailViewModel
 	{
-        public Guid Id { get; set; }
-        public string AgeRestrictionName { get; set; }
-        public string AgeRestrictionDescription { get; set; }
-        public string AgeRestrictionAbbreviation { get; set; }
-        public string Name { get; set; }
+		public Guid Id { get; set; }
+		public string AgeRestrictionName { get; set; }
+		public string AgeRestrictionDescription { get; set; }
+		public string AgeRestrictionAbbreviation { get; set; }
+		public string Name { get; set; }
 		public string Image { get; set; }
 		public int? Time { get; set; }
         public DateTime ReleaseDate { get; set; }
@@ -28,6 +28,8 @@ namespace Cinema.DTOs
 	{
 		public DateTime Date { get; set; }
 		public List<TheaterRowViewModel> Theaters { get; set; }
+		public List<ShowTimeRowViewModel> Showtimes { get; set; }
+
 	}
 
 	public class TheaterRowViewModel
@@ -46,5 +48,6 @@ namespace Cinema.DTOs
         public Guid ShowTimeId { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+		
 	}
 }

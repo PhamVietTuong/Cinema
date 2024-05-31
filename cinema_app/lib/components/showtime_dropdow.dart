@@ -1,5 +1,5 @@
 import 'package:cinema_app/constants.dart';
-import 'package:cinema_app/data/models/showtime.dart';
+import 'package:cinema_app/data/models/movie.dart';
 import 'package:flutter/material.dart';
 
 class ShowtimeDropDown extends StatefulWidget {
@@ -11,16 +11,16 @@ class ShowtimeDropDown extends StatefulWidget {
       required this.selectShowtime});
 
   final double marginLeft;
-  final List<Showtime> showtimes;
-  final Showtime showtime;
-  final Function(Showtime) selectShowtime;
+  final List<ShowtimeRoom> showtimes;
+  final ShowtimeRoom showtime;
+  final Function(ShowtimeRoom) selectShowtime;
 
   @override
   State<ShowtimeDropDown> createState() => _ShowtimeDropDownState();
 }
 
 class _ShowtimeDropDownState extends State<ShowtimeDropDown> {
-  late Showtime selectedItem;
+  late ShowtimeRoom selectedItem;
 
   @override
   void initState() {

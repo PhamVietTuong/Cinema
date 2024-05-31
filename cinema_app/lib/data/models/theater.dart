@@ -47,12 +47,12 @@ class TheaterRepositoryIml implements TheaterRepository {
     print("API fetch theates: $api");
 
     final response = await http.get(Uri.parse(api));
-
-    if (response.statusCode != 200) {
+    if (response.statusCode == 204) return [];
+    if (response.statusCode == 200) {
+      final List<dynamic> theaterJsonList = jsonDecode(response.body);
+      return theaterJsonList.map((json) => Theater.fromJson(json)).toList();
+    } else {
       throw Exception('Failed to fetch theaters');
     }
-
-    final List<dynamic> theaterJsonList = jsonDecode(response.body);
-    return theaterJsonList.map((json) => Theater.fromJson(json)).toList();
   }
 }
