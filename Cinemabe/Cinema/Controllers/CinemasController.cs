@@ -50,11 +50,25 @@ namespace Cinema.Controllers
             }
         }
 
-		#endregion
+        [HttpGet("GetMovieTheaterId{theaterId}")]
+        public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieTheaterId(Guid theaterId)
+        {
+            try
+            {
+                var result = await _uow.MovieRepository.GetMovieTheaterId(theaterId);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
-		#region FoodAndDrink
+        #endregion
 
-		[HttpGet("ComboByTheaterId/{id}")]
+        #region FoodAndDrink
+
+        [HttpGet("ComboByTheaterId/{id}")]
         public async Task<ActionResult<List<ComboViewModel>>> ComboByTheaterId(Guid id)
 		{
 			try
