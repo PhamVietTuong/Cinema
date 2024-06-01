@@ -32,11 +32,4 @@ class Ticket {
         status = json["status"] ?? 0;
 }
 
-abstract class TicketRepository {
 
-
-}
-
-class TicketRepositoryIml implements TicketRepository {
-  
-}

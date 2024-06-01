@@ -2,7 +2,7 @@ import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';
 import 'package:flutter/material.dart';
 
@@ -35,19 +35,18 @@ class _ListThreaterState extends State<ListThreater> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: styles.primaryColor,
+              color: Styles.primaryColor,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   widget.data.name, // Sử dụng dữ liệu từ widget cha
-                  style: styles.titleTextStyle.copyWith(color: Colors.white),
+                  style: TextStyle(color: Colors.white),
                 ),
                 Icon(
                   isShow ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
                   color: Colors.white,
-                  size: styles.iconSizeInTitle,
                 ),
               ],
             ),

@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -49,7 +49,7 @@ class _SignInState extends State<SignIn> {
           (
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Đăng nhập",style: styles.titleTextStyle.copyWith(color: Colors.grey,fontSize: 24),),
+              Text("Đăng nhập",style: TextStyle(color: Colors.grey,fontSize: 24),),
             ],
           ),
           const Text("Đăng nhập bằng email của bạn !",style: TextStyle(fontSize: 16),),

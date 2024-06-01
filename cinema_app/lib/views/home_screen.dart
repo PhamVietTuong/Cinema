@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget {
@@ -65,14 +65,14 @@ class _HomePageState extends State<HomePage> {
             ),
             child: const MySecondCarousel(),
           ),
-          Text("Phim sắp chiếu",style: styles.titleTextStyle.copyWith(fontSize: 20),),
+          Text("Phim sắp chiếu",style: TextStyle(fontSize: 20),),
              Container(
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/2,
             child:  const CarouselThird(),
           ),
-          Text("Ưu đãi",style: styles.titleTextStyle.copyWith(fontSize: 20),),
+          Text("Ưu đãi",style:TextStyle(fontSize: 20),),
                Container(
             padding: const EdgeInsets.all(5),
             width: MediaQuery.of(context).size.width,
@@ -236,15 +236,15 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
               children: [
                 Text(
                                  "KUNG FU PANDA 4 2D LT(P)",
-                                 style:styles.titleTextStyle.copyWith(color: Colors.white,fontSize: 20) ,
+                                 style:TextStyle(color: Colors.white,fontSize: 20) ,
                                   ),
-                     const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hành động',),
+                     const MovieTypeBox(padding: 5, title: 'Hành động',),
                     const SizedBox(height:5),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
+                    const ShowtimeTypeBox(title: '2D',),
                    const SizedBox(width: 10,),
                    const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
                   const SizedBox(width: 200,),
@@ -302,14 +302,14 @@ class _MySecondCarouselState extends State<MySecondCarousel> {
       children: [
         Text(
           "KUNG FU PANDA 4 2D LT(P)",
-          style: styles.titleTextStyle.copyWith(color: Colors.white,fontSize: 20),
+          style: TextStyle(color: Colors.white,fontSize: 20),
         ),
-        const MovieTypeBox(fontSizeCus: 14,padding: 5, title: 'Hài',),
+        const MovieTypeBox(padding: 5, title: 'Hài',),
         const SizedBox(height:5),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const ShowtimeTypeBox(title: '2D',fontSizeCus: 15,),
+            const ShowtimeTypeBox(title: '2D',),
             const SizedBox(width: 2,),
             const AgeRestrictionBox(title: "T18",fontSizeCus: 15,),
             const SizedBox(width: 200,),

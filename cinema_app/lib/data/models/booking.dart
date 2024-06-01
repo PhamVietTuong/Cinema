@@ -9,7 +9,7 @@ class Booking {
 
   List<TicketOption> tickets = List.filled(0, TicketOption(), growable: true);
   List<String> seatIds = List.filled(0, "", growable: true);
-  Showtime showtime = Showtime();
+  ShowtimeRoom showtime = ShowtimeRoom();
   
   Booking({Theater? theater, Movie? movie})
       : theater = theater ?? Theater(),
@@ -33,7 +33,7 @@ class Booking {
 
   int countingSignle() {
     return tickets
-        .where((e) => e.seatType.name.compareTo("Đơn") == 0)
+        .where((e) => e.seatTypeName.compareTo("Đơn") == 0)
         .toList()
         .map((a) => a.quantity)
         .fold(0, (previousValue, element) => previousValue + element);
@@ -41,7 +41,7 @@ class Booking {
 
   int countingCouple() {
     return tickets
-        .where((e) => e.seatType.name.compareTo("Đôi") == 0)
+        .where((e) => e.seatTypeName.compareTo("Đôi") == 0)
         .toList()
         .map((a) => a.quantity)
         .fold(0, (previousValue, element) => previousValue + element);
