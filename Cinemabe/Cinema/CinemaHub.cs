@@ -3,8 +3,6 @@ using Cinema.Data.Models;
 using Cinema.DTOs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Linq;
 
 namespace Cinema
 {
