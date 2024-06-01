@@ -148,8 +148,8 @@ class _MovieDetailState extends State<MovieDetail> {
                           children: [
                             Text(
                               widget.movie.name,
-                              style: styles.titleTextStyle
-                                  .copyWith(color: Colors.white, fontSize: 18),
+                              style: TextStyle
+                                  (color: Colors.white, fontSize: 18),
                             ),
                             Row(
                               children: [
@@ -170,7 +170,7 @@ class _MovieDetailState extends State<MovieDetail> {
                                     5), // Khoảng trống giữa tên phim và loại phim
                             widget.movie.movieType.isNotEmpty
                                 ? MovieTypeBox(
-                                    fontSizeCus: 14,
+                                 
                                     padding: 5,
                                     title: '${widget.movie.movieType}',
                                   )
@@ -184,7 +184,6 @@ class _MovieDetailState extends State<MovieDetail> {
                                     ? ShowtimeTypeBox(
                                         title:
                                             '${widget.movie.showTimeTypeName}',
-                                        fontSizeCus: 15,
                                       )
                                     : SizedBox.shrink(),
                                 widget.movie.ageRestrictionName.isNotEmpty

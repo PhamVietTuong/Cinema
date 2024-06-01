@@ -26,7 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             Text(
               "Đăng nhập",
-              style: styles.titleTextStyle.copyWith(fontSize: 20),
             ),
             const SizedBox(height: 20),
             TextFormField(
@@ -80,7 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {},
               child: Text(
                 'Đăng nhập',
-                style: styles.titleTextStyle.copyWith(fontSize: 18),
               ),
             ),
             const SizedBox(
@@ -92,8 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   "Người dùng mới!",
-                  style: styles.titleTextStyle
-                      .copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+    
                 ),
                 const SizedBox(
                   width: 10,
@@ -113,11 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: Text(
                     "Đăng ký",
-                    style: styles.titleTextStyle.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey,
-                    ),
+                   
                   ),
                 ),
               ],

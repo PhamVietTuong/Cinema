@@ -5,9 +5,10 @@
 
 import 'package:cinema_app/config.dart';
 import 'package:http/http.dart' as http;
+
+import 'showtime.dart';
 // import '../../constants.dart';
 
-import 'package:cinema_app/data/models/showtime.dart';
 
 class Movie {
   String id;
@@ -62,7 +63,7 @@ class Movie {
         releaseDate = DateTime.parse(json["releaseDate"]) ,
         time = json["time"] ?? -1,
         trailer = json["trailer"] ?? "",
-        schedules=(json["schedules"] as List).map((e) => Schedule.fromJson(e as Map<String, dynamic>)).toList();
+        schedules= json["schedules"]!=null?(json["schedules"] as List).map((e) => Schedule.fromJson(e as Map<String, dynamic>)).toList():[];
 }
 
 class Schedule {
@@ -91,34 +92,11 @@ class TheaterShowtime {
   TheaterShowtime.fromJson(Map<String, dynamic> json)
       : theaterAddress = json["theaterAddress"] ?? "",
         theaterName = json["theaterName"] ?? "",
-        showtimes = (json["showTimes"] as List<ShowtimeRoom>)
+        showtimes = (json["showTimes"] as List)
             .map((e) => ShowtimeRoom.fromJson(e as Map<String, dynamic>))
             .toList();
 }
 
-class ShowtimeRoom {
-  String roomId;
-  String roomName;
-  String showTimeId;
-  DateTime startTime = DateTime.now();
-  DateTime endTime = DateTime.now();
-
-  ShowtimeRoom({this.roomId = "", this.roomName = "", this.showTimeId = ""});
-  ShowtimeRoom.fromJson(Map<String, dynamic> json)
-      : roomId = json["roomId"],
-        roomName = json["roomName"],
-        showTimeId = json["showTimeId"],
-        startTime = DateTime.parse(json["startTime"]),
-        endTime = DateTime.parse(json["endTime"]);
-
-  String getFormatTime() {
-    return '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
-  }
-
-  String getFormatDate() {
-    return '${startTime.day.toString().padLeft(2, '0')}/${startTime.month.toString().padLeft(2, '0')}';
-  }
-}
 
 abstract class MovieRepository {
   Future<List<Movie>> fetchMovies();

@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               child: Text(
                                 "Đang chiếu",
                                 textAlign: TextAlign.center,
-                                style: styles.titleTextStyle.copyWith(
+                                style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,
                                 ),
@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               child: Text(
                                 "Chiếu sớm",
                                 textAlign: TextAlign.center,
-                                style: styles.titleTextStyle.copyWith(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
                             ),
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               child: Text(
                                 "Sắp chiếu",
                                 textAlign: TextAlign.center,
-                                style: styles.titleTextStyle.copyWith(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
                             ),
@@ -259,8 +259,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                 : [
                                     Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: styles.titleTextStyle
-                                          .copyWith(color: Colors.white),
+                                      style:TextStyle
+                                          (color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -275,8 +275,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                 : [
                                     Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: styles.titleTextStyle
-                                          .copyWith(color: Colors.white),
+                                      style:TextStyle
+                                          (color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -291,8 +291,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                 : [
                                     Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: styles.titleTextStyle
-                                          .copyWith(color: Colors.white),
+                                      style: TextStyle
+                                          (color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -305,8 +305,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Video",
-                        style: styles.titleTextStyle
-                            .copyWith(color: Colors.white)),
+                        style: TextStyle
+                            (color: Colors.white)),
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 3,
                       child: PageView.builder(
@@ -467,7 +467,6 @@ class InfoMovie extends StatelessWidget {
                     ? const SizedBox.shrink()
                     : ShowtimeTypeBox(
                         title: movie.showTimeTypeName,
-                        fontSizeCus: 14,
                       )
               ],
             ),
@@ -477,7 +476,7 @@ class InfoMovie extends StatelessWidget {
           ),
           Text(
             movie.name,
-            style: styles.titleTextStyle.copyWith(
+            style:TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ],

@@ -20,9 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         automaticallyImplyLeading: true,
         title: Text(
           "Cấu hình",
-          style: styles.titleTextStyle.copyWith(
-              fontSize: 20,
-              fontWeight: FontWeight.w700) 
+      
         ),
       ),
       body: Column(
@@ -38,8 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   "Ngôn Ngữ",
-                  style: styles.titleTextStyle
-                      .copyWith(fontSize: 18, color: Colors.black54),
+          
                 ),
                 ToggleButtons(
                   isSelected: [
@@ -70,13 +67,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   "Phiên Bản",
-                  style: styles.titleTextStyle
-                      .copyWith(fontSize: 18, color: Colors.black54),
+               
                 ),
                 Text(
                   "23",
-                  style: styles.titleTextStyle
-                      .copyWith(fontSize: 18, color: Colors.black54),
+              
                 )
               ],
             ),
@@ -92,8 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   "Giới thiệu ứng dụng cho bạn bè",
-                  style: styles.titleTextStyle
-                      .copyWith(fontSize: 18, color: Colors.black54),
+        
                 ),
               ],
             ),
@@ -106,8 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onPressed: () {},
             child: Text(
               "Xóa tài khoản",
-              style: styles.titleTextStyle
-                  .copyWith(fontSize: 16, color: Colors.black54),
+     
             ),
           ),
         ],

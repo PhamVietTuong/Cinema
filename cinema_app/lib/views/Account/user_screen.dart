@@ -21,10 +21,7 @@ class _UserState extends State<User> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("TÀI KHOẢN",
-                style: styles.titleTextStyle.copyWith(
-                    fontSize: 20,
-                    fontWeight:
-                        FontWeight.w700) // Adjust the font size as needed
+               // Adjust the font size as needed
                 ),
           ],
         ),
@@ -57,11 +54,9 @@ class _UserState extends State<User> {
                     ),
                     Text(
                       "Đăng Ký Thành Viên",
-                      style: styles.titleTextStyle.copyWith(fontSize: 20),
                     ),
                     Text(
                       "Nhận Ngay Nhiều Ưu Đãi!",
-                      style: styles.titleTextStyle.copyWith(fontSize: 20),
                     ),
                   ],
                 ),
@@ -85,13 +80,10 @@ class _UserState extends State<User> {
                   ),
                   child: Text(
                     "Đăng ký",
-                    style: styles.titleTextStyle.copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey,
+                 
                     ),
                   ),
-                ),
+                
                 const SizedBox(width: 16),
                 OutlinedButton(
                   onPressed: () {
@@ -109,11 +101,7 @@ class _UserState extends State<User> {
                   ),
                   child: Text(
                     "Đăng nhập",
-                    style: styles.titleTextStyle.copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                   
                   ),
                 ),
               ],
@@ -130,8 +118,7 @@ class _UserState extends State<User> {
                 children: [
                   Text(
                     "Thông Tin Công Ty",
-                    style: styles.titleTextStyle
-                        .copyWith(fontSize: 18, color: Colors.black54),
+                
                   ),
                   const Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
@@ -149,8 +136,7 @@ class _UserState extends State<User> {
                 children: [
                   Text(
                     "Điều Khoản Sử Dụng",
-                    style: styles.titleTextStyle
-                        .copyWith(fontSize: 18, color: Colors.black54),
+                   
                   ),
                   const Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
@@ -168,8 +154,7 @@ class _UserState extends State<User> {
                 children: [
                   Text(
                     "Chính Sách Thanh Toán",
-                    style: styles.titleTextStyle
-                        .copyWith(fontSize: 18, color: Colors.black54),
+                  
                   ),
                   const Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
@@ -187,8 +172,7 @@ class _UserState extends State<User> {
                 children: [
                   Text(
                     "Chính Sách Bảo Mật",
-                    style: styles.titleTextStyle
-                        .copyWith(fontSize: 18, color: Colors.black54),
+                   
                   ),
                   const Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
@@ -206,8 +190,7 @@ class _UserState extends State<User> {
                 children: [
                   Text(
                     "Hỏi Đáp",
-                    style: styles.titleTextStyle
-                        .copyWith(fontSize: 18, color: Colors.black54),
+                   
                   ),
                   const Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
