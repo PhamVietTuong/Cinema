@@ -1,10 +1,14 @@
 // ignore_for_file: avoid_print
 
 //import 'dart:convert';
-// import 'package:http/http.dart' as http;
+ import 'dart:convert';
+
+import 'package:cinema_app/config.dart';
+import 'package:http/http.dart' as http;
+
+import 'showtime.dart';
 // import '../../constants.dart';
 
-import 'package:cinema_app/data/models/showtime.dart';
 
 class Movie {
   String id;
@@ -52,14 +56,14 @@ class Movie {
         description = json["description"] ?? "",
         director = json["director"] ?? "",
         img = json["image"] ?? "",
-        movieType = json["movieType"]??"",
-        showTimeTypeName = json["showTimeTypeName"]??"",
+        movieType = json["movieType"] ??"",
+        showTimeTypeName = json["showTimeTypeName"] ??"",
         languages = json["languages"] ?? "",
         name = json["name"] ?? "",
-        releaseDate = DateTime.parse(json["releaseDate"]),
+        releaseDate = DateTime.parse(json["releaseDate"]) ,
         time = json["time"] ?? -1,
         trailer = json["trailer"] ?? "",
-        schedules=(json["schedules"] as List).map((e) => Schedule.fromJson(e as Map<String, dynamic>)).toList();
+        schedules= json["schedules"]!=null?(json["schedules"] as List).map((e) => Schedule.fromJson(e as Map<String, dynamic>)).toList():[];
 }
 
 class Schedule {
@@ -88,11 +92,29 @@ class TheaterShowtime {
   TheaterShowtime.fromJson(Map<String, dynamic> json)
       : theaterAddress = json["theaterAddress"] ?? "",
         theaterName = json["theaterName"] ?? "",
-        showtimes = (json["showTimes"] as List<ShowtimeRoom>)
+        showtimes = (json["showTimes"] as List)
             .map((e) => ShowtimeRoom.fromJson(e as Map<String, dynamic>))
             .toList();
 }
 
-abstract class MovieRepository {}
 
-class MovieRepositoryIml implements MovieRepository {}
+abstract class MovieRepository {
+  Future<List<Movie>> fetchMovies();
+}
+
+class MovieRepositoryIml implements MovieRepository {
+  @override
+  Future<List<Movie>> fetchMovies() async {
+    String api ='$serverUrl/api/Cinemas/GetMovieList';
+    print("API fetch movies: $api");
+
+    final response = await http.get(Uri.parse(api));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch movies');
+    }
+
+    final List<dynamic> movieJsonList = jsonDecode(response.body);
+    return movieJsonList.map((json) => Movie.fromJson(json)).toList();
+  }
+}
