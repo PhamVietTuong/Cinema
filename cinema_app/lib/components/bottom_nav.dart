@@ -1,5 +1,4 @@
-import 'package:cinema_app/config.dart';
-import 'package:cinema_app/views/Account/sign_in.dart';
+import 'package:cinema_app/views/Account/user_screen.dart';
 import 'package:cinema_app/views/home_screen.dart';
 import 'package:cinema_app/views/1_threater_selection/theater_sceen.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
@@ -16,13 +15,13 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   var index = 0;
   List<Widget> pages = [
-    const HomePage(),
+     const HomePage(),
     const TheaterScreen(),
     const Center(
       child: Text("News"),
     ),
     const Center(
-      child: SignIn(),
+      child: User(),
     )
   ];
   @override

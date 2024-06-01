@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
 //import 'dart:convert';
-// import 'package:http/http.dart' as http;
+ import 'dart:convert';
+
+import 'package:cinema_app/config.dart';
+import 'package:http/http.dart' as http;
 // import '../../constants.dart';
 
 import 'package:cinema_app/data/models/showtime.dart';
@@ -52,11 +55,11 @@ class Movie {
         description = json["description"] ?? "",
         director = json["director"] ?? "",
         img = json["image"] ?? "",
-        movieType = json["movieType"]??"",
-        showTimeTypeName = json["showTimeTypeName"]??"",
+        movieType = json["movieType"] ??"",
+        showTimeTypeName = json["showTimeTypeName"] ??"",
         languages = json["languages"] ?? "",
         name = json["name"] ?? "",
-        releaseDate = DateTime.parse(json["releaseDate"]),
+        releaseDate = DateTime.parse(json["releaseDate"]) ,
         time = json["time"] ?? -1,
         trailer = json["trailer"] ?? "",
         schedules=(json["schedules"] as List).map((e) => Schedule.fromJson(e as Map<String, dynamic>)).toList();
@@ -93,6 +96,47 @@ class TheaterShowtime {
             .toList();
 }
 
-abstract class MovieRepository {}
+class ShowtimeRoom {
+  String roomId;
+  String roomName;
+  String showTimeId;
+  DateTime startTime = DateTime.now();
+  DateTime endTime = DateTime.now();
 
-class MovieRepositoryIml implements MovieRepository {}
+  ShowtimeRoom({this.roomId = "", this.roomName = "", this.showTimeId = ""});
+  ShowtimeRoom.fromJson(Map<String, dynamic> json)
+      : roomId = json["roomId"],
+        roomName = json["roomName"],
+        showTimeId = json["showTimeId"],
+        startTime = DateTime.parse(json["startTime"]),
+        endTime = DateTime.parse(json["endTime"]);
+
+  String getFormatTime() {
+    return '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  String getFormatDate() {
+    return '${startTime.day.toString().padLeft(2, '0')}/${startTime.month.toString().padLeft(2, '0')}';
+  }
+}
+
+abstract class MovieRepository {
+  Future<List<Movie>> fetchMovies();
+}
+
+class MovieRepositoryIml implements MovieRepository {
+  @override
+  Future<List<Movie>> fetchMovies() async {
+    String api ='$serverUrl/api/Cinemas/GetMovieList';
+    print("API fetch movies: $api");
+
+    final response = await http.get(Uri.parse(api));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch movies');
+    }
+
+    final List<dynamic> movieJsonList = jsonDecode(response.body);
+    return movieJsonList.map((json) => Movie.fromJson(json)).toList();
+  }
+}
