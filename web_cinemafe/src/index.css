@@ -21,7 +21,7 @@ body::before {
 
 @media screen and (min-width: 2000px) {
   body {
-    ont-size: 20px;
+    font-size: 20px;
   }
 }
 
@@ -137,7 +137,7 @@ img {
   --row-gap: 24px;
   display: flex;
   flex-wrap: wrap;
-  margin: 0 calc(var(--col-gap) / 2 * -1) calc(var(--row-gap) * -1);
+  margin: 0 calc(var(-col-gap) / 2 * -1) calc(var(-row-gap) * -1);
 }
 
 .cursor-pointer {
@@ -278,9 +278,22 @@ p {
 }
 
 .swal2-title {
+  font-family: "Anton", sans-serif;
   color: #f8fafc;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 400;
+  text-transform: uppercase
+}
+
+@media only screen and (max-width: 1200px) {
+  .swal2-title {
+    font-size: 20px;
+  }
+}
+
+.swal2-html-container {
+  color: #f8fafc !important;
+  font-size: 16px !important;
 }
 
 .swal2-actions .swal2-confirm {

@@ -1,5 +1,6 @@
+import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -16,8 +17,22 @@ const stateDefault = {
     listSeatDisconnection: [],
     seatState: 0,
     listWattingSeat: [],
-    updateSeat: []
+    updateSeat: [],
+    seatTypeMapping: {},
+    totalSeatType: {},
 }
+
+const createSeatTypeMapping = (seatData) => {
+    let mapping = {};
+    seatData.rowName.forEach(row => {
+        row.rowSeats.forEach(seat => {
+            if (seat.seatTypeId) {
+                mapping[seat.id] = seat.seatTypeId;
+            }
+        });
+    });
+    return mapping;
+};
 
 export const CinemasReducer = (state = stateDefault, action) => {
     switch (action.type) {
@@ -37,22 +52,49 @@ export const CinemasReducer = (state = stateDefault, action) => {
         }
 
         case SET_SEAT: {
-            state.seat = action.seat;
-            return { ...state };
+            const seatTypeMapping = createSeatTypeMapping(action.seat);
+            return { ...state, seat: action.seat, seatTypeMapping };
         }
 
         case SET_COMBO: {
-            state.combo = action.combo;
-            return { ...state };
+            return { ...state, combo: action.combo };
         }
 
         case SEAT_BEING_SELECTED: {
-            const updatedSeatYour = action.here
-                ? state.seatYour.includes(action.seatId)
-                    ? state.seatYour.filter(id => id !== action.seatId)
-                    : [...state.seatYour, action.seatId]
-                : [];
+            const { seatId } = action;
+            const { seatTypeMapping, totalSeatType } = state;
+            const updatedSeatYour = state.seatYour.includes(seatId)
+                ? state.seatYour.filter(id => id !== seatId)
+                : [...state.seatYour, seatId]
 
+            const seatTypeId = seatTypeMapping[seatId];
+            const currentSelectedCount = updatedSeatYour.filter(seat => seatTypeMapping[seat] === seatTypeId).length;
+
+            if ((totalSeatType[seatTypeId] || 0) === 0) {
+                Swal.fire({
+                    title: `LƯU Ý !`,
+                    text: "Bạn cần chọn loại ghế!",
+                    padding: "24px",
+                    width: "400px",
+                    customClass: {
+                        confirmButton: 'custom-ok-button'
+                    }
+                });
+                return state;
+            }
+
+            if ((totalSeatType[seatTypeId] || 0) - currentSelectedCount <= -1) {
+                Swal.fire({
+                    title: `LƯU Ý !`,
+                    text: "Bạn đã mua đủ ghế loại này!",
+                    padding: "24px",
+                    width: "400px",
+                    customClass: {
+                        confirmButton: 'custom-ok-button'
+                    }
+                });
+                return state; 
+            }
             return { ...state, seatYour: updatedSeatYour };
         }
 
@@ -111,7 +153,11 @@ export const CinemasReducer = (state = stateDefault, action) => {
         }
 
         case CLEAN: {
-            return { ...state, listOfSeatSold: [], updateSeat: [], listWattingSeat: [] };
+            return { ...state, listOfSeatSold: [], updateSeat: [], listWattingSeat: [], seatYour: [] };
+        }
+
+        case TOTAL_CHOOSES_SEAT_TYPE: {
+            return { ...state, totalSeatType: action.totalSeatType, seatYour: [] };
         }
 
         default: return { ...state };
