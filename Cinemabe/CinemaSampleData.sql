@@ -3,13 +3,13 @@
 --Delete data table
 DELETE FROM MovieTypeDetail;
 DELETE FROM Ticket;
+DELETE FROM ShowTimeRoom;
 DELETE FROM ShowTime;
 DELETE FROM Seat;
 DELETE FROM Movie;
 DELETE FROM [User];
 DELETE FROM UserType;
 DELETE FROM AgeRestriction;
-DELETE FROM ShowTimeType;
 DELETE FROM Room;
 DELETE FROM TicketType;
 DELETE FROM SeatType;
@@ -25,36 +25,80 @@ SET @NEW_GUID = NEWID();
 INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Đơn', 1)
 SET @NEW_GUID = NEWID();
 INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Ðôi', 1)
+SET @NEW_GUID = NEWID();
+INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Nằm', 1)
+
 
 SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'CINESTAR HAI BÀ TRƯNG', N'135 Hai Bà Trưng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 1', N'65 Huỳnh Thúc Kháng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh','ckc_quan1.jpg','02437654321',
+1)
 SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'Mega GS Cao Thắng', N'Lầu 6 - 7, 19 Cao Thắng, P.2, Q.3, Tp. Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 3', N'Lầu 6 - 7,
+19 Cao Thắng, P.2, Q.3, Tp. Hồ Chí Minh','ckc_quan3.jpg','02838456789',
+1)
 SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'Galaxy Nguyễn Du', N'116 Nguyễn Du, Q.1, Tp. Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 10', N'116 Nguyễn Tri Phương, Q.10, Tp. Hồ Chí Minh','ckc_quan10.jpg','02363839999',
+1)
 SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'CGV Hùng Vương Plaza ', N'Tầng 7, Hùng Vương Plaza, 126 Hùng Vương, Q.5, Tp. Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 5', N'Tầng 7, Hùng Vương Plaza,
+126 Hùng Vương, Q.5, Tp. Hồ Chí Minh','ckc_quan5.jpg','02253851234',
+1)
 SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Status) VALUES (@NEW_GUID, N'BHD Star 3/2', N'Lầu 4, Siêu Thị Vincom 3/2, 3C Đường 3/2, Q. 10, Tp. Hồ Chí Minh', 1)
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 7', N'Lầu 4, Siêu Thị Vincom 3/2,
+3C Đường 3/2, Q.7, Tp. Hồ Chí Minh','ckc_quan7.jpg','02923734567',
+1)
+
 
 SET @NEW_GUID = NEWID();
-INSERT Room(Id, TheaterId, Name, [Width], Length, Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'Mega GS Cao Thắng'), '01', '50', '50', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 1'), '01',1)
 SET @NEW_GUID = NEWID();
-INSERT Room(Id, TheaterId, Name, [Width], Length, Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'Mega GS Cao Thắng'), '02', '100', '100', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 1'), '02', 1)
 SET @NEW_GUID = NEWID();
-INSERT Room(Id, TheaterId, Name, [Width], Length, Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'Mega GS Cao Thắng'), '03', '150', '150', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 1'), '03', 1)
 SET @NEW_GUID = NEWID();
-INSERT Room(Id, TheaterId, Name, [Width], Length, Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'Mega GS Cao Thắng'), '04', '200', '200', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 1'), '04', 1)
 SET @NEW_GUID = NEWID();
-INSERT Room(Id, TheaterId, Name, [Width], Length, Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'Mega GS Cao Thắng'), '05', '250', '250', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 1'), '05', 1)
 
 SET @NEW_GUID = NEWID();
-INSERT AgeRestriction(Id, Name, Description, Status) VALUES (@NEW_GUID, 'T18', N'Phim dành cho khán giả từ đủ 18 tuổi trở lên.' , 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 5'), '01',1)
+SET @NEW_GUID = NEWID();
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 5'), '02', 1)
+SET @NEW_GUID = NEWID();
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 7'), '01', 1)
+SET @NEW_GUID = NEWID();
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 7'), '02', 1)
+SET @NEW_GUID = NEWID();
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@NEW_GUID, (select Id from Theater where Name=N'CKC Quận 10'), '01', 1)
+
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTimeType(Id, Name, Status) VALUES (@NEW_GUID, '2D', 1)
+INSERT INTO AgeRestriction(Id, Name, Description, Abbreviation, Status) 
+VALUES (@NEW_GUID, 'P', N'Phim không giới hạn độ tuổi.', 'KID', 1);
+
+
 SET @NEW_GUID = NEWID();
-INSERT ShowTimeType(Id, Name, Status) VALUES (@NEW_GUID, '3D', 1)
+INSERT INTO AgeRestriction(Id, Name, Description, Abbreviation, Status) 
+VALUES (@NEW_GUID, 'T13', N'Phim dành cho khán giả từ đủ 13 tuổi trở lên.', 'Teen', 1);
+
+
+SET @NEW_GUID = NEWID();
+INSERT INTO AgeRestriction(Id, Name, Description, Abbreviation, Status) 
+VALUES (@NEW_GUID, 'T16', N'Phim dành cho khán giả từ đủ 16 tuổi trở lên.', 'Adult', 1);
+
+SET @NEW_GUID = NEWID();
+INSERT INTO AgeRestriction(Id, Name, Description, Abbreviation, Status) 
+VALUES (@NEW_GUID, 'K', N'Phim dành cho mọi đối tượng, có hướng dẫn của phụ huynh.', 'KID', 1);
+
+SET @NEW_GUID = NEWID();
+INSERT INTO AgeRestriction(Id, Name, Description, Abbreviation, Status) 
+VALUES (@NEW_GUID, 'T18', N'Phim dành cho khán giả từ đủ 18 tuổi trở lên.', 'Adult', 1);
+
+
+
+
+
+
 
 SET @NEW_GUID = NEWID();
 INSERT Movie(Id, AgeRestrictionId, ShowTimeTypeId, Name, image, Time, ReleaseDate, Description, Director, Actor, Trailer, Languages, Status) VALUES (@NEW_GUID, (select Id from AgeRestriction where Name='T18'), (select Id from ShowTimeType where Name='3D'), N'GODZILLA X KONG', 'godzilla-x-kong.jpg', '125', GETDATE(), N'Kong và Godzilla - hai sinh vật vĩ đại huyền thoại, hai kẻ thủ truyền kiếp sẽ cùng bắt tay thực thi một sứ mệnh chung mang tính sống còn để bảo vệ nhân loại, và trận chiến gắn kết chúng với loài người mãi mãi sẽ bắt đầu.', N'Adam Wingard', N'Rebecca Hall, Dan Stevens, Rachel House', N'trailer', N'Tiếng việt', 1)

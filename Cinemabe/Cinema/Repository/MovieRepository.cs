@@ -191,5 +191,49 @@ namespace Cinema.Repository
             }
             return rows;
         }
+        public async Task<List<MovieDetailViewModel>> GetMoviesByName(string name){
+            var input =name.Trim().ToLower().RemoveDiacritics();
+            var movies = await _context.Movie
+                               .Include(x => x.AgeRestriction)
+                               .Where(x => x.Status==true)
+                               .ToListAsync();
+            var filteredMovies = movies.Where(x => x.Name.ToLower().RemoveDiacritics().Contains(input)).ToList();
+            var results = new List<MovieDetailViewModel>();
+            foreach (var movie in filteredMovies)
+            {
+                void addMovie(int time, ProjectionForm form)
+                {
+                    results.Add(new MovieDetailViewModel
+                    {
+                        Id = movie.Id,
+                        AgeRestrictionName = movie.AgeRestriction.Name,
+                        AgeRestrictionDescription = movie.AgeRestriction.Description,
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation,
+                        Name = movie.Name,
+                        Image = movie.Image,
+                        Time = time,
+                        ReleaseDate = movie.ReleaseDate,
+                        Description = movie.Description,
+                        Director = movie.Director,
+                        Actor = movie.Actor,
+                        Trailer = movie.Trailer,
+                        Languages = movie.Languages,
+                        MovieType = String.Join(", ", _context.MovieTypeDetail.Include(x => x.MovieType).Where(x=>x.MovieId==movie.Id).Select(x=>new {x.MovieType.Name}).ToList()),
+                        ShowTimeTypeName = form == ProjectionForm.Time2D ? "2D" : "3D",
+                        ProjectionForm=(int)form
+                       
+                    });
+                }
+                if (movie.Time2D != -1)
+                {
+                    addMovie(movie.Time2D ?? 0, ProjectionForm.Time2D);
+                }
+                if (movie.Time3D != -1)
+                {
+                    addMovie(movie.Time3D ?? 0, ProjectionForm.Time3D);
+                }
+            }
+            return results;
+        }
     }
 }

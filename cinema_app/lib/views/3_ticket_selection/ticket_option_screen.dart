@@ -22,11 +22,13 @@ class TicketOptionScreen extends StatefulWidget {
       {super.key,
       required this.booking,
       required this.showtimeRoom,
-      required this.movie});
+      required this.movie,
+      required this.selectedDate});
 
   final Booking booking;
   final Movie movie;
   final ShowtimeRoom showtimeRoom;
+  final DateTime selectedDate;
 
   @override
   State<TicketOptionScreen> createState() => _TicketOptionScreenState();
@@ -87,6 +89,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
     return SeatScreen(
       booking: widget.booking,
       showtime: selectedShowtime,
+      selectedDate: widget.selectedDate,
     );
   }
 
@@ -158,7 +161,11 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,
-                      showtimes: widget.movie.schedules[0].showtimes,
+                      showtimes: widget.movie.schedules
+                          .firstWhere((element) =>
+                              element.date.day == widget.selectedDate.day &&
+                              element.date.month == widget.selectedDate.month)
+                          .showtimes,
                       selectShowtime: selectShowtime,
                     )
                   ],
@@ -242,16 +249,15 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                     child: Container(
                                       margin: const EdgeInsets.only(left: 5),
                                       child: Text(
-                                        "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
-                                        softWrap: true,
-                                         style: TextStyle(
-                                              color: Styles
-                                                  .textColor["dark_purple"],
-                                              fontSize: Styles.textSize,
-                                            )),
-                                      ),
+                                          "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
+                                          softWrap: true,
+                                          style: TextStyle(
+                                            color:
+                                                Styles.textColor["dark_purple"],
+                                            fontSize: Styles.textSize,
+                                          )),
                                     ),
-                                
+                                  ),
                                 ],
                               ),
                             ],
@@ -274,7 +280,6 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
               Container(
                   margin: const EdgeInsets.only(bottom: 25, left: 8, right: 8),
                   decoration: BoxDecoration(
-  
                       borderRadius: BorderRadius.circular(2),
                       boxShadow: [
                         BoxShadow(

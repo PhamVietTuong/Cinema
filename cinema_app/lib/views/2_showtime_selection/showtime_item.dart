@@ -11,8 +11,10 @@ class ShowtimeItem extends StatelessWidget {
       {super.key,
       required this.showtimeRoom,
       required this.booking,
-      required this.movie});
+      required this.movie,
+      required this.selectedDate});
 
+  final DateTime selectedDate;
   final Booking booking;
   final Movie movie;
   final ShowtimeRoom showtimeRoom;
@@ -25,6 +27,7 @@ class ShowtimeItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => TicketOptionScreen(
+                selectedDate: selectedDate,
                 booking: booking,
                 showtimeRoom: showtimeRoom,
                 movie: movie,
@@ -32,7 +35,7 @@ class ShowtimeItem extends StatelessWidget {
             ));
       },
       child: Container(
-        padding:const EdgeInsets.all(2),
+        padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3.0),
           gradient: LinearGradient(

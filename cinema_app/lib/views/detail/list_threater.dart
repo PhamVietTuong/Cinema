@@ -53,16 +53,41 @@ class _ListThreaterState extends State<ListThreater> {
           ),
         ),
         isShow
-            ?  Column(
+            ? Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
                     ],
                   )
                 ],

@@ -36,6 +36,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
   List<ShowTimeOfMovieItem> lstShowTimeMovie = List.filled(
       0,
       ShowTimeOfMovieItem(
+        selectedDate: DateTime.now(),
         movie: Movie(),
         booking: Booking(),
       ),
@@ -54,6 +55,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
               sch.date.day == selectedDay.day &&
               sch.date.month == selectedDay.month))
           .map((e) => ShowTimeOfMovieItem(
+                selectedDate: selectedDay,
                 movie: e,
                 booking: widget.booking,
               ))
@@ -96,25 +98,31 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
           onPressed: () {
             Navigator.pop(this.context);
           },
-          icon:  Icon(Icons.arrow_back_ios_new, color: Styles.boldTextColor["dark_purple"],),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: Styles.boldTextColor["dark_purple"],
+          ),
         ),
         title: Text(
           widget.booking.theater.name,
-          style: TextStyle(color: Styles.boldTextColor["dark_purple"],
-          fontSize: Styles.appbarFontSize),
+          style: TextStyle(
+              color: Styles.boldTextColor["dark_purple"],
+              fontSize: Styles.appbarFontSize),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
           child: Column(
             children: [
               Container(
-                color: Styles.backgroundColor["dark_purple"], // Màu của đường viền
+                color:
+                    Styles.backgroundColor["dark_purple"], // Màu của đường viền
                 height: 1, // Độ dày của đường viền
               ),
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                decoration:  BoxDecoration(color: Styles.backgroundContent["dark_purple"]),
+                decoration: BoxDecoration(
+                    color: Styles.backgroundContent["dark_purple"]),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -145,7 +153,9 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                   ),
                   Text(
                     "Đang tải...",
-                    style: TextStyle(color: Styles.boldTextColor["dark_purple"], fontSize: Styles.titleFontSize),
+                    style: TextStyle(
+                        color: Styles.boldTextColor["dark_purple"],
+                        fontSize: Styles.titleFontSize),
                   )
                 ],
               ),
@@ -153,7 +163,8 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
           : SingleChildScrollView(
               child: Center(
                 child: Container(
-                  decoration:  BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+                  decoration: BoxDecoration(
+                      color: Styles.backgroundColor["dark_purple"]),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: lstShowTimeMovie.isNotEmpty
@@ -174,6 +185,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
               sch.date.day == selectedDay.day &&
               sch.date.month == selectedDay.month))
           .map((e) => ShowTimeOfMovieItem(
+                selectedDate: selectedDay,
                 movie: e,
                 booking: widget.booking,
               ))

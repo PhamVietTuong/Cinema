@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var serverUrl = 'https://10.0.2.2:7209';
+var serverUrl = 'http://103.104.122.137:9000';
 
 class Styles {
   static const backgroundColor = {
