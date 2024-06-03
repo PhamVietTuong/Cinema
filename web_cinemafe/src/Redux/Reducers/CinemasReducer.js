@@ -20,6 +20,8 @@ const stateDefault = {
     updateSeat: [],
     seatTypeMapping: {},
     totalSeatType: {},
+    checkBooking: false,
+    seatYourName: ''
 }
 
 const createSeatTypeMapping = (seatData) => {
@@ -32,6 +34,40 @@ const createSeatTypeMapping = (seatData) => {
         });
     });
     return mapping;
+};
+
+const getSeatNames = (seatIds, seatData) => {
+    const seatNames = [];
+    seatData.rowName.forEach(row => {
+        row.rowSeats.forEach(seat => {
+            if (seatIds.includes(seat.id)) {
+                seatNames.push(seat.name);
+            }
+        });
+    });
+    return seatNames.join(', ');
+};
+
+const checkIfSeatsAreEnough = (seatYour, seatTypeMapping, totalSeatType) => {
+    let seatCount = {};
+
+    seatYour.forEach(seatId => {
+        const seatTypeId = seatTypeMapping[seatId];
+        if (seatTypeId) {
+            if (!seatCount[seatTypeId]) {
+                seatCount[seatTypeId] = 0;
+            }
+            seatCount[seatTypeId]++;
+        }
+    });
+
+    for (let seatTypeId in totalSeatType) {
+        if ((seatCount[seatTypeId] || 0) < totalSeatType[seatTypeId]) {
+            return false;
+        }
+    }
+
+    return true;
 };
 
 export const CinemasReducer = (state = stateDefault, action) => {
@@ -78,7 +114,8 @@ export const CinemasReducer = (state = stateDefault, action) => {
                     width: "400px",
                     customClass: {
                         confirmButton: 'custom-ok-button'
-                    }
+                    },
+                    showCancelButton: false,
                 });
                 return state;
             }
@@ -91,11 +128,15 @@ export const CinemasReducer = (state = stateDefault, action) => {
                     width: "400px",
                     customClass: {
                         confirmButton: 'custom-ok-button'
-                    }
+                    },
+                    confirmButtonText: "Oki",
+                    showCancelButton: false,
                 });
                 return state; 
             }
-            return { ...state, seatYour: updatedSeatYour };
+
+            const updateCheckBooking = checkIfSeatsAreEnough(updatedSeatYour, seatTypeMapping, totalSeatType);
+            return { ...state, seatYour: updatedSeatYour, checkBooking: updateCheckBooking };
         }
 
         case SEAT_HAS_BEEN_CHOSEN: {
