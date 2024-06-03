@@ -1,6 +1,5 @@
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/data/models/theater.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';

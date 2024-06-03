@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 //import 'dart:convert';
- import 'dart:convert';
+import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
 import 'package:http/http.dart' as http;
@@ -22,6 +22,7 @@ class Movie {
   String img;
   String movieType;
   String showTimeTypeName;
+  int projectionForm;
 
   DateTime releaseDate = DateTime.now();
 
@@ -42,6 +43,7 @@ class Movie {
     this.showTimeTypeName = "",
     this.time = 0,
     this.trailer = "",
+    this.projectionForm = 0,
   });
 
   Movie.fromJson(Map<String, dynamic> json)
@@ -53,13 +55,14 @@ class Movie {
         description = json["description"] ?? "",
         director = json["director"] ?? "",
         img = json["image"] ?? "",
-        movieType = json["movieType"] ??"",
-        showTimeTypeName = json["showTimeTypeName"] ??"",
+        movieType = json["movieType"] ?? "",
+        showTimeTypeName = json["showTimeTypeName"] ?? "",
         languages = json["languages"] ?? "",
         name = json["name"] ?? "",
-        releaseDate = DateTime.parse(json["releaseDate"]) ,
+        releaseDate = DateTime.parse(json["releaseDate"]),
         time = json["time"] ?? -1,
-        trailer = json["trailer"] ?? "";
+        trailer = json["trailer"] ?? "",
+        projectionForm = json["projectionForm"] ?? 0;
 }
 
 class Schedule {
@@ -119,13 +122,14 @@ class ShowtimeRoom {
 
 abstract class MovieRepository {
   Future<List<Movie>> fetchMovies();
+  Future<Movie> fetchMovieDetail(String movieID, int projectionForm);
 }
 
 class MovieRepositoryIml implements MovieRepository {
   @override
   Future<List<Movie>> fetchMovies() async {
-    String api ='$serverUrl/api/Cinemas/GetMovieList';
-    print("API fetch movies: $api");
+    String api = '$serverUrl/api/Cinemas/GetMovieList';
+    // print("API fetch movies: $api");
 
     final response = await http.get(Uri.parse(api));
 
@@ -135,5 +139,24 @@ class MovieRepositoryIml implements MovieRepository {
 
     final List<dynamic> movieJsonList = jsonDecode(response.body);
     return movieJsonList.map((json) => Movie.fromJson(json)).toList();
+  }
+
+  @override
+  Future<Movie> fetchMovieDetail(String movieID, int projectionForm) async {
+    String api = '$serverUrl/api/Cinemas/MovieDetail';
+
+    final response = await http.post(Uri.parse(api),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({"id": movieID, "projectionForm": projectionForm}));
+
+    if (response.statusCode == 200) {
+      final dynamic movieJson = jsonDecode(response.body);
+      return Movie.fromJson(movieJson);
+    } else {
+      throw Exception(
+          'Failed to fetch movie detail, status code: ${response.statusCode}');
+    }
   }
 }

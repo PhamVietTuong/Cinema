@@ -5,7 +5,6 @@ import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/seat.dart';
 import 'package:cinema_app/data/models/seat_row.dart';
-import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/presenters/seat_presenter.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_screen.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';

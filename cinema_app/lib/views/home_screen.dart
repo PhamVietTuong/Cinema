@@ -8,12 +8,11 @@ import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
-    Key? key,
+    super.key,
   });
   @override
   State<HomePage> createState() => _HomePageState();
@@ -30,13 +29,10 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
     end: Alignment.bottomCenter,
     colors: [Color(0xFF802FF7), Color(0xFFB654C3)],
   );
-  List<Movie> lstMovie = List.filled(
-      0,
-      Movie(),
-      growable: true);
-  List<Movie> showingMovies=List.filled(0, Movie(), growable: true);
-  List<Movie> upcomingMovies=List.filled(0, Movie(), growable: true);
-  List<Movie> earlyMovies=List.filled(0, Movie(), growable: true);
+  List<Movie> lstMovie = List.filled(0, Movie(), growable: true);
+  List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
+  List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
+  List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
 
   @override
   void initState() {
@@ -48,25 +44,38 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   @override
   void onLoadMoviesComplete(List<Movie> movies) {
     setState(() {
-      lstMovie =movies;
-     // Đoạn code ban đầu
- showingMovies = movies.where((e) => e.releaseDate.day <= today.day && e.releaseDate.month == today.month || e.releaseDate.month < today.month).toList();
- upcomingMovies = movies.where((e) => e.releaseDate.day > today.day && e.releaseDate.month == today.month || e.releaseDate.month > today.month).toList();
-
-// Sửa lại và viết tiếp
- earlyMovies = movies.where((e) => e.releaseDate.isAfter(today) && e.releaseDate.difference(today).inDays < 7).toList();
+      lstMovie = movies;
+      showingMovies = movies
+          .where((e) =>
+              e.releaseDate.day <= today.day &&
+                  e.releaseDate.month == today.month ||
+              e.releaseDate.month < today.month)
+          .toList();
+      upcomingMovies = movies
+          .where((e) =>
+              e.releaseDate.day > today.day &&
+                  e.releaseDate.month == today.month ||
+              e.releaseDate.month > today.month)
+          .toList();
+      earlyMovies = movies
+          .where((e) =>
+              e.releaseDate.isAfter(today) &&
+              e.releaseDate.difference(today).inDays < 7)
+          .toList();
 
       isLoadingData = false;
-      print(" $lstMovie");
+      // print(" $lstMovie");
     });
   }
 
+  void onLoadMovieDetailComplete(Movie movies) {}
   @override
   void onLoadMoviesError() {
     setState(() {
       isLoadingData = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +122,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
             ),
             child: IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.search , ),
+              icon: const Icon(
+                Icons.search,
+              ),
               color: Colors.white,
             ),
           ),
@@ -236,56 +247,52 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   children: [
                     if (_selectedTabIndex == 0)
                       SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child:
-                             Row(
-                                children: 
-                                showingMovies.isNotEmpty?showingMovies.map((e) => InfoMovie(movie: e)).toList():[
-
-                            Text(
-                                "Danh sách phim đang được cập nhật",
-                                style: styles.titleTextStyle
-                                    .copyWith(color: Colors.white),
-                              ),
-                                ]
-                                ,
-                              )
-                      ),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: showingMovies.isNotEmpty
+                                ? showingMovies
+                                    .map((e) => InfoMovie(movie: e))
+                                    .toList()
+                                : [
+                                    Text(
+                                      "Danh sách phim đang được cập nhật",
+                                      style: styles.titleTextStyle
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                  ],
+                          )),
                     if (_selectedTabIndex == 1)
                       SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: 
-                         
-                               Row(
-                                  children: earlyMovies.isNotEmpty?earlyMovies
-                                      .map((e) => InfoMovie(movie: e)).toList():[
-
-                            Text(
-                                "Danh sách phim đang được cập nhật",
-                                style: styles.titleTextStyle
-                                    .copyWith(color: Colors.white),
-                              ),
-                                ]
-                                ,
-                              )
-                          
-                      ),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: earlyMovies.isNotEmpty
+                                ? earlyMovies
+                                    .map((e) => InfoMovie(movie: e))
+                                    .toList()
+                                : [
+                                    Text(
+                                      "Danh sách phim đang được cập nhật",
+                                      style: styles.titleTextStyle
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                  ],
+                          )),
                     if (_selectedTabIndex == 2)
                       SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child:  Row(
-                                  children: upcomingMovies.isNotEmpty?upcomingMovies
-                                      .map((e) => InfoMovie(movie: e)).toList():[
-
-                            Text(
-                                "Danh sách phim đang được cập nhật",
-                                style: styles.titleTextStyle
-                                    .copyWith(color: Colors.white),
-                              ),
-                                ]
-                                ,
-                              )
-                      ),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: upcomingMovies.isNotEmpty
+                                ? upcomingMovies
+                                    .map((e) => InfoMovie(movie: e))
+                                    .toList()
+                                : [
+                                    Text(
+                                      "Danh sách phim đang được cập nhật",
+                                      style: styles.titleTextStyle
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                  ],
+                          )),
                   ],
                 ),
               ),
@@ -303,18 +310,15 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                         scrollDirection: Axis.horizontal,
                         itemCount: lstMovie.length,
                         itemBuilder: (context, index) {
-                       return  
-                            SizedBox(
-                                  width: MediaQuery.of(context).size.width - 30,
-                                  height:
-                                      MediaQuery.of(context).size.height / 3,
-                                  child: WebView(
-                                    initialUrl:
-                                        'https://www.youtube.com/embed/${lstMovie[index].trailer}',
-                                    javascriptMode: JavascriptMode.unrestricted,
-                                  ),
-                                );
-                              
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width - 30,
+                            height: MediaQuery.of(context).size.height / 3,
+                            child: WebView(
+                              initialUrl:
+                                  'https://www.youtube.com/embed/${lstMovie[index].trailer}',
+                              javascriptMode: JavascriptMode.unrestricted,
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -390,14 +394,14 @@ class _SlideShowState extends State<SlideShow> {
             ),
           ),
         ),
-         Center(
+        Center(
           child: ClipRRect(
             child: Image.asset(
               'assets/img_demo/Banner.png',
             ),
           ),
         ),
-         Center(
+        Center(
           child: ClipRRect(
             child: Image.asset(
               'assets/img_demo/Banner.png',
@@ -423,55 +427,62 @@ class InfoMovie extends StatelessWidget {
   Widget build(BuildContext context) {
     var wImage = (MediaQuery.of(context).size.width - 30) / 2;
     return InkWell(
-     onTap: () {
+      onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MovieDetail(movie: movie,)),
+          MaterialPageRoute(
+              builder: (context) => MovieDetail(
+                    movieID: movie.id,
+                    projectionForm: movie.projectionForm,
+                  )),
         );
       },
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          width: wImage,
-          height: wImage / 0.57,
-          margin: const EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(
-            color: Colors.amber,
-            image: DecorationImage(
-              fit: BoxFit.fitHeight,
-              image: NetworkImage("$serverUrl/Images/${movie.img}"),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: wImage,
+            height: wImage / 0.57,
+            margin: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              image: DecorationImage(
+                fit: BoxFit.fitHeight,
+                image: NetworkImage("$serverUrl/Images/${movie.img}"),
+              ),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                movie.ageRestrictionName.isNotEmpty
+                    ? AgeRestrictionBox(
+                        title: movie.ageRestrictionName,
+                        fontSizeCus: 14,
+                      )
+                    : const SizedBox.shrink(),
+                movie.projectionForm == 0
+                    ? const ShowtimeTypeBox(
+                        title: '2D',
+                        fontSizeCus: 14,
+                      )
+                    : const ShowtimeTypeBox(
+                        title: '3D',
+                        fontSizeCus: 14,
+                      )
+              ],
             ),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              movie.ageRestrictionName.isNotEmpty
-                  ? AgeRestrictionBox(
-                      title: movie.ageRestrictionName,
-                      fontSizeCus: 14,
-                    )
-                  : const SizedBox.shrink(),
-              movie.showTimeTypeName.isEmpty
-                  ? const SizedBox.shrink()
-                  : ShowtimeTypeBox(
-                      title: movie.showTimeTypeName,
-                      fontSizeCus: 14,
-                    )
-            ],
+          const SizedBox(
+            height: 5,
           ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Text(
-          movie.name,
-          style: styles.titleTextStyle.copyWith(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-      ],
-    ),
+          Text(
+            movie.name,
+            style: styles.titleTextStyle.copyWith(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
     );
   }
 }

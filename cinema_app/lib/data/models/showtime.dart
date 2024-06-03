@@ -52,8 +52,6 @@ class ShowtimeRepositoryIml implements ShowtimeRepository {
     if (response.statusCode == 200) {
       final List<dynamic> jsons = jsonDecode(response.body);
 
-      final List<Showtime> showtimes =
-          List.filled(0, Showtime(), growable: true);
       final List<Movie> movies = List.filled(0, Movie(), growable: true);
       final Set<String> movieIds = {};
 
