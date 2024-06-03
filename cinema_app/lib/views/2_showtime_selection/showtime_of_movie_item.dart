@@ -11,10 +11,14 @@ import '../../components/movie_type_box.dart';
 
 class ShowTimeOfMovieItem extends StatelessWidget {
   const ShowTimeOfMovieItem(
-      {super.key, required this.movie, required this.booking});
+      {super.key,
+      required this.movie,
+      required this.booking,
+      required this.selectedDate});
 
   final Movie movie;
   final Booking booking;
+  final DateTime selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +68,11 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${movie.name} ${movie.showTimeTypeName} (${movie.ageRestrictionName})', style: TextStyle(
-                              color: Styles.boldTextColor["dark_purple"], fontSize: Styles.titleFontSize, fontWeight: FontWeight.bold
-                            ),
+                            '${movie.name} ${movie.showTimeTypeName} (${movie.ageRestrictionName})',
+                            style: TextStyle(
+                                color: Styles.boldTextColor["dark_purple"],
+                                fontSize: Styles.titleFontSize,
+                                fontWeight: FontWeight.bold),
                           ),
                           MovieTypeBox(
                             title: movie.movieType,
@@ -101,14 +107,23 @@ class ShowTimeOfMovieItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Standard", style: TextStyle(fontWeight:  FontWeight.bold, fontSize: Styles.titleFontSize, color: Styles.boldTextColor["dark_purple"]),
+                  "Standard",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Styles.titleFontSize,
+                      color: Styles.boldTextColor["dark_purple"]),
                 ),
                 Wrap(
                   spacing: 5,
                   runSpacing: 5,
-                  children: movie.schedules[0].showtimes
+                  children: movie.schedules
+                      .firstWhere((element) =>
+                          element.date.day == selectedDate.day &&
+                          element.date.month == selectedDate.month)
+                      .showtimes
                       .where((element) => element.showtimeType == 0)
                       .map((e) => ShowtimeItem(
+                            selectedDate: selectedDate,
                             showtimeRoom: e,
                             booking: booking,
                             movie: movie,
@@ -118,15 +133,22 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "Deluxe",style: TextStyle(fontWeight:  FontWeight.bold, fontSize: Styles.titleFontSize, color: Styles.boldTextColor["dark_purple"])
-                ),
+                Text("Deluxe",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Styles.titleFontSize,
+                        color: Styles.boldTextColor["dark_purple"])),
                 Wrap(
                   spacing: 5,
                   runSpacing: 5,
-                  children: movie.schedules[0].showtimes
+                  children: movie.schedules
+                      .firstWhere((element) =>
+                          element.date.day == selectedDate.day &&
+                          element.date.month == selectedDate.month)
+                      .showtimes
                       .where((element) => element.showtimeType == 1)
                       .map((e) => ShowtimeItem(
+                            selectedDate: selectedDate,
                             showtimeRoom: e,
                             booking: booking,
                             movie: movie,

@@ -7,5 +7,7 @@ namespace Cinema.Contracts
 		Task<List<MovieDetailViewModel>> GetMovieList();
 		Task<MovieDetailViewModel> GetMovieDetail(MovieDetailDTO movieDetailDTO);
 		Task<List<MovieDetailViewModel>> GetMovieTheaterId(Guid theaterId);
-    }
+		 Task<List<MovieDetailViewModel>> GetMoviesByName(string name);
+
+	}
 }

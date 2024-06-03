@@ -7,5 +7,7 @@ namespace Cinema.Contracts
     {
         Task<List<TheaterDTO>> GetAllTheater();
         Task<List<MovieDetailViewModel>> GetShowTimeByTheaterId(Guid theaterId);
+		Task<List<TheaterDTO>> GetTheatersByName(string name);
+
     }
 }

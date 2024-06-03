@@ -18,10 +18,15 @@ import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
 class SeatScreen extends StatefulWidget {
-  const SeatScreen({super.key, required this.booking, required this.showtime});
+  const SeatScreen(
+      {super.key,
+      required this.booking,
+      required this.showtime,
+      required this.selectedDate});
 
   final Booking booking;
   final ShowtimeRoom showtime;
+  final DateTime selectedDate;
 
   @override
   State<SeatScreen> createState() => _SeatScreenState();
@@ -177,7 +182,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
       hubConnection.onclose(({error}) => print("Connection Closed"));
 
       print("Starting connection...");
-      print('hubConnectionState: ${hubConnection.state}');
+
       await joinShowTime();
     } catch (e) {
       print("Connection error: $e");
@@ -185,9 +190,10 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
   Future<void> joinShowTime() async {
-    try {
-      await hubConnection.start();
+    await hubConnection.start();
+    print('hubConnectionState: ${hubConnection.state}');
 
+    try {
       hubConnection.invoke("JoinShowTime", args: [
         {
           "showTimeId": selectedShowtime.showTimeId,
@@ -259,6 +265,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   @override
   void onLoadSeatComplete(List<SeatRowData> seatLst) {
+    print(seatLst);
     setState(() {
       seatRows = seatLst;
 
@@ -320,69 +327,68 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
           ),
           titleSpacing: 0,
           leadingWidth: 45,
-          title: 
-            Container(
-              margin: EdgeInsets.only(right: marginHorizontalScreen),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        size: Styles.iconSizeInLineText,
-                        color: Styles.boldTextColor["dark_purple"],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 5),
-                        child: Text(
-                          "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
-                          style: TextStyle(
+          title: Container(
+            margin: EdgeInsets.only(right: marginHorizontalScreen),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      size: Styles.iconSizeInLineText,
+                      color: Styles.boldTextColor["dark_purple"],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 5),
+                      child: Text(
+                        "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
+                        style: TextStyle(
                             color: Styles.textColor["dark_purple"],
                             fontSize: Styles.textSize,
-                            fontWeight: FontWeight.bold
-
-                          ),
-                        ),
+                            fontWeight: FontWeight.bold),
                       ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.av_timer_rounded,
-                        size: Styles.iconSizeInLineText,
-                        color: Styles.boldTextColor["dark_purple"],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 5),
-                        child: Text(
-                          "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
-                          softWrap: true,
-                          style: TextStyle(
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.av_timer_rounded,
+                      size: Styles.iconSizeInLineText,
+                      color: Styles.boldTextColor["dark_purple"],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 5),
+                      child: Text(
+                        "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
+                        softWrap: true,
+                        style: TextStyle(
                             color: Styles.textColor["dark_purple"],
                             fontSize: Styles.textSize,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
+                            fontWeight: FontWeight.bold),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
         body: Center(
           child: Container(
-            decoration: BoxDecoration(
-              color: Styles.backgroundColor["dark_purple"]
-            ),
+            decoration:
+                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
-              Text("${widget.booking.movie.name} ${widget.booking.movie.showTimeTypeName} (${widget.booking.movie.ageRestrictionName})", style: TextStyle(fontSize: Styles.titleFontSize, color: Styles.boldTextColor["dark_purple"]),),
+              Text(
+                "${widget.booking.movie.name} ${widget.booking.movie.showTimeTypeName} (${widget.booking.movie.ageRestrictionName})",
+                style: TextStyle(
+                    fontSize: Styles.titleFontSize,
+                    color: Styles.boldTextColor["dark_purple"]),
+              ),
               //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
               Container(
                 padding:
@@ -406,7 +412,11 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,
-                      showtimes: widget.booking.movie.schedules[0].showtimes,
+                      showtimes: widget.booking.movie.schedules
+                          .firstWhere((element) =>
+                              element.date.day == widget.selectedDate.day &&
+                              element.date.month == widget.selectedDate.month)
+                          .showtimes,
                       selectShowtime: selectShowtime,
                     )
                   ],
@@ -423,8 +433,11 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                       child: Container(
                         width: wS - 20,
                         alignment: Alignment.center,
-                        child:  Text(
-                          "MÀN HÌNH", style: TextStyle(fontSize: Styles.titleFontSize, color: Styles.boldTextColor["dark_purple"]),
+                        child: Text(
+                          "MÀN HÌNH",
+                          style: TextStyle(
+                              fontSize: Styles.titleFontSize,
+                              color: Styles.boldTextColor["dark_purple"]),
                         ),
                       ),
                     )

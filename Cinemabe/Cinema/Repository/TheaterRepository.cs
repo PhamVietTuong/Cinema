@@ -84,6 +84,7 @@ namespace Cinema.Repository
                         Languages = item.movie.Languages,
                         MovieType = String.Join(", ", item.types.Select(type => type.MovieType.Name)),
                         ShowTimeTypeName = form == ProjectionForm.Time2D ? "2D" : "3D",
+                        ProjectionForm = (int)form,
                         Schedules = item.showTimes
                             .Where(sRoom => sRoom.ShowTime.ProjectionForm == (int)form)
                             .GroupBy(sRoom => sRoom.ShowTime.StartTime.Date)
@@ -119,6 +120,22 @@ namespace Cinema.Repository
 
             }
             return rows;
+        }
+
+        public async Task<List<TheaterDTO>> GetTheatersByName(string name)
+        {
+            var input = name.Trim().ToLower().RemoveDiacritics();
+            var theaters = await _context.Theater.Where(x => x.Status == true).Select(x => new TheaterDTO
+            {
+                Id = x.Id,
+                Address = x.Address,
+                Image = x.Image,
+                Name = x.Name,
+                Phone = x.Phone,
+                Status = x.Status
+            }).ToListAsync();
+            var filteredTheaters = theaters.Where(x => x.Name.ToLower().RemoveDiacritics().Contains(input)).ToList();
+            return filteredTheaters;
         }
     }
 }
