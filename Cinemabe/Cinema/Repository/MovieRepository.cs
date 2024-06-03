@@ -218,7 +218,7 @@ namespace Cinema.Repository
                         Actor = movie.Actor,
                         Trailer = movie.Trailer,
                         Languages = movie.Languages,
-                        MovieType = String.Join(", ", _context.MovieTypeDetail.Include(x => x.MovieType).Where(x=>x.MovieId==movie.Id).Select(x=>new {x.MovieType.Name}).ToList()),
+                        MovieType = String.Join(", ", _context.MovieTypeDetail.Include(x => x.MovieType).Where(x=>x.MovieId==movie.Id).Select(x=> x.MovieType.Name).ToList()),
                         ShowTimeTypeName = form == ProjectionForm.Time2D ? "2D" : "3D",
                         ProjectionForm=(int)form
                        
