@@ -8,12 +8,11 @@ import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
-    Key? key,
+    super.key,
   });
   @override
   State<HomePage> createState() => _HomePageState();
@@ -46,7 +45,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   void onLoadMoviesComplete(List<Movie> movies) {
     setState(() {
       lstMovie = movies;
-      // Đoạn code ban đầu
       showingMovies = movies
           .where((e) =>
               e.releaseDate.day <= today.day &&
@@ -59,8 +57,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   e.releaseDate.month == today.month ||
               e.releaseDate.month > today.month)
           .toList();
-
-// Sửa lại và viết tiếp
       earlyMovies = movies
           .where((e) =>
               e.releaseDate.isAfter(today) &&
@@ -68,16 +64,19 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
           .toList();
 
       isLoadingData = false;
-      print(" $lstMovie");
+      // print(" $lstMovie");
     });
   }
 
+  @override
+  void onLoadMovieDetailComplete(Movie movies) {}
   @override
   void onLoadMoviesError() {
     setState(() {
       isLoadingData = false;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +127,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               icon: const Icon(
                 Icons.search,
               ),
+            
               color: Colors.white,
             ),
           ),
@@ -257,10 +257,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                     .map((e) => InfoMovie(movie: e))
                                     .toList()
                                 : [
-                                    Text(
+                                    const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style:TextStyle
-                                          (color: Colors.white),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -273,9 +272,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                     .map((e) => InfoMovie(movie: e))
                                     .toList()
                                 : [
-                                    Text(
+                                    const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style:TextStyle
+                                      style: TextStyle
                                           (color: Colors.white),
                                     ),
                                   ],
@@ -289,10 +288,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                     .map((e) => InfoMovie(movie: e))
                                     .toList()
                                 : [
-                                    Text(
+                                    const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: TextStyle
-                                          (color: Colors.white),
+                                      style:TextStyle(color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -304,7 +302,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Video",
+                    const Text("Video",
                         style: TextStyle
                             (color: Colors.white)),
                     SizedBox(
@@ -435,7 +433,8 @@ class InfoMovie extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => MovieDetail(
-                    movie: movie,
+                    movieID: movie.id,
+                    projectionForm: movie.projectionForm,
                   )),
         );
       },
@@ -463,10 +462,12 @@ class InfoMovie extends StatelessWidget {
                         fontSizeCus: 14,
                       )
                     : const SizedBox.shrink(),
-                movie.showTimeTypeName.isEmpty
-                    ? const SizedBox.shrink()
-                    : ShowtimeTypeBox(
-                        title: movie.showTimeTypeName,
+                movie.projectionForm == 0
+                    ? const ShowtimeTypeBox(
+                        title: '2D',
+                      )
+                    : const ShowtimeTypeBox(
+                        title: '3D',
                       )
               ],
             ),

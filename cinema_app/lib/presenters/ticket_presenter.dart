@@ -12,6 +12,7 @@ abstract class TicketViewContract {
 }
 
 class TicketPresenter {
+  // ignore: unused_field
   final TicketViewContract _view;
   late TicketRepository repository;
 

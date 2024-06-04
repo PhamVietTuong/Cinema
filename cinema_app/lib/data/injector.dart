@@ -20,6 +20,7 @@ class Injector {
   static TicketRepository ticketRepoIml = TicketRepositoryIml();
   static SeatRepository seatRepoIml = SeatRepositoryIml();
 
+
   TheaterRepository getTheaterRepository() => theaterRepoIml;
   MovieRepository getMovieRepository() => movieRepoIml;
   ShowtimeRepository getShowtimeRepository() => showtimeRepoIml;

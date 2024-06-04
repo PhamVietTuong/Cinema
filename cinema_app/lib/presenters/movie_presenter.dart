@@ -3,6 +3,7 @@ import 'package:cinema_app/data/models/movie.dart';
 
 abstract class MovieViewContract {
   void onLoadMoviesComplete(List<Movie> movies);
+  void onLoadMovieDetailComplete(Movie movies);
   void onLoadMoviesError();
 }
 
@@ -19,7 +20,16 @@ class MoviePresenter {
       List<Movie> movies = await _repository.fetchMovies();
       _view.onLoadMoviesComplete(movies);
     } catch (error) {
-      print('Error fetching movies: $error');
+     // print('Error fetching movies: $error');
+      _view.onLoadMoviesError();
+    }
+  }
+   Future<void> fetchMovieDetail( String movieID, int projectionForm) async {
+    try {
+      Movie movies = await _repository.fetchMovieDetail(  movieID,  projectionForm);
+      _view.onLoadMovieDetailComplete(movies);
+    } catch (error) {
+    // print('Error fetching moviesdetail: $error');
       _view.onLoadMoviesError();
     }
   }

@@ -31,7 +31,7 @@ namespace Cinema.DTOs
 		public List<ShowTimeRowViewModel> Showtimes { get; set; }
 
 	}
-
+	
 	public class TheaterRowViewModel
 	{
         public Guid TheaterId { get; set; }
@@ -50,4 +50,5 @@ namespace Cinema.DTOs
 		public DateTime EndTime { get; set; }
 		
 	}
+
 }

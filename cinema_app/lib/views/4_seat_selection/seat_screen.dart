@@ -4,7 +4,6 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/seat.dart';
 import 'package:cinema_app/data/models/seat_row.dart';
-import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/presenters/seat_presenter.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_screen.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
@@ -16,6 +15,8 @@ import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_row.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
+
+import '../../data/models/showtime.dart';
 
 class SeatScreen extends StatefulWidget {
   const SeatScreen(
