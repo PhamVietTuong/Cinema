@@ -17,16 +17,11 @@ namespace Cinema.Data
             _mapper = mapper;
 		}
 
-		public ITicketRepository TicketRepository => new TicketRepository(_context, _mapper);
         public IUserRepository UserRepository => new UserRepository(_context);
 		public IMovieRepository MovieRepository => new MovieRepository(_context);
 		public IFoodAndDrinkRepository FoodAndDrinkRepository => new FoodAndDrinkRepository(_context);
 		public ITicketTypeRepository TicketTypeRepository => new TicketTypeRepository(_context);
 		public ISeatRepository SeatRepository => new SeatRepository(_context);
 		public ITheaterRepository TheaterRepository => new TheaterRepository(_context);
-        public async Task<bool> SaveChangeAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
     }
 }

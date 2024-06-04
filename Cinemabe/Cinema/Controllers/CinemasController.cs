@@ -68,28 +68,10 @@ namespace Cinema.Controllers
             }
         }
 
-		#endregion
+        #endregion
 
-		#region Ticket
-
-		[HttpPost("Ticket")]
-		public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
-		{
-            try
-            {
-                var result = await _uow.TicketRepository.CreateAysn(vm);
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e);
-            }
-        }
-
-		#endregion
-
-		#region Seat
-		[HttpPost("SeatByShowTimeAndRoomId")]
+        #region Seat
+        [HttpPost("SeatByShowTimeAndRoomId")]
 		public async Task<ActionResult<List<SeatViewModel>>> SeatByShowTimeAndRoomId(SeatByShowTimeAndRoomDTO vm)
 		{
             try

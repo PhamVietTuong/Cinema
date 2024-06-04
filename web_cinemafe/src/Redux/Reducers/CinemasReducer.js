@@ -21,14 +21,14 @@ const stateDefault = {
     seatTypeMapping: {},
     totalSeatType: {},
     checkBooking: false,
-    seatYourName: ''
+    seatYourName: '',
 }
 
 const createSeatTypeMapping = (seatData) => {
     let mapping = {};
     seatData.rowName.forEach(row => {
         row.rowSeats.forEach(seat => {
-            if (seat.seatTypeId) {
+            if (seat.seatTypeId && seat.isSeat !== false) {
                 mapping[seat.id] = seat.seatTypeId;
             }
         });
@@ -136,7 +136,8 @@ export const CinemasReducer = (state = stateDefault, action) => {
             }
 
             const updateCheckBooking = checkIfSeatsAreEnough(updatedSeatYour, seatTypeMapping, totalSeatType);
-            return { ...state, seatYour: updatedSeatYour, checkBooking: updateCheckBooking };
+
+            return { ...state, seatYour: updatedSeatYour, checkBooking: updateCheckBooking};
         }
 
         case SEAT_HAS_BEEN_CHOSEN: {
