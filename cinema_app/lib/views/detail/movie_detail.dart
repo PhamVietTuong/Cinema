@@ -184,7 +184,7 @@ void onLoadMovieDetailComplete(Movie movie) {
                                   children: [
                                     Text(
                                       _movieDetail.name,
-                                      style: styles.titleTextStyle.copyWith(
+                                      style:const TextStyle(
                                           color: Colors.white, fontSize: 18),
                                     ),
                                     Row(
@@ -205,7 +205,6 @@ void onLoadMovieDetailComplete(Movie movie) {
                                     const SizedBox(height: 5),
                                     _movieDetail.movieType.isNotEmpty
                                         ? MovieTypeBox(
-                                            fontSizeCus: 14,
                                             padding: 5,
                                             title: _movieDetail.movieType,
                                           )
@@ -218,11 +217,9 @@ void onLoadMovieDetailComplete(Movie movie) {
                                         _movieDetail.projectionForm == 0
                                             ? const ShowtimeTypeBox(
                                                 title: '2D',
-                                                fontSizeCus: 14,
                                               )
                                             : const ShowtimeTypeBox(
                                                 title: '3D',
-                                                fontSizeCus: 14,
                                               ),
                                         _movieDetail
                                                 .ageRestrictionName.isNotEmpty

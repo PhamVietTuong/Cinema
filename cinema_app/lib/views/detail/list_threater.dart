@@ -5,6 +5,8 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_item.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/models/showtime.dart';
+
 class ListThreater extends StatefulWidget {
   final Theater data;
 

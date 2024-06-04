@@ -16,6 +16,8 @@ import 'package:cinema_app/views/4_seat_selection/seat_row.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
+import '../../data/models/showtime.dart';
+
 class SeatScreen extends StatefulWidget {
   const SeatScreen(
       {super.key,

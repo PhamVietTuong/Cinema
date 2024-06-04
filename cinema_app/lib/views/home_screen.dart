@@ -33,10 +33,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
-  List<Movie> lstMovie = List.filled(0, Movie(), growable: true);
-  List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
-  List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
-  List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
 
   @override
   void initState() {
@@ -131,9 +127,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               icon: const Icon(
                 Icons.search,
               ),
-              icon: const Icon(
-                Icons.search,
-              ),
+            
               color: Colors.white,
             ),
           ),
@@ -263,10 +257,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                     .map((e) => InfoMovie(movie: e))
                                     .toList()
                                 : [
-                                    Text(
+                                    const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: styles.titleTextStyle
-                                          .copyWith(color: Colors.white),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -279,10 +272,10 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                     .map((e) => InfoMovie(movie: e))
                                     .toList()
                                 : [
-                                    Text(
+                                    const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: styles.titleTextStyle
-                                          .copyWith(color: Colors.white),
+                                      style: TextStyle
+                                          (color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -295,10 +288,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                     .map((e) => InfoMovie(movie: e))
                                     .toList()
                                 : [
-                                    Text(
+                                    const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: styles.titleTextStyle
-                                          .copyWith(color: Colors.white),
+                                      style:TextStyle(color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -310,7 +302,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Video",
+                    const Text("Video",
                         style: TextStyle
                             (color: Colors.white)),
                     SizedBox(
@@ -319,15 +311,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                         scrollDirection: Axis.horizontal,
                         itemCount: lstMovie.length,
                         itemBuilder: (context, index) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width - 30,
-                            height: MediaQuery.of(context).size.height / 3,
-                            child: WebView(
-                              initialUrl:
-                                  'https://www.youtube.com/embed/${lstMovie[index].trailer}',
-                              javascriptMode: JavascriptMode.unrestricted,
-                            ),
-                          );
                           return SizedBox(
                             width: MediaQuery.of(context).size.width - 30,
                             height: MediaQuery.of(context).size.height / 3,
@@ -413,14 +396,12 @@ class _SlideShowState extends State<SlideShow> {
           ),
         ),
         Center(
-        Center(
           child: ClipRRect(
             child: Image.asset(
               'assets/img_demo/Banner.png',
             ),
           ),
         ),
-        Center(
         Center(
           child: ClipRRect(
             child: Image.asset(
@@ -447,7 +428,6 @@ class InfoMovie extends StatelessWidget {
   Widget build(BuildContext context) {
     var wImage = (MediaQuery.of(context).size.width - 30) / 2;
     return InkWell(
-      onTap: () {
       onTap: () {
         Navigator.push(
           context,
@@ -485,11 +465,9 @@ class InfoMovie extends StatelessWidget {
                 movie.projectionForm == 0
                     ? const ShowtimeTypeBox(
                         title: '2D',
-                        fontSizeCus: 14,
                       )
                     : const ShowtimeTypeBox(
                         title: '3D',
-                        fontSizeCus: 14,
                       )
               ],
             ),
@@ -499,7 +477,7 @@ class InfoMovie extends StatelessWidget {
           ),
           Text(
             movie.name,
-            style: styles.titleTextStyle.copyWith(
+            style:TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ],
