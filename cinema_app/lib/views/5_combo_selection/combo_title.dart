@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_item.dart';
 import 'package:flutter/material.dart';
 
@@ -31,17 +31,16 @@ class _ComboTitleState extends State<ComboTitle> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: styles.primaryColor),
+                  color: Styles.primaryColor),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Combo 2 ngăn",
-                    style: styles.titleTextStyle.copyWith(color: Colors.white),
                   ),
                   Icon(isShow
                       ? Icons.keyboard_arrow_down
-                      : Icons.keyboard_arrow_up, color: Colors.white,size:styles.iconSizeInTitle,)
+                      : Icons.keyboard_arrow_up)
                 ],
               ),
             ),

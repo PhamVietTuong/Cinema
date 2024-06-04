@@ -1,4 +1,4 @@
-import 'package:cinema_app/constants.dart';
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/btn_up_down.dart';
 import 'package:cinema_app/data/models/ticket_option.dart';
 import 'package:flutter/material.dart';
@@ -24,58 +24,74 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Container(
-      padding: const EdgeInsets.only(bottom: 10),
       margin: const EdgeInsets.only(bottom: 10),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(width: 1)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  widget.option.getName(),
-                  style: styles.normalTextStyle,
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Row(
-                children: [
-                  Container(
-                      margin: const EdgeInsets.only(right: 15),
-                      child: Text(
-                        formatter.format(widget.option.price),
-                        style: styles.normalTextStyle
-                            .copyWith(fontWeight: FontWeight.bold),
-                      )),
-                  BtnUpDown(
-                      colorText: styles.primaryColor,
-                      opt: widget.option,
-                      upDown: updown),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Text(
-                        widget.option.quantity.toString().padLeft(2, '0'),
-                        style: styles.titleTextStyle
-                            .copyWith(color: styles.primaryColor),
-                      )),
-                  BtnUpDown(
-                    isUp: true,
-                    colorText: styles.primaryColor,
-                    opt: widget.option,
-                    upDown: updown,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3.0),
+          gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Styles.gradientTop["dark_purple"]!,
+                Styles.gradientBot["dark_purple"]!
+              ])),
+      child: Container(
+       padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(bottom: 3),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(3.0),
+            color: Styles.backgroundContent["dark_purple"]),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.option.getName(),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Styles.textSize,
+                        color: Styles.boldTextColor["dark_purple"]),
                   ),
-                ],
-              )
-            ],
-          ),
-        ],
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Row(
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(right: 15),
+                        child: Text(
+                          formatter.format(widget.option.price),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Styles.boldTextColor["dark_purple"]),
+                        )),
+                    BtnUpDown(
+                        colorText: Styles.btnColor["dark_purple"],
+                        opt: widget.option,
+                        upDown: updown),
+                    Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          widget.option.quantity.toString().padLeft(2, '0'),
+                          style: TextStyle(
+                              color: Styles.boldTextColor["dark_purple"],
+                              fontWeight: FontWeight.bold),
+                        )),
+                    BtnUpDown(
+                      isUp: true,
+                      colorText: Styles.btnColor["dark_purple"],
+                      opt: widget.option,
+                      upDown: updown,
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

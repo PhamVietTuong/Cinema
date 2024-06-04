@@ -11,7 +11,7 @@ import 'moment/locale/vi';
 import { useDispatch, useSelector } from "react-redux";
 import { ComboAction, SeatAction, SeatBeingSelected, TicketBooking, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
 import { TicketBookingSuccess } from '../../../Models/TicketBookingSuccess';
-import { CHECK_FOR_EMPTY_SEAT, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, SEAT_BEING_SELECTED, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, SEAT_BEING_SELECTED, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
 import { connection } from '../../../connectionSignalR';
 import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
 import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
@@ -41,58 +41,21 @@ const Theater = (props) => {
     const [countdown, setCountdown] = useState(300);
     const [timerRunning, setTimerRunning] = useState(false);
     const [selectedRoomId, setselectedRoomId] = useState(null);
-    const [countTicketTypes, setCountTicketTypes] = useState(ticketType.map(() => 0) || 0);
-    const [countCombos, setCountCombos] = useState(ticketType.map(() => 0) || 0);
-    
-    const incrementTicketType = (index) => {
-        setCountTicketTypes(prevCounts => {
-            const newCounts = [...prevCounts];
-
-            if (newCounts[index] === 8) {
-                Swal.fire({
-                    title: `Vui lòng chọn tối đa <span class="c-second">8</span> ghế`,
-                    padding: "24px",
-                    width: "400px",
-                    customClass: {
-                        confirmButton: 'custom-ok-button'
-                    }
-                });
-
-                return newCounts
+    const [countTicketTypes, setCountTicketTypes] = useState(
+        ticketType.reduce((acc, ticket) => { 
+            if (!acc[ticket.ticketTypeId]) {
+                acc[ticket.seatTypeId] = {};
             }
-
-            newCounts[index] = (newCounts[index] || 0) + 1;
-
-            return newCounts;
-        });
-    };
-
-    const decrementTicketType = (index) => {
-        setCountCombos(prevCounts => {
-            const newCounts = [...prevCounts];
-            newCounts[index] = (newCounts[index] > 0) ? newCounts[index] - 1 : 0;
-            return newCounts;
-        });
-    };
-
-    const incrementCombo = (index) => {
-        setCountCombos(prevCounts => {
-            const newCounts = [...prevCounts];
-
-            newCounts[index] = (newCounts[index] || 0) + 1;
-
-            return newCounts;
-        });
-    };
-
-    const decrementCombo = (index) => {
-        setCountTicketTypes(prevCounts => {
-            const newCounts = [...prevCounts];
-            newCounts[index] = (newCounts[index] > 0) ? newCounts[index] - 1 : 0;
-            return newCounts;
-        });
-    };
-
+            acc[ticket.seatTypeId][ticket.ticketTypeId] = 0;
+        return acc;
+    }, {}));
+    const [countCombos, setCountCombos] = useState(
+        combo.reduce((acc, combo) => {
+            acc[combo.id] = 0;
+            return acc;
+        }, {}));
+    const [selectedShowTimeColorActiveId, setSelectedShowTimeColorActiveId] = useState({ showTimeId: null, roomId: null });
+    const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
         if (timerRunning && countdown > 0) {
@@ -102,18 +65,63 @@ const Theater = (props) => {
 
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
+            Swal.fire({
+                text: "ĐÃ HẾT THỜI GIAN GIỮ VÉ",
+                padding: "24px",
+                width: "400px",
+                customClass: {
+                    confirmButton: 'custom-ok-button'
+                }
+            });
             window.location.reload();
-
         }
     }, [timerRunning, countdown]);
 
     const minutes = Math.floor(countdown / 60);
     const seconds = countdown % 60;
 
+    useEffect(() => {
+        let totalSeatType = Object.entries(countTicketTypes).map(([key, value]) => [key, Object.values(value).reduce((acc, curr) => acc + curr, 0)])
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {})
+        console.log(totalSeatType);
+
+        dispatch({
+            type: TOTAL_CHOOSES_SEAT_TYPE,
+            totalSeatType
+        });
+    }, [countTicketTypes]);
+    
+    useEffect(() => {
+        let newTotalPrice = 0;
+
+        Object.entries(countTicketTypes).forEach(([seatTypeId, ticketCounts]) => {
+            Object.entries(ticketCounts).forEach(([ticketTypeId, count]) => {
+                const ticket = ticketType.find(t => t.ticketTypeId === ticketTypeId && t.seatTypeId === seatTypeId);
+                if (ticket) {
+                    newTotalPrice += count * ticket.price;
+                }
+            });
+        });
+
+        Object.entries(countCombos).forEach(([comboId, count]) => {
+            const comboHasValue = combo.find(c => c.id === comboId);
+            if (comboHasValue) {
+                newTotalPrice += count * comboHasValue.price;
+            }
+        });
+
+        setTotalPrice(newTotalPrice);
+    }, [countTicketTypes, countCombos]);
+
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('vi-VN').format(value) + ' VNĐ';
+    };
+
     const handleSeatSelect = (seatId, showTimeId, roomId) => {
         setTimerRunning(false);
         setCountdown(300);
         setTimerRunning(true);
+
         dispatch(SeatBeingSelected(seatId, showTimeId, roomId));
     }
 
@@ -121,8 +129,7 @@ const Theater = (props) => {
         if (connection) {
             await connection.stop();
             await dispatch({
-                type: SEAT_BEING_SELECTED,
-                here: false
+                type: CLEAN,
             });
         }
 
@@ -177,6 +184,59 @@ const Theater = (props) => {
         setSelectedShowTimeId(showTimeId)
         setselectedRoomId(roomId)
     }
+
+    const incrementTicketType = (ticketTypeId, seatTypeId) => {
+        setCountTicketTypes(prevCounts => {
+            const totalTickets = Object.values(prevCounts).reduce(
+                (acc, ticketCounts) => acc + Object.values(ticketCounts).reduce((a, c) => a + c, 0),
+                0
+            );
+            if (totalTickets === 8) {
+                Swal.fire({
+                    title: `Vui lòng chọn tối đa <span class="c-second">8</span> ghế`,
+                    padding: "24px",
+                    width: "400px",
+                    customClass: {
+                        confirmButton: 'custom-ok-button'
+                    }
+                });
+
+                return prevCounts
+            }
+
+            return {
+                ...prevCounts,
+                [seatTypeId]: {
+                    ...prevCounts[seatTypeId],
+                    [ticketTypeId]: (prevCounts[seatTypeId]?.[ticketTypeId] || 0) + 1
+                }
+            };
+        });
+    };
+
+    const decrementTicketType = (ticketTypeId, seatTypeId) => {
+        setCountTicketTypes(prevCounts => ({
+            ...prevCounts,
+            [seatTypeId]: {
+                ...prevCounts[seatTypeId],
+                [ticketTypeId]: prevCounts[seatTypeId]?.[ticketTypeId] > 0 ? prevCounts[seatTypeId][ticketTypeId] - 1 : 0
+            }
+        }));
+    };
+
+    const incrementCombo = (id) => {
+        setCountCombos(prevCounts => ({
+                ...prevCounts,
+            [id]: (prevCounts[id] || 0) + 1
+        }));
+    };
+
+    const decrementCombo = (id) => {
+        setCountCombos(prevCounts => ({
+            ...prevCounts,
+            [id]: prevCounts[id] > 0 ? prevCounts[id] - 1 : 0
+        }));
+    };
 
     const renderSeats = (seatItem) => {
         return seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => {
@@ -273,10 +333,13 @@ const Theater = (props) => {
                                                                                 <ul className="list-time">
                                                                                     {
                                                                                         theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map((timeItem, timeIndex) => (
-                                                                                            <li key={timeIndex} className="item-time"
+                                                                                            <li key={timeIndex} 
+                                                                                                className={`item-time ${selectedShowTimeColorActiveId.showTimeId === timeItem.showTimeId && selectedShowTimeColorActiveId.roomId === timeItem.roomId ? 'active' : ''}`}
+
                                                                                                 onClick={() => {
                                                                                                     showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
                                                                                                     setSelectedTheaterName(theaterItem.theaterName);
+                                                                                                    setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
                                                                                                 }}>
                                                                                                 {moment(timeItem.startTime).format("HH:mm")}
                                                                                             </li>
@@ -353,11 +416,13 @@ const Theater = (props) => {
                                                                         </div>
                                                                         <div className="content-bottom">
                                                                             <div className="count">
-                                                                                <div className="count-btn count-minus" onClick={() => decrementTicketType(ticketIndex)}>
+                                                                                <div className="count-btn count-minus" onClick={() => decrementTicketType(ticketItem.ticketTypeId, ticketItem.seatTypeId)}>
                                                                                     <FontAwesomeIcon icon={faMinus} />
                                                                                 </div>
-                                                                                <p className="count-number">{countTicketTypes[ticketIndex] || 0}</p>
-                                                                                <div className="count-btn count-plus" onClick={() => incrementTicketType(ticketIndex)}>
+                                                                                <p className="count-number">
+                                                                                    {countTicketTypes[ticketItem.seatTypeId]?.[ticketItem.ticketTypeId] || 0}
+                                                                                </p>
+                                                                                <div className="count-btn count-plus" onClick={() => incrementTicketType(ticketItem.ticketTypeId, ticketItem.seatTypeId)}>
                                                                                     <FontAwesomeIcon icon={faPlus} />
                                                                                 </div>
                                                                             </div>
@@ -417,7 +482,7 @@ const Theater = (props) => {
                                             <li className="note-it">
                                                 <div className="image">
                                                     {" "}
-                                                    <img src="	https://cinestar.com.vn/assets/images/seat-single.svg" alt="" />
+                                                    <img src="https://cinestar.com.vn/assets/images/seat-single.svg" alt="" />
                                                 </div>
                                                 <span className="txt">Ghế Thường</span>
                                             </li>
@@ -494,11 +559,11 @@ const Theater = (props) => {
                                                                     </div>
                                                                     <div className="content-bottom">
                                                                         <div className="count">
-                                                                            <div className="count-btn count-minus" onClick={() => decrementCombo(comboIndex)}>
+                                                                            <div className="count-btn count-minus" onClick={() => decrementCombo(comboItem.id)}>
                                                                                 <FontAwesomeIcon icon={faMinus} />
                                                                             </div>
-                                                                            <p className="count-number">{countCombos[comboIndex] || 0}</p>
-                                                                            <div className="count-btn count-plus" onClick={() => incrementCombo(comboIndex)}>
+                                                                            <p className="count-number">{countCombos[comboItem.id] || 0}</p>
+                                                                            <div className="count-btn count-plus" onClick={() => incrementCombo(comboItem.id)}>
                                                                                 <FontAwesomeIcon icon={faPlus} />
                                                                             </div>
                                                                         </div>
@@ -552,16 +617,21 @@ const Theater = (props) => {
                                     <div className="bill-right">
                                         <div className="price">
                                             <span className="txt">Tạm tính </span>
-                                            <span className="num">90,000 đ</span>
+                                            <span className="num"> {formatCurrency(totalPrice)}</span>
                                         </div>
-                                        <button className="btn btn-warning opacity-100"
+                                        <button className={`btn btn-warning opacity-100 ticketBooking ${seatYour.length === 0 ? 'enableButton': ''}`}
+
                                             onClick={() => {
-                                                const ticketBookingSuccess = new TicketBookingSuccess();
-                                                ticketBookingSuccess.showTimeId = selectedShowTimeId
-                                                ticketBookingSuccess.seatIds = seatYour
-                                                ticketBookingSuccess.roomId = selectedRoomId
-                                                dispatch(TicketBooking(ticketBookingSuccess))
+                                                if (seatYour.length > 0) {
+                                                    const ticketBookingSuccess = new TicketBookingSuccess();
+                                                    ticketBookingSuccess.showTimeId = selectedShowTimeId
+                                                    ticketBookingSuccess.seatIds = seatYour
+                                                    ticketBookingSuccess.roomId = selectedRoomId
+                                                    dispatch(TicketBooking(ticketBookingSuccess))
+                                                }
                                             }}
+                                            disabled={seatYour.length === 0}
+
                                         >ĐẶT VÉ</button>
                                     </div>
                                 </div>

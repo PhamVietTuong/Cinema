@@ -328,3 +328,56 @@
 .custom-ok-button {
     width: 350.4px;
 }
+
+.shtime-ft .cinestar-item .item-time.active {
+    border: .5px solid #f3ea28;
+    color: #f3ea28;
+    pointer-events: none;
+}
+.ticketBooking {
+    position: relative;
+    overflow: hidden;
+}
+
+.bill-right .btn-warning {
+    background: #f3ea28;
+    color: #0f172a !important;
+    font-family: Anton,
+        sans-serif;
+        font-size: 16px;
+        z-index: 1;
+}
+
+
+
+.bill-right .btn-warning::before {
+    background: #f3ea28;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: width 0.4s ease-in-out;
+}
+
+
+
+.bill-right .btn-warning::after,
+.bill-right .btn-warning::before {
+    content: "";
+    height: 100%;
+    position: absolute;
+    transition: all .4s ease-in-out;
+}
+
+@media (max-width: 1024px) {
+    .bill-right .btn {
+        font-size: 12px;
+    }
+}
+
+.bill-right .enableButton {
+    pointer-events: none !important;
+    opacity: .4 !important;
+}

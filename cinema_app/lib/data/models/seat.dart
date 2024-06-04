@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:cinema_app/data/models/seat_row.dart';
 import 'package:http/http.dart' as http;
-import '../../constants.dart';
+import '../../config.dart';
 
 class Seat {
   String id;

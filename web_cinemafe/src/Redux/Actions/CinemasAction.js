@@ -83,8 +83,7 @@ export const SeatBeingSelected = (seatId, showTimeId, roomId) => {
         try {
             await dispatch({
                 type: SEAT_BEING_SELECTED,
-                seatId,
-                here: true
+                seatId
             });
 
             const { seatYour } = getState().CinemasReducer;

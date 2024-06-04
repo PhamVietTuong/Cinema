@@ -66,24 +66,26 @@ const Detail = () => {
                                                     <ul className='info-detail'>
                                                         <li className='info-item'>
                                                             <span class="ic">
-                                                                <img src="https://cinestar.com.vn/assets/images/icon-tag.svg" alt="" />
+                                                                <img src="/Images/movieType.svg" alt="Movie Type Icon" width="100" height="100"/>
                                                             </span>
                                                             <span class="txt">{movieDetail?.movieType}</span>
                                                         </li>
                                                         <li className='info-item'>
                                                             <span class="ic">
-                                                                <img src="https://cinestar.com.vn/assets/images/icon-clock.svg" alt="" />
+                                                                <img src="/Images/icon-clock.svg" alt="Clock icon" />
                                                             </span>
                                                             <span class="txt">{movieDetail?.time}'</span>
                                                         </li>
                                                         <li className='info-item'>
                                                             <span class="ic">
-                                                                <i class="fa-regular fa-earth-americas fa-lg " style={{ color: "#ede12d", fontSize: "2.1rem" }}></i>
+                                                                <img src="/Images/earth-americas.svg" alt="Earth americas Icon" width="100" height="100"/>
                                                             </span>
                                                             <span class="txt">Khác</span>
                                                         </li>
                                                         <li className='info-item'>
-                                                            <span class="ic"><i class="fa-regular fa-user-check" style={{ color: "#ede12d" }}></i></span>
+                                                            <span class="ic">
+                                                                <img src="/Images/user-check.svg" alt="User check Icon" width="100" height="100" />
+                                                            </span>
                                                             <span class="txt">{movieDetail?.ageRestrictionName}: {movieDetail?.ageRestrictionDescription}</span>
                                                         </li>
                                                     </ul>

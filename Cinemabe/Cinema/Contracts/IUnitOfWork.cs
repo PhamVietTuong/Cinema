@@ -9,6 +9,7 @@
 		ITicketTypeRepository TicketTypeRepository { get; }
 		ISeatRepository SeatRepository { get; }
 		ITheaterRepository TheaterRepository { get; }
+
         Task<bool> SaveChangeAsync();
 	}
 }
