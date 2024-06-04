@@ -21,6 +21,36 @@ namespace Cinema.Controllers
             _uow = uow;
         }
 
+  #region Search theater, movie
+        [HttpGet("SearchByName{name}")]
+        public async Task<ActionResult> Search(string name)
+        {
+
+            try
+            {
+                var theaterResults = await _uow.TheaterRepository.GetTheatersByName(name);
+                if (theaterResults != null && theaterResults.Any())
+                {
+                    return Ok(theaterResults);
+                }
+
+                var movieResults = await _uow.MovieRepository.GetMoviesByName(name);
+                if (movieResults != null && movieResults.Any())
+                {
+                    return Ok(movieResults);
+                }
+
+
+
+                return NotFound(new { Message = "Không tìm thấy phim hoặc rạp chiếu phim nào." });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = e.Message });
+            }
+        }
+        #endregion
+
         #region Movie
 
         [HttpGet("GetMovieList")]
