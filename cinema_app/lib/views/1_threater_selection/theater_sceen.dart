@@ -29,39 +29,44 @@ class _TheaterScreenState extends State<TheaterScreen>
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "MUA VÉ",
-          style: styles.appBarTextStyle,
+          style: TextStyle(color: Styles.boldTextColor["dark_purple"], fontSize: Styles.appbarFontSize),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Styles.backgroundContent["dark_purple"],
         elevation: 1,
       ),
-      body: Center(
-          child: isLoadingData
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: Styles.backgroundColor["dark_purple"]
+        ),
+        child: Center(
+            child: isLoadingData
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Đang tải...",
+                        style: TextStyle(fontSize: Styles.titleFontSize, fontWeight:  FontWeight.bold),
+                      )
+                    ],
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: theaterItemLst,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Đang tải...",
-                      style: styles.titleTextStyle,
-                    )
-                  ],
-                )
-              : SingleChildScrollView(
-                  child: Column(
-                    children: theaterItemLst,
-                  ),
-                )),
+                  )),
+      ),
     );
   }
 

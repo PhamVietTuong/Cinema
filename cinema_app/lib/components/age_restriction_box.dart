@@ -13,7 +13,6 @@ class AgeRestrictionBox extends StatelessWidget {
   final double padding;
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Container(
       margin: EdgeInsets.only(left: marginLeft),
       padding:  EdgeInsets.all(padding),
@@ -23,10 +22,8 @@ class AgeRestrictionBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(3.0),
       ),
       child: Text(
-        title,
-        style: fontSizeCus != 0.0
-            ? styles.titleTextStyle.copyWith(fontSize: fontSizeCus)
-            : styles.titleTextStyle,
+        title, style: const TextStyle(fontSize: Styles.textSize, fontWeight: FontWeight.bold),
+       
       ),
     );
   }

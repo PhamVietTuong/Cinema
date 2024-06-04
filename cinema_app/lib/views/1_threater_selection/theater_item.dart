@@ -18,28 +18,28 @@ class TheaterItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
-    var styles = Styles();
     const borderRadius = 2.0;
     return GestureDetector(
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ShowTimeSceen(booking: Booking(theater: data)),
+              builder: (context) =>
+                  ShowTimeSceen(booking: Booking(theater: data)),
             ));
       },
       child: Container(
-        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
+        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10, top:8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
-            color: Colors.white,
+            color: Styles.backgroundContent["dark_purple"],
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.5),
                 blurRadius: 1,
                 spreadRadius: -1,
                 offset:
-                    const Offset(0, 4), // Độ dịch chuyển của bóng (ngang, dọc)
+                    const Offset(2, 4), // Độ dịch chuyển của bóng (ngang, dọc)
               ),
             ]),
         child: Row(
@@ -51,38 +51,46 @@ class TheaterItem extends StatelessWidget {
               width: wS * 0.3,
               height: 110,
               decoration: BoxDecoration(
-                color: Colors.amber,
+                  // color: Colors.amber,
                   borderRadius: BorderRadius.circular(borderRadius)),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius),
-                child:
-                    Image(fit: BoxFit.fitHeight, image: AssetImage(data.img.isEmpty?"assets/img/theater_white.png":data.img)),
+                child: Image(
+                    fit: BoxFit.fitHeight,
+                    image: data.img.isEmpty
+                        ? const AssetImage("assets/img/theater_white.png")
+                            as ImageProvider
+                        : NetworkImage("$serverUrl/Images/${data.img}")),
               ),
             ),
             //phần thông tin riêng của từng rạp: địa chỉ, tên, sdt
             Expanded(
               flex: 1,
               child: Container(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10, right: 3, top:3, bottom: 3),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         data.name,
-                        style: styles.titleTextStyle,
+                        style: TextStyle(
+                            color: Styles.boldTextColor["dark_purple"],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.location_on,
-                              size: styles.iconSizeInLineText),
+                           Icon(Icons.location_on,
+                              size: Styles.iconSizeInLineText, color: Styles.boldTextColor["dark_purple"],),
                           Expanded(
                             flex: 1,
                             child: Container(
                               margin: const EdgeInsets.only(left: 5),
                               child: Text(
                                 data.address,
-                                style: styles.normalTextStyle,
+                                style:
+                                     TextStyle(fontSize: Styles.textSize, color:Styles.textColor["dark_purple"] ),
                                 softWrap: true,
                               ),
                             ),
@@ -92,13 +100,19 @@ class TheaterItem extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.phone_in_talk_rounded,
-                              size: styles.iconSizeInLineText),
+                           Icon(Icons.phone_in_talk_rounded,
+                              size: Styles.iconSizeInLineText,
+                            color: Styles.boldTextColor["dark_purple"],
+                          ),
                           Container(
                             margin: const EdgeInsets.only(left: 5),
                             child: Text(
-                             data.phone.isNotEmpty?formatPhoneNumber(data.phone):"Đang cập nhật",
-                              style: styles.normalTextStyle,
+                              data.phone.isNotEmpty
+                                  ? formatPhoneNumber(data.phone)
+                                  : "Đang cập nhật",
+                              style: TextStyle(
+                                  fontSize: Styles.textSize,
+                                  color: Styles.textColor["dark_purple"]),
                             ),
                           )
                         ],

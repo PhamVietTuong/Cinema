@@ -16,8 +16,8 @@ class TicketBox extends StatelessWidget {
           border: Border.all(width: 2, color: Colors.purple), borderRadius: BorderRadius.circular(5)),
       child:  Column(
         children: [
-          Text("E07", style: TextStyle(color: styles.primaryColor),),
-          Text("70,000", style: TextStyle(color: styles.primaryColor),),
+          Text("E07", style: TextStyle(color: Styles.primaryColor),),
+          Text("70,000", style: TextStyle(color: Styles.primaryColor),),
         ],
       ),
     );

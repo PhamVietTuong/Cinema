@@ -1,6 +1,6 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
-import 'package:cinema_app/data/models/movie.dart';
+import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_title.dart';
 import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/views/6_payment/pay_screen.dart';
@@ -41,7 +41,6 @@ class _ComboScreenState extends State<ComboScreen> {
         leadingWidth: 45,
         title: Text(
           "Combo",
-          style: styles.appBarTextStyle,
         ),
       ),
       body: Container(

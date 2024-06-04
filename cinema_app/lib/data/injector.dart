@@ -4,7 +4,7 @@ import 'package:cinema_app/data/models/seat.dart';
 import 'models/showtime.dart';
 import 'models/theater.dart';
 import 'models/room.dart';
-import 'models/tickets.dart';
+import 'models/ticket_option.dart';
 
 class Injector {
   static final Injector _singleton = Injector._internal();

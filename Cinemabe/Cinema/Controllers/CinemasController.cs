@@ -14,6 +14,11 @@ namespace Cinema.Controllers
     public class CinemasController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CinemasController : ControllerBase
+    {
+        private readonly IUnitOfWork _uow;
 
         public CinemasController(IUnitOfWork uow)
         {
@@ -21,7 +26,11 @@ namespace Cinema.Controllers
         }
 
         #region Movie
+        #region Movie
 
+        [HttpGet("GetMovieList")]
+        public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()
+        {
         [HttpGet("GetMovieList")]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()
         {
@@ -35,7 +44,11 @@ namespace Cinema.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
         }
+        }
 
+        [HttpPost("MovieDetail")]
+        public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
+        {
         [HttpPost("MovieDetail")]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
         {
@@ -73,9 +86,15 @@ namespace Cinema.Controllers
         {
             try
             {
+        {
+            try
+            {
                 var result = await _uow.FoodAndDrinkRepository.ComboByTheaterIdAsync(id);
                 return Ok(result);
 
+            }
+            catch (Exception e)
+            {
             }
             catch (Exception e)
             {
@@ -84,9 +103,14 @@ namespace Cinema.Controllers
         }
 
         #endregion
+        #endregion
 
         #region Ticket
+        #region Ticket
 
+        [HttpPost("Ticket")]
+        public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
+        {
         [HttpPost("Ticket")]
         public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
         {
@@ -102,7 +126,12 @@ namespace Cinema.Controllers
         }
 
         #endregion
+        #endregion
 
+        #region Seat
+        [HttpPost("SeatByShowTimeAndRoomId")]
+        public async Task<ActionResult<List<SeatViewModel>>> SeatByShowTimeAndRoomId(SeatByShowTimeAndRoomDTO vm)
+        {
         #region Seat
         [HttpPost("SeatByShowTimeAndRoomId")]
         public async Task<ActionResult<List<SeatViewModel>>> SeatByShowTimeAndRoomId(SeatByShowTimeAndRoomDTO vm)
@@ -119,9 +148,14 @@ namespace Cinema.Controllers
         }
 
         #endregion
+        #endregion
 
         #region Theater
+        #region Theater
 
+        [HttpGet("GetTheaterList")]
+        public async Task<ActionResult<List<TheaterDTO>>> GetTheaterList()
+        {
         [HttpGet("GetTheaterList")]
         public async Task<ActionResult<List<TheaterDTO>>> GetTheaterList()
         {
@@ -148,7 +182,12 @@ namespace Cinema.Controllers
 
 
             var result = await _uow.TheaterRepository.GetShowTimeByTheaterId(theaterId);
+            var result = await _uow.TheaterRepository.GetShowTimeByTheaterId(theaterId);
 
+            if (result.Count == 0)
+            {
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
             if (result.Count == 0)
             {
                 return StatusCode(StatusCodes.Status204NoContent);
@@ -156,7 +195,10 @@ namespace Cinema.Controllers
 
             return Ok(result);
         }
+            return Ok(result);
+        }
 
+        #endregion
         #endregion
 
         #region TicketType

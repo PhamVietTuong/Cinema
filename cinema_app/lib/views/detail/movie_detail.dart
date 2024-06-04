@@ -47,6 +47,8 @@ class _MovieDetailState extends State<MovieDetail>
   }
 
   @override
+
+  @override
   void initState() {
     selectedDay = today;
     super.initState();

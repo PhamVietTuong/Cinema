@@ -34,35 +34,59 @@ class _ListThreaterState extends State<ListThreater> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: styles.primaryColor,
+              color: Styles.primaryColor,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   widget.data.name, // Sử dụng dữ liệu từ widget cha
-                  style: styles.titleTextStyle.copyWith(color: Colors.white),
+                  style: TextStyle(color: Colors.white),
                 ),
                 Icon(
                   isShow ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
                   color: Colors.white,
-                  size: styles.iconSizeInTitle,
                 ),
               ],
             ),
           ),
         ),
         isShow
-            ?  Column(
+            ? Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
-                      ShowtimeItem(showtimeRoom: ShowtimeRoom(),booking: Booking(),movie: Movie(),),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
+                      ShowtimeItem(
+                        showtimeRoom: ShowtimeRoom(),
+                        booking: Booking(),
+                        movie: Movie(),
+                        selectedDate: DateTime.now(),
+                      ),
                     ],
                   )
                 ],

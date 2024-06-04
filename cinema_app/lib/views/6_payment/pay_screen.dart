@@ -53,14 +53,12 @@ class _PayScreenState extends State<PayScreen> {
                   margin: const EdgeInsets.only(left: 5),
                   child: Text(
                     widget.booking.theater.name,
-                    style: styles.titleTextStyle,
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(left: 5),
                   child: Text(
                     "17/04/024 - 12:10 | Phòng: 03",
-                    style: styles.normalTextStyle,
                     softWrap: true,
                   ),
                 ),
@@ -70,8 +68,7 @@ class _PayScreenState extends State<PayScreen> {
                 margin: const EdgeInsets.only(right: 15),
                 child: Text(
                   "04:55",
-                  style: styles.titleTextStyle
-                      .copyWith(color: styles.primaryColor),
+        
                 ))
           ],
         ),
@@ -117,7 +114,6 @@ class _PayScreenState extends State<PayScreen> {
                       children: [
                         Text(
                           "Dune 2",
-                          style: styles.titleTextStyle,
                         ),
                         const SizedBox(
                           height: 10,
@@ -146,14 +142,12 @@ class _PayScreenState extends State<PayScreen> {
                         ),
                         Text(
                           "Thời lượng: 125 phút",
-                          style: styles.normalTextStyle,
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
                           "Ghế: E07",
-                          style: styles.normalTextStyle,
                         ),
                       ],
                     ),
@@ -266,7 +260,7 @@ class _PayScreenState extends State<PayScreen> {
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 decoration: BoxDecoration(
-                    color: styles.primaryColor,
+                    color: Styles.primaryColor,
                     borderRadius: BorderRadius.circular(8)),
                 child: const Text(
                   "THANH TOÁN",

@@ -1,6 +1,8 @@
-import 'package:cinema_app/data/models/movie.dart';
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
-import '../config.dart';
+
+import '../data/models/showtime.dart';
+
 class ShowtimeDropDown extends StatefulWidget {
   const ShowtimeDropDown(
       {super.key,
@@ -29,23 +31,28 @@ class _ShowtimeDropDownState extends State<ShowtimeDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Container(
       margin: EdgeInsets.only(left: widget.marginLeft),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          border: styles.borderWith, borderRadius: BorderRadius.circular(4)),
+          color: Styles.btnColor["dark_purple"],
+          borderRadius: BorderRadius.circular(4)),
       child: DropdownButton(
+          dropdownColor: Styles.btnColor["dark_purple"],
           underline: const SizedBox(),
           isDense: true,
           itemHeight: null,
-          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+          icon: Icon(Icons.keyboard_arrow_down_outlined,
+              color: Styles.boldTextColor["dark_purple"]),
           value: selectedItem,
           menuMaxHeight: 400,
           items: widget.showtimes.map((value) {
             return DropdownMenuItem(
               value: value,
-              child: Text(value.getFormatTime()),
+              child: Text(
+                value.getFormatTime(),
+                style: TextStyle(color: Styles.boldTextColor["dark_purple"]),
+              ),
             );
           }).toList(),
           onChanged: (newValue) {

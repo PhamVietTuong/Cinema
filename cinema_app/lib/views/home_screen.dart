@@ -33,6 +33,10 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
+  List<Movie> lstMovie = List.filled(0, Movie(), growable: true);
+  List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
+  List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
+  List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
 
   @override
   void initState() {
@@ -76,6 +80,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
       isLoadingData = false;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +128,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
             ),
             child: IconButton(
               onPressed: () {},
+              icon: const Icon(
+                Icons.search,
+              ),
               icon: const Icon(
                 Icons.search,
               ),
@@ -189,7 +197,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               child: Text(
                                 "Đang chiếu",
                                 textAlign: TextAlign.center,
-                                style: styles.titleTextStyle.copyWith(
+                                style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,
                                 ),
@@ -211,7 +219,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               child: Text(
                                 "Chiếu sớm",
                                 textAlign: TextAlign.center,
-                                style: styles.titleTextStyle.copyWith(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
                             ),
@@ -231,7 +239,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               child: Text(
                                 "Sắp chiếu",
                                 textAlign: TextAlign.center,
-                                style: styles.titleTextStyle.copyWith(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
                             ),
@@ -303,14 +311,23 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Video",
-                        style: styles.titleTextStyle
-                            .copyWith(color: Colors.white)),
+                        style: TextStyle
+                            (color: Colors.white)),
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 3,
                       child: PageView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: lstMovie.length,
                         itemBuilder: (context, index) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width - 30,
+                            height: MediaQuery.of(context).size.height / 3,
+                            child: WebView(
+                              initialUrl:
+                                  'https://www.youtube.com/embed/${lstMovie[index].trailer}',
+                              javascriptMode: JavascriptMode.unrestricted,
+                            ),
+                          );
                           return SizedBox(
                             width: MediaQuery.of(context).size.width - 30,
                             height: MediaQuery.of(context).size.height / 3,
@@ -396,12 +413,14 @@ class _SlideShowState extends State<SlideShow> {
           ),
         ),
         Center(
+        Center(
           child: ClipRRect(
             child: Image.asset(
               'assets/img_demo/Banner.png',
             ),
           ),
         ),
+        Center(
         Center(
           child: ClipRRect(
             child: Image.asset(
@@ -428,6 +447,7 @@ class InfoMovie extends StatelessWidget {
   Widget build(BuildContext context) {
     var wImage = (MediaQuery.of(context).size.width - 30) / 2;
     return InkWell(
+      onTap: () {
       onTap: () {
         Navigator.push(
           context,

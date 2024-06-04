@@ -5,6 +5,8 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 
+import '../config.dart';
+
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
 
@@ -32,10 +34,10 @@ class _BottomNavState extends State<BottomNav> {
           height: 52,
           child: CurvedNavigationBar(
             index: index,
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Styles.backgroundContent["dark_purple"]!,
             items: const [
               CurvedNavigationBarItem(
-                child:  Icon(Icons.home_outlined),
+                child: Icon(Icons.home_outlined),
               ),
               CurvedNavigationBarItem(
                 child: Icon(Icons.confirmation_num_outlined),
@@ -58,7 +60,6 @@ class _BottomNavState extends State<BottomNav> {
           ),
         ),
         body: Container(
-          color: Colors.blueAccent,
           child: pages[index],
         ));
   }

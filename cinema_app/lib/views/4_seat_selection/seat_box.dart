@@ -20,7 +20,7 @@ class SeatBox extends StatefulWidget {
 }
 
 class _SeatBoxState extends State<SeatBox> {
-  var styles = Styles();
+
   bool isSelected = false;
   int loadSeatColor() {
     //trạng thái đã bán
@@ -51,11 +51,11 @@ class _SeatBoxState extends State<SeatBox> {
     //String seatName =
     //  '${widget.name}${widget.index.toString().padLeft(2, '0')}';
     Map<int, Color> colorMap = {
-      1: styles.singleSeatColor,
-      2: styles.coupleSeatColor,
-      3: styles.soldColor,
-      4: styles.selectedSeatColor,
-      5: styles.waitingSeatColor
+      1: Styles.singleSeatColor,
+      2: Styles.coupleSeatColor,
+      3: Styles.soldColor,
+      4: Styles.selectedSeatColor,
+      5: Styles.waitingSeatColor
     };
     //int rowIndex = widget.seat.rowIndex;
     //print('id: ${widget.seat.id } - stt: ${widget.seat.status}');
