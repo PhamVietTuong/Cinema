@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
     });
   }
 
+  @override
   void onLoadMovieDetailComplete(Movie movies) {}
   @override
   void onLoadMoviesError() {

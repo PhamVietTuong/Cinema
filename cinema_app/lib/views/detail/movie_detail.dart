@@ -312,7 +312,7 @@ void onLoadMovieDetailComplete(Movie movie) {
                                         },
                                         child: Text(
                                           isExpanded2 ? 'Thu gọn' : 'Xem thêm',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: Colors.white30,
                                             fontWeight: FontWeight.bold,
                                           ),
