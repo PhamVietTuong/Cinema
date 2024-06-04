@@ -191,10 +191,10 @@ namespace Cinema.Repository
             }
             return rows;
         }
-        public async Task<List<DateTime>> GetDateByMovieID(Guid movieID,int ProjectionForm)
+        public async Task<List<DateTime>> GetDateByMovieID(Guid movieID, int ProjectionForm)
         {
             var days = await _context.ShowTime
-                .Where(x => x.MovieId == movieID && x.ProjectionForm==ProjectionForm )
+                .Where(x => x.MovieId == movieID && x.ProjectionForm == ProjectionForm)
                 .Select(x => x.StartTime.Date)
                 .Distinct()
                 .ToListAsync();
@@ -202,13 +202,13 @@ namespace Cinema.Repository
             return days;
         }
 
-        public async Task<List<ShowTimeRowViewModel>> GetShowTimeByMovieID(Guid movieID, DateTime date,int ProjectionForm)
+        public async Task<List<ShowTimeRowViewModel>> GetShowTimeByMovieID(Guid movieID, DateTime date, int ProjectionForm)
         {
             var showTimeRoom = await _context.ShowTimeRoom
                 .Include(sr => sr.ShowTime)
                     .ThenInclude(st => st.Movie)
                 .Include(sr => sr.Room)
-                .Where(sr => sr.ShowTime.MovieId == movieID && sr.ShowTime.StartTime.Date == date.Date &&  sr.ShowTime.ProjectionForm==ProjectionForm)
+                .Where(sr => sr.ShowTime.MovieId == movieID && sr.ShowTime.StartTime.Date == date.Date && sr.ShowTime.ProjectionForm == ProjectionForm)
                 .ToListAsync();
 
             var showtimeViewModels = showTimeRoom.Select(sr => new ShowTimeRowViewModel
@@ -225,7 +225,51 @@ namespace Cinema.Repository
         }
 
 
+        public async Task<List<MovieDetailViewModel>> GetMoviesByName(string name)
+        {
+            var input = name.Trim().ToLower().RemoveDiacritics();
+            var movies = await _context.Movie
+                               .Include(x => x.AgeRestriction)
+                               .Where(x => x.Status == true)
+                               .ToListAsync();
+            var filteredMovies = movies.Where(x => x.Name.ToLower().RemoveDiacritics().Contains(input)).ToList();
+            var results = new List<MovieDetailViewModel>();
+            foreach (var movie in filteredMovies)
+            {
+                void addMovie(int time, ProjectionForm form)
+                {
+                    results.Add(new MovieDetailViewModel
+                    {
+                        Id = movie.Id,
+                        AgeRestrictionName = movie.AgeRestriction.Name,
+                        AgeRestrictionDescription = movie.AgeRestriction.Description,
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation,
+                        Name = movie.Name,
+                        Image = movie.Image,
+                        Time = time,
+                        ReleaseDate = movie.ReleaseDate,
+                        Description = movie.Description,
+                        Director = movie.Director,
+                        Actor = movie.Actor,
+                        Trailer = movie.Trailer,
+                        Languages = movie.Languages,
+                        MovieType = String.Join(", ", _context.MovieTypeDetail.Include(x => x.MovieType).Where(x => x.MovieId == movie.Id).Select(x => x.MovieType.Name).ToList()),
+                        ShowTimeTypeName = form == ProjectionForm.Time2D ? "2D" : "3D",
+                        ProjectionForm = (int)form
 
+                    });
+                }
+                if (movie.Time2D != -1)
+                {
+                    addMovie(movie.Time2D ?? 0, ProjectionForm.Time2D);
+                }
+                if (movie.Time3D != -1)
+                {
+                    addMovie(movie.Time3D ?? 0, ProjectionForm.Time3D);
+                }
+            }
+            return results;
+        }
 
     }
 }
