@@ -13,10 +13,9 @@ const Header = () => {
                             <div className="container">
                                 <div className="hd-top-wr">
                                     <div className="popup-top-logo">
-                                        <img src="/Images/Header/app-icon.webp" alt="" />
+                                        <img src="/Images/HeaderAndFooter/app-icon.webp" alt="" />
                                         <div className="popup-top-content">
                                             <div className="text" >
-                                                {" "}
                                                 <span className="txt">Tải ứng dụng CineStar Cinema.</span>
                                                 <span className="txt txt-sub">Tra cứu lịch chiếu và đặt vé siêu nhanh</span>
                                             </div>
@@ -26,7 +25,7 @@ const Header = () => {
                                         </div>
                                     </div>
                                     <div className="hd-top-close" >
-                                        <img src="/Images/Header/header-ic-close.svg" alt="" />
+                                        <img src="/Images/HeaderAndFooter/header-ic-close.svg" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +40,7 @@ const Header = () => {
                                 aria-label="The logo of Cinestar"
                                 href="/"
                             >
-                                <img alt="CineStar Logo" src="/Images/Header/header-logo.webp" />
+                                <img alt="CineStar Logo" src="/Images/HeaderAndFooter/header-logo.webp" />
                             </a>
                             <div className="hd-action" >
                                 <a className="btn book-now" href="/movie/">
@@ -49,14 +48,14 @@ const Header = () => {
                                     <span className="txt">Đặt Vé Ngay</span>
                                 </a>
                                 <a className="btn book-food" href="/popcorn-drink/">
-                                    <img className="icon" src="/Images/Header/ic-cor.svg" alt="" />
+                                    <img className="icon" src="/Images/HeaderAndFooter/ic-cor.svg" alt="" />
                                     <span className="txt">Đặt Bắp Nước</span>
                                 </a>
                             </div>
                             <div className="hd-mid-right" >
                                 <div className="hd-search" >
-                                    <div className="hd-search-icon toggleBtn" >
-                                        <img src="/Images/Header/icon-search.svg" alt="" />
+                                    <div className="hd-search-icon" >
+                                        <img src="/Images/HeaderAndFooter/icon-search.svg" alt="" />
                                     </div>
                                     <div className="hd-search-block togglePanel">
                                         <div className="hd-search-form" >
@@ -77,21 +76,18 @@ const Header = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div
-                                            className="search-bg-blur search-bg-blur-no-top"
-                                        />
+                                        <div className="search-bg-blur search-bg-blur-no-top" />
                                     </div>
                                 </div>
                                 <div className="hd-regi" >
                                     <div className="hd-regi-wr" >
                                         <div className="hd-regi-ava" >
-                                            <img src="/Images/Header/ic-header-auth.svg" alt="" />
+                                            <img src="/Images/HeaderAndFooter/ic-header-auth.svg" alt="" />
                                         </div>
                                         <div className="hd-regi-list" >
-                                            <a className="link" href="/login/?prevUrl=/">
-                                                {" "}
+                                            <a className="link dang-nhap" href="/login/?prevUrl=/">
                                                 <FontAwesomeIcon className="icon" icon={faCircleUser} />
-                                                Đăng nhập{" "}
+                                                Đăng nhập
                                             </a>
                                         </div>
                                     </div>
@@ -101,7 +97,7 @@ const Header = () => {
                                         <div className="lg-popup" >
                                             <div className="lg-option" >
                                                 <span className="image">
-                                                    <img src="/Images/Header/footer-vietnam.svg" alt="" />
+                                                    <img src="/Images/HeaderAndFooter/footer-vietnam.svg" alt="" />
                                                 </span>
                                                 <span className="txt">VN</span>
                                                 <FontAwesomeIcon className="icon" icon={faCaretDown} />
@@ -110,21 +106,11 @@ const Header = () => {
                                         <div className="lg-action-popup" >
                                             <div className="lg-option" >
                                                 <span className="image">
-                                                    <img src="/Images/Header/footer-america.png" alt="" />
+                                                    <img src="/Images/HeaderAndFooter/footer-america.png" alt="" />
                                                 </span>
                                                 <span className="txt">ENG</span>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="hd-burger" >
-                                    <div className="burger toggleBtn" >
-                                        <span className="line" />
-                                        <span className="line" />
-                                        <span className="line" />
-                                        <svg width="100%" height="100%" viewBox="-1 -1 102 102">
-                                            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
-                                        </svg>
                                     </div>
                                 </div>
                             </div>
@@ -136,12 +122,12 @@ const Header = () => {
                         <div className="hd-bot-wr hd-regi-wr" >
                             <div className="hd-bot-action-wrap" >
                                 <div className="hd-regi" >
-                                    <div className=" --second" >
-                                        <span className="hd-bot-loca">
-                                            <FontAwesomeIcon icon={faLocationDot} />
+                                    <div className="--second" >
+                                        <span className="hd-bot-loca chon-rap">
+                                            <FontAwesomeIcon className="icon" icon={faLocationDot} />
                                             <span className="txt">Chọn rạp</span>
                                         </span>
-                                        {/* <div className="hd-regi-list hd-regi-list-custom --second custom-position-left"                              >
+                                        <div className="hd-regi-list hd-regi-list-custom --second custom-position-left"                              >
                                             <a
                                                 className="link"
                                                 href="/book-tickets/8f3a5832-8340-4a43-89bc-6653817162f1"
@@ -190,27 +176,27 @@ const Header = () => {
                                             >
                                                 Cinestar Huế
                                             </a>
-                                        </div> */}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="hd-bot-action-left" >
-                                    <a className="hd-bot-loca" href="/showtimes/">
-                                        <FontAwesomeIcon icon={faCalendar} />
+                                    <a className="hd-bot-loca lich-chieu" href="/showtimes/">
+                                        <FontAwesomeIcon className="icon" icon={faCalendar} />
                                         <span className="txt">Lịch chiếu</span>
                                     </a>
                                 </div>
                             </div>
                             <div className="hd-bot-km" >
-                                <a className="link" href="/chuong-trinh-khuyen-mai/">
+                                <a className="link km" href="/chuong-trinh-khuyen-mai/">
                                     Khuyến mãi
                                 </a>
-                                <a className="link" href="/to-chuc-su-kien/">
+                                <a className="link tsk" href="/to-chuc-su-kien/">
                                     Thuê sự kiện
                                 </a>
-                                <a className="link" href="/cac-loai-hinh-giai-tri-khac/">
+                                <a className="link tcgt" href="/cac-loai-hinh-giai-tri-khac/">
                                     Tất cả các giải trí
                                 </a>
-                                <a className="link" href="/about-us/">
+                                <a className="link gt" href="/about-us/">
                                     Giới thiệu
                                 </a>
                             </div>

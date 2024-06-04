@@ -1,0 +1,75 @@
+img {
+    display: block;
+    height: auto;
+    transition: all .2s;
+    width: 100%;
+}
+
+.footer {
+    padding-bottom: 40px;
+    position: relative;
+    background: linear-gradient(106deg, #639, #36c 102.69%);
+}
+
+.footer-wr {
+    padding-top: 100px;
+}
+
+.footer .footer-list {
+    padding-bottom: 24px;
+}
+
+.footer .footer-item:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0;
+}
+
+.footer .footer-item .ft-logo {
+    display: block;
+    width: 43%;
+}
+
+.footer .ft-group-btn {
+    align-items: center;
+    display: flex;
+    gap: 0 16px;
+}
+
+.footer .ft-group-btn .btn {
+    width: 175px;
+}
+
+.footer .ft-group-btn .dat-ve {
+    background: #f3ea28;
+    font-size: 14px;
+    font-weight: 800;
+    transition: all 1s ease;
+    padding: 10px 0;
+}
+
+.footer .ft-group-btn .dat-ve:hover {
+    background: linear-gradient(106deg, #639, #36c 102.69%);
+}
+
+.footer .ft-group-btn .dat-bap-nuoc {
+    background: linear-gradient(106deg, #639, #36c 102.69%);
+    color: #f3ea28;
+    border: #f3ea28 1px solid;
+    font-size: 14px;
+    font-weight: 800;
+    transition: all 1s ease;
+    padding: 10px 0;
+}
+
+.footer .ft-group-btn .dat-bap-nuoc:hover {
+    color: #fff;
+    background: linear-gradient(90deg, #ff6d00, #ffc107);
+}
+
+
+@media screen and (min-width: 768px) {
+    .footer-item .ft-text .txt-mobile {
+        display: none;
+    }
+}

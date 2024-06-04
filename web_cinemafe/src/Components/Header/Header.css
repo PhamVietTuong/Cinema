@@ -160,15 +160,9 @@ a {
     position: relative;
 }
 
-@media screen and (min-width: 1200px) {
-    .hd-search-icon {
-        display: none !important;
-    }
-}
-
 .hd-search-icon {
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 34px;
     align-items: center;
     border: 2px solid #fff;
     border-radius: 1000px;
@@ -178,7 +172,7 @@ a {
 }
 
 .hd-search-icon img {
-    width: 50%;
+    width: 60%;
 }
 
 .hd-search-wr {
@@ -237,12 +231,15 @@ a {
     position: relative;
 }
 
+.hd-regi-wr .hd-regi-list .dang-nhap:hover {
+    color: #f3ea28;
+}
+
 .hd-regi-ava {
     flex-shrink: 0;
-    height: 24px;
+    height: 34px;
+    width: 34px;
     position: relative;
-    top: -2px;
-    width: 24px;
 }
 
 .hd-regi-ava img {
@@ -265,17 +262,13 @@ a {
     color: #fff;
 }
 
-@media screen and (min-width: 1025px) {
-    .hd-regi .link .icon {
-        display: none;
-    }
-}
-
 .hd-regi .link .icon {
     position: relative;
     top: -3px;
     vertical-align: middle;
     font-weight: 400;
+    font-size: 24px;
+    margin-right: 10px;
 }
 
 .lg-action {
@@ -337,46 +330,151 @@ a {
     top: calc(100% + 4px);
     transform: translateY(10px);
     transition: all 0.3s ease-in-out;
-    /* opacity: 0;
-    visibility: hidden; */
+    opacity: 0;
+    visibility: hidden;
 }
 
-@media screen and (min-width: 768px) {
-    .hd-burger {
+.lg-action:hover .lg-action-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.hd-bot {
+    height: 50px;
+}
+
+.hd-regi-wr {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    gap: 10px;
+    position: relative;
+}
+
+.hd-bot-wr {
+    align-items: center;
+    border-top: 1px solid rgba(248, 250, 252, .1);
+    display: flex;
+    gap: 10px;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.hd-bot-action-wrap {
+    display: flex;
+    gap: 40px;
+}
+
+.hd-bot-loca {
+    color: #fff;
+    text-decoration: none;
+}
+
+.hd-bot-loca.lich-chieu:hover, .hd-bot-loca.chon-rap:hover{
+    color: #f3ea28;
+}
+
+.hd-bot-loca .icon {
+    margin-right: 8px;
+}
+
+.hd-regi-list.--second.custom-position-left {
+    left: 0;
+    right: auto;
+}
+
+.hd-regi-list-custom.--second {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    padding: 15px 10px;
+    row-gap: 5px;
+    top: 100%;
+}
+
+.hd-regi-list.--second {
+    align-items: flex-start;
+    background-color: #0f172a;
+    border: 1px solid rgba(248, 250, 252, 0.1);
+    border-radius: 4px;
+    flex-direction: column;
+    gap: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transition: 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.hd-regi-list-custom {
+    width: 100%;
+}
+
+.hd-regi-list {
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    z-index: 1;
+}
+
+.hd-regi-list.--second .link {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    padding: 8px 10px;
+    transition: 0.3s ease-in-out;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.hd-regi:hover .hd-regi-list.hd-regi-list-custom.--second.custom-position-left {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.hd-bot-km {
+    align-items: center;
+    display: flex;
+    gap: 24px;
+}
+
+.hd-bot-km a {
+    color: #fff;
+}
+
+.hd-bot-km .km:hover, .hd-bot-km .tsk:hover, .hd-bot-km .tcgt:hover, .hd-bot-km .gt:hover {
+    color: #f3ea28;
+} 
+
+.hd-bot-km .link {
+    text-decoration: underline;
+    text-underline-position: under;
+    transition: .3s ease-in-out;
+}
+
+@media screen and (min-width: 1200px) {
+    .hd-search-icon {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .hd-search-form {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    .hd-regi-ava {
         display: none;
     }
 }
 
-.burger {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    height: 32px;
-    justify-content: center;
-    position: relative;
-    width: 32px;
-}
-
-.burger .line {
-    background-color: #f8fafc;
-    border-radius: 1000px;
-    display: block;
-    flex-shrink: 0;
-    height: 2px;
-    transition: .3s ease-in-out;
-    width: 24px;
-}
-
-.burger .line:nth-child(2) {
-    margin: 5px 0;
-}
-
-.burger svg {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
+@media screen and (max-width: 1025px) {
+    .hd-regi-list {
+        display: none;
+    }
 }
