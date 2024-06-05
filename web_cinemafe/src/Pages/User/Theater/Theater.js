@@ -3,7 +3,7 @@ import './SeatType.css'
 import './Seat.css'
 import './FoodAndDrink.css'
 import './Bill.css'
-import { Nav, Tab, } from 'react-bootstrap';
+import { Nav, Tab } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import moment from 'moment';
@@ -11,7 +11,7 @@ import 'moment/locale/vi';
 import { useDispatch, useSelector } from "react-redux";
 import { ComboAction, SeatAction, SeatBeingSelected, TicketBooking, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
 import { TicketBookingSuccess } from '../../../Models/TicketBookingSuccess';
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, SEAT_BEING_SELECTED, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
 import { connection } from '../../../connectionSignalR';
 import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
 import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
@@ -21,6 +21,8 @@ import { ShowTimeType } from '../../../Enum/ShowTimeType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
+import TicketInfo from '../../../Components/ticketInfo/TicketInfo'
+import { InvoiceDTO } from '../../../Models/InvoiceDTO'
 
 const Theater = (props) => {
     const dispatch = useDispatch();
@@ -31,24 +33,26 @@ const Theater = (props) => {
         listOfSeatSold,
         seatYour,
         listWattingSeat,
-        updateSeat
+        updateSeat,
+        checkBooking,
     } = useSelector((state) => state.CinemasReducer);
     const [activeIndex, setActiveIndex] = useState(0);
     const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
     const [selectedheaterName, setSelectedTheaterName] = useState(null);
-    const [selectedSeatName, setSelectedSeatName] = useState([]);
+    const [selectedShowTime, setSelectedShowTime] = useState(null);
     const [selectedShowTimeId, setSelectedShowTimeId] = useState(null);
+    const [selectedTheaterId, setSelectedTheaterId] = useState(null);
     const [countdown, setCountdown] = useState(300);
     const [timerRunning, setTimerRunning] = useState(false);
     const [selectedRoomId, setselectedRoomId] = useState(null);
     const [countTicketTypes, setCountTicketTypes] = useState(
-        ticketType.reduce((acc, ticket) => { 
+        ticketType.reduce((acc, ticket) => {
             if (!acc[ticket.ticketTypeId]) {
                 acc[ticket.seatTypeId] = {};
             }
             acc[ticket.seatTypeId][ticket.ticketTypeId] = 0;
-        return acc;
-    }, {}));
+            return acc;
+        }, {}));
     const [countCombos, setCountCombos] = useState(
         combo.reduce((acc, combo) => {
             acc[combo.id] = 0;
@@ -56,7 +60,13 @@ const Theater = (props) => {
         }, {}));
     const [selectedShowTimeColorActiveId, setSelectedShowTimeColorActiveId] = useState({ showTimeId: null, roomId: null });
     const [totalPrice, setTotalPrice] = useState(0);
-
+    const [show, setShow] = useState(false);
+    const [hasShownHSSVWarning, setHasShownHSSVWarning] = useState(false);
+    const [seatYourName, setSeatYourName] = useState();
+    const [selectedTicketTypeName, setSelectedTTicketTypeName] = useState();
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    const [invoiceTickets, setInvoiceTickets] = useState([]);
     useEffect(() => {
         if (timerRunning && countdown > 0) {
             const timer = setTimeout(() => {
@@ -65,32 +75,26 @@ const Theater = (props) => {
 
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
+            // setShow(true)
             Swal.fire({
-                text: "ĐÃ HẾT THỜI GIAN GIỮ VÉ",
-                padding: "24px",
+                title: "ĐÃ HẾT THỜI GIAN GIỮ VÉ",
+                padding: "15px",
                 width: "400px",
                 customClass: {
                     confirmButton: 'custom-ok-button'
+                },
+                showCancelButton: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload();
                 }
-            });
-            window.location.reload();
+            })
         }
     }, [timerRunning, countdown]);
 
     const minutes = Math.floor(countdown / 60);
     const seconds = countdown % 60;
 
-    useEffect(() => {
-        let totalSeatType = Object.entries(countTicketTypes).map(([key, value]) => [key, Object.values(value).reduce((acc, curr) => acc + curr, 0)])
-            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {})
-        console.log(totalSeatType);
-
-        dispatch({
-            type: TOTAL_CHOOSES_SEAT_TYPE,
-            totalSeatType
-        });
-    }, [countTicketTypes]);
-    
     useEffect(() => {
         let newTotalPrice = 0;
 
@@ -110,8 +114,31 @@ const Theater = (props) => {
             }
         });
 
+        console.log(countCombos);
+        console.log(countTicketTypes);
+
         setTotalPrice(newTotalPrice);
     }, [countTicketTypes, countCombos]);
+
+    useEffect(() => {
+        setSelectedTTicketTypeName(getTicketNames(ticketType, countTicketTypes))
+    }, [countTicketTypes, ticketType]);
+
+    useEffect(() => {
+        setSeatYourName(getSeatNames(seatYour, seat))
+        setInvoiceTickets(assignTicketsToSeats(seatYour, countTicketTypes, seat));
+    }, [seatYour]);
+
+    useEffect(() => {
+        let totalSeatType = Object.entries(countTicketTypes).map(([key, value]) => [key, Object.values(value).reduce((acc, curr) => acc + curr, 0)])
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {})
+
+        dispatch({
+            type: TOTAL_CHOOSES_SEAT_TYPE,
+            totalSeatType
+        });
+    }, [countTicketTypes]);
+
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN').format(value) + ' VNĐ';
@@ -131,6 +158,9 @@ const Theater = (props) => {
             await dispatch({
                 type: CLEAN,
             });
+            setCountTicketTypes({});
+            setCountCombos({});
+            setHasShownHSSVWarning(false)
         }
 
         connection.on("ListOfSeatsSold", (seatIds) => {
@@ -187,21 +217,36 @@ const Theater = (props) => {
 
     const incrementTicketType = (ticketTypeId, seatTypeId) => {
         setCountTicketTypes(prevCounts => {
-            const totalTickets = Object.values(prevCounts).reduce(
-                (acc, ticketCounts) => acc + Object.values(ticketCounts).reduce((a, c) => a + c, 0),
-                0
-            );
-            if (totalTickets === 8) {
+            // const totalTickets = Object.values(prevCounts).reduce(
+            //     (acc, ticketCounts) => acc + Object.values(ticketCounts).reduce((a, c) => a + c, 0),
+            //     0
+            // );
+            // if (totalTickets === 8) {
+            //     Swal.fire({
+            //         title: `Vui lòng chọn tối đa <span class="c-second">8</span> ghế`,
+            //         padding: "24px",
+            //         width: "400px",
+            //         customClass: {
+            //             confirmButton: 'custom-ok-button'
+            //         }
+            //     });
+
+            //     return prevCounts
+            // }
+            if (
+                !!ticketType.find(x => x.ticketTypeName === "Hssv - Người cao tuổi" && x.ticketTypeId === ticketTypeId && x.seatTypeId === seatTypeId) &&
+                !hasShownHSSVWarning
+            ) {
                 Swal.fire({
-                    title: `Vui lòng chọn tối đa <span class="c-second">8</span> ghế`,
+                    text: "Bạn đang mua hạng vé đặc biệt dành cho HSSV, U22 hoặc người cao tuổi. Vui lòng mang theo CCCD hoặc thẻ HSSV có dán ảnh để xác minh trước khi vào rạp. Nhân viên rạp có thể từ chối không cho bạn vào xem nếu không thực hiện đúng quy định này. Trân trọng cảm ơn",
                     padding: "24px",
                     width: "400px",
                     customClass: {
                         confirmButton: 'custom-ok-button'
-                    }
-                });
-
-                return prevCounts
+                    },
+                    confirmButtonText: "Đồng ý",
+                })
+                setHasShownHSSVWarning(true);
             }
 
             return {
@@ -215,34 +260,142 @@ const Theater = (props) => {
     };
 
     const decrementTicketType = (ticketTypeId, seatTypeId) => {
-        setCountTicketTypes(prevCounts => ({
-            ...prevCounts,
-            [seatTypeId]: {
-                ...prevCounts[seatTypeId],
-                [ticketTypeId]: prevCounts[seatTypeId]?.[ticketTypeId] > 0 ? prevCounts[seatTypeId][ticketTypeId] - 1 : 0
+        setCountTicketTypes(prevCounts => {
+            let hssv = ticketType.find(x => x.ticketTypeName === "Hssv - Người cao tuổi" && x.ticketTypeId === ticketTypeId && x.seatTypeId === seatTypeId)
+            if (!!hssv) {
+                let currentCount = prevCounts[hssv.seatTypeId]?.[hssv.ticketTypeId] || 0;
+
+                if (currentCount === 1) {
+                    setHasShownHSSVWarning(false);
+                }
             }
-        }));
+
+            const newCounts = {
+                ...prevCounts,
+                [seatTypeId]: {
+                    ...prevCounts[seatTypeId],
+                    [ticketTypeId]: (prevCounts[seatTypeId]?.[ticketTypeId] || 0) > 0 ? prevCounts[seatTypeId][ticketTypeId] - 1 : 0
+                }
+            };
+
+            if (newCounts[seatTypeId][ticketTypeId] === 0) {
+                delete newCounts[seatTypeId][ticketTypeId];
+                if (Object.keys(newCounts[seatTypeId]).length === 0) {
+                    delete newCounts[seatTypeId];
+                }
+            }
+
+            return newCounts;
+        });
     };
 
     const incrementCombo = (id) => {
         setCountCombos(prevCounts => ({
-                ...prevCounts,
+            ...prevCounts,
             [id]: (prevCounts[id] || 0) + 1
         }));
     };
 
     const decrementCombo = (id) => {
-        setCountCombos(prevCounts => ({
-            ...prevCounts,
-            [id]: prevCounts[id] > 0 ? prevCounts[id] - 1 : 0
-        }));
+        setCountCombos(prevCounts => {
+            const newCounts = {
+                ...prevCounts,
+                [id]: prevCounts[id] > 0 ? prevCounts[id] - 1 : 0
+            };
+            if (newCounts[id] === 0) {
+                delete newCounts[id];
+            }
+            return newCounts;
+        });
+    };
+
+    const findSeatById = (seatId, seats) => {
+        for (let row of seats.rowName) {
+            for (let seat of row.rowSeats) {
+                if (seat.id === seatId) {
+                    return seat;
+                }
+            }
+        }
+        return null;
+    };
+
+    const assignTicketsToSeats = (selectedSeats, selectedTicketTypes, seats) => {
+        const result = [];
+        const seatTypeCount = {};
+
+        for (let seatTypeId in selectedTicketTypes) {
+            seatTypeCount[seatTypeId] = {};
+            for (let ticketTypeId in selectedTicketTypes[seatTypeId]) {
+                seatTypeCount[seatTypeId][ticketTypeId] = selectedTicketTypes[seatTypeId][ticketTypeId];
+            }
+        }
+
+        for (let seatId of selectedSeats) {
+            const seat = findSeatById(seatId, seats);
+
+            if (seat && seat.isSeat !== false) {
+                const seatTypeId = seat.seatTypeId;
+
+                if (seatTypeId && seatTypeCount[seatTypeId]) {
+                    for (let ticketTypeId in seatTypeCount[seatTypeId]) {
+                        if (seatTypeCount[seatTypeId][ticketTypeId] > 0) {
+                            result.push({ seatId: seat.id, ticketTypeId: ticketTypeId });
+                            seatTypeCount[seatTypeId][ticketTypeId] -= 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    };
+
+    const getSeatNames = (seatIds, seatData) => {
+        const seatNames = [];
+        seatData.rowName?.forEach(row => {
+            row.rowSeats.forEach(seat => {
+                if (seatIds.includes(seat.id)) {
+                    seatNames.push(seat.name);
+                }
+            });
+        });
+        return seatNames.join(', ');
+    };
+
+    const getTicketNames = (ticketTypes, selectedTicketTypes) => {
+        let ticketNames = {};
+
+        for (let seatTypeId in selectedTicketTypes) {
+            for (let ticketTypeId in selectedTicketTypes[seatTypeId]) {
+                const quantity = selectedTicketTypes[seatTypeId][ticketTypeId];
+                const ticketType = ticketTypes.find(ticket =>
+                    ticket.ticketTypeId === ticketTypeId && ticket.seatTypeId === seatTypeId
+                );
+                if (ticketType) {
+                    const seatTypeName = ticketType.seatTypeName === "Đôi" ? " (đôi)" : " (đơn)";
+                    const ticketName = ticketType.ticketTypeName + seatTypeName;
+
+                    if (quantity > 0) {
+                        if (ticketNames[ticketName]) {
+                            ticketNames[ticketName] += quantity;
+                        } else {
+                            ticketNames[ticketName] = quantity;
+                        }
+                    }
+                }
+            }
+        }
+
+        return Object.entries(ticketNames).map(([name, count]) => `${count} ${name}`).join(', ');
     };
 
     const renderSeats = (seatItem) => {
         return seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => {
             let classSeated = rowSeatItem.seatStatus === SeatStatus.Sold ? 'booked' : '';
             let classSeatBeingSelected = seatYour.includes(rowSeatItem.id) ? 'choosing' : '';
-            
+
             let classSeatSold = listOfSeatSold.includes(rowSeatItem.id) ? 'booked' : ''
 
             let classUpdateSeat = updateSeat.includes(rowSeatItem.id) ? 'update' : ''
@@ -262,7 +415,7 @@ const Theater = (props) => {
                         >
                             <div className={`seat-wr seat-single ${classSeatSold} ${classUpdateSeat} ${classWattingSeat} ${classSeated} ${classSeatBeingSelected}`} >
                                 <img
-                                    src="https://cinestar.com.vn/assets/images/seat-single.svg"
+                                    src="/Images/seat-single.svg"
                                     alt=""
                                 />
                                 <span className="seat-name">{rowSeatItem.name}</span>
@@ -284,7 +437,7 @@ const Theater = (props) => {
                     <div className="container">
                         <div className="shtime-wr">
                             <Tab.Container id="left-tabs-example" defaultActiveKey="tab-0">
-                                <div className="shtime-heading" data-aos="fade-up">
+                                <div className="shtime-heading">
                                     <h2 className="heading">LỊCH CHIẾU</h2>
                                     <div className="shtime-slider time-list">
                                         <div className="swiper-container">
@@ -333,13 +486,15 @@ const Theater = (props) => {
                                                                                 <ul className="list-time">
                                                                                     {
                                                                                         theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map((timeItem, timeIndex) => (
-                                                                                            <li key={timeIndex} 
+                                                                                            <li key={timeIndex}
                                                                                                 className={`item-time ${selectedShowTimeColorActiveId.showTimeId === timeItem.showTimeId && selectedShowTimeColorActiveId.roomId === timeItem.roomId ? 'active' : ''}`}
 
                                                                                                 onClick={() => {
                                                                                                     showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
                                                                                                     setSelectedTheaterName(theaterItem.theaterName);
                                                                                                     setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
+                                                                                                    setSelectedTheaterId(theaterItem.theaterId)
+                                                                                                    setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
                                                                                                 }}>
                                                                                                 {moment(timeItem.startTime).format("HH:mm")}
                                                                                             </li>
@@ -357,6 +512,9 @@ const Theater = (props) => {
                                                                                                 onClick={() => {
                                                                                                     showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
                                                                                                     setSelectedTheaterName(theaterItem.theaterName);
+                                                                                                    setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
+                                                                                                    setSelectedTheaterId(theaterItem.theaterId)
+                                                                                                    setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
                                                                                                 }}>
                                                                                                 {moment(timeItem.startTime).format("HH:mm")}
                                                                                             </li>
@@ -397,7 +555,7 @@ const Theater = (props) => {
                                     <div className="ticket-container relative">
                                         <div className="ticket-ct">
                                             <div className="combo-content">
-                                                <div className="combo-list row" data-aos="fade-up">
+                                                <div className="combo-list row">
                                                     {
                                                         ticketType.map((ticketItem, ticketIndex) => (
                                                             <div className="combo-item col col-4" key={ticketIndex}>
@@ -445,16 +603,16 @@ const Theater = (props) => {
                             <div className="seat">
                                 <div className="container">
                                     <div className="seat-wr">
-                                        <div className="seat-heading sec-heading" data-aos="fade-up">
+                                        <div className="seat-heading sec-heading">
                                             <h2 className="heading">Chọn ghế - Rạp {seat?.roomName} </h2>
                                         </div>
                                         <div className="seat-indicator-scroll">
                                             <div className="seat-block relative --full">
-                                                <div className="seat-screen" data-aos="fade-up">
-                                                    <img src="https://cinestar.com.vn/assets/images/img-screen.png" alt=''/>
+                                                <div className="seat-screen">
+                                                    <img src="https://cinestar.com.vn/assets/images/img-screen.png" alt='' />
                                                     <div className="txt">Màn hình</div>
                                                 </div>
-                                                <div className="seat-main" data-aos="fade-up">
+                                                <div className="seat-main">
                                                     <div className="minimap-container ">
                                                         <div>
                                                             <div className="seat-table">
@@ -481,35 +639,30 @@ const Theater = (props) => {
                                         <ul className="seat-note">
                                             <li className="note-it">
                                                 <div className="image">
-                                                    {" "}
                                                     <img src="https://cinestar.com.vn/assets/images/seat-single.svg" alt="" />
                                                 </div>
                                                 <span className="txt">Ghế Thường</span>
                                             </li>
                                             <li className="note-it note-it-couple">
                                                 <div className="image">
-                                                    {" "}
                                                     <img src="https://cinestar.com.vn/assets/images/seat-couple.svg" alt="" />
                                                 </div>
                                                 <span className="txt">Ghế Đôi</span>
                                             </li>
                                             <li className="note-it">
                                                 <div className="image">
-                                                    {" "}
                                                     <img src="https://cinestar.com.vn/assets/images/seat-vip.svg" alt="" />
                                                 </div>
                                                 <span className="txt">Ghế Vip</span>
                                             </li>
                                             <li className="note-it">
                                                 <div className="image">
-                                                    {" "}
                                                     <img src="https://cinestar.com.vn/assets/images/seat-single-selecting.svg" alt="" />
                                                 </div>
                                                 <span className="txt">Ghế chọn</span>
                                             </li>
                                             <li className="note-it">
                                                 <div className="image">
-                                                    {" "}
                                                     <img src="https://cinestar.com.vn/assets/images/seat-single-disable.svg" alt="" />
                                                 </div>
                                                 <span className="txt">Ghế đã đặt</span>
@@ -525,11 +678,11 @@ const Theater = (props) => {
                         <div className="dt-food">
                             <div className="container">
                                 <div className="dt-food-wr">
-                                    <div className="dt-food-heading sec-heading" data-aos="fade-up">
+                                    <div className="dt-food-heading sec-heading">
                                         <h2 className="heading">Chọn bắp nước</h2>
                                     </div>
                                     <div className="dt-food-body">
-                                        <div className="dt-combo dt-item" data-aos="fade-up">
+                                        <div className="dt-combo dt-item">
                                             <div className="combo-tile">
                                                 <div className="title">COMBO 2 NGĂN</div>
                                             </div>
@@ -583,26 +736,33 @@ const Theater = (props) => {
 
                     <div className="dt-bill bill-fixed bill-custom">
                         <div className="container">
-                            <div className="bill-wr" data-aos="fade-up">
+                            <div className="bill-wr">
                                 <div className="bill-left">
                                     <h4 className="name-combo">{props.MovieDetail?.name} ({props.MovieDetail?.ageRestrictionName})</h4>
                                     <ul className="list">
                                         <li className="item">
                                             <span className="txt">{selectedheaterName}</span>
-                                            <span className="dot">|</span>
-                                            <span className="txt">2 HSSV-Người Cao Tuổi</span>
+                                            {
+                                                selectedTicketTypeName && (
+                                                    <>
+                                                        <span className="dot">|</span>
+                                                        <span className="txt">{selectedTicketTypeName}</span>
+                                                    </>
+                                                )
+                                            }
                                         </li>
-                                        <li className="item">
-                                            <span className="txt">Phòng chiếu :</span>
-                                            <span className="txt">{seat?.roomName}</span>
-                                            <span className="dot">|</span>
-                                            <span className="txt">{selectedSeatName}</span>
-                                            <span className="dot">|</span>
-                                            <span className="dot">16:45</span>
-                                        </li>
-                                        <li className="item">
-                                            <span className="txt" />
-                                        </li>
+                                        {
+                                            seatYourName && (
+                                                <li className="item">
+                                                    <span className="txt">Phòng chiếu :</span>
+                                                    <span className="txt">{seat?.roomName}</span>
+                                                    <span className="dot">|</span>
+                                                    <span className="txt">{seatYourName}</span>
+                                                    <span className="dot">|</span>
+                                                    <span className="dot">{selectedShowTime}</span>
+                                                </li>
+                                            )
+                                        }
                                     </ul>
                                 </div>
                                 <div className="bill-custom-right">
@@ -619,18 +779,19 @@ const Theater = (props) => {
                                             <span className="txt">Tạm tính </span>
                                             <span className="num"> {formatCurrency(totalPrice)}</span>
                                         </div>
-                                        <button className={`btn btn-warning opacity-100 ticketBooking ${seatYour.length === 0 ? 'enableButton': ''}`}
-
+                                        <button className={`btn btn-warning opacity-100 ticketBooking ${!checkBooking ? 'enableButton' : ''}`}
                                             onClick={() => {
-                                                if (seatYour.length > 0) {
-                                                    const ticketBookingSuccess = new TicketBookingSuccess();
-                                                    ticketBookingSuccess.showTimeId = selectedShowTimeId
-                                                    ticketBookingSuccess.seatIds = seatYour
-                                                    ticketBookingSuccess.roomId = selectedRoomId
-                                                    dispatch(TicketBooking(ticketBookingSuccess))
+                                                if (checkBooking) {
+                                                    const invoiceDTO = new InvoiceDTO();
+                                                    invoiceDTO.showTimeId = selectedShowTimeId
+                                                    invoiceDTO.roomId = selectedRoomId
+                                                    invoiceDTO.theaterId = selectedTheaterId
+                                                    invoiceDTO.invoiceTickets = invoiceTickets
+                                                    invoiceDTO.foodAndDrinks = Object.entries(countCombos).map((e) => ({ foodAndDrinkId: e[0], quantity: e[1] }))
+                                                    dispatch(TicketBooking(invoiceDTO))
                                                 }
                                             }}
-                                            disabled={seatYour.length === 0}
+                                            disabled={!checkBooking}
 
                                         >ĐẶT VÉ</button>
                                     </div>
@@ -640,6 +801,7 @@ const Theater = (props) => {
                     </div>
                 </>
             )}
+            <TicketInfo show={show} handleClose={handleClose} />
         </>
     )
 }

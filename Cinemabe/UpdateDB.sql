@@ -99,3 +99,58 @@ Phone nvarchar(255) NULL
 ALTER TABLE Room
 DROP COLUMN Width,
 COLUMN Length
+------------------------------------------------
+DROP TABLE Ticket
+
+CREATE TABLE [Invoice] (
+	Id uniqueidentifier NOT NULL,
+	[UserId] uniqueidentifier NOT NULL,
+	[Code] nvarchar(255)  NOT NULL,
+	[CreationTime] datetime NOT NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_Invoice_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+)
+
+CREATE TABLE [InvoiceTicket] (
+	[InvoiceId] uniqueidentifier NOT NULL,
+	[ShowTimeId] uniqueidentifier NOT NULL,
+	[SeatId] uniqueidentifier NOT NULL,
+	[TicketTypeId] uniqueidentifier NOT NULL,
+	[Price] float NOT NULL,
+	PRIMARY KEY ([InvoiceId], [ShowTimeId], [SeatId], [TicketTypeId]),
+	CONSTRAINT FK_InvoiceTicket_Invoice FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
+	CONSTRAINT FK_InvoiceTicket_ShowTime FOREIGN KEY ([ShowTimeId]) REFERENCES [ShowTime] (Id),
+	CONSTRAINT FK_InvoiceTicket_Seat FOREIGN KEY ([SeatId]) REFERENCES [Seat] (Id),
+	CONSTRAINT FK_InvoiceTicket_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
+)
+
+CREATE TABLE [InvoiceFoodAndDrink] (
+	[InvoiceId] uniqueidentifier NOT NULL,
+	[FoodAndDrinkId] uniqueidentifier NOT NULL,
+	[Quantity] int NOT NULL,
+	[Price] float NOT NULL,
+	PRIMARY KEY ([InvoiceId], [FoodAndDrinkId]),
+	CONSTRAINT FK_InvoiceFoodAndDrink_Invoice FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
+	CONSTRAINT FK_InvoiceFoodAndDrink_FoodAndDrink FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
+)
+
+ALTER TABLE FoodAndDrink
+DROP COLUMN Price
+
+ALTER TABLE FoodAndDrink
+DROP CONSTRAINT FK_FoodAndDrink_Theater
+
+ALTER TABLE FoodAndDrink
+DROP COLUMN TheaterId
+
+IF OBJECT_ID('dbo.FoodAndDrinkTheater', 'U') IS NOT NULL
+DROP TABLE dbo.FoodAndDrinkTheater;
+
+CREATE TABLE FoodAndDrinkTheater (
+	[FoodAndDrinkId] uniqueidentifier NOT NULL,
+	[TheaterId] uniqueidentifier NOT NULL,
+	[Price] float NOT NULL,
+	PRIMARY KEY ([FoodAndDrinkId], [TheaterId]),
+	CONSTRAINT FK_FoodAndDrinkTheater_FoodAndDrink FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
+	CONSTRAINT FK_FoodAndDrinkTheater_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
+)
