@@ -459,9 +459,9 @@ class InfoMovie extends StatelessWidget {
                 movie.ageRestrictionName.isNotEmpty
                     ? AgeRestrictionBox(
                         title: movie.ageRestrictionName,
-                        fontSizeCus: 14,
                       )
                     : const SizedBox.shrink(),
+                SizedBox(width: 2,),
                 movie.projectionForm == 0
                     ? const ShowtimeTypeBox(
                         title: '2D',
@@ -477,7 +477,7 @@ class InfoMovie extends StatelessWidget {
           ),
           Text(
             movie.name,
-            style:TextStyle(
+            style:const TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ],

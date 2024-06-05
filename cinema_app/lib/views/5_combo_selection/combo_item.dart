@@ -13,7 +13,6 @@ class _ComboItemState extends State<ComboItem> {
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
-    var styles = Styles();
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.symmetric(horizontal: 10),

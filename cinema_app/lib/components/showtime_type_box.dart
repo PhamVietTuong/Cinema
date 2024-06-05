@@ -1,5 +1,4 @@
 import 'package:cinema_app/config.dart';
-import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class ShowtimeTypeBox extends StatelessWidget {
@@ -18,7 +17,7 @@ class ShowtimeTypeBox extends StatelessWidget {
       padding:  EdgeInsets.all(padding),
       margin: EdgeInsets.only(left: marginLeft),
       decoration: BoxDecoration(
-        border: Border.all(width: 2),
+       border: Border.all(width: 1,color: Styles.boldTextColor["dark_purple"]!),
         color: Styles.boldTextColor["dark_purple"],
         borderRadius: BorderRadius.circular(3.0),
       ),

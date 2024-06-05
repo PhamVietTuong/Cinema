@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 var serverUrl = 'http://103.104.122.137:9000';
 
 class Styles {
+  
   static const backgroundColor = {
     "dark_purple": Color(0xFF272042),
   };
@@ -18,6 +19,7 @@ class Styles {
   static const titleFontSize = 18.0;
   static const textSize = 15.0;
   static const appbarFontSize = 25.0;
+  static const defaultHorizontal=15;
 
   //var iconSize=
   static const primaryColor = Color(0xff802ef7);

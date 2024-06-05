@@ -65,7 +65,8 @@ class Movie {
         releaseDate = DateTime.parse(json["releaseDate"]),
         time = json["time"] ?? -1,
         trailer = json["trailer"] ?? "",
-        projectionForm = json["projectionForm"] ?? 0;
+        projectionForm = json["projectionForm"] ?? 0,
+        schedules= json["schedules"]!=null?(json["schedules"] as List).map((e) => Schedule.fromJson(e as Map<String, dynamic>)).toList():[];
 }
 
 class Schedule {
@@ -90,7 +91,7 @@ class TheaterShowtime {
   String theaterAddress;
   List<ShowtimeRoom> showtimes = List.filled(0, ShowtimeRoom(), growable: true);
 
-  TheaterShowtime({this.theaterName = "", this.theaterAddress = ""});
+  TheaterShowtime({this.theaterName = "name", this.theaterAddress = "address"});
   TheaterShowtime.fromJson(Map<String, dynamic> json)
       : theaterAddress = json["theaterAddress"] ?? "",
         theaterName = json["theaterName"] ?? "",
