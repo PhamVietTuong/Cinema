@@ -1,4 +1,3 @@
-import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/btn_up_down.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +12,6 @@ class _ComboItemState extends State<ComboItem> {
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
-    var styles = Styles();
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.symmetric(horizontal: 10),

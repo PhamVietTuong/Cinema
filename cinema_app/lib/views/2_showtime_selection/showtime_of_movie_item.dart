@@ -120,6 +120,10 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                       .firstWhere((element) =>
                           element.date.day == selectedDate.day &&
                           element.date.month == selectedDate.month)
+                      .theaters
+                      .firstWhere(
+                          (element) => element.theaterId == booking.theater.id,
+                          orElse: () => TheaterShowtime())
                       .showtimes
                       .where((element) => element.showtimeType == 0)
                       .map((e) => ShowtimeItem(
@@ -145,6 +149,10 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                       .firstWhere((element) =>
                           element.date.day == selectedDate.day &&
                           element.date.month == selectedDate.month)
+                      .theaters
+                      .firstWhere(
+                          (element) => element.theaterId == booking.theater.id,
+                          orElse: () => TheaterShowtime())
                       .showtimes
                       .where((element) => element.showtimeType == 1)
                       .map((e) => ShowtimeItem(

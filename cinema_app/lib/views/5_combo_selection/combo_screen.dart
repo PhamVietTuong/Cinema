@@ -1,4 +1,3 @@
-import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_title.dart';
@@ -26,7 +25,6 @@ class _ComboScreenState extends State<ComboScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
@@ -39,7 +37,7 @@ class _ComboScreenState extends State<ComboScreen> {
         ),
         titleSpacing: 0,
         leadingWidth: 45,
-        title: Text(
+        title: const Text(
           "Combo",
         ),
       ),

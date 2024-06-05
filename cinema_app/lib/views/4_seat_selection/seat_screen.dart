@@ -16,6 +16,7 @@ import 'package:cinema_app/views/4_seat_selection/seat_row.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
+import '../../data/models/movie.dart';
 import '../../data/models/showtime.dart';
 
 class SeatScreen extends StatefulWidget {
@@ -417,6 +418,11 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                           .firstWhere((element) =>
                               element.date.day == widget.selectedDate.day &&
                               element.date.month == widget.selectedDate.month)
+                           .theaters
+                          .firstWhere(
+                              (element) =>
+                                  element.theaterId ==widget.booking.theater.id,
+                              orElse: () => TheaterShowtime())
                           .showtimes,
                       selectShowtime: selectShowtime,
                     )

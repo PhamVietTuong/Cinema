@@ -44,28 +44,30 @@ class _TheaterScreenState extends State<TheaterScreen>
         decoration: BoxDecoration(
           color: Styles.backgroundColor["dark_purple"]
         ),
-        child: Center(
-            child: isLoadingData
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Đang tải...",
-                        style: TextStyle(fontSize: Styles.titleFontSize, fontWeight:  FontWeight.bold),
-                      )
-                    ],
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      children: theaterItemLst,
+        child: isLoadingData
+            ?  Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Styles.boldTextColor["dark_purple"]!),
                     ),
-                  )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Đang tải...",
+                      style: TextStyle(fontSize: Styles.titleFontSize, fontWeight:  FontWeight.bold, color: Styles.boldTextColor["dark_purple"]),
+                    )
+                  ],
+                ),
+            )
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: theaterItemLst,
+                ),
+              ),
       ),
     );
   }

@@ -42,6 +42,7 @@ namespace Cinema.Repository
         {
             var showTimeRooms = await _context.ShowTimeRoom
             .Include(x => x.Room)
+            .ThenInclude(x => x.Theater)
             .Include(x => x.ShowTime)
                 .ThenInclude(x => x.Movie)
                     .ThenInclude(m => m.AgeRestriction)
@@ -91,20 +92,27 @@ namespace Cinema.Repository
                             .Select(st => new ScheduleRowViewModel
                             {
                                 Date = st.Key,
-                                Showtimes = st.Select(x =>
+                                Theaters = st.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address, x.Room.TheaterId })
+                                .Select(x => new TheaterRowViewModel
                                 {
-                                    bool isDulexe = _context.Seat.Include(seat => seat.SeatType).Where(seat => seat.RoomId == x.RoomId).Any(x => x.SeatType.Name == "Nằm");
+                                    TheaterId = x.Key.TheaterId,
+                                    TheaterAddress = x.Key.Address,
+                                    TheaterName = x.Key.Name,
+                                    ShowTimes = x.Select(showtime =>
+                                     {
+                                         bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == showtime.RoomId).Any(x => x.SeatType.Name == "Nằm");
+                                         return new ShowTimeRowViewModel
+                                         {
+                                             RoomId = showtime.Room.Id,
+                                             RoomName = showtime.Room.Name,
+                                             ShowTimeId = showtime.ShowTime.Id,
+                                             StartTime = showtime.ShowTime.StartTime,
+                                             EndTime = showtime.ShowTime.EndTime,
+                                             ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
+                                         };
+                                     }).ToList()
 
-                                    return new ShowTimeRowViewModel
-                                    {
-                                        RoomId = x.RoomId,
-                                        RoomName = x.Room.Name,
-                                        ShowTimeId = x.ShowTime.Id,
-                                        StartTime = x.ShowTime.StartTime,
-                                        EndTime = x.ShowTime.EndTime,
-                                        ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
-                                    };
-                                }).ToList()
+                                }).ToList(),
                             }).ToList()
 
                     });

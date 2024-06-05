@@ -165,6 +165,12 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                           .firstWhere((element) =>
                               element.date.day == widget.selectedDate.day &&
                               element.date.month == widget.selectedDate.month)
+                          .theaters
+                          .firstWhere(
+                              (element) =>
+                                  element.theaterId ==
+                                  widget.booking.theater.id,
+                              orElse: () => TheaterShowtime())
                           .showtimes,
                       selectShowtime: selectShowtime,
                     )

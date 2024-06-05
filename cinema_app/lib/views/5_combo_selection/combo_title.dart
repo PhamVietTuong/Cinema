@@ -16,7 +16,6 @@ class _ComboTitleState extends State<ComboTitle> {
           const ComboItem(),];
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return 
      Column(
         children: [
@@ -35,7 +34,7 @@ class _ComboTitleState extends State<ComboTitle> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Combo 2 ngăn",
                   ),
                   Icon(isShow

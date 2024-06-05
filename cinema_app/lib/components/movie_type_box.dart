@@ -1,5 +1,4 @@
 import 'package:cinema_app/config.dart';
-import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class MovieTypeBox extends StatelessWidget {
