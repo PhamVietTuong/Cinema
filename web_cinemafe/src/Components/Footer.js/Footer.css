@@ -5,7 +5,12 @@ img {
     width: 100%;
 }
 
+ol, ul {
+    list-style: none;
+}
+
 .footer {
+    font-family: "Josefin Sans", sans-serif;
     padding-bottom: 40px;
     position: relative;
     background: linear-gradient(106deg, #639, #36c 102.69%);
@@ -30,6 +35,10 @@ img {
     width: 43%;
 }
 
+.footer .footer-item .footer-item-bot {
+    margin-top: 48px;
+}
+
 .footer .ft-group-btn {
     align-items: center;
     display: flex;
@@ -42,8 +51,8 @@ img {
 
 .footer .ft-group-btn .dat-ve {
     background: #f3ea28;
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 16px;
+    font-family: "Anton", sans-serif;
     transition: all 1s ease;
     padding: 10px 0;
 }
@@ -56,8 +65,8 @@ img {
     background: linear-gradient(106deg, #639, #36c 102.69%);
     color: #f3ea28;
     border: #f3ea28 1px solid;
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 16px;
+    font-family: "Anton", sans-serif;
     transition: all 1s ease;
     padding: 10px 0;
 }
@@ -67,9 +76,133 @@ img {
     background: linear-gradient(90deg, #ff6d00, #ffc107);
 }
 
+.ft-hotline-socials .list {
+    align-items: center;
+    display: flex;
+    gap: 0 12px;
+}
 
-@media screen and (min-width: 768px) {
-    .footer-item .ft-text .txt-mobile {
-        display: none;
-    }
+.ft-hotline-socials .link {
+    display: block;
+    transition: all 0.3s ease;
+    width: 24px;
+    margin-right: 5px;
+}
+
+.ft-hotline-socials .link .icon {
+    color: #fff;
+    font-size: 24px;
+}
+
+.ft-lg, .lg-action {
+    align-items: center;
+    display: flex;
+}
+
+.ft-lg {
+    gap: 0 24px;
+}
+
+.lg-action {
+    cursor: pointer;
+    gap: 0 8px;
+    position: relative;
+}
+.ft-lg, .lg-action {
+    align-items: center;
+    display: flex;
+}
+
+.lg-popup {
+    display: flex;
+    gap: 0 8px;
+}
+
+.lg-option {
+    align-items: center;
+    display: flex;
+    gap: 0 8px;
+}
+
+.lg-option .image {
+    border-radius: 1000px;
+    display: inline-block;
+    flex-shrink: 0;
+    height: 24px;
+    width: 24px;
+}
+
+.lg-option .image img {
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    width: 100%;
+}
+
+.lg-action-popup {
+    -webkit-backdrop-filter: blur(100px);
+    backdrop-filter: blur(100px);
+    background: rgba(51, 102, 204, .8);
+    border-radius: .8rem;
+    min-width: 100%;
+    opacity: 0;
+    padding: 6px 10px;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    transform: translateY(10px);
+    transition: all .3s ease-in-out;
+    visibility: hidden;
+}
+
+.lg-action:hover .lg-action-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.footer .footer-item .text {
+    font-family: "Anton", sans-serif;
+    text-transform: uppercase;
+}
+
+.footer .text {
+    margin-bottom: 2.4rem;
+}
+
+.footer .footer-item .menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.footer .footer-item .menu-link {
+    text-decoration: none;
+    text-underline-position: under;
+}
+
+.footer .footer-item .menu-link {
+    cursor: pointer;
+    font-size: 16px;
+    transition: all .3s;
+    color: #fff;
+}
+
+.footer-bottom {
+    border-top: 1px solid #f8fafc;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 24px;
+}
+
+.footer-bottom .menu-list {
+    display: flex;
+    gap: 0 24px;
+}
+
+.footer-bottom .menu-list .menu-link {
+    cursor: pointer;
+    transition: all .3s;
+    text-decoration: none;
+    color: #fff;
 }

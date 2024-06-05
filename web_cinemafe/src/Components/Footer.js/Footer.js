@@ -1,4 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Footer.css'
+import { faFacebook, faTiktok, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
     return (
@@ -17,7 +19,6 @@ const Footer = () => {
                                     </a>
                                     <div className="ft-text">
                                         <p className="txt-deskop">BE HAPPY, BE A STAR</p>
-                                        <p className="txt-mobile">BE HAPPY, BE A STAR</p>
                                     </div>
                                     <div className="ft-group-btn">
                                         <a className="btn dat-ve" href="/movie">
@@ -27,50 +28,6 @@ const Footer = () => {
                                             <span className="txt">ĐẶT BẮP NƯỚC</span>
                                         </a>
                                     </div>
-                                    <div className="ft-menu-mobile">
-                                        <ul className="menu-list">
-                                            <li className="menu-item">
-                                                <a href="/account/account-profile/" className="menu-link">
-                                                    Tài khoản
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="/loai-hinh-cho-thue-khac" className="menu-link">
-                                                    Cho thuê sự kiện
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="/cac-loai-hinh-giai-tri-khac" className="menu-link">
-                                                    Dịch vụ khác
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="/about-us/" className="menu-link">
-                                                    Giới thiệu
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a className="menu-link" href="/chinh-sach-bao-mat">
-                                                    Chính sách bảo mật
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="/news" className="menu-link">
-                                                    Tin tức
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="/career" className="menu-link">
-                                                    Tuyển dụng
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="/contact" className="menu-link">
-                                                    Liên hệ
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                     <div className="ft-hotline-socials">
                                         <ul className="list">
                                             <li className="item item-fb">
@@ -79,20 +36,16 @@ const Footer = () => {
                                                     className="link"
                                                     aria-label="Facebook of Cinestart"
                                                 >
-                                                    <img src="/assets/images/footer-facebook.svg" alt="" />
+                                                    <FontAwesomeIcon className="icon" icon={faFacebook} />
                                                 </a>
                                             </li>
-                                            {/* <li class="item item-ig"><a href="https://www.instagram.com/cine_star/" class="link"> <img
-                              src="/assets/images/footer-instagram.svg" alt=""></a></li>
-                  <li class="item item-lk">
-                      <a class="link"> <img src="/assets/images/footer-linkedIn.svg" alt=""></a></li> */}
                                             <li className="item item-yt">
                                                 <a
                                                     className="link"
                                                     href="https://www.youtube.com/@CinestarCinemasVietnam"
                                                     aria-label="Youtube of Cinestar"
                                                 >
-                                                    <img src="/assets/images/footer-youtube.svg" alt="" />
+                                                    <FontAwesomeIcon className="icon" icon={faYoutube} />
                                                 </a>
                                             </li>
                                             <li className="item item-tt">
@@ -101,19 +54,7 @@ const Footer = () => {
                                                     href="https://www.tiktok.com/@cinestar_cinemas?is_from_webapp=1&sender_device=pc"
                                                     aria-label="Tiktok of Cinestar"
                                                 >
-                                                    <img
-                                                        src="https://api-website.cinestar.com.vn/media/wysiwyg/CMSPage/Icon/ic-tittok.svg"
-                                                        alt=""
-                                                    />
-                                                </a>
-                                            </li>
-                                            <li className="item item-zl">
-                                                <a
-                                                    className="link"
-                                                    href="https://zalo.me/2861828859391058401"
-                                                    ria-label="Zalo of Cinestar"
-                                                >
-                                                    <img src="/assets/images/ic-zl-white.svg" alt="" />
+                                                    <FontAwesomeIcon className="icon" icon={faTiktok} />
                                                 </a>
                                             </li>
                                         </ul>
@@ -126,7 +67,7 @@ const Footer = () => {
                                             <div className="lg-popup">
                                                 <div className="lg-option">
                                                     <span className="image">
-                                                        <img src="/assets/images/footer-vietnam.svg" alt="" />
+                                                        <img src="/Images/HeaderAndFooter/footer-vietnam.svg" alt="" />
                                                     </span>
                                                     <span className="txt">VN</span>
                                                 </div>
@@ -134,7 +75,7 @@ const Footer = () => {
                                             <div className="lg-action-popup popUpOpenJs">
                                                 <div className="lg-option">
                                                     <span className="image">
-                                                        <img src="/assets/images/footer-america.png" alt="" />
+                                                        <img src="/Images/HeaderAndFooter/footer-america.png" alt="" />
                                                     </span>
                                                     <span className="txt">EN</span>
                                                 </div>
@@ -142,41 +83,6 @@ const Footer = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <div class="footer-item col col-2">
-          <div class="footer-item-top">
-              <div class="text">Tài khoản</div>
-              <ul class="menu-list">
-                  <li class="menu-item"><a class="menu-link" href="/login/?prevUrl=">Đăng nhập</a></li>
-                  <li class="menu-item"><a class="menu-link" href="/register">Đăng ký</a></li>
-                  <li class="menu-item"><a class="menu-link" href="/membership">Membership</a></li>
-              </ul>
-          </div>
-          <div class="footer-item-bot">
-              <div class="text">Xem Phim</div>
-              <ul class="menu-list">
-                  <li class="menu-item"><a class="menu-link" href="/movie/showing/">Phim đang chiếu</a></li>
-                  <li class="menu-item"><a class="menu-link" href="/movie/upcoming/">Phim sắp chiếu</a></li>
-                  <li class="menu-item"><a class="menu-link" href="/movie">Suất chiếu đặc biệt</a></li>
-              </ul>
-          </div>
-      </div>
-      <div class="footer-item col col-2">
-        <div class="footer-item-top">
-          <div class="text">Thuê sự kiện</div>
-          <ul class="menu-list">
-              <li class="menu-item"><a class="menu-link" href="/he-thong-thue-rap/">Thuê rạp</a></li>
-              <li class="menu-item"><a class="menu-link" href="/loai-hinh-cho-thue-khac/">Các loại hình cho thuê khác</a>
-          </ul>
-        </div>
-          <div class="footer-item-bot">
-              <div class="text">Cinestar</div>
-              <ul class="menu-list">
-                  <li class="menu-item"><a class="menu-link" href="/about-us">Giới thiệu</a></li>
-                  <li class="menu-item"><a class="menu-link" href="/contact">Liên hệ</a></li>
-                  <li class="menu-item"><a class="menu-link" href="/career/">Tuyển dụng</a></li>
-              </ul>
-          </div>
-      </div> */}
                                 <div className="footer-item col col-4">
                                     <div className="row footer-item-top">
                                         <div className="col-6 col">
@@ -385,26 +291,13 @@ const Footer = () => {
                                             Hỏi và đáp
                                         </a>
                                     </li>
-                                    {/* <li class="menu-item"><a class="menu-link" href="/career/">Tuyển dụng</a></li>
-          <li class="menu-item"><a class="menu-link" href="/contact">Liên hệ</a></li>
-          <li class="menu-item"><a class="menu-link" href="/about-us">Giới thiệu</a></li> */}
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div classname="ft-author" >
-                        <div
-                            classname="container"
-                            style={{
-                                /* justifyContent: 'center', */
-                                textAlign: "center"
-                            }}
-                        >
-                            <div
-                                classname="ft-bct"
-                                style={{ width: 143 /* height: 50, */, margin: "12px auto" }}
-
-                            >
+                        <div classname="container" style={{ textAlign: "center" }}>
+                            <div classname="ft-bct" style={{ width: 143, margin: "12px auto" }}>
                                 <a
                                     href="http://online.gov.vn/HomePage/CustomWebsiteDisplay.aspx?DocId=51406"
                                     target="_blank"
