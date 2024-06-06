@@ -1,4 +1,4 @@
-Use [Cinema];
+﻿Use [Cinema];
 
 IF OBJECT_ID('dbo.MovieTypeDetail', 'U') IS NOT NULL
 DROP TABLE dbo.MovieTypeDetail;
@@ -151,11 +151,11 @@ CREATE TABLE [SeatTypeTicketType] (
 
 CREATE TABLE [Seat] (
 	[Id] uniqueidentifier NOT NULL,
-	[RoomId] uniqueidentifier NOT NULL,
+	[RoomId] uniqueidentifier NOT NULL UNIQUE,
 	[SeatTypeId] uniqueidentifier NULL,
 	[Name] nvarchar(255) NULL,
-	[ColIndex] int NOT NULL,
-	[RowName] nvarchar(255) NOT NULL,
+	[ColIndex] int NOT NULL UNIQUE,
+	[RowName] nvarchar(255) NOT NULL UNIQUE,
 	[IsSeat] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Seat_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
@@ -164,9 +164,9 @@ CREATE TABLE [Seat] (
 
 CREATE TABLE [ShowTime] (
 	[Id] uniqueidentifier NOT NULL,
-	[MovieId] uniqueidentifier NOT NULL,
+	[MovieId] uniqueidentifier NOT NULL UNIQUE,
 	[ProjectionForm] int NOT NULL,
-	[StartTime] datetime NOT NULL,
+	[StartTime] datetime NOT NULL UNIQUE,
 	[EndTime] datetime NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
@@ -245,3 +245,77 @@ CREATE TABLE [MovieTypeDetail] (
 	CONSTRAINT FK_MovieTypeDetail_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
 	CONSTRAINT FK_MovieTypeDetail_MovieType FOREIGN KEY ([MovieTypeId]) REFERENCES [MovieType] (Id),
 )
+
+
+CREATE TRIGGER TRG_Seat_Unique_RoomId_ColIndex_RowName
+ON [Seat]
+INSTEAD OF INSERT, UPDATE
+AS
+BEGIN
+    -- Check for duplicates in the existing data for INSERT
+    IF EXISTS (
+        SELECT 1
+        FROM [Seat] s
+        JOIN inserted i ON s.RoomId = i.RoomId AND s.ColIndex = i.ColIndex AND s.RowName = i.RowName
+    )
+    BEGIN
+        RAISERROR ('Duplicate RoomId, ColIndex, and RowName combination found.', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+    -- Check for duplicates in the existing data for UPDATE
+    IF EXISTS (
+        SELECT 1
+        FROM [Seat] s
+        JOIN inserted i ON s.RoomId = i.RoomId AND s.ColIndex = i.ColIndex AND s.RowName = i.RowName
+        WHERE s.Id != i.Id
+    )
+    BEGIN
+        RAISERROR ('Duplicate RoomId, ColIndex, and RowName combination found.', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+    -- If no duplicates, proceed with the insert or update
+    INSERT INTO [Seat] (Id, RoomId, SeatTypeId, Name, ColIndex, RowName, IsSeat)
+    SELECT Id, RoomId, SeatTypeId, Name, ColIndex, RowName, IsSeat
+    FROM inserted;
+END;
+
+CREATE TRIGGER TRG_ShowTime_Unique_MovieId_StartTime
+ON [ShowTime]
+INSTEAD OF INSERT, UPDATE
+AS
+BEGIN
+    -- Check for duplicates in the existing data for INSERT
+    IF EXISTS (
+        SELECT 1
+        FROM [ShowTime] s
+        JOIN inserted i ON s.MovieId = i.MovieId AND s.StartTime = i.StartTime
+    )
+    BEGIN
+        RAISERROR ('Duplicate MovieId and StartTime combination found.', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+    -- Check for duplicates in the existing data for UPDATE
+    IF EXISTS (
+        SELECT 1
+        FROM [ShowTime] s
+        JOIN inserted i ON s.MovieId = i.MovieId AND s.StartTime = i.StartTime
+        WHERE s.Id != i.Id
+    )
+    BEGIN
+        RAISERROR ('Duplicate MovieId and StartTime combination found.', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+    -- If no duplicates, proceed with the insert or update
+    INSERT INTO [ShowTime] (Id, MovieId, ProjectionForm, StartTime, EndTime, Status)
+    SELECT Id, MovieId, ProjectionForm, StartTime, EndTime, Status
+    FROM inserted;
+END;
+
