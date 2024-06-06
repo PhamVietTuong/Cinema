@@ -151,26 +151,28 @@ CREATE TABLE [SeatTypeTicketType] (
 
 CREATE TABLE [Seat] (
 	[Id] uniqueidentifier NOT NULL,
-	[RoomId] uniqueidentifier NOT NULL UNIQUE,
+	[RoomId] uniqueidentifier NOT NULL,
 	[SeatTypeId] uniqueidentifier NULL,
 	[Name] nvarchar(255) NULL,
 	[ColIndex] int NOT NULL UNIQUE,
-	[RowName] nvarchar(255) NOT NULL UNIQUE,
+	[RowName] nvarchar(255) NOT NULL,
 	[IsSeat] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Seat_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
 	CONSTRAINT FK_Seat_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES SeatType(Id),
+	CONSTRAINT UQ_Seat_RoomId_ColIndex_RowName UNIQUE (RoomId, ColIndex, RowName)
 )
 
 CREATE TABLE [ShowTime] (
 	[Id] uniqueidentifier NOT NULL,
-	[MovieId] uniqueidentifier NOT NULL UNIQUE,
+	[MovieId] uniqueidentifier NOT NULL,
 	[ProjectionForm] int NOT NULL,
-	[StartTime] datetime NOT NULL UNIQUE,
+	[StartTime] datetime NOT NULL,
 	[EndTime] datetime NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_ShowTime_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
+	CONSTRAINT UQ_ShowTime_MovieId_StartTime UNIQUE (MovieId, StartTime)
 )
 
 CREATE TABLE [ShowTimeRoom] (
