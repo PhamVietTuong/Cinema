@@ -81,7 +81,7 @@ class _SeatBoxState extends State<SeatBox> {
         children: [
           Expanded(
             child: AspectRatio(
-              aspectRatio: widget.seat.seatTypeName.compareTo("Đơn")==0 ? 1 : 2,
+              aspectRatio: widget.seat.seatTypeName.compareTo("Đơn")==0 ? 1.1 : 2.2,
               child: widget.seat.isSeat
                   ? Container(
                       margin: const EdgeInsets.only(right: 3, bottom: 3),
@@ -94,10 +94,9 @@ class _SeatBoxState extends State<SeatBox> {
                         decoration:
                             BoxDecoration(color: colorMap[loadSeatColor()]!),
                         child: Text(
-                          widget.seat.name,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
+                          "A10",
+                          style:  TextStyle(
+                              color: Styles.boldTextColor["dark_purple"],
                               fontWeight: FontWeight.bold),
                         ),
                       ),
