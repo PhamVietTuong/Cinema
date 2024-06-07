@@ -170,7 +170,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: lstShowTimeMovie.isNotEmpty
                           ? lstShowTimeMovie
-                          : [const Text("Trống")]),
+                          : [ Text("Trống", style:  TextStyle(color: Styles.boldTextColor["dark_purple"]),)]),
                 ),
               ),
             ),
