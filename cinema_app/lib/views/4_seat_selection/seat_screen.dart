@@ -410,7 +410,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                     AgeRestrictionBox(
                         title: widget.booking.movie.ageRestrictionName,
                         marginLeft: marginLeft,
-                        fontSizeCus: 15),
+                        ),
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,

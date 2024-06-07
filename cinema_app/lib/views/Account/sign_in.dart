@@ -45,7 +45,7 @@ class _SignInState extends State<SignIn> {
       ),
       body: Column(
         children: [
-          Row
+          const Row
           (
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -21,7 +21,6 @@ class _ListThreaterState extends State<ListThreater> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         GestureDetector(
@@ -42,7 +41,7 @@ class _ListThreaterState extends State<ListThreater> {
               children: [
                 Text(
                   widget.data.name, // Sử dụng dữ liệu từ widget cha
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
                 Icon(
                   isShow ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
