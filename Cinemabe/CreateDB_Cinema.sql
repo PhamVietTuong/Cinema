@@ -124,6 +124,7 @@ CREATE TABLE [Room] (
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Room_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
+	CONSTRAINT UQ_Room_TheaterId_Name UNIQUE (TheaterId, Name)
 );
 
 CREATE TABLE [SeatType] (
@@ -153,8 +154,7 @@ CREATE TABLE [Seat] (
 	[Id] uniqueidentifier NOT NULL,
 	[RoomId] uniqueidentifier NOT NULL,
 	[SeatTypeId] uniqueidentifier NULL,
-	[Name] nvarchar(255) NULL,
-	[ColIndex] int NOT NULL UNIQUE,
+	[ColIndex] int NOT NULL,
 	[RowName] nvarchar(255) NOT NULL,
 	[IsSeat] bit NOT NULL,
 	PRIMARY KEY (Id),
