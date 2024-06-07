@@ -6,7 +6,6 @@ class TicketBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 5,
@@ -14,7 +13,7 @@ class TicketBox extends StatelessWidget {
       margin: const EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
           border: Border.all(width: 2, color: Colors.purple), borderRadius: BorderRadius.circular(5)),
-      child:  Column(
+      child:  const Column(
         children: [
           Text("E07", style: TextStyle(color: Styles.primaryColor),),
           Text("70,000", style: TextStyle(color: Styles.primaryColor),),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-var serverUrl = 'http://103.104.122.137:9000';
-
+var serverUrl = 'https://10.0.2.2:7209';
+//'https://10.0.2.2:7209';
 class Styles {
   
   static const backgroundColor = {
@@ -19,7 +19,7 @@ class Styles {
   static const titleFontSize = 18.0;
   static const textSize = 15.0;
   static const appbarFontSize = 25.0;
-  static const defaultHorizontal=15;
+  static const defaultHorizontal=15.0;
 
   //var iconSize=
   static const primaryColor = Color(0xff802ef7);
@@ -31,4 +31,6 @@ class Styles {
 
   static const iconSizeInLineText = 20.0;
   static const iconSizeInTitle = 30.0;
+  static const iconInAppBar=25.0;
+  
 }

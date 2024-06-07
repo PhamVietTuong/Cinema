@@ -14,11 +14,10 @@ class TicketInfoScreen extends StatefulWidget {
 class _TicketInfoScreenState extends State<TicketInfoScreen> {
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     var sW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "THANH TOÁN",
         ),
         leading: const SizedBox(),
@@ -30,10 +29,10 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
             Container(
               width: sW - 30,
               padding: const EdgeInsets.symmetric(vertical: 15),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Styles.primaryColor,
               ),
-              child: Center(
+              child: const Center(
                   child: Text(
                 "Thông Tin Giao Dịch",
               )),
@@ -100,16 +99,16 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
               margin: const EdgeInsets.only(
                 top: 20,
               ),
-              child: Column(
+              child: const Column(
                 children: [
                   Text(
                     "Mã vé",
                   ),
                   Text("111850955",),
-                  const SizedBox(
+                  SizedBox(
                     height: 15,
                   ),
-                  const QrBox(
+                  QrBox(
                     value: "111850955",
                     size: 200.0,
                   )
@@ -136,7 +135,7 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                         decoration: BoxDecoration(
                             color: Styles.primaryColor,
                             borderRadius: BorderRadius.circular(8)),
-                        child: Text(
+                        child: const Text(
                           "XÁC NHẬN",
                   
                         ))),

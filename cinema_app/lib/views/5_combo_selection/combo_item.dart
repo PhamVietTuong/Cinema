@@ -23,7 +23,7 @@ class _ComboItemState extends State<ComboItem> {
               width: (wS - 20) * 0.3,
               child:
                   const Image(image: AssetImage("assets/img_demo/Combo.png"))),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,7 +47,7 @@ class _ComboItemState extends State<ComboItem> {
               ),
               Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
+                  child: const Text(
                     "000",
                   )),
                BtnUpDown(upDown: (bool i){},)

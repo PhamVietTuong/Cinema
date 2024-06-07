@@ -1,7 +1,6 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/Account/login_screen.dart';
 import 'package:cinema_app/views/Account/registration_screen.dart';
-import 'package:cinema_app/views/Account/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 class User extends StatefulWidget {
@@ -17,7 +16,7 @@ class _UserState extends State<User> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("TÀI KHOẢN",
@@ -29,10 +28,10 @@ class _UserState extends State<User> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              // );
             },
           ),
         ],
@@ -52,10 +51,10 @@ class _UserState extends State<User> {
                       height: MediaQuery.of(context).size.height / 5,
                       fit: BoxFit.contain,
                     ),
-                    Text(
+                    const Text(
                       "Đăng Ký Thành Viên",
                     ),
-                    Text(
+                    const Text(
                       "Nhận Ngay Nhiều Ưu Đãi!",
                     ),
                   ],
@@ -78,7 +77,7 @@ class _UserState extends State<User> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Đăng ký",
                  
                     ),
@@ -99,7 +98,7 @@ class _UserState extends State<User> {
                     ),
                     backgroundColor: Colors.grey,
                   ),
-                  child: Text(
+                  child: const Text(
                     "Đăng nhập",
                    
                   ),
@@ -113,14 +112,14 @@ class _UserState extends State<User> {
             ),
             TextButton(
               onPressed: () {},
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Thông Tin Công Ty",
                 
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded,
+                  Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
                 ],
               ),
@@ -131,14 +130,14 @@ class _UserState extends State<User> {
             ),
             TextButton(
               onPressed: () {},
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Điều Khoản Sử Dụng",
                    
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded,
+                  Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
                 ],
               ),
@@ -149,14 +148,14 @@ class _UserState extends State<User> {
             ),
             TextButton(
               onPressed: () {},
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Chính Sách Thanh Toán",
                   
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded,
+                  Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
                 ],
               ),
@@ -167,14 +166,14 @@ class _UserState extends State<User> {
             ),
             TextButton(
               onPressed: () {},
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Chính Sách Bảo Mật",
                    
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded,
+                  Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
                 ],
               ),
@@ -185,14 +184,14 @@ class _UserState extends State<User> {
             ),
             TextButton(
               onPressed: () {},
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Hỏi Đáp",
                    
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded,
+                  Icon(Icons.arrow_forward_ios_rounded,
                       color: Colors.black54),
                 ],
               ),

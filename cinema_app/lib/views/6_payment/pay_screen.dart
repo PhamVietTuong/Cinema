@@ -37,7 +37,6 @@ class _PayScreenState extends State<PayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     var wS = MediaQuery.of(context).size.width;
 
     return Scaffold(
