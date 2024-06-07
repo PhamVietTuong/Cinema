@@ -1,4 +1,3 @@
-import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/btn_up_down.dart';
 import 'package:flutter/material.dart';
 
