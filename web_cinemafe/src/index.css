@@ -294,21 +294,50 @@ p {
 .swal2-html-container {
   color: #f8fafc !important;
   font-size: 16px !important;
+  line-height: 24.8px !important;
 }
 
-.swal2-actions .swal2-confirm {
-  margin: 0 auto;
-    max-width: 40rem;
-    border: .1rem solid #f3ea28;
+.swal2-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
+.swal2-actions .swal2-cancel {
+    margin: 0;
+      width: 120px;
+      height: 40px;
+      max-width: 180px;
+      border: 1px solid #f3ea28;
       color: #f3ea28;
       position: relative;
       transition: all .4s ease-in-out;
       z-index: 1;
       background-color: transparent;
       font-family: "Anton", sans-serif;
+      align-items: center;
+      justify-content: center;
 }
 
-.swal2-confirm {
+.swal2-actions .swal2-confirm {
+  margin: 0;
+  width: 120px;
+    height: 40px;
+    max-width: 180px;
+    border: 1px solid #f3ea28;
+      color: #f3ea28;
+      position: relative;
+      transition: all .4s ease-in-out;
+      z-index: 1;
+      background-color: transparent;
+      font-family: "Anton", sans-serif;
+          display: flex !important;
+          align-items: center;
+            justify-content: center;
+}
+
+.swal2-confirm, .swal2-cancel {
   color: #f3ea28;
   position: relative;
   z-index: 1;
@@ -317,23 +346,27 @@ p {
 }
 
 .swal2-confirm::before,
-.swal2-confirm::after {
+.swal2-confirm::after,
+.swal2-cancel::before,
+.swal2-cancel::after {
   content: '';
   height: 100%;
-  width: 0.1rem;
+  width: 1px;
   transition: all 0.4s ease-in-out;
   position: absolute;
   top: 0;
 }
 
-.swal2-confirm::before {
+.swal2-confirm::before,
+.swal2-cancel::before {
   width: 100%;
   background: transparent;
   z-index: -2;
   right: 0;
 }
 
-.swal2-confirm::after {
+.swal2-confirm::after,
+.swal2-cancel::after {
   bottom: 0;
   left: 0;
   width: 0;
@@ -342,19 +375,158 @@ p {
   z-index: -1;
 }
 
-.swal2-confirm:hover {
+.swal2-confirm:hover,
+.swal2-cancel:hover {
   color: #fff;
 }
 
-.swal2-confirm:hover img {
+.swal2-confirm:hover img,
+.swal2-cancel:hover img {
   transition: all .2s;
   filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
 }
 
-.swal2-confirm:hover::before {
+.swal2-confirm:hover::before,
+.swal2-cancel:hover::before {
   width: 0;
 }
 
-.swal2-confirm:hover::after {
+.swal2-confirm:hover::after,
+.swal2-cancel:hover::after {
   width: 100%;
 }
+
+
+.btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  text-align: center;
+  font-family: "Anton", sans-serif !important;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 12px;
+  overflow: hidden;
+}
+
+.btn--pri {
+  color: #0f172a !important;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn--pri::before,
+.btn--pri::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  transition: all 0.4s ease-in-out;
+}
+
+.btn--pri::before {
+  width: 100%;
+  background: #f3ea28;
+  z-index: -2;
+  right: 0;
+  top: 0;
+}
+
+.btn--pri::after {
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(106deg, #639 0%, #36C 102.69%);
+  z-index: -1;
+}
+
+.btn--pri:hover {
+  color: #fff !important;
+}
+
+.btn--pri:hover img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
+}
+
+.btn--pri:hover::before {
+  width: 0;
+}
+
+.btn--pri:hover::after {
+  width: 100%;
+}
+
+.btn--pri-active {
+  /* color: $color-white; */
+}
+
+.btn--pri-active img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
+}
+
+.btn--pri-active::before {
+  width: 0;
+}
+
+.btn--pri-active::after {
+  width: 100%;
+}
+
+.btn.--wf {
+  width: fit-content;
+}
+
+.btn.--mw {
+  min-width: 236px;
+}
+
+.btn.--gray {
+  background-color: #E2E8F0;
+  color: #000;
+}
+
+.modal-header {
+  /* border-bottom: none !important; */
+  border-bottom: none !important;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+}
+
+.modal-header .modal-btn-close{
+  /* color: rgb(248, 250, 252);
+  cursor: pointer !important;
+    display: block;
+      height: 32px;
+      position: absolute;
+      right: 16px;
+      top: 30px;
+      width: 32px; */
+      background-color: transparent;
+        border: none;
+        color: rgb(248, 250, 252);
+        cursor: pointer !important;
+        display: block;
+        height: 32px;
+        width: 32px;
+        padding: 0;
+}
+
+button {
+    background-color: transparent;
+    padding: 0;
+}
+
+

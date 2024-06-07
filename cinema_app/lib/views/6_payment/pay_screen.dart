@@ -67,7 +67,6 @@ class _PayScreenState extends State<PayScreen> {
                 margin: const EdgeInsets.only(right: 15),
                 child: const Text(
                   "04:55",
-        
                 ))
           ],
         ),
@@ -89,6 +88,7 @@ class _PayScreenState extends State<PayScreen> {
         leadingWidth: 45,
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Center(
           child: Column(children: [
             //thông tin phim

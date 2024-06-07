@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:cinema_app/data/models/food_and_drink.dart';
 import 'package:cinema_app/data/models/theater.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/presenters/theater_presenter.dart';
@@ -33,7 +34,9 @@ class _TheaterScreenState extends State<TheaterScreen>
       appBar: AppBar(
         title: Text(
           "MUA VÉ",
-          style: TextStyle(color: Styles.boldTextColor["dark_purple"], fontSize: Styles.appbarFontSize),
+          style: TextStyle(
+              color: Styles.boldTextColor["dark_purple"],
+              fontSize: Styles.appbarFontSize),
         ),
         centerTitle: true,
         backgroundColor: Styles.backgroundContent["dark_purple"],
@@ -41,28 +44,31 @@ class _TheaterScreenState extends State<TheaterScreen>
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: Styles.backgroundColor["dark_purple"]
-        ),
+        decoration: BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
         child: isLoadingData
-            ?  Center(
-              child: Column(
+            ? Center(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Styles.boldTextColor["dark_purple"]!),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Styles.boldTextColor["dark_purple"]!),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Text(
                       "Đang tải...",
-                      style: TextStyle(fontSize: Styles.titleFontSize, fontWeight:  FontWeight.bold, color: Styles.boldTextColor["dark_purple"]),
+                      style: TextStyle(
+                          fontSize: Styles.titleFontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Styles.boldTextColor["dark_purple"]),
                     )
                   ],
                 ),
-            )
+              )
             : SingleChildScrollView(
+                physics:const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: theaterItemLst,
@@ -75,7 +81,7 @@ class _TheaterScreenState extends State<TheaterScreen>
   @override
   void onLoadTheaterComplete(List<Theater> theaters) {
     setState(() {
-      theaterItemLst.clear();
+      theaters.sort((a, b) => a.name.compareTo(b.name));
       theaterItemLst =
           theaters.map((theater) => TheaterItem(data: theater)).toList();
       isLoadingData = false;
@@ -83,7 +89,7 @@ class _TheaterScreenState extends State<TheaterScreen>
   }
 
   @override
-  void onLoadTheaterError() {
+  void onLoadError() {
     setState(() {
       isLoadingData = false;
     });
@@ -119,4 +125,7 @@ class _TheaterScreenState extends State<TheaterScreen>
           );
         });
   }
+
+  @override
+  void onLoadCombosByTheater(List<FoodAndDrink> combos) {}
 }

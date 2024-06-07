@@ -74,12 +74,13 @@ class _MovieDetailState extends State<MovieDetail>
         orElse: () => Schedule(),
       );
 
+
       isLoadingData = false;
     });
   }
 
   @override
-  void onLoadMoviesError() {
+  void onLoadError() {
     setState(() {
       isLoadingData = false;
     });
@@ -96,7 +97,6 @@ class _MovieDetailState extends State<MovieDetail>
           date: today.add(Duration(days: i)),
           selectDay: _selectDay));
     }
-
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -232,6 +232,7 @@ class _MovieDetailState extends State<MovieDetail>
                                       width:
                                           MediaQuery.of(context).size.width / 4,
                                       height: 150,
+
                                     ),
                                     const SizedBox(width: 15),
                                     Column(

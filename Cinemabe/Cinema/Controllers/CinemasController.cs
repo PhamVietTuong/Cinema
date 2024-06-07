@@ -9,7 +9,6 @@ using System.Net;
 
 namespace Cinema.Controllers
 {
-  
     [Route("api/[controller]")]
     [ApiController]
     public class CinemasController : ControllerBase
@@ -21,7 +20,7 @@ namespace Cinema.Controllers
             _uow = uow;
         }
 
-  #region Search theater, movie
+        #region Search theater, movie
         [HttpGet("SearchByName{name}")]
         public async Task<ActionResult> Search(string name)
         {
@@ -31,13 +30,13 @@ namespace Cinema.Controllers
                 var theaterResults = await _uow.TheaterRepository.GetTheatersByName(name);
                 if (theaterResults != null && theaterResults.Any())
                 {
-                    return Ok(theaterResults);
+                    return Ok(new { theaters =theaterResults});
                 }
 
                 var movieResults = await _uow.MovieRepository.GetMoviesByName(name);
                 if (movieResults != null && movieResults.Any())
                 {
-                    return Ok(movieResults);
+                    return Ok(new { movies = movieResults });
                 }
 
 
@@ -65,7 +64,7 @@ namespace Cinema.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
-                }
+        }
 
         [HttpPost("MovieDetail")]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
@@ -108,24 +107,7 @@ namespace Cinema.Controllers
                 return Ok(result);
 
             }
-         
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e);
-            }
-        }
 
-        #endregion
-
-        #region Ticket
-        [HttpPost("Ticket")]
-        public async Task<ActionResult<List<TicketDTO>>> CreateTicket([FromBody] TicketDTO vm)
-        {
-            try
-            {
-                var result = await _uow.TicketRepository.CreateAysn(vm);
-                return Ok(result);
-            }
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
@@ -210,11 +192,11 @@ namespace Cinema.Controllers
 
         #region Date
         [HttpGet("GetDateByMovieId/{movieId}/{ProjectionForm}")]
-        public async Task<ActionResult<List<DateTime>>> GetDateByMovieID(Guid movieId,int ProjectionForm)
+        public async Task<ActionResult<List<DateTime>>> GetDateByMovieID(Guid movieId, int ProjectionForm)
         {
             try
             {
-                var dateRows = await _uow.MovieRepository.GetDateByMovieID(movieId,ProjectionForm);
+                var dateRows = await _uow.MovieRepository.GetDateByMovieID(movieId, ProjectionForm);
 
                 if (dateRows == null)
                 {
@@ -225,18 +207,18 @@ namespace Cinema.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message); 
+                return StatusCode(500, e.Message);
             }
         }
         #endregion
 
         #region ShowtimeByDate
-      [HttpGet("GetShowTimeByMovieID/{movieId}/{date}/{ProjectionForm}")]
-        public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetShowTimeByMovieID(Guid movieId, DateTime date,int ProjectionForm)
+        [HttpGet("GetShowTimeByMovieID/{movieId}/{date}/{ProjectionForm}")]
+        public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetShowTimeByMovieID(Guid movieId, DateTime date, int ProjectionForm)
         {
             try
             {
-                var showtimeViewModels = await _uow.MovieRepository.GetShowTimeByMovieID(movieId, date,ProjectionForm);
+                var showtimeViewModels = await _uow.MovieRepository.GetShowTimeByMovieID(movieId, date, ProjectionForm);
 
                 if (showtimeViewModels == null || !showtimeViewModels.Any())
                 {
@@ -247,13 +229,9 @@ namespace Cinema.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message); 
+                return StatusCode(500, e.Message);
             }
         }
         #endregion
-
-
-
-
     }
-        }
+}

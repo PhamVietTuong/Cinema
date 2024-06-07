@@ -31,7 +31,9 @@ namespace Cinema.Repository
 											.Where(x => x.RoomId == showTimeRoom.RoomId)
 											.ToListAsync();
 
-			var ticket = await _context.Ticket.Include(x => x.Seat).Where(x => x.ShowTimeId == vm.ShowTimeId && x.Seat.RoomId == vm.RoomId).ToListAsync();
+			var ticket = await _context.InvoiceTicket
+				.Include(x => x.Seat)
+				.Where(x => x.ShowTimeId == vm.ShowTimeId && x.Seat.RoomId == vm.RoomId).ToListAsync();
 
             var seatTypeTicketTypes = await _context.SeatTypeTicketType
 											.Include(x => x.TicketType)

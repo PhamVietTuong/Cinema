@@ -15,13 +15,22 @@ namespace Cinema.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MovieTypeDetail>()
-                .HasKey(mtd => new { mtd.MovieId, mtd.MovieTypeId });
+                .HasKey(x => new { x.MovieId, x.MovieTypeId });
 
             modelBuilder.Entity<ShowTimeRoom>()
-                .HasKey(mtd => new { mtd.ShowTimeId, mtd.RoomId });
+                .HasKey(x => new { x.ShowTimeId, x.RoomId });
 
             modelBuilder.Entity<SeatTypeTicketType>()
-                .HasKey(mtd => new { mtd.SeatTypeId, mtd.TicketTypeId });
+                .HasKey(x => new { x.SeatTypeId, x.TicketTypeId });
+
+            modelBuilder.Entity<FoodAndDrinkTheater>()
+               .HasKey(x => new { x.FoodAndDrinkId, x.TheaterId });
+
+            modelBuilder.Entity<InvoiceTicket>()
+                .HasKey(x => new { x.InvoiceId, x.ShowTimeId, x.SeatId, x.TicketTypeId });
+
+            modelBuilder.Entity<InvoiceFoodAndDrink>()
+                .HasKey(x => new { x.InvoiceId, x.FoodAndDrinkId });
         }
 
         public DbSet<User> User { get; set; }
@@ -38,10 +47,6 @@ namespace Cinema.Data
 
         public DbSet<FoodAndDrink> FoodAndDrink { get; set; }
 
-        public DbSet<Ticket> Ticket { get; set; }
-
-        public DbSet<InvoiceDetail> InvoiceDetail { get; set; }
-
         public DbSet<Movie> Movie { get; set; }
 
         public DbSet<MovieType> MovieType { get; set; }
@@ -57,5 +62,13 @@ namespace Cinema.Data
         public DbSet<ShowTimeRoom> ShowTimeRoom { get; set; }
 
         public DbSet<SeatTypeTicketType> SeatTypeTicketType { get; set; }
+
+        public DbSet<InvoiceFoodAndDrink> InvoiceFoodAndDrink { get; set; }
+
+        public DbSet<InvoiceTicket> InvoiceTicket { get; set; }
+
+        public DbSet<Invoice> Invoice { get; set; }
+
+        public DbSet<FoodAndDrinkTheater> FoodAndDrinkTheater { get; set; }
     }
 }

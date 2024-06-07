@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 var serverUrl = 'https://10.0.2.2:7209';
-//'https://10.0.2.2:7209';
+
 class Styles {
-  
-  static const backgroundColor = {
-    "dark_purple": Color(0xFF272042),
-  };
+  static const backgroundColor = {"dark_purple": Color(0xFF272042),};
   static const backgroundContent = {"dark_purple": Color(0xFF332E59)};
   static const btnColor = {"dark_purple": Color(0xff802ef7)};
   static const boldTextColor = {"dark_purple": Color(0xffffffff)};
@@ -21,7 +18,6 @@ class Styles {
   static const appbarFontSize = 25.0;
   static const defaultHorizontal=15.0;
 
-  //var iconSize=
   static const primaryColor = Color(0xff802ef7);
   static const soldColor = Colors.grey;
   static const coupleSeatColor = Colors.green;

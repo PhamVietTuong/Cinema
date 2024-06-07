@@ -16,7 +16,9 @@ namespace Cinema.Repository
 
 		public async Task<List<ComboViewModel>> ComboByTheaterIdAsync(Guid theaterId)
 		{
-			var combos = await _context.FoodAndDrink.Where(x => x.TheaterId == theaterId).ToListAsync();
+			var combos = await _context.FoodAndDrinkTheater
+				.Include(x => x.FoodAndDrink)	
+				.Where(x => x.TheaterId == theaterId).ToListAsync();
 			
 			var rows = new List<ComboViewModel>();
 
@@ -24,10 +26,10 @@ namespace Cinema.Repository
 			{
 				rows.Add(new ComboViewModel
 				{
-					Id = combo.Id,
-					Name = combo.Name,
-					Description = combo.Description,
-					Image = combo.Image,
+					Id = combo.FoodAndDrink.Id,
+					Name = combo.FoodAndDrink.Name,
+					Description = combo.FoodAndDrink.Description,
+					Image = combo.FoodAndDrink.Image,
 					Price = combo.Price,
 				});
 			}

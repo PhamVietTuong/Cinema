@@ -1,0 +1,132 @@
+.form-main {
+    gap: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+}
+
+@media (max-width: 767px) {
+    .form-main {
+        gap: 8px;
+    }
+}
+
+.modal-dialog .inner-info:nth-child(1) {
+    font-family: "Anton",
+        sans-serif;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+.modal-dialog .inner-info:not(:nth-child(1)) {
+    font-family: "Josefin Sans", sans-serif;
+}
+
+@media (max-width: 767px) {
+    .modal-dialog .inner-info:nth-child(1) {
+        font-size: 16px;
+        letter-spacing: 1.6px;
+    }
+}
+
+.form-main .inner-info {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+}
+
+.modal-dialog .tt {
+    color: #f3ea28;
+}
+
+@media (max-width: 767px) {
+    .modal-dialog .tt {
+        font-size: 12px;
+    }
+}
+
+.modal-dialog .inner-info .ct,
+.modal-dialog .inner-info .dt {
+    color: #f8fafc;
+}
+
+.modal-dialog .ct {
+    font-size: 20px;
+}
+
+@media (max-width: 900px) {
+    .modal-dialog .ct {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 767px) {
+    .modal-dialog .ct {
+        font-size: 14px;
+    }
+}
+
+.form-footer {
+    border-top: 2px dashed #F8FAFC;
+    padding-top: 12px;
+}
+
+.modal-dialog .btn-save {
+    font-size: 14px;
+}
+
+.modal-dialog .btn {
+    display: block;
+}
+
+.modal-content {
+    background-color: #36c !important;
+    text-align: left;
+}
+
+.prof-main .block-check {
+
+}
+
+.form-checkout-cus {
+    border-radius: 4px;
+}
+
+.form-footer .inner-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Josefin Sans",
+        sans-serif;
+}
+
+.form-footer .inner-info-row .ct {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+/* Assuming $mobile is a max-width breakpoint, e.g., 600px */
+@media (max-width: 767px) {
+    .form-footer .inner-info-row .ct {
+        font-size: 24px;
+    }
+}
+
+.btn-full-width {
+    width: 100%;
+    margin: 0;
+}
+
+.modal-header .modal-btn-close {
+    border: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    border-bottom: none !important;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 100;
+    padding: 10px 10px 0px 0px !important;
+}
