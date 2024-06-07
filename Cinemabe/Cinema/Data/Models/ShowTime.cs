@@ -9,7 +9,7 @@ namespace Cinema.Data.Models
         public Movie Movie { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-		public int ProjectionForm { get; set; }
+		public ProjectionForm ProjectionForm { get; set; }
         public bool Status { get; set; }
 	}
 }
