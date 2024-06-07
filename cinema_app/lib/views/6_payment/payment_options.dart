@@ -1,4 +1,3 @@
-import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class PaymentOption extends StatelessWidget {
@@ -8,7 +7,6 @@ class PaymentOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   var wS=MediaQuery.of(context).size.width;
-var styles=Styles();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

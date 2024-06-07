@@ -6,7 +6,6 @@ class TicketBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 5,

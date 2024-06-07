@@ -47,7 +47,6 @@ class _MovieDetailState extends State<MovieDetail>
   }
 
   @override
-
   @override
   void initState() {
     selectedDay = today;
@@ -57,18 +56,16 @@ class _MovieDetailState extends State<MovieDetail>
   }
 
   @override
- @override
-void onLoadMovieDetailComplete(Movie movie) {
-  setState(() {
-    _movieDetail = movie;
-    isLoadingData = false;
-   
-  });
-}
-
+  @override
+  void onLoadMovieDetailComplete(Movie movie) {
+    setState(() {
+      _movieDetail = movie;
+      isLoadingData = false;
+    });
+  }
 
   @override
-  void onLoadMoviesError() {
+  void onLoadError() {
     setState(() {
       isLoadingData = false;
     });
@@ -82,7 +79,6 @@ void onLoadMovieDetailComplete(Movie movie) {
     if (isLoadingData) {
       return const CircularProgressIndicator();
     } else {
-      var styles = Styles();
       days.clear();
       for (int i = 0; i < 7; i++) {
         days.add(DayItemBox(
@@ -184,7 +180,7 @@ void onLoadMovieDetailComplete(Movie movie) {
                                   children: [
                                     Text(
                                       _movieDetail.name,
-                                      style:const TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white, fontSize: 18),
                                     ),
                                     Row(

@@ -160,3 +160,6 @@ ADD CONSTRAINT UQ_Seat_RoomId_ColIndex_RowName UNIQUE (RoomId, ColIndex, RowName
 
 ALTER TABLE [ShowTime]
 ADD CONSTRAINT UQ_ShowTime_MovieId_StartTime UNIQUE (MovieId, StartTime);
+
+ALTER table room
+add unique (TheaterId, name)

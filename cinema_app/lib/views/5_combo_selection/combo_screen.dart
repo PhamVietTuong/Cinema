@@ -1,14 +1,19 @@
-import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
+import 'package:cinema_app/data/models/food_and_drink.dart';
 import 'package:cinema_app/data/models/showtime.dart';
-import 'package:cinema_app/views/5_combo_selection/combo_title.dart';
+import 'package:cinema_app/data/models/theater.dart';
+import 'package:cinema_app/presenters/theater_presenter.dart';
+import 'package:cinema_app/views/5_combo_selection/combo_item.dart';
 import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/views/6_payment/pay_screen.dart';
 import 'package:flutter/material.dart';
 
 class ComboScreen extends StatefulWidget {
   const ComboScreen(
-      {super.key, required this.booking, required this.selectedSeatIds, required this.showtime});
+      {super.key,
+      required this.booking,
+      required this.selectedSeatIds,
+      required this.showtime});
   final Booking booking;
   final List<String> selectedSeatIds;
   final ShowtimeRoom showtime;
@@ -17,16 +22,21 @@ class ComboScreen extends StatefulWidget {
   State<ComboScreen> createState() => _ComboScreenState();
 }
 
-class _ComboScreenState extends State<ComboScreen> {
+class _ComboScreenState extends State<ComboScreen>
+    implements TheaterViewContract {
+  late TheaterPresenter theaterPre;
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
+    theaterPre = TheaterPresenter(this);
+    theaterPre.fetchCombos(widget.booking.theater.id);
     widget.booking.seatIds = widget.selectedSeatIds;
   }
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
@@ -39,7 +49,7 @@ class _ComboScreenState extends State<ComboScreen> {
         ),
         titleSpacing: 0,
         leadingWidth: 45,
-        title: Text(
+        title: const Text(
           "Combo",
         ),
       ),
@@ -49,13 +59,12 @@ class _ComboScreenState extends State<ComboScreen> {
         decoration: const BoxDecoration(),
         child: Column(
           children: [
-            const Expanded(
+             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+
                 child: Column(
-                  children: [
-                    ComboTitle(),
-                    ComboTitle(),
-                  ],
+                  children: widget.booking.theater.combos.map((e) => ComboItem(item: e)).toList(),
                 ),
               ),
             ),
@@ -84,4 +93,22 @@ class _ComboScreenState extends State<ComboScreen> {
       ),
     );
   }
+
+  @override
+  void onLoadCombosByTheater(List<FoodAndDrink> combos) {
+    setState(() {
+      widget.booking.theater.combos = combos;
+      isLoading = false;
+    });
+  }
+
+  @override
+  void onLoadError() {
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void onLoadTheaterComplete(List<Theater> theaters) {}
 }

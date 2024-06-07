@@ -37,7 +37,6 @@ class _PayScreenState extends State<PayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
     var wS = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -57,7 +56,7 @@ class _PayScreenState extends State<PayScreen> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(left: 5),
-                  child: Text(
+                  child: const Text(
                     "17/04/024 - 12:10 | Phòng: 03",
                     softWrap: true,
                   ),
@@ -66,9 +65,8 @@ class _PayScreenState extends State<PayScreen> {
             ),
             Container(
                 margin: const EdgeInsets.only(right: 15),
-                child: Text(
+                child: const Text(
                   "04:55",
-        
                 ))
           ],
         ),
@@ -90,6 +88,7 @@ class _PayScreenState extends State<PayScreen> {
         leadingWidth: 45,
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Center(
           child: Column(children: [
             //thông tin phim
@@ -108,18 +107,18 @@ class _PayScreenState extends State<PayScreen> {
                               image: AssetImage(
                                   'assets/img_demo/movie_img_1.jpg')))),
                   //thông tin chi tiết về phim và ghế đã chọn
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Dune 2",
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 10,
                         ),
                         //thể loại, giới hạn tuổi, kiểu xuất chiếu
-                        const Row(
+                        Row(
                           children: [
                             MovieTypeBox(
                               title: "Khoa Học Viễn Tưởng",
@@ -137,13 +136,13 @@ class _PayScreenState extends State<PayScreen> {
                             )
                           ],
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 10,
                         ),
                         Text(
                           "Thời lượng: 125 phút",
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 10,
                         ),
                         Text(

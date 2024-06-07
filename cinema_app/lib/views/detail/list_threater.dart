@@ -21,7 +21,6 @@ class _ListThreaterState extends State<ListThreater> {
 
   @override
   Widget build(BuildContext context) {
-    var styles = Styles();
 
     return Column(
       children: [

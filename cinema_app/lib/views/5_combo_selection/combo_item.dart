@@ -1,10 +1,11 @@
-import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/btn_up_down.dart';
+import 'package:cinema_app/data/models/food_and_drink.dart';
 import 'package:flutter/material.dart';
 
 class ComboItem extends StatefulWidget {
-  const ComboItem({super.key});
+  const ComboItem({super.key, required this.item});
 
+  final FoodAndDrink item;
   @override
   State<ComboItem> createState() => _ComboItemState();
 }
@@ -13,7 +14,6 @@ class _ComboItemState extends State<ComboItem> {
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
-    var styles = Styles();
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -25,18 +25,18 @@ class _ComboItemState extends State<ComboItem> {
               width: (wS - 20) * 0.3,
               child:
                   const Image(image: AssetImage("assets/img_demo/Combo.png"))),
-          Expanded(
+           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Combo Couple 2 Ngăn - VOL",
+                 widget.item.name,
                 ),
                 Text(
-                  "1 Coke 32oz - v + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN",
+                 widget.item.description,
                 ),
                 Text(
-                  "119,000 đ",
+                 widget.item.price.toString(),
                 ),
               ],
             ),
@@ -44,15 +44,18 @@ class _ComboItemState extends State<ComboItem> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-               BtnUpDown(
-                isUp: true,upDown: (bool i){},
+              BtnUpDown(
+                isUp: true,
+                upDown: (bool i) {},
               ),
               Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
+                  child: const Text(
                     "000",
                   )),
-               BtnUpDown(upDown: (bool i){},)
+              BtnUpDown(
+                upDown: (bool i) {},
+              )
             ],
           )
         ],

@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'showtime.dart';
 // import '../../constants.dart';
 
-
 class Movie {
   String id;
   String ageRestrictionName;
@@ -50,7 +49,7 @@ class Movie {
   });
 
   Movie.fromJson(Map<String, dynamic> json)
-      : id = json["id"]??"",
+      : id = json["id"] ?? "",
         actor = json["actor"] ?? "",
         ageRestrictionAbbreviation = json["ageRestrictionAbbreviation"] ?? "",
         ageRestrictionDescription = json["ageRestrictionDescription"] ?? "",
@@ -65,40 +64,44 @@ class Movie {
         releaseDate = DateTime.parse(json["releaseDate"]),
         time = json["time"] ?? -1,
         trailer = json["trailer"] ?? "",
-        projectionForm = json["projectionForm"] ?? 0;
+        projectionForm = json["projectionForm"] ?? 0,
+        schedules = json["schedules"] != null
+            ? (json["schedules"] as List)
+                .map((e) => Schedule.fromJson(e as Map<String, dynamic>))
+                .toList()
+            : [];
 }
 
 class Schedule {
   DateTime date = DateTime.now();
   List<TheaterShowtime> theaters =
       List.filled(0, TheaterShowtime(), growable: true);
-  List<ShowtimeRoom> showtimes = List.filled(0, ShowtimeRoom(), growable: true);
 
   Schedule();
   Schedule.fromJson(Map<String, dynamic> json)
       : date = DateTime.parse(json["date"]),
-        theaters =json["theaters"]!=null?(json["theaters"] as List)
-            .map((e) => TheaterShowtime.fromJson(e as Map<String, dynamic>))
-            .toList():[],
-        showtimes =json["showtimes"]!=null? (json["showtimes"] as List)
-            .map((e) => ShowtimeRoom.fromJson(e as Map<String, dynamic>))
-            .toList():[];
+        theaters = json["theaters"] != null
+            ? (json["theaters"] as List)
+                .map((e) => TheaterShowtime.fromJson(e as Map<String, dynamic>))
+                .toList()
+            : [];
 }
 
 class TheaterShowtime {
+  String theaterId;
   String theaterName;
   String theaterAddress;
   List<ShowtimeRoom> showtimes = List.filled(0, ShowtimeRoom(), growable: true);
 
-  TheaterShowtime({this.theaterName = "", this.theaterAddress = ""});
+  TheaterShowtime({this.theaterName = "", this.theaterAddress = "", this.theaterId=""});
   TheaterShowtime.fromJson(Map<String, dynamic> json)
       : theaterAddress = json["theaterAddress"] ?? "",
+      theaterId=json["theaterId"]??"",
         theaterName = json["theaterName"] ?? "",
         showtimes = (json["showTimes"] as List)
             .map((e) => ShowtimeRoom.fromJson(e as Map<String, dynamic>))
             .toList();
 }
-
 
 abstract class MovieRepository {
   Future<List<Movie>> fetchMovies();

@@ -28,7 +28,6 @@ namespace Cinema.DTOs
 	{
 		public DateTime Date { get; set; }
 		public List<TheaterRowViewModel> Theaters { get; set; }
-		public List<ShowTimeRowViewModel> Showtimes { get; set; }
 
 	}
 	

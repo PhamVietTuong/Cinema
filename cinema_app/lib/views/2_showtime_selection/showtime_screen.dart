@@ -73,7 +73,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
     selectedDay = today;
     loadData();
     showtimePr = ShowtimePresenter(this);
-    showtimePr.fetchShowtimesByDate(widget.booking.theater.id);
+    showtimePr.fetchShowtimesByTheaterId(widget.booking.theater.id);
   }
 
   @override
@@ -124,6 +124,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                 decoration: BoxDecoration(
                     color: Styles.backgroundContent["dark_purple"]),
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: days,
@@ -195,7 +196,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
   }
 
   @override
-  void onLoadShowtimeError() {
+  void onLoadError() {
     setState(() {
       isLoadingData = false;
     });

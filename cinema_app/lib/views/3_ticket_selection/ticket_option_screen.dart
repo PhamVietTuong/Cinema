@@ -9,7 +9,6 @@ import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/ticket_option.dart';
-import 'package:cinema_app/data/models/tickets.dart';
 import 'package:cinema_app/presenters/ticket_presenter.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_screen.dart';
 import 'package:cinema_app/views/3_ticket_selection/ticket_option.dart';
@@ -165,6 +164,12 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                           .firstWhere((element) =>
                               element.date.day == widget.selectedDate.day &&
                               element.date.month == widget.selectedDate.month)
+                          .theaters
+                          .firstWhere(
+                              (element) =>
+                                  element.theaterId ==
+                                  widget.booking.theater.id,
+                              orElse: () => TheaterShowtime())
                           .showtimes,
                       selectShowtime: selectShowtime,
                     )
@@ -273,6 +278,8 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                   padding:
                       EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
                   child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+
                     child: Column(children: options),
                   ),
                 ),
@@ -301,10 +308,9 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
   }
 
   @override
-  void onLoadTicketComplete(List<Ticket> tickets) {}
 
   @override
-  void onLoadTicketError() {}
+  void onLoadError() {}
 
   @override
   void onLoadTicketOptionComplete(List<TicketOption> ticketOptions) {
