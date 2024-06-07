@@ -154,3 +154,9 @@ CREATE TABLE FoodAndDrinkTheater (
 	CONSTRAINT FK_FoodAndDrinkTheater_FoodAndDrink FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
 	CONSTRAINT FK_FoodAndDrinkTheater_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
 )
+
+ALTER TABLE [Seat]
+ADD CONSTRAINT UQ_Seat_RoomId_ColIndex_RowName UNIQUE (RoomId, ColIndex, RowName);
+
+ALTER TABLE [ShowTime]
+ADD CONSTRAINT UQ_ShowTime_MovieId_StartTime UNIQUE (MovieId, StartTime);

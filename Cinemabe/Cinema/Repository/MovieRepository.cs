@@ -82,10 +82,12 @@ namespace Cinema.Repository
 
         public async Task<MovieDetailViewModel> GetMovieDetail(MovieDetailDTO movieDetailDTO)
         {
-            var movieDetail = await _context.Movie
-                                            .Include(a => a.AgeRestriction)
-                                            .FirstOrDefaultAsync(x => x.Id == movieDetailDTO.Id);
 
+            var movieDetail = await _context.ShowTimeRoom
+                                .Include(a => a.ShowTime)
+                                    .ThenInclude(x => x.Movie)
+                                        .ThenInclude(x => x.AgeRestriction)
+                                .FirstOrDefaultAsync(x => x.ShowTime.ProjectionForm == movieDetailDTO.ProjectionForm && x.ShowTime.Movie.Id == movieDetailDTO.Id );
             if (movieDetail == null)
             {
                 return null;
@@ -93,7 +95,7 @@ namespace Cinema.Repository
 
             var movieTypeDetails = await _context.MovieTypeDetail
                                                 .Include(x => x.MovieType)
-                                                .Where(x => x.MovieId == movieDetail.Id)
+                                                .Where(x => x.MovieId == movieDetail.ShowTime.MovieId)
                                                 .ToListAsync();
 
             string movieTypes = String.Join(", ", movieTypeDetails.Select(x => x.MovieType.Name));
@@ -102,7 +104,7 @@ namespace Cinema.Repository
                                                         .Include(x => x.ShowTime)
                                                         .Include(x => x.Room)
                                                             .ThenInclude(x => x.Theater)
-                                                        .Where(x => x.ShowTime.MovieId == movieDetail.Id)
+                                                        .Where(x => x.ShowTime.MovieId == movieDetail.ShowTime.MovieId)
                                                         .ToListAsync();
 
             var schedules = showTimeRoom
@@ -137,19 +139,19 @@ namespace Cinema.Repository
 
             var viewModel = new MovieDetailViewModel
             {
-                Id = movieDetail.Id,
-                AgeRestrictionName = movieDetail.AgeRestriction.Name,
-                AgeRestrictionDescription = movieDetail.AgeRestriction.Description,
-                AgeRestrictionAbbreviation = movieDetail.AgeRestriction.Abbreviation,
-                Name = movieDetail.Name,
-                Image = movieDetail.Image,
-                Time = (int)(movieDetailDTO.ProjectionForm == (int)ProjectionForm.Time2D ? movieDetail.Time2D : movieDetail.Time3D),
-                ReleaseDate = movieDetail.ReleaseDate,
-                Description = movieDetail.Description,
-                Director = movieDetail.Director,
-                Actor = movieDetail.Actor,
-                Trailer = movieDetail.Trailer,
-                Languages = movieDetail.Languages,
+                Id = movieDetail.ShowTime.MovieId,
+                AgeRestrictionName = movieDetail.ShowTime.Movie.AgeRestriction.Name,
+                AgeRestrictionDescription = movieDetail.ShowTime.Movie.AgeRestriction.Description,
+                AgeRestrictionAbbreviation = movieDetail.ShowTime.Movie.AgeRestriction.Abbreviation,
+                Name = movieDetail.ShowTime.Movie.Name,
+                Image = movieDetail.ShowTime.Movie.Image,
+                Time = (int)(movieDetailDTO.ProjectionForm == (int)ProjectionForm.Time2D ? movieDetail.ShowTime.Movie.Time2D : movieDetail.ShowTime.Movie.Time3D),
+                ReleaseDate = movieDetail.ShowTime.Movie.ReleaseDate,
+                Description = movieDetail.ShowTime.Movie.Description,
+                Director = movieDetail.ShowTime.Movie.Director,
+                Actor = movieDetail.ShowTime.Movie.Actor,
+                Trailer = movieDetail.ShowTime.Movie.Trailer,
+                Languages = movieDetail.ShowTime.Movie.Languages,
                 ShowTimeTypeName = movieDetailDTO.ProjectionForm == (int)ProjectionForm.Time2D ? "2D" : "3D",
                 MovieType = movieTypes,
                 Schedules = schedules
