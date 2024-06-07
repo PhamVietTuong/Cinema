@@ -14,6 +14,7 @@ DELETE FROM Room;
 DELETE FROM SeatTypeTicketType;
 DELETE FROM TicketType;
 DELETE FROM SeatType;
+DELETE FROM FoodAndDrinkTheater;
 DELETE FROM Theater;
 DELETE FROM FoodAndDrink;
 
