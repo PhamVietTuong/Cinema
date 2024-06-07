@@ -83,19 +83,29 @@ namespace Cinema.Repository
         public async Task<MovieDetailViewModel> GetMovieDetail(MovieDetailDTO movieDetailDTO)
         {
 
-            var movieDetail = await _context.ShowTimeRoom
-                                .Include(a => a.ShowTime)
-                                    .ThenInclude(x => x.Movie)
-                                        .ThenInclude(x => x.AgeRestriction)
-                                .FirstOrDefaultAsync(x => x.ShowTime.ProjectionForm == movieDetailDTO.ProjectionForm && x.ShowTime.Movie.Id == movieDetailDTO.Id );
+            var movieDetail = await _context.Movie
+                                .Include(x => x.AgeRestriction)
+                                .FirstOrDefaultAsync(x => x.Id == movieDetailDTO.Id);
+
             if (movieDetail == null)
+            {
+                return null;
+            }
+
+            int? selectedTime = movieDetailDTO.ProjectionForm == ProjectionForm.Time2D
+                                ? movieDetail.Time2D
+                                : movieDetailDTO.ProjectionForm == ProjectionForm.Time3D
+                                  ? movieDetail.Time3D
+                                  : null;
+
+            if (selectedTime == -1 || selectedTime == null)
             {
                 return null;
             }
 
             var movieTypeDetails = await _context.MovieTypeDetail
                                                 .Include(x => x.MovieType)
-                                                .Where(x => x.MovieId == movieDetail.ShowTime.MovieId)
+                                                .Where(x => x.MovieId == movieDetail.Id)
                                                 .ToListAsync();
 
             string movieTypes = String.Join(", ", movieTypeDetails.Select(x => x.MovieType.Name));
@@ -104,7 +114,7 @@ namespace Cinema.Repository
                                                         .Include(x => x.ShowTime)
                                                         .Include(x => x.Room)
                                                             .ThenInclude(x => x.Theater)
-                                                        .Where(x => x.ShowTime.MovieId == movieDetail.ShowTime.MovieId)
+                                                        .Where(x => x.ShowTime.MovieId == movieDetail.Id && x.ShowTime.ProjectionForm == movieDetailDTO.ProjectionForm)
                                                         .ToListAsync();
 
             var schedules = showTimeRoom
@@ -139,20 +149,20 @@ namespace Cinema.Repository
 
             var viewModel = new MovieDetailViewModel
             {
-                Id = movieDetail.ShowTime.MovieId,
-                AgeRestrictionName = movieDetail.ShowTime.Movie.AgeRestriction.Name,
-                AgeRestrictionDescription = movieDetail.ShowTime.Movie.AgeRestriction.Description,
-                AgeRestrictionAbbreviation = movieDetail.ShowTime.Movie.AgeRestriction.Abbreviation,
-                Name = movieDetail.ShowTime.Movie.Name,
-                Image = movieDetail.ShowTime.Movie.Image,
-                Time = (int)(movieDetailDTO.ProjectionForm == (int)ProjectionForm.Time2D ? movieDetail.ShowTime.Movie.Time2D : movieDetail.ShowTime.Movie.Time3D),
-                ReleaseDate = movieDetail.ShowTime.Movie.ReleaseDate,
-                Description = movieDetail.ShowTime.Movie.Description,
-                Director = movieDetail.ShowTime.Movie.Director,
-                Actor = movieDetail.ShowTime.Movie.Actor,
-                Trailer = movieDetail.ShowTime.Movie.Trailer,
-                Languages = movieDetail.ShowTime.Movie.Languages,
-                ShowTimeTypeName = movieDetailDTO.ProjectionForm == (int)ProjectionForm.Time2D ? "2D" : "3D",
+                Id = movieDetail.Id,
+                AgeRestrictionName = movieDetail.AgeRestriction.Name,
+                AgeRestrictionDescription = movieDetail.AgeRestriction.Description,
+                AgeRestrictionAbbreviation = movieDetail.AgeRestriction.Abbreviation,
+                Name = movieDetail.Name,
+                Image = movieDetail.Image,
+                Time = (int)(movieDetailDTO.ProjectionForm == ProjectionForm.Time2D ? movieDetail.Time2D : movieDetail.Time3D),
+                ReleaseDate = movieDetail.ReleaseDate,
+                Description = movieDetail.Description,
+                Director = movieDetail.Director,
+                Actor = movieDetail.Actor,
+                Trailer = movieDetail.Trailer,
+                Languages = movieDetail.Languages,
+                ShowTimeTypeName = movieDetailDTO.ProjectionForm == ProjectionForm.Time2D ? "2D" : "3D",
                 MovieType = movieTypes,
                 Schedules = schedules
             };
@@ -211,7 +221,7 @@ namespace Cinema.Repository
             return rows;
         }
 
-        public async Task<List<DateTime>> GetDateByMovieID(Guid movieID, int ProjectionForm)
+        public async Task<List<DateTime>> GetDateByMovieID(Guid movieID, ProjectionForm ProjectionForm)
         {
             var days = await _context.ShowTime
                 .Where(x => x.MovieId == movieID && x.ProjectionForm == ProjectionForm)
@@ -222,7 +232,7 @@ namespace Cinema.Repository
             return days;
         }
 
-        public async Task<List<ShowTimeRowViewModel>> GetShowTimeByMovieID(Guid movieID, DateTime date, int ProjectionForm)
+        public async Task<List<ShowTimeRowViewModel>> GetShowTimeByMovieID(Guid movieID, DateTime date, ProjectionForm ProjectionForm)
         {
             var showTimeRoom = await _context.ShowTimeRoom
                 .Include(sr => sr.ShowTime)
