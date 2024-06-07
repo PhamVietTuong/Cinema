@@ -20,25 +20,31 @@ DELETE FROM FoodAndDrink;
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 
+DECLARE @GUID_theater1 UNIQUEIDENTIFIER;
+DECLARE @GUID_theater2 UNIQUEIDENTIFIER;
+DECLARE @GUID_theater3 UNIQUEIDENTIFIER;
+DECLARE @GUID_theater4 UNIQUEIDENTIFIER;
+DECLARE @GUID_theater5 UNIQUEIDENTIFIER;
+
 
 
 --theater
-SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 1', N'65 Huỳnh Thúc Kháng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh','ckc_quan1.jpg','02437654321',
+SET @GUID_theater1 = NEWID();
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater1, N'CKC Quận 1', N'65 Huỳnh Thúc Kháng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh','ckc_quan1.jpg','02437654321',
 1)
-SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 3', N'Lầu 6 - 7,
+SET @GUID_theater2 = NEWID();
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater2, N'CKC Quận 3', N'Lầu 6 - 7,
 19 Cao Thắng, P.2, Q.3, Tp. Hồ Chí Minh','ckc_quan3.jpg','02838456789',
 1)
-SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 10', N'116 Nguyễn Tri Phương, Q.10, Tp. Hồ Chí Minh','ckc_quan10.jpg','02363839999',
+SET @GUID_theater3 = NEWID();
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater3, N'CKC Quận 10', N'116 Nguyễn Tri Phương, Q.10, Tp. Hồ Chí Minh','ckc_quan10.jpg','02363839999',
 1)
-SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 5', N'Tầng 7, Hùng Vương Plaza,
+SET @GUID_theater4 = NEWID();
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater4, N'CKC Quận 5', N'Tầng 7, Hùng Vương Plaza,
 126 Hùng Vương, Q.5, Tp. Hồ Chí Minh','ckc_quan5.jpg','02253851234',
 1)
-SET @NEW_GUID = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@NEW_GUID, N'CKC Quận 7', N'Lầu 4, Siêu Thị Vincom 3/2,
+SET @GUID_theater5 = NEWID();
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater5, N'CKC Quận 7', N'Lầu 4, Siêu Thị Vincom 3/2,
 3C Đường 3/2, Q.7, Tp. Hồ Chí Minh','ckc_quan7.jpg','02923734567',
 1)
 
@@ -55,26 +61,26 @@ DECLARE @GUID_room9 UNIQUEIDENTIFIER;
 DECLARE @GUID_room10 UNIQUEIDENTIFIER;
 
 SET @GUID_room1 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room1, (select Id from Theater where Name=N'CKC Quận 1'), '01',1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room1, @GUID_theater1, '01',1)
 SET @GUID_room2 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room2, (select Id from Theater where Name=N'CKC Quận 1'), '02', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room2, @GUID_theater1, '02', 1)
 SET @GUID_room3 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room3, (select Id from Theater where Name=N'CKC Quận 1'), '03', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room3, @GUID_theater1, '03', 1)
 SET @GUID_room4 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room4, (select Id from Theater where Name=N'CKC Quận 1'), '04', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room4, @GUID_theater1, '04', 1)
 SET @GUID_room5 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room5, (select Id from Theater where Name=N'CKC Quận 1'), '05', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room5, @GUID_theater1, '05', 1)
 
 SET @GUID_room6 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room6, (select Id from Theater where Name=N'CKC Quận 5'), '01',1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room6, @GUID_theater4, '01',1)
 SET @GUID_room7 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room7, (select Id from Theater where Name=N'CKC Quận 5'), '02', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room7, @GUID_theater4, '02', 1)
 SET @GUID_room8 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room8, (select Id from Theater where Name=N'CKC Quận 7'), '01', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room8, @GUID_theater5, '01', 1)
 SET @GUID_room9 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room9, (select Id from Theater where Name=N'CKC Quận 7'), '02', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room9, @GUID_theater5, '02', 1)
 SET @GUID_room10 = NEWID();
-INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room10, (select Id from Theater where Name=N'CKC Quận 10'), '01', 1)
+INSERT Room(Id, TheaterId, Name,  Status) VALUES (@GUID_room10,@GUID_theater3, '01', 1)
 
 --age restriction
 SET @NEW_GUID = NEWID();
@@ -397,7 +403,7 @@ INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,1, '2024-06-10T08:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,1, '2024-06-10T08:30:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 --spider
@@ -408,7 +414,7 @@ INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-10T11:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-10T11:30:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 SET @NEW_GUID = NEWID();
@@ -457,67 +463,654 @@ SET @GUID_TicketType2 = NEWID();
 INSERT TicketType(Id, Name, Status) VALUES (@GUID_TicketType2,  N'Người lớn', 1)
 
 --seat type
-SET @NEW_GUID = NEWID();
-INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Đơn', 1)
-SET @NEW_GUID = NEWID();
-INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Ðôi', 1)
-SET @NEW_GUID = NEWID();
-INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Nằm', 1)
+DECLARE @GUID_seatType1 UNIQUEIDENTIFIER;
+DECLARE @GUID_seatType2 UNIQUEIDENTIFIER;
+DECLARE @GUID_seatType3 UNIQUEIDENTIFIER;
 
-SET @NEW_GUID = NEWID();
-INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='01'), 'A', 1, NULL, 0)
-SET @NEW_GUID = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='01'), 'A', 2, NULL, 0)
+SET @GUID_seatType1 = NEWID();
+INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType1, N'Đơn', 1)
+SET @GUID_seatType2 = NEWID();
+INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType2, N'Ðôi', 1)
+SET @GUID_seatType3 = NEWID();
+INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType3, N'Nằm', 1)
 
-SET @NEW_GUID = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='02'), 'A', 1, NULL, 0)
-SET @NEW_GUID = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='02'), 'A', 2, 'A1', 0)
+--đơn - hssv, lớn
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType1,45000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType2,70000)
+--đôi - lớn
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType2,@GUID_TicketType2,145000)
+--nằm - hssv, lớn
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType2,190000)
 
+--combo
+DECLARE @GUID_cb1 UNIQUEIDENTIFIER;
+DECLARE @GUID_cb2 UNIQUEIDENTIFIER;
+DECLARE @GUID_cb3 UNIQUEIDENTIFIER;
 
+SET @GUID_cb1 = NEWID();
+INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb1, N'Combo Solo - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', N'1 Coke 32oz - V + 1 Bắp 64OZ PM + CARAMEN', 1)
+SET @GUID_cb2 = NEWID();
+INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb2, N'Combo Party - VOL', 'BAP-2-NGAN_COMBO-PARTY.png', N'4 Coke 22oz - V + 2 Bắp 64OZ PM + CARAMEN', 1)
+SET @GUID_cb3 = NEWID();
+INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb3, N'Combo Couple - VOL', 'BAP-2-NGAN_COMBO-COUPLE.png', N'2 Coke 32oz - V + 1 Bắp 64OZ PM + CARAMEN', 1)
 
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'A', 3, 'A1', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'A', 4, 'A2', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'A', 5, 'A3', 0)
-
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'A', 3, 'A2', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'A', 4, 'A3', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'A', 5, 'A4', 0)
-
-
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 1, 'B1', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 2, 'B2', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 3, 'B3', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 4, 'B4', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 5, 'B5', 0)
-
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 1, 'B1', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 2, 'B2', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 3, 'B3', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 4, 'B4', 0)
-SET @NEW_GUID1 = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 5, 'B5', 0)
+--theater 1
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb1,@GUID_theater1,109000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb2,@GUID_theater1,249000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb3,@GUID_theater1,119000);
+--theater 2
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb1,@GUID_theater2,109000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb2,@GUID_theater2,249000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb3,@GUID_theater2,119000);
 
 
+--theater 3
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb1,@GUID_theater3,119000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb2,@GUID_theater3,259000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb3,@GUID_theater3,129000);
 
-SET @NEW_GUID = NEWID();
-INSERT FoodAndDrink(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
-SET @NEW_GUID = NEWID();
-INSERT FoodAndDrink(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Party 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-PARTY.png', 259000, N'4 Coke 22oz - V + 2 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
-SET @NEW_GUID = NEWID();
-INSERT FoodAndDrink(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Couple 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-COUPLE.png', 129000, N'2 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)
+--theater 4
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb1,@GUID_theater4,100000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb2,@GUID_theater4,240000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb3,@GUID_theater4,110000);
+
+--theater 5
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb1,@GUID_theater5,99000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb2,@GUID_theater5,240000);
+Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb3,@GUID_theater5,110000);
+
+--phòng 1
+--hàng A
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 1, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 2, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 3, 0, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 4, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 5, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 6, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 7, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 8, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 9, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 10, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 11, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 12, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'A', 13, 0, @GUID_seatType1)
+
+-- Hàng B
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'B', 13, 0, @GUID_seatType1);
+
+-- Hàng C
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'C', 13, 0, @GUID_seatType1);
+
+-- Hàng D
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'D', 13, 1, @GUID_seatType1);
+
+-- Hàng E
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'E', 13, 1, @GUID_seatType1);
+
+-- Hàng F
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'F', 13, 1, @GUID_seatType1);
+
+-- Hàng g
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'G', 13, 1, @GUID_seatType1);
+
+
+-- Hàng H
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'H', 13, 1, @GUID_seatType1);
+
+-- Hàng I
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'I', 13, 1, @GUID_seatType1);
+
+-- Hàng k
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'K', 1, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'K', 2, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'K', 3, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'K', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'K', 5, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'K', 6, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room1, 'K', 7, 1, @GUID_seatType2);
+
+--phòng 2
+--hàng A
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 1, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 2, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 3, 0, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 4, 0, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 5, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 6, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 7, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 8, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 9, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 10, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 11, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 12, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 13, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'A', 17, 1, @GUID_seatType1)
+-- Hàng B
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'B', 17, 1, @GUID_seatType1)
+
+-- Hàng C
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'C', 17, 1, @GUID_seatType1)
+
+-- Hàng D
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'D', 17, 1, @GUID_seatType1)
+
+-- Hàng E
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'E', 17, 1, @GUID_seatType1)
+-- Hàng F
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'F', 17, 1, @GUID_seatType1)
+
+-- Hàng g
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'G', 17, 1, @GUID_seatType1)
+
+
+-- Hàng H
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'H', 17, 1, @GUID_seatType1)
+
+-- Hàng I
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'I', 17, 1, @GUID_seatType1)
+-- Hàng k
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 1, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 2, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 3, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 5, 0, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 6, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 7, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 8, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room2, 'K', 9, 1, @GUID_seatType2);
+
+--phòng 3
+--hàng A
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 1, 0, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 2, 0, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 3, 0, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 4, 0, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 5, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 6, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 7, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 8, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 9, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 10, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 11, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 12, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 13, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'A', 17, 1, @GUID_seatType1)
+-- Hàng B
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 1, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 2, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'B', 17, 1, @GUID_seatType1)
+
+-- Hàng C
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 1, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 2, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'C', 17, 1, @GUID_seatType1)
+
+-- Hàng D
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 1, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 2, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'D', 17, 1, @GUID_seatType1)
+
+-- Hàng E
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 1, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 2, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'E', 17, 1, @GUID_seatType1)
+-- Hàng F
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'F', 17, 1, @GUID_seatType1)
+
+-- Hàng g
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'G', 17, 1, @GUID_seatType1)
+
+
+-- Hàng H
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'H', 17, 1, @GUID_seatType1)
+
+-- Hàng I
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'I', 17, 1, @GUID_seatType1)
+
+-- Hàng k
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 3, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'K', 17, 1, @GUID_seatType1)
+
+-- Hàng L
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 3, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'L', 17, 1, @GUID_seatType1)
+
+-- Hàng M
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 3, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'M', 17, 1, @GUID_seatType1)
+-- Hàng N
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 1, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 2, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 3, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 4, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 5, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 6, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 7, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 8, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 9, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 10, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 11, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 12, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 13, 1, @GUID_seatType1);
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 14, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 15, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 16, 1, @GUID_seatType1)
+SET @NEW_GUID = NEWID();INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'N', 17, 1, @GUID_seatType1)
+
+-- Hàng O
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 1, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 2, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 3, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 4, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 5, 0, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 6, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 7, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 8, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'O', 9, 1, @GUID_seatType2);
+
+-- Hàng P
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 1, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 2, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 3, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 4, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 5, 0, @GUID_seatType1);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 6, 0, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 7, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 8, 1, @GUID_seatType2);
+SET @NEW_GUID = NEWID(); INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, @GUID_room3, 'P', 9, 1, @GUID_seatType2);
