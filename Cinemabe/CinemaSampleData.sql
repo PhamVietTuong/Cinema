@@ -2,6 +2,7 @@
 
 --Delete data table
 DELETE FROM MovieTypeDetail;
+DELETE FROM MovieType;
 DELETE FROM ShowTimeRoom;
 DELETE FROM ShowTime;
 DELETE FROM Seat;
@@ -10,21 +11,16 @@ DELETE FROM [User];
 DELETE FROM UserType;
 DELETE FROM AgeRestriction;
 DELETE FROM Room;
+DELETE FROM SeatTypeTicketType;
 DELETE FROM TicketType;
 DELETE FROM SeatType;
 DELETE FROM Theater;
 DELETE FROM FoodAndDrink;
-DELETE FROM MovieType;
+
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 
---seat type
-SET @NEW_GUID = NEWID();
-INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Đơn', 1)
-SET @NEW_GUID = NEWID();
-INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Ðôi', 1)
-SET @NEW_GUID = NEWID();
-INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Nằm', 1)
+
 
 --theater
 SET @NEW_GUID = NEWID();
@@ -303,6 +299,90 @@ VALUES (
     N'Tiếng việt', 
     1
 );
+--movie type and details
+DECLARE @GUID_movieType1 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType2 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType3 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType4 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType5 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType6 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType7 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType8 UNIQUEIDENTIFIER;
+DECLARE @GUID_movieType9 UNIQUEIDENTIFIER;
+
+
+-- Insert các thể loại phim vào bảng MovieType với GUID riêng
+set @GUID_movieType1 = NEWID();
+set @GUID_movieType2 = NEWID();
+set @GUID_movieType3 = NEWID();
+set @GUID_movieType4 = NEWID();
+set @GUID_movieType5 = NEWID();
+set @GUID_movieType6 = NEWID();
+set @GUID_movieType7 = NEWID();
+set @GUID_movieType8 = NEWID();
+set @GUID_movieType9 = NEWID();
+
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType1, N'Hành động', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType2, N'Khoa học viễn tưởng', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType3, N'Phiêu lưu', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType4, N'Tâm lý', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType5, N'Giả tưởng', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType6, N'Hình sự', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType7, N'Kinh dị', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType8, N'Hoạt hình', 1);
+INSERT MovieType(Id, Name, Status) VALUES (@GUID_movieType9, N'Hài hước', 1);
+
+-- Insert các MovieTypeDetail cho các phim tương ứng
+
+-- GODZILLA X KONG
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie1, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie1, @GUID_movieType2);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie1, @GUID_movieType3);
+
+-- AVATAR: THE WAY OF WATER
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie2, @GUID_movieType2);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie2, @GUID_movieType3);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie2, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie2, @GUID_movieType5);
+
+-- DUNE
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie3, @GUID_movieType2);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie3, @GUID_movieType3);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie3, @GUID_movieType4);
+
+-- THE BATMAN
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie4, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie4, @GUID_movieType6);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie4, @GUID_movieType4);
+
+-- SPIDER-MAN: NO WAY HOME
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie5, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie5, @GUID_movieType3);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie5, @GUID_movieType5);
+
+-- INDIANA JONES AND THE DIAL OF DESTINY
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie6, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie6, @GUID_movieType3);
+
+-- MISSION: IMPOSSIBLE – DEAD RECKONING PART ONE
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie7, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie7, @GUID_movieType3);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie7, @GUID_movieType7);
+
+-- BLACK PANTHER: WAKANDA FOREVER
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie8, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie8, @GUID_movieType5);
+
+-- THE FLASH
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie9, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie9, @GUID_movieType2);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie9, @GUID_movieType5);
+
+-- JURASSIC WORLD: DOMINION
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie10, @GUID_movieType1);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie10, @GUID_movieType3);
+INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie10, @GUID_movieType5);
+
 
 --showtime and showtime-room
 --kong
@@ -367,13 +447,25 @@ INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES 
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --ticket type
+DECLARE @GUID_TicketType1 UNIQUEIDENTIFIER;
+DECLARE @GUID_TicketType2 UNIQUEIDENTIFIER;
+
+
+SET @GUID_TicketType1 = NEWID();
+INSERT TicketType(Id, Name, Status) VALUES (@GUID_TicketType1, N'HSSV-Người Cao Tuổi', 1)
+SET @GUID_TicketType2 = NEWID();
+INSERT TicketType(Id, Name, Status) VALUES (@GUID_TicketType2,  N'Người lớn', 1)
+
+--seat type
 SET @NEW_GUID = NEWID();
-INSERT TicketType(Id, Name, Status) VALUES (@NEW_GUID, N'HSSV-Người Cao Tuổi', 1)
+INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Đơn', 1)
 SET @NEW_GUID = NEWID();
-INSERT TicketType(Id, Name, Status) VALUES (@NEW_GUID,  N'Người lớn', 1)
+INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Ðôi', 1)
+SET @NEW_GUID = NEWID();
+INSERT SeatType(Id, Name, Status) VALUES (@NEW_GUID, N'Nằm', 1)
 
 SET @NEW_GUID = NEWID();
-INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='01'), 'A', 1, NULL, 0)
+INSERT Seat(Id, RoomId, RowName, ColIndex, IsSeat,SeatTypeId) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='01'), 'A', 1, NULL, 0)
 SET @NEW_GUID = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='01'), 'A', 2, NULL, 0)
 
@@ -382,8 +474,7 @@ INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@
 SET @NEW_GUID = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID, NULL, (select Id from Room where Name='02'), 'A', 2, 'A1', 0)
 
-SET @NEW_GUID = NEWID();
-INSERT TicketType(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_GUID, (select Id from SeatType where Name=N'Đơn'), N'Người lớn', 70000, 1)
+
 
 SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'A', 3, 'A1', 0)
@@ -399,8 +490,6 @@ INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@
 SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'A', 5, 'A4', 0)
 
-SET @NEW_GUID = NEWID();
-INSERT TicketType(Id, SeatTypeId, Name, Price, Status) VALUES (@NEW_GUID, (select Id from SeatType where Name=N'Ðôi'), N'HSSV-Người Cao Tuổi', 90000, 1)
 
 SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='01'), 'B', 1, 'B1', 0)
@@ -424,18 +513,7 @@ INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@
 SET @NEW_GUID1 = NEWID();
 INSERT Seat(Id, TicketTypeId, RoomId, RowName, ColIndex, Name, IsSeat) VALUES (@NEW_GUID1, @NEW_GUID, (select Id from Room where Name='02'), 'B', 5, 'B5', 0)
 
-SET @NEW_GUID = NEWID();
-SET @NEW_GUID1 = NEWID();
-INSERT MovieType(Id, Name, Status) VALUES (@NEW_GUID, N'Hành động', 1)
-INSERT MovieTypeDetail(Id, MovieId, MovieTypeId) VALUES (@NEW_GUID1, (select Id from Movie where Name=N'GODZILLA X KONG'), @NEW_GUID)
-SET @NEW_GUID = NEWID();
-SET @NEW_GUID1 = NEWID();
-INSERT MovieType(Id, Name, Status) VALUES (@NEW_GUID, N'Hoạt hình', 1)
-INSERT MovieTypeDetail(Id, MovieId, MovieTypeId) VALUES (@NEW_GUID1, (select Id from Movie where Name=N'KUNG FU PANDA 4'), @NEW_GUID)
-SET @NEW_GUID = NEWID();
-SET @NEW_GUID1 = NEWID();
-INSERT MovieType(Id, Name, Status) VALUES (@NEW_GUID, N'Hài hước', 1)
-INSERT MovieTypeDetail(Id, MovieId, MovieTypeId) VALUES (@NEW_GUID1, (select Id from Movie where	Name=N'KUNG FU PANDA 4'), @NEW_GUID)
+
 
 SET @NEW_GUID = NEWID();
 INSERT FoodAndDrink(Id, Name, Image, Price, Description, Status) VALUES (@NEW_GUID, N'Combo Solo 2 Ngăn - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', 119000, N'1 Coke 32oz - V + 1 Bắp 2 Ngăn 64OZ PM + CARAMEN', 1)

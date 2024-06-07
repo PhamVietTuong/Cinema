@@ -30,13 +30,13 @@ namespace Cinema.Controllers
                 var theaterResults = await _uow.TheaterRepository.GetTheatersByName(name);
                 if (theaterResults != null && theaterResults.Any())
                 {
-                    return Ok(theaterResults);
+                    return Ok(new { theaters =theaterResults});
                 }
 
                 var movieResults = await _uow.MovieRepository.GetMoviesByName(name);
                 if (movieResults != null && movieResults.Any())
                 {
-                    return Ok(movieResults);
+                    return Ok(new { movies = movieResults });
                 }
 
 
