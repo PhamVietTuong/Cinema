@@ -71,12 +71,11 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   @override
   void onLoadMovieDetailComplete(Movie movies) {}
   @override
-  void onLoadMoviesError() {
+  void onLoadError() {
     setState(() {
       isLoadingData = false;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +126,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               icon: const Icon(
                 Icons.search,
               ),
-            
               color: Colors.white,
             ),
           ),
@@ -274,8 +272,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                 : [
                                     const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style: TextStyle
-                                          (color: Colors.white),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -290,7 +287,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                 : [
                                     const Text(
                                       "Danh sách phim đang được cập nhật",
-                                      style:TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ],
                           )),
@@ -302,9 +299,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Video",
-                        style: TextStyle
-                            (color: Colors.white)),
+                    const Text("Video", style: TextStyle(color: Colors.white)),
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 3,
                       child: PageView.builder(
@@ -477,7 +472,7 @@ class InfoMovie extends StatelessWidget {
           ),
           Text(
             movie.name,
-            style:TextStyle(
+            style: TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ],

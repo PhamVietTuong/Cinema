@@ -292,7 +292,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
   @override
-  void onLoadSeatError() {}
+  void onLoadError() {}
 
   @override
   void initState() {
@@ -418,10 +418,11 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                           .firstWhere((element) =>
                               element.date.day == widget.selectedDate.day &&
                               element.date.month == widget.selectedDate.month)
-                           .theaters
+                          .theaters
                           .firstWhere(
                               (element) =>
-                                  element.theaterId ==widget.booking.theater.id,
+                                  element.theaterId ==
+                                  widget.booking.theater.id,
                               orElse: () => TheaterShowtime())
                           .showtimes,
                       selectShowtime: selectShowtime,
@@ -455,6 +456,8 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
               Expanded(
                 flex: 1,
                 child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+
                   scrollDirection: Axis.horizontal,
                   child: Column(children: renderSeatRow()),
                 ),

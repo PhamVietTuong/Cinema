@@ -7,7 +7,7 @@ import '../data/injector.dart';
 abstract class SeatViewContract {
   void onLoadSeatComplete(List<SeatRowData> seats);
 
-  void onLoadSeatError();
+  void onLoadError();
 }
 
 class SeatPresenter {
@@ -27,7 +27,7 @@ class SeatPresenter {
     } catch (error) {
       // Xử lý lỗi
       print('Error fetch Seats By Showtimeid and RoomId: $error');
-      _view.onLoadSeatError();
+      _view.onLoadError();
     }
   }
 }
