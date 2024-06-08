@@ -3,8 +3,6 @@ import { useEffect } from "react";
 import './Home.css'
 import Slide from "../../../Components/Slide/Slide";
 import { MovieListAction } from "../../../Redux/Actions/CinemasAction";
-import Header from "../../../Components/Header/Header";
-import Footer from "../../../Components/Footer.js/Footer";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -15,17 +13,13 @@ const Home = () => {
 
     return (
         <>
-            <Header></Header>
-            <div className="main">
-                <section className="web-movie-slide">
-                    <div className="movie-showing ht">
-                        <div className="container">
-                            <Slide movieList={movieList} />
-                        </div>
+            <section className="web-movie-slide">
+                <div className="movie-showing ht">
+                    <div className="container">
+                        <Slide movieList={movieList} />
                     </div>
-                </section>
-            </div>
-            <Footer></Footer>
+                </div>
+            </section>
         </>
     );
 }

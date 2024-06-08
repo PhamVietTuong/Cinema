@@ -430,6 +430,12 @@ a {
     width: 100%;
 }
 
+@media (hover: hover) {
+    .hd-regi-list.--second .link:hover {
+        color: #f3ea28;
+    }
+}
+
 .hd-regi:hover .hd-regi-list.hd-regi-list-custom.--second.custom-position-left {
     opacity: 1;
     visibility: visible;

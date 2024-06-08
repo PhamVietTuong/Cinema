@@ -3,7 +3,7 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { TicketBookingSuccess } from "../../Models/TicketBookingSuccess";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "./Type/CinemasType";
+import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 import { history } from "../../Routers";
 
 export const MovieListAction = () => {
@@ -39,7 +39,7 @@ export const TicketTypeAction = (ticketTypeByShowTimeDTO) => {
     return async (dispatch) => {
         try {
             const ticketType = await cinemasService.PostTicketTypeByShowTimeAndRoomId(ticketTypeByShowTimeDTO);
-
+            
             dispatch({
                 type: SET_TICKET_TYPE,
                 ticketType: ticketType.data,
@@ -102,6 +102,25 @@ export const SeatBeingSelected = (seatId, showTimeId, roomId) => {
     }
 }
 
+export const updateTotalSeatTypeAndProceed = (totalSeatType, showTimeId, roomId) => {
+    return async (dispatch, getState) => {
+        dispatch({
+            type: TOTAL_CHOOSES_SEAT_TYPE,
+            totalSeatType
+        });
+
+        const { seatYour } = getState().CinemasReducer;
+
+        let ticketBookingSuccess = new TicketBookingSuccess();
+        ticketBookingSuccess.seatIds = seatYour;
+        ticketBookingSuccess.showTimeId = showTimeId;
+        ticketBookingSuccess.roomId = roomId;
+        if (connection.state === 'Connected') {
+            await connection.invoke("SeatBeingSelected", ticketBookingSuccess);
+        } 
+    }
+}
+
 export const TicketBooking = (invoiceDTO) => {
     return async (dispatch) => {
         try {
@@ -144,6 +163,48 @@ export const TicketBooking = (invoiceDTO) => {
             })
         } catch (error) {
             console.log("TicketBooking", error);
+        }
+    }
+}
+
+export const TheaterListAction = () => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTheaterList();
+            dispatch({
+                type: SET_THEATER_LIST,
+                theaterList: result.data,
+            })
+        } catch (error) {
+            console.log("listMovieAction: ", error);
+        }
+    }
+}
+
+export const TheaterAction = (id) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTheaterId(id);
+            dispatch({
+                type: SET_THEATER_DETAIL,
+                theaterDetail: result.data,
+            })
+        } catch (error) {
+            console.log("listMovieAction: ", error);
+        }
+    }
+}
+
+export const ShowTimeByTheaterIdAction = (id) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetShowTimeByTheaterId(id);
+            dispatch({
+                type: SET_LIST_MOVIE_BY_THEATER_ID,
+                listMovieByTheaterId: result.data,
+            })
+        } catch (error) {
+            console.log("listMovieAction: ", error);
         }
     }
 }
