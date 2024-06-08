@@ -1,4 +1,5 @@
 ﻿using Cinema.Contracts;
+using Cinema.Data.Enum;
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -170,6 +171,26 @@ namespace Cinema.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetTheater/{id}")]
+        public async Task<ActionResult<TheaterDTO>> GetTheater(Guid id)
+        {
+            try
+            {
+                var result = await _uow.TheaterRepository.GetTheaterAsync(id);
+
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
         #endregion
 
         #region TicketType
@@ -192,7 +213,7 @@ namespace Cinema.Controllers
 
         #region Date
         [HttpGet("GetDateByMovieId/{movieId}/{ProjectionForm}")]
-        public async Task<ActionResult<List<DateTime>>> GetDateByMovieID(Guid movieId, int ProjectionForm)
+        public async Task<ActionResult<List<DateTime>>> GetDateByMovieID(Guid movieId, ProjectionForm ProjectionForm)
         {
             try
             {
@@ -214,7 +235,7 @@ namespace Cinema.Controllers
 
         #region ShowtimeByDate
         [HttpGet("GetShowTimeByMovieID/{movieId}/{date}/{ProjectionForm}")]
-        public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetShowTimeByMovieID(Guid movieId, DateTime date, int ProjectionForm)
+        public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetShowTimeByMovieID(Guid movieId, DateTime date, ProjectionForm ProjectionForm)
         {
             try
             {
