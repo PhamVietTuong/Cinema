@@ -46,7 +46,7 @@ namespace Cinema.Repository
                                 .Select(rowNameViewModel =>
                                 {
                                     int colIndex = 1;
-                                    var sortedSeats = rowNameViewModel.OrderBy(x => x.ColIndex).ToList(); // Sort seats by ColIndex and Name
+                                    var sortedSeats = rowNameViewModel.OrderBy(x => x.ColIndex).ToList();
                                     return new RowNameViewModel
                                     {
                                         RowName = rowNameViewModel.Key.RowName,
@@ -55,16 +55,13 @@ namespace Cinema.Repository
                                             var seatTypeTicketType = rowSeatViewModel.SeatTypeId.HasValue
                                                                                         ? seatTypeTicketTypes.FirstOrDefault(x => x.SeatTypeId == rowSeatViewModel.SeatTypeId.Value)
                                                                                         : null;
-                                            string name = null;
+                                            string name = rowSeatViewModel.IsSeat ? $"{rowSeatViewModel.RowName}{colIndex}" : null;
+
                                             if (rowSeatViewModel.IsSeat)
                                             {
-                                                name = $"{rowSeatViewModel.RowName}{colIndex}";
                                                 colIndex++;
                                             }
-                                            else
-                                            {
-                                                name = null;
-                                            }
+
                                             return new RowSeatViewModel
                                             {
                                                 Id = rowSeatViewModel.Id,
