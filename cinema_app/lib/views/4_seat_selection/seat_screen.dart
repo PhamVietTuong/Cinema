@@ -6,12 +6,9 @@ import 'package:cinema_app/data/models/seat.dart';
 import 'package:cinema_app/data/models/seat_row.dart';
 import 'package:cinema_app/presenters/seat_presenter.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_screen.dart';
-import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/components/chair_type_color_box.dart';
-import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_dropdow.dart';
-import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_row.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
@@ -44,7 +41,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   List<SeatRowData> seatRows = List.filled(0, SeatRowData(), growable: true);
   List waitingSeatIds = List.filled(0, "", growable: true);
-  List<String> selectedSeats = List.filled(0, "", growable: true);
+  List<Seat> selectedSeats = List.filled(0, Seat(), growable: true);
 
   bool handel() {
     if (selectedSeats.isEmpty || countCouple != 0 || countSignle != 0) {
@@ -55,17 +52,19 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   Widget nextScreen() {
     return ComboScreen(
+        hub: hubConnection,
         booking: widget.booking,
-        selectedSeatIds: selectedSeats,
+        selectedSeats: selectedSeats,
         showtime: selectedShowtime);
   }
 
-  bool coutSeat(String seatId, bool state) {
+  bool coutSeat(Seat seat, bool state) {
     for (var row in seatRows) {
-      for (var seat in row.seats) {
-        if (seat.id == seatId) {
+      for (var item in row.seats) {
+        if (item.id == seat.id) {
           //tìm được đúng ghế cần xử lý
-          if (seat.seatTypeName.compareTo("Đôi") == 0) {
+
+          if (item.seatTypeName.compareTo("Ðôi") == 0) {
             //state ==true thì xử lý bỏ chọn.
             if (state == true) {
               setState(() {
@@ -131,7 +130,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
 //truyền vào mã và trạng thái hiện tại
-  bool selectSeat(String seatId, bool state) {
+  bool selectSeat(Seat seat, bool state) {
     if (state == false &&
         selectedSeats.length >= widget.booking.getTotalTickets()) {
       print("Đã chọn đủ số lượng ghế!");
@@ -139,17 +138,17 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     }
 
     //kiểm tra chọn đúng loại ghế đã chọn theo vé
-    if (!coutSeat(seatId, state)) {
+    if (!coutSeat(seat, state)) {
       return false;
     }
     setState(() {
-      state ? selectedSeats.remove(seatId) : selectedSeats.add(seatId);
+      state ? selectedSeats.remove(seat) : selectedSeats.add(seat);
     });
     hubConnection.invoke("SeatBeingSelected", args: [
       {
         "showTimeId": selectedShowtime.showTimeId,
         "roomId": selectedShowtime.roomId,
-        "seatIds": selectedSeats,
+        "seatIds": selectedSeats.map((e) => e.id).toList(),
       }
     ]);
 
@@ -218,7 +217,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
       if (seat != null) {
         setState(() {
           seat.status = state;
-          selectedSeats.remove(seat.id);
+          selectedSeats.remove(seat);
           seat.seatTypeName.compareTo("Đơn") == 0
               ? countSignle++
               : countCouple++;
@@ -267,7 +266,6 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   @override
   void onLoadSeatComplete(List<SeatRowData> seatLst) {
-    print(seatLst);
     setState(() {
       seatRows = seatLst;
 
@@ -331,50 +329,70 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
           leadingWidth: 45,
           title: Container(
             margin: EdgeInsets.only(right: marginHorizontalScreen),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.location_on,
-                      size: Styles.iconSizeInLineText,
-                      color: Styles.boldTextColor["dark_purple"],
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: Styles.iconSizeInLineText,
+                          color: Styles.boldTextColor["dark_purple"],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
+                            style: TextStyle(
+                                color: Styles.boldTextColor["dark_purple"],
+                                fontSize: Styles.titleFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
-                        style: TextStyle(
-                            color: Styles.textColor["dark_purple"],
-                            fontSize: Styles.textSize,
-                            fontWeight: FontWeight.bold),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.av_timer_rounded,
+                          size: Styles.iconSizeInLineText,
+                          color: Styles.boldTextColor["dark_purple"],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
+                            softWrap: true,
+                            style: TextStyle(
+                                color: Styles.boldTextColor["dark_purple"],
+                                fontSize: Styles.titleFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.av_timer_rounded,
-                      size: Styles.iconSizeInLineText,
-                      color: Styles.boldTextColor["dark_purple"],
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
-                        softWrap: true,
-                        style: TextStyle(
-                            color: Styles.textColor["dark_purple"],
-                            fontSize: Styles.textSize,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
+                ShowtimeDropDown(
+                  marginLeft: marginLeft,
+                  showtime: selectedShowtime,
+                  showtimes: widget.booking.movie.schedules
+                      .firstWhere((element) =>
+                          element.date.day == widget.selectedDate.day &&
+                          element.date.month == widget.selectedDate.month)
+                      .theaters
+                      .firstWhere(
+                          (element) =>
+                              element.theaterId == widget.booking.theater.id,
+                          orElse: () => TheaterShowtime())
+                      .showtimes,
+                  selectShowtime: selectShowtime,
+                )
               ],
             ),
           ),
@@ -385,54 +403,10 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                 BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
-              Text(
-                "${widget.booking.movie.name} ${widget.booking.movie.showTimeTypeName} (${widget.booking.movie.ageRestrictionName})",
-                style: TextStyle(
-                    fontSize: Styles.titleFontSize,
-                    color: Styles.boldTextColor["dark_purple"]),
-              ),
               //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
+
               Container(
-                padding:
-                    EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
-                margin: const EdgeInsets.only(bottom: 5),
-                child: Row(
-                  children: [
-                    MovieTypeBox(
-                      title: widget.booking.movie.movieType,
-                      maxBoxWith: wS * 0.5 - 10,
-                      padding: 5,
-                    ),
-                    ShowtimeTypeBox(
-                      title: widget.booking.movie.showTimeTypeName,
-                      marginLeft: marginLeft,
-                    ),
-                    AgeRestrictionBox(
-                        title: widget.booking.movie.ageRestrictionName,
-                        marginLeft: marginLeft,
-                        ),
-                    ShowtimeDropDown(
-                      marginLeft: marginLeft,
-                      showtime: selectedShowtime,
-                      showtimes: widget.booking.movie.schedules
-                          .firstWhere((element) =>
-                              element.date.day == widget.selectedDate.day &&
-                              element.date.month == widget.selectedDate.month)
-                          .theaters
-                          .firstWhere(
-                              (element) =>
-                                  element.theaterId ==
-                                  widget.booking.theater.id,
-                              orElse: () => TheaterShowtime())
-                          .showtimes,
-                      selectShowtime: selectShowtime,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Stack(
                   children: [
                     const CurvedLineWidget(),
@@ -456,8 +430,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
               Expanded(
                 flex: 1,
                 child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Column(children: renderSeatRow()),
                 ),

@@ -13,14 +13,13 @@ class SeatBox extends StatefulWidget {
 
   final Seat seat;
   final String name;
-  final bool Function(String id, bool state) selectSeat;
+  final bool Function(Seat seat, bool state) selectSeat;
 
   @override
   State<SeatBox> createState() => _SeatBoxState();
 }
 
 class _SeatBoxState extends State<SeatBox> {
-
   bool isSelected = false;
   int loadSeatColor() {
     //trạng thái đã bán
@@ -30,7 +29,7 @@ class _SeatBoxState extends State<SeatBox> {
 
     //trạng thái trống
     if (widget.seat.status == 1) {
-      return widget.seat.seatTypeName.compareTo("Đơn")==0?1:2;
+      return widget.seat.seatTypeName.compareTo("Đơn") == 0 ? 1 : 2;
     }
     // trạng thái đang chọn
     if (widget.seat.status == 2) {
@@ -65,7 +64,7 @@ class _SeatBoxState extends State<SeatBox> {
         if (stt == 0 || stt == 3) {
           return;
         }
-        widget.selectSeat(widget.seat.id, isSelected)
+        widget.selectSeat(widget.seat, isSelected)
             ? setState(() {
                 if (!isSelected) {
                   widget.seat.status = 2;
@@ -81,22 +80,26 @@ class _SeatBoxState extends State<SeatBox> {
         children: [
           Expanded(
             child: AspectRatio(
-              aspectRatio: widget.seat.seatTypeName.compareTo("Đơn")==0 ? 1.1 : 2.2,
+              aspectRatio:
+                  widget.seat.seatTypeName.compareTo("Đơn") == 0 ? 1.2 : 2.4,
               child: widget.seat.isSeat
                   ? Container(
-                      margin: const EdgeInsets.only(right: 3, bottom: 3),
+                      margin: const EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(1),
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 2, color: colorMap[loadSeatColor()]!)),
+                          border: Border.all(color: colorMap[loadSeatColor()]!),
+                          borderRadius: BorderRadius.circular(4)),
                       child: Container(
                         alignment: Alignment.center,
-                        margin: const EdgeInsets.all(1.5),
-                        decoration:
-                            BoxDecoration(color: colorMap[loadSeatColor()]!),
+                        margin: const EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                            color: colorMap[loadSeatColor()]!,
+                            borderRadius: BorderRadius.circular(2)),
                         child: Text(
-                          "A10",
-                          style:  TextStyle(
+                          widget.seat.name,
+                          style: TextStyle(
                               color: Styles.boldTextColor["dark_purple"],
+                              fontSize: 10,
                               fontWeight: FontWeight.bold),
                         ),
                       ),

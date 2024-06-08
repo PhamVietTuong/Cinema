@@ -106,6 +106,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
         title: Text(
           widget.booking.theater.name,
           style: TextStyle(
+            fontWeight: FontWeight.bold,
               color: Styles.boldTextColor["dark_purple"],
               fontSize: Styles.appbarFontSize),
         ),
@@ -170,7 +171,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: lstShowTimeMovie.isNotEmpty
                           ? lstShowTimeMovie
-                          : [const Text("Trống")]),
+                          : [ Text("Trống", style:  TextStyle(color: Styles.boldTextColor["dark_purple"]),)]),
                 ),
               ),
             ),

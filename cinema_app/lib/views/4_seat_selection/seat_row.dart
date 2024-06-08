@@ -10,7 +10,7 @@ class SeatRow extends StatelessWidget {
       required this.selelctSeat});
   final List<Seat> seats;
   final String name;
-  final bool Function(String id, bool state) selelctSeat;
+  final bool Function(Seat seat, bool state) selelctSeat;
   @override
   Widget build(BuildContext context) {
     List<SeatBox> seatBoxs = List.filled(

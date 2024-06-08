@@ -1,4 +1,3 @@
-import 'package:cinema_app/data/models/ticket_option.dart';
 import 'package:flutter/material.dart';
 
 class BtnUpDown extends StatelessWidget {
@@ -7,10 +6,9 @@ class BtnUpDown extends StatelessWidget {
       this.isUp = false,
       this.colorText = Colors.black,
       required this.upDown,
-      this.opt});
+  });
   final bool isUp;
   final Color? colorText;
-  final TicketOption? opt;
   final Function(bool isUp) upDown;
   @override
   Widget build(BuildContext context) {
