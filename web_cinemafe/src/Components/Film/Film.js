@@ -9,7 +9,7 @@ const Film = (props) => {
         <>
             <div className="web-movie-box">
                 <div className="image">
-                    <Link to={`detail/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
+                    <Link to={`movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
                         <img src={`${DOMAIN}/Images/${props.movie.image}`} alt={`${props.movie.image}`}/>
                         <div className="attach">
                             <div className="type-movie">
@@ -28,7 +28,7 @@ const Film = (props) => {
                 </div>
 
                 <div className="info">
-                    <Link className='name' to={`detail/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
+                    <Link className='name' to={`movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
                         {props.movie.name}
                     </Link>
 

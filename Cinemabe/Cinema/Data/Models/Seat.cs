@@ -9,7 +9,6 @@
 		public SeatType SeatType { get; set; }
         public int ColIndex { get; set; }
         public string RowName { get; set; }
-		public string Name { get; set; }
 		public bool IsSeat { get; set; }
 	}
 }

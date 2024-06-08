@@ -9,71 +9,83 @@ using Microsoft.EntityFrameworkCore;
 namespace Cinema.Repository
 {
     public class SeatRepository : ISeatRepository
-	{
-		private readonly CinemaContext _context;
+    {
+        private readonly CinemaContext _context;
 
-		public SeatRepository(CinemaContext context)
-		{
-			_context = context;
-		}
+        public SeatRepository(CinemaContext context)
+        {
+            _context = context;
+        }
 
-		public async Task<SeatViewModel> GetSeatByShowTimeAndRoomIdAysn(SeatByShowTimeAndRoomDTO vm)
-		{
-			var showTimeRoom = (await _context.ShowTimeRoom
-								.Include(x => x.ShowTime)
-								.Where(x => x.ShowTimeId == vm.ShowTimeId && x.RoomId == vm.RoomId)
-								.ToListAsync())
-								.FirstOrDefault();
+        public async Task<SeatViewModel> GetSeatByShowTimeAndRoomIdAysn(SeatByShowTimeAndRoomDTO vm)
+        {
+            var showTimeRoom = (await _context.ShowTimeRoom
+                                .Include(x => x.ShowTime)
+                                .Where(x => x.ShowTimeId == vm.ShowTimeId && x.RoomId == vm.RoomId)
+                                .ToListAsync())
+                                .FirstOrDefault();
 
-			var seats = await _context.Seat
-											.Include(x => x.SeatType)
-											.Include(x => x.Room)
-											.Where(x => x.RoomId == showTimeRoom.RoomId)
-											.ToListAsync();
+            var seats = await _context.Seat
+                                            .Include(x => x.SeatType)
+                                            .Include(x => x.Room)
+                                            .Where(x => x.RoomId == showTimeRoom.RoomId)
+                                            .ToListAsync();
 
-			var ticket = await _context.InvoiceTicket
-				.Include(x => x.Seat)
-				.Where(x => x.ShowTimeId == vm.ShowTimeId && x.Seat.RoomId == vm.RoomId).ToListAsync();
+            var ticket = await _context.InvoiceTicket
+                .Include(x => x.Seat)
+                .Where(x => x.ShowTimeId == vm.ShowTimeId && x.Seat.RoomId == vm.RoomId).ToListAsync();
 
             var seatTypeTicketTypes = await _context.SeatTypeTicketType
-											.Include(x => x.TicketType)
-											.Include(x => x.SeatType)
-											.ToListAsync();
+                                            .Include(x => x.TicketType)
+                                            .Include(x => x.SeatType)
+                                            .ToListAsync();
 
             var roomName = seats.FirstOrDefault()?.Room.Name;
 
-			var rowName = seats.GroupBy(x => new { x.RowName })
-								.Select(rowNameViewModel => new RowNameViewModel
-								{
-									RowName = rowNameViewModel.Key.RowName,
-									RowSeats = rowNameViewModel.Select(rowSeatViewModel => {
+            var rowName = seats.GroupBy(x => new { x.RowName })
+                                .Select(rowNameViewModel =>
+                                {
+                                    int colIndex = 1;
+                                    var sortedSeats = rowNameViewModel.OrderBy(x => x.ColIndex).ToList(); // Sort seats by ColIndex and Name
+                                    return new RowNameViewModel
+                                    {
+                                        RowName = rowNameViewModel.Key.RowName,
+                                        RowSeats = sortedSeats.Select(rowSeatViewModel =>
+                                        {
+                                            var seatTypeTicketType = rowSeatViewModel.SeatTypeId.HasValue
+                                                                                        ? seatTypeTicketTypes.FirstOrDefault(x => x.SeatTypeId == rowSeatViewModel.SeatTypeId.Value)
+                                                                                        : null;
+                                            string name = null;
+                                            if (rowSeatViewModel.IsSeat)
+                                            {
+                                                name = $"{rowSeatViewModel.RowName}{colIndex}";
+                                                colIndex++;
+                                            }
+                                            else
+                                            {
+                                                name = null;
+                                            }
+                                            return new RowSeatViewModel
+                                            {
+                                                Id = rowSeatViewModel.Id,
+                                                ColIndex = rowSeatViewModel.ColIndex,
+                                                IsSeat = rowSeatViewModel.IsSeat,
+                                                Name = name,
+                                                SeatTypeId = rowSeatViewModel.SeatTypeId,
+                                                SeatTypeName = rowSeatViewModel.SeatType?.Name,
+                                                SeatStatus = ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? SeatStatus.Sold : SeatStatus.Empty,
+                                            };
+                                        }).OrderBy(x => x.ColIndex).ThenBy(x => x.Name)
+                                        .ToList()
+                                    };
+                                }).OrderBy(x => x.RowName).ToList();
 
-                                        var seatTypeTicketType = rowSeatViewModel.SeatTypeId.HasValue
-																					? seatTypeTicketTypes.FirstOrDefault(x => x.SeatTypeId == rowSeatViewModel.SeatTypeId.Value)
-																					: null;
-                                        return new RowSeatViewModel
-										{
-											Id = rowSeatViewModel.Id,
-											ColIndex = rowSeatViewModel.ColIndex,
-											IsSeat = rowSeatViewModel.IsSeat,
-											Name = rowSeatViewModel.Name,
-											SeatTypeId = rowSeatViewModel.SeatTypeId,
-                                            SeatTypeName = rowSeatViewModel.SeatType?.Name,
-											SeatStatus = (int)(ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? SeatStatus.Sold : SeatStatus.Empty),
-										};
-									})
-									.OrderBy(x => x.ColIndex).ThenBy(x => x.Name)
-									.ToList()
-								})
-								.OrderBy(x => x.RowName)
-								.ToList();
-
-			var result = new SeatViewModel
-			{
-				RoomName = roomName,
-				RowName = rowName
-			};
-			return result;
-		}
-	}
+            var result = new SeatViewModel
+            {
+                RoomName = roomName,
+                RowName = rowName
+            };
+            return result;
+        }
+    }
 }

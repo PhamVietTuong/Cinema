@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -22,6 +22,9 @@ const stateDefault = {
     totalSeatType: {},
     checkBooking: false,
     seatYourName: '',
+    theaterList: [],
+    theaterDetail: {},
+    listMovieByTheaterId: []
 }
 
 const createSeatTypeMapping = (seatData) => {
@@ -73,18 +76,15 @@ const checkIfSeatsAreEnough = (seatYour, seatTypeMapping, totalSeatType) => {
 export const CinemasReducer = (state = stateDefault, action) => {
     switch (action.type) {
         case SET_MOVIE_LIST: {
-            state.movieList = action.movieList;
-            return { ...state };
+            return { ...state, movieList: action.movieList };
         }
 
         case SET_MOVIE_DETAIL: {
-            state.movieDetail = action.movieDetail;
-            return { ...state};
+            return { ...state, movieDetail: action.movieDetail };
         }
         
         case SET_TICKET_TYPE: {
-            state.ticketType = action.ticketType;
-            return { ...state };
+            return { ...state, ticketType: action.ticketType };
         }
 
         case SET_SEAT: {
@@ -200,6 +200,18 @@ export const CinemasReducer = (state = stateDefault, action) => {
 
         case TOTAL_CHOOSES_SEAT_TYPE: {
             return { ...state, totalSeatType: action.totalSeatType, seatYour: [] };
+        }
+
+        case SET_THEATER_LIST: {
+            return { ...state, theaterList: action.theaterList };
+        }
+
+        case SET_THEATER_DETAIL: {
+            return { ...state, theaterDetail: action.theaterDetail };
+        }
+
+        case SET_LIST_MOVIE_BY_THEATER_ID: {
+            return { ...state, listMovieByTheaterId: action.listMovieByTheaterId };
         }
 
         default: return { ...state };

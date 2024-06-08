@@ -19,7 +19,19 @@ body::before {
   background-color: #0F172A;
 }
 
-@media screen and (min-width: 2000px) {
+.app-main,
+.main {
+  position: relative;
+}
+
+.app-main,
+.main {
+  min-height: 68vh;
+  padding-top: 190px;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+@media (min-width: 2000px) {
   body {
     font-size: 20px;
   }
@@ -529,4 +541,14 @@ button {
     padding: 0;
 }
 
-
+.app-main:before,
+.main:before {
+  background-color: #0f172a;
+  bottom: 0;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -5;
+}

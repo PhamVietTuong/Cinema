@@ -24,6 +24,14 @@
     transition: none;
 }
 
+.choosing {
+    color: #f3ea28;
+}
+
+.choosing img {
+    filter: brightness(0) saturate(100%) invert(82%) sepia(85%) saturate(423%) hue-rotate(357deg) brightness(92%) contrast(107%);
+}
+
 .seat-wr.choosing {
     color: #f3ea28;
 }
@@ -32,14 +40,26 @@
     filter: brightness(0) saturate(100%) invert(82%) sepia(85%) saturate(423%) hue-rotate(357deg) brightness(92%) contrast(107%);
 }
 
-.seat-wr.booked {
+.booked {
     pointer-events: none;
     cursor: default;
     color: #475569;
 }
 
+.booked img {
+    filter: brightness(0) saturate(100%) invert(32%) sepia(9%) saturate(1380%) hue-rotate(176deg) brightness(94%) contrast(88%);
+}
+
 .seat-wr.booked img {
     filter: brightness(0) saturate(100%) invert(32%) sepia(9%) saturate(1380%) hue-rotate(176deg) brightness(94%) contrast(88%);
+}
+
+.update {
+    color: red;
+}
+
+.update img {
+    filter: brightness(0) saturate(100%) invert(19%) sepia(91%) saturate(7480%) hue-rotate(359deg) brightness(102%) contrast(107%);
 }
 
 .seat-wr.update {
