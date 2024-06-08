@@ -4,6 +4,7 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
+
 class InfoMovie extends StatelessWidget {
   const InfoMovie({
     Key? key,
@@ -49,13 +50,10 @@ class InfoMovie extends StatelessWidget {
                 const SizedBox(
                   width: 2,
                 ),
-                movie.projectionForm == 0
-                    ? const ShowtimeTypeBox(
-                        title: '2D',
-                      )
-                    : const ShowtimeTypeBox(
-                        title: '3D',
-                      )
+                ShowtimeTypeBox(
+                    title: movie.showTimeTypeName.isNotEmpty
+                        ? movie.showTimeTypeName
+                        : "")
               ],
             ),
           ),
