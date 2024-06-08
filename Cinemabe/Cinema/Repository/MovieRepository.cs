@@ -164,6 +164,7 @@ namespace Cinema.Repository
                 Languages = movieDetail.Languages,
                 ShowTimeTypeName = movieDetailDTO.ProjectionForm == ProjectionForm.Time2D ? "2D" : "3D",
                 MovieType = movieTypes,
+                ProjectionForm = movieDetailDTO.ProjectionForm == ProjectionForm.Time2D ? 0 : 1,
                 Schedules = schedules
             };
             return viewModel;
