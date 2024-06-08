@@ -35,6 +35,7 @@ class _TheaterScreenState extends State<TheaterScreen>
         title: Text(
           "MUA VÉ",
           style: TextStyle(
+            fontWeight: FontWeight.bold,
               color: Styles.boldTextColor["dark_purple"],
               fontSize: Styles.appbarFontSize),
         ),

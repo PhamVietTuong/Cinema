@@ -109,12 +109,14 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
     var wS = MediaQuery.of(context).size.width;
     var marginLeft = 10.0;
     var marginHorizontalScreen = 15.0;
+  
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Styles.backgroundContent["dark_purple"],
           leading: IconButton(
             alignment: Alignment.center,
             onPressed: () {
+              widget.booking.movie = Movie();
               Navigator.pop(this.context);
             },
             icon: Icon(
@@ -127,6 +129,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
           title: Text(
             'CHỌN VÉ',
             style: TextStyle(
+                fontWeight: FontWeight.bold,
                 fontSize: Styles.appbarFontSize,
                 color: Styles.boldTextColor["dark_purple"]),
           ),
@@ -154,9 +157,9 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                       marginLeft: marginLeft,
                     ),
                     AgeRestrictionBox(
-                        title: widget.movie.ageRestrictionName,
-                        marginLeft: marginLeft,
-                        ),
+                      title: widget.movie.ageRestrictionName,
+                      marginLeft: marginLeft,
+                    ),
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,
@@ -278,8 +281,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                   padding:
                       EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
                   child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-
+                    physics: const BouncingScrollPhysics(),
                     child: Column(children: options),
                   ),
                 ),
@@ -308,7 +310,6 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
   }
 
   @override
-
   @override
   void onLoadError() {}
 

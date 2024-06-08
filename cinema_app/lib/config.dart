@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 var serverUrl = 'https://10.0.2.2:7209';
 
 class Styles {
-  static const backgroundColor = {"dark_purple": Color(0xFF272042),};
+  static const backgroundColor = {
+    "dark_purple": Color(0xFF272042),
+  };
   static const backgroundContent = {"dark_purple": Color(0xFF332E59)};
   static const btnColor = {"dark_purple": Color(0xff802ef7)};
   static const boldTextColor = {"dark_purple": Color(0xffffffff)};
@@ -16,7 +19,7 @@ class Styles {
   static const titleFontSize = 18.0;
   static const textSize = 15.0;
   static const appbarFontSize = 25.0;
-  static const defaultHorizontal=15.0;
+  static const defaultHorizontal = 15.0;
 
   static const primaryColor = Color(0xff802ef7);
   static const soldColor = Colors.grey;
@@ -27,6 +30,8 @@ class Styles {
 
   static const iconSizeInLineText = 20.0;
   static const iconSizeInTitle = 30.0;
-  static const iconInAppBar=25.0;
-  
+  static const iconInAppBar = 25.0;
+
+  static NumberFormat formatter =
+      NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
 }

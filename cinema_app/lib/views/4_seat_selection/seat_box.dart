@@ -13,7 +13,7 @@ class SeatBox extends StatefulWidget {
 
   final Seat seat;
   final String name;
-  final bool Function(String id, bool state) selectSeat;
+  final bool Function(Seat seat, bool state) selectSeat;
 
   @override
   State<SeatBox> createState() => _SeatBoxState();
@@ -43,6 +43,7 @@ class _SeatBoxState extends State<SeatBox> {
   @override
   void initState() {
     super.initState();
+    widget.seat.name = "ý";
   }
 
   @override
@@ -64,7 +65,7 @@ class _SeatBoxState extends State<SeatBox> {
         if (stt == 0 || stt == 3) {
           return;
         }
-        widget.selectSeat(widget.seat.id, isSelected)
+        widget.selectSeat(widget.seat, isSelected)
             ? setState(() {
                 if (!isSelected) {
                   widget.seat.status = 2;

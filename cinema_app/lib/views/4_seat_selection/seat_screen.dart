@@ -41,7 +41,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   List<SeatRowData> seatRows = List.filled(0, SeatRowData(), growable: true);
   List waitingSeatIds = List.filled(0, "", growable: true);
-  List<String> selectedSeats = List.filled(0, "", growable: true);
+  List<Seat> selectedSeats = List.filled(0, Seat(), growable: true);
 
   bool handel() {
     if (selectedSeats.isEmpty || countCouple != 0 || countSignle != 0) {
@@ -52,17 +52,19 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   Widget nextScreen() {
     return ComboScreen(
+        hub: hubConnection,
         booking: widget.booking,
-        selectedSeatIds: selectedSeats,
+        selectedSeats: selectedSeats,
         showtime: selectedShowtime);
   }
 
-  bool coutSeat(String seatId, bool state) {
+  bool coutSeat(Seat seat, bool state) {
     for (var row in seatRows) {
-      for (var seat in row.seats) {
-        if (seat.id == seatId) {
+      for (var item in row.seats) {
+        if (item.id == seat.id) {
           //tìm được đúng ghế cần xử lý
-          if (seat.seatTypeName.compareTo("Đôi") == 0) {
+
+          if (item.seatTypeName.compareTo("Ðôi") == 0) {
             //state ==true thì xử lý bỏ chọn.
             if (state == true) {
               setState(() {
@@ -128,7 +130,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
 //truyền vào mã và trạng thái hiện tại
-  bool selectSeat(String seatId, bool state) {
+  bool selectSeat(Seat seat, bool state) {
     if (state == false &&
         selectedSeats.length >= widget.booking.getTotalTickets()) {
       print("Đã chọn đủ số lượng ghế!");
@@ -136,17 +138,17 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     }
 
     //kiểm tra chọn đúng loại ghế đã chọn theo vé
-    if (!coutSeat(seatId, state)) {
+    if (!coutSeat(seat, state)) {
       return false;
     }
     setState(() {
-      state ? selectedSeats.remove(seatId) : selectedSeats.add(seatId);
+      state ? selectedSeats.remove(seat) : selectedSeats.add(seat);
     });
     hubConnection.invoke("SeatBeingSelected", args: [
       {
         "showTimeId": selectedShowtime.showTimeId,
         "roomId": selectedShowtime.roomId,
-        "seatIds": selectedSeats,
+        "seatIds": selectedSeats.map((e) => e.id).toList(),
       }
     ]);
 
@@ -215,7 +217,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
       if (seat != null) {
         setState(() {
           seat.status = state;
-          selectedSeats.remove(seat.id);
+          selectedSeats.remove(seat);
           seat.seatTypeName.compareTo("Đơn") == 0
               ? countSignle++
               : countCouple++;
@@ -346,8 +348,8 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                           child: Text(
                             "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
                             style: TextStyle(
-                                color: Styles.textColor["dark_purple"],
-                                fontSize: Styles.textSize,
+                                color: Styles.boldTextColor["dark_purple"],
+                                fontSize: Styles.titleFontSize,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -367,8 +369,8 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                             "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
                             softWrap: true,
                             style: TextStyle(
-                                color: Styles.textColor["dark_purple"],
-                                fontSize: Styles.textSize,
+                                color: Styles.boldTextColor["dark_purple"],
+                                fontSize: Styles.titleFontSize,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -401,12 +403,10 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                 BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
-            
               //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
-            
+
               Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Stack(
                   children: [
                     const CurvedLineWidget(),
@@ -430,8 +430,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
               Expanded(
                 flex: 1,
                 child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Column(children: renderSeatRow()),
                 ),
