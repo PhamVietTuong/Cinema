@@ -16,6 +16,7 @@ class Styles {
   static const titleFontSize = 18.0;
   static const textSize = 15.0;
   static const appbarFontSize = 25.0;
+  static const defaultHorizontal=15.0;
 
   static const primaryColor = Color(0xff802ef7);
   static const soldColor = Colors.grey;
@@ -26,4 +27,6 @@ class Styles {
 
   static const iconSizeInLineText = 20.0;
   static const iconSizeInTitle = 30.0;
+  static const iconInAppBar=25.0;
+  
 }

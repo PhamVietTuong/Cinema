@@ -156,7 +156,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                     AgeRestrictionBox(
                         title: widget.movie.ageRestrictionName,
                         marginLeft: marginLeft,
-                        fontSizeCus: 15),
+                        ),
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,

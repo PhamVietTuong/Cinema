@@ -6,10 +6,9 @@ class AgeRestrictionBox extends StatelessWidget {
       {super.key,
       required this.title,
       this.marginLeft = 0.0,
-      this.fontSizeCus = 0.0, this.padding=5.0});
+      this.padding=5.0});
   final String title;
   final double marginLeft;
-  final double fontSizeCus;
   final double padding;
   @override
   Widget build(BuildContext context) {

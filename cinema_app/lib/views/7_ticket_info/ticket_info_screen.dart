@@ -105,6 +105,7 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                   Text(
                     "Mã vé",
                   ),
+
                   Text(
                     "111850955",
                   ),
