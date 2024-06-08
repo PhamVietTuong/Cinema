@@ -87,7 +87,7 @@ namespace Cinema.Repository
                         ShowTimeTypeName = form == ProjectionForm.Time2D ? "2D" : "3D",
                         ProjectionForm = (int)form,
                         Schedules = item.showTimes
-                            .Where(sRoom => sRoom.ShowTime.ProjectionForm == (int)form)
+                            .Where(sRoom => sRoom.ShowTime.ProjectionForm == form)
                             .GroupBy(sRoom => sRoom.ShowTime.StartTime.Date)
                             .Select(st => new ScheduleRowViewModel
                             {
@@ -144,6 +144,22 @@ namespace Cinema.Repository
             }).ToListAsync();
             var filteredTheaters = theaters.Where(x => x.Name.ToLower().RemoveDiacritics().Contains(input)).ToList();
             return filteredTheaters;
+        }
+
+        public async Task<TheaterDTO> GetTheaterAsync(Guid id)
+        {
+            var theater = await _context.Theater.FindAsync(id);
+
+            var result = new TheaterDTO
+            {
+                Id = theater.Id,
+                Name = theater.Name,
+                Address = theater.Address,
+                Image = theater.Image,
+                Phone = theater.Phone,
+            };
+
+            return result;
         }
     }
 }
