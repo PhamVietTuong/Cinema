@@ -43,7 +43,6 @@ class _SeatBoxState extends State<SeatBox> {
   @override
   void initState() {
     super.initState();
-    widget.seat.name = "ý";
   }
 
   @override
@@ -97,7 +96,7 @@ class _SeatBoxState extends State<SeatBox> {
                             color: colorMap[loadSeatColor()]!,
                             borderRadius: BorderRadius.circular(2)),
                         child: Text(
-                          "A10",
+                          widget.seat.name,
                           style: TextStyle(
                               color: Styles.boldTextColor["dark_purple"],
                               fontSize: 10,
