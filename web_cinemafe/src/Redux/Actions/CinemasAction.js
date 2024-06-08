@@ -1,8 +1,10 @@
+import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
 import { TicketBookingSuccess } from "../../Models/TicketBookingSuccess";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
 import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL } from "./Type/CinemasType";
+import { history } from "../../Routers";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -100,33 +102,46 @@ export const SeatBeingSelected = (seatId, showTimeId, roomId) => {
     }
 }
 
-export const TicketBooking = (ticket) => {
+export const TicketBooking = (invoiceDTO) => {
     return async (dispatch) => {
         try {
             const handleInforTicket = async (tickets, seatStatus) => {
                 if (seatStatus === SeatStatus.Sold) {
                     const seatNames = tickets.map(x => x.seat.name).join(", ");
                     let seatIds = tickets.map(x => x.seat.id);
-
-                    alert("Đã có người mua: " + seatNames);
-
+                    Swal.fire({
+                        title: `LƯU Ý !`,
+                        text: "Đã có người mua ghế: " + seatNames,
+                        padding: "24px",
+                        width: "400px",
+                        customClass: {
+                            confirmButton: 'custom-ok-button'
+                        },
+                        showCancelButton: false,
+                        confirmButtonText: "Thử lại",
+                    });
                     dispatch({
                         type: REMOVE_SEAT_BEING_SELECTED,
                         seatIds, seatStatus
                     });
-                } else {
-                    const ticketBooking = await cinemasService.PostTicket(ticket);
-
-                    if (ticketBooking.status === 200) {
-                        await connection.invoke("TicketBookingSuccess", ticket);
-                        window.location.reload();
-                        alert("Đặt vé thành công");
-                    }
                 }
-            };
+                // else {
+                //     const ticketBooking = await cinemasService.PostTicket(invoiceDTO);
 
+                //     if (ticketBooking.status === 200) {
+                //         await connection.invoke("TicketBookingSuccess", invoiceDTO);
+                //         window.location.reload();
+                //         alert("Đặt vé thành công");
+                //     }
+                // }
+            };
             await connection.on("InforTicket", handleInforTicket);
-            await connection.invoke("CheckTheSeatBeforeBooking", ticket)
+            await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO).then((result) => {
+                if(result) {
+                    history.push("/");
+                    window.location.reload();
+                }
+            })
         } catch (error) {
             console.log("TicketBooking", error);
         }

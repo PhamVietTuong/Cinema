@@ -24,6 +24,7 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Center(
           child: Column(children: [
             Container(
@@ -104,7 +105,10 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                   Text(
                     "Mã vé",
                   ),
-                  Text("111850955",),
+
+                  Text(
+                    "111850955",
+                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -137,7 +141,6 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                             borderRadius: BorderRadius.circular(8)),
                         child: const Text(
                           "XÁC NHẬN",
-                  
                         ))),
               ],
             )

@@ -194,7 +194,7 @@
 .seat-block.--full {
     --w: 100%;
 }
-
+/* 
 @media (min-width: 1200px) {
     .seat-block.--full .seat-td:not(.seat-couple) .seat-wr {
         padding: 6px;
@@ -203,7 +203,7 @@
     .seat-block.--full .seat-name {
         bottom: -9px;
     }
-}
+} */
 
 @media (max-width: 800px) {
     .seat-block {

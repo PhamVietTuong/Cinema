@@ -51,7 +51,7 @@ namespace Cinema
                 }
             }
 
-            var ticket = await _context.Ticket
+            var ticket = await _context.InvoiceTicket
                                     .Include(x => x.Seat)
                                     .Where(x => x.ShowTimeId == entity.ShowTimeId && x.Seat.RoomId == entity.RoomId && entity.SeatIds.Contains(x.SeatId))
                                     .ToListAsync();
@@ -118,27 +118,76 @@ namespace Cinema
             await GetWaitingSeat(entity.ShowTimeId, entity.RoomId);
         }
 
-        public async Task CheckTheSeatBeforeBooking(TicketBookingSuccess entity)
+        public async Task<InvoiceDTO> CheckTheSeatBeforeBooking(InvoiceDTO entity)
         {
-            var tickets = await _context.Ticket
-                                    .Include(x => x.Seat)
-                                    .Where(x => x.ShowTimeId == entity.ShowTimeId && x.Seat.RoomId == entity.RoomId && entity.SeatIds.Contains(x.SeatId))
-                                    .ToListAsync();
-
-            var uniqueTickets = tickets
-                    .GroupBy(x => x.SeatId)
-                    .Select(g => g.First())
-                    .ToList();
-
-            if (uniqueTickets.Any())
+            try
             {
-                await Clients.Caller.SendAsync("InforTicket", uniqueTickets, SeatStatus.Sold);
-                return;
+                var tickets = await _context.InvoiceTicket
+                   .Include(x => x.Seat)
+                   .Where(x => x.ShowTimeId == entity.ShowTimeId && x.Seat.RoomId == entity.RoomId && entity.InvoiceTickets.Select(x => x.SeatId).Contains(x.SeatId))
+                   .ToListAsync();
+
+                var uniqueTickets = tickets
+                        .GroupBy(x => x.SeatId)
+                        .Select(g => g.First())
+                        .ToList();
+
+                if (uniqueTickets.Any())
+                {
+                    await Clients.Caller.SendAsync("InforTicket", uniqueTickets, SeatStatus.Sold);
+                    return null;
+                }
+                else
+                {
+                    var invoice = new Invoice
+                    {
+                        UserId = entity.UserId,
+                        Code = entity.UserId.ToString(),
+                        CreationTime = DateTime.UtcNow,
+                    };
+
+                    await _context.Invoice.AddAsync(invoice);
+
+                    foreach (var seat in entity.InvoiceTickets)
+                    {
+                        var invoiceTicket = new InvoiceTicket
+                        {
+                            InvoiceId = invoice.Id,
+                            ShowTimeId = entity.ShowTimeId,
+                            SeatId = seat.SeatId,
+                            TicketTypeId = seat.TicketTypeId,
+                            Price = _context.SeatTypeTicketType.FirstOrDefault(x => x.TicketTypeId == seat.TicketTypeId && _context.Seat.FirstOrDefault(x => x.Id == seat.SeatId).SeatTypeId == x.SeatTypeId).Price,
+                        };
+
+                        await _context.InvoiceTicket.AddAsync(invoiceTicket);
+                    }
+
+                    foreach (var item in entity.FoodAndDrinks)
+                    {
+                        if (item.Quantity <= 0) break;
+
+                        var invoiceFoodAndDrink = new InvoiceFoodAndDrink
+                        {
+                            InvoiceId = invoice.Id,
+                            FoodAndDrinkId = item.FoodAndDrinkId,
+                            Quantity = item.Quantity,
+                            Price = _context.FoodAndDrinkTheater.FirstOrDefault(x => x.FoodAndDrinkId == item.FoodAndDrinkId && x.TheaterId == entity.TheaterId).Price,
+                        };
+
+                        await _context.InvoiceFoodAndDrink.AddAsync(invoiceFoodAndDrink);
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.InvoiceTickets.Select(x => x.SeatId), SeatStatus.Sold);
+
+                    return entity;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Clients.Caller.SendAsync("InforTicket", null, SeatStatus.Empty);
-                return;
+                Console.WriteLine($"Error in CheckTheSeatBeforeBooking: {ex.Message}");
+                throw;
             }
         }
 

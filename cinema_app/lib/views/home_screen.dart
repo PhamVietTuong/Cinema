@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   @override
   void onLoadMovieDetailComplete(Movie movies) {}
   @override
-  void onLoadMoviesError() {
+  void onLoadError() {
     setState(() {
       isLoadingData = false;
     });
@@ -138,6 +138,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               icon: Icon(Icons.search,
                   size: Styles.iconInAppBar,
                   color: Styles.boldTextColor["dark_purple"]),
+
             ),
           ),
         ],

@@ -11,9 +11,7 @@ class ComboTitle extends StatefulWidget {
 
 class _ComboTitleState extends State<ComboTitle> {
   var isShow = true;
-  List<ComboItem> comboItems=[const ComboItem(),
-          const ComboItem(),
-          const ComboItem(),];
+  List<ComboItem> comboItems=[];
   @override
   Widget build(BuildContext context) {
     return 
