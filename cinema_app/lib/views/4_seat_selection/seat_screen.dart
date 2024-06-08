@@ -264,7 +264,6 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   @override
   void onLoadSeatComplete(List<SeatRowData> seatLst) {
-    print(seatLst);
     setState(() {
       seatRows = seatLst;
 

@@ -43,7 +43,6 @@ class TheaterItem extends StatelessWidget {
               ),
             ]),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // hình ảnh giới thiệu của từng rạp
