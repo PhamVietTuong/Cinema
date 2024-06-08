@@ -1,3 +1,4 @@
+import 'package:cinema_app/data/models/theater.dart';
 import 'package:flutter/material.dart';
 
 import '../config.dart';
@@ -10,19 +11,25 @@ class ShowtimeFromTheater extends StatefulWidget {
       {super.key,
       required this.selectedDate,
       required this.item,
-      required this.movie});
+      required this.movie, required this.scroll});
 
   final DateTime selectedDate;
   final TheaterShowtime item;
   final Movie movie;
+  final Function() scroll;
 
   @override
   State<ShowtimeFromTheater> createState() => _ShowtimeFromTheaterState();
 }
 
 class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
-  bool isShow=false;
+  bool isShow = false;
 
+@override
+  void initState() {
+    super.initState();
+    
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,6 +40,9 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
             setState(() {
               isShow = !isShow;
             });
+            widget.scroll();
+              // Cuộn xuống dưới cùng khi isShow là true
+             
           },
           child: Container(
             padding: const EdgeInsets.all(10),
@@ -61,33 +71,40 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
             ),
           ),
         ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-            child: Text(
-              widget.item.theaterAddress,
-              style: TextStyle(
-                color: Styles.textColor["dark_purple"],
-                fontSize: Styles.textSize,
-              ),
-            ),
-          ),
         //phần showtime
         if (isShow)
-          SizedBox(
-            width: MediaQuery.of(context).size.width - 30,
-            child: Wrap(
-              runSpacing: 5,
-              spacing: 10,
-              children: widget.item.showtimes
-                  .map(
-                    (e) => ShowtimeItem(
-                      showtimeRoom: e,
-                      booking: Booking(),
-                      movie: widget.movie,
-                      selectedDate: widget.selectedDate,
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+                  child: Text(
+                    widget.item.theaterAddress,
+                    style: TextStyle(
+                      color: Styles.textColor["dark_purple"],
+                      fontSize: Styles.textSize,
                     ),
-                  )
-                  .toList(),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 30,
+                  child: Wrap(
+                    runSpacing: 5,
+                    spacing: 10,
+                    children: widget.item.showtimes
+                        .map(
+                          (e) => ShowtimeItem(
+                            showtimeRoom: e,
+                            booking: Booking(theater: Theater(id: widget.item.theaterId, name: widget.item.theaterName)),
+                            movie: widget.movie,
+                            selectedDate: widget.selectedDate,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
             ),
           ),
       ],
