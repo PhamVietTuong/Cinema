@@ -4,6 +4,7 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:flutter/material.dart';
+
 class InfoMovie extends StatelessWidget {
   const InfoMovie({
     Key? key,
@@ -24,56 +25,59 @@ class InfoMovie extends StatelessWidget {
                   )),
         );
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: wImage,
-            height: wImage / 0.57,
-            margin: const EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fitHeight,
-                image: NetworkImage("$serverUrl/Images/${movie.img}"),
+      child: Container(
+        width: wImage,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: wImage,
+              height: wImage / 0.57,
+              margin: const EdgeInsets.only(right: 10),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fitHeight,
+                  image: NetworkImage("$serverUrl/Images/${movie.img}"),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  movie.ageRestrictionName.isNotEmpty
+                      ? AgeRestrictionBox(
+                          title: movie.ageRestrictionName,
+                        )
+                      : const SizedBox.shrink(),
+                  const SizedBox(
+                    width: 2,
+                  ),
+                  ShowtimeTypeBox(
+                      title: movie.showTimeTypeName.isNotEmpty
+                          ? movie.showTimeTypeName
+                          : "")
+                ],
               ),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                movie.ageRestrictionName.isNotEmpty
-                    ? AgeRestrictionBox(
-                        title: movie.ageRestrictionName,
-                      )
-                    : const SizedBox.shrink(),
-                const SizedBox(
-                  width: 2,
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: wImage*0.9
+              ),
+              child: Text(
+                movie.name,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Styles.boldTextColor["dark_purple"],
+                  fontSize: Styles.titleFontSize,
+                  fontWeight: FontWeight.w500,
                 ),
-                movie.projectionForm == 0
-                    ? const ShowtimeTypeBox(
-                        title: '2D',
-                      )
-                    : const ShowtimeTypeBox(
-                        title: '3D',
-                      )
-              ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            movie.name.length > 15
-                ? '${movie.name.substring(0, 15)}...'
-                : movie.name,
-            softWrap: true,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: Styles.titleFontSize,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
