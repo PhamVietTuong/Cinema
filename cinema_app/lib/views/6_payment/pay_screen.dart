@@ -432,8 +432,9 @@ class _PayScreenState extends State<PayScreen> {
                             ),
                           ));
                     }
+                  }).catchError((error) {
+                    print("Error: $error");
                   });
-                  ;
                 },
                 child: Container(
                   padding:

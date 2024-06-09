@@ -38,7 +38,6 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   late int countCouple;
   final hubConnection =
       HubConnectionBuilder().withUrl("$serverUrl/cinema").build();
-
   List<SeatRowData> seatRows = List.filled(0, SeatRowData(), growable: true);
   List waitingSeatIds = List.filled(0, "", growable: true);
   List<Seat> selectedSeats = List.filled(0, Seat(), growable: true);
@@ -104,7 +103,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     return false;
   }
 
-  List<SeatRow> renderSeatRow() {
+  List<Widget> renderSeatRow() {
     return seatRows
         .map((e) => SeatRow(
               selelctSeat: selectSeat,
@@ -307,8 +306,9 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
+    var hS = MediaQuery.of(context).size.height;
+
     var marginLeft = 10.0;
-    var marginHorizontalScreen = 15.0;
 
     return Scaffold(
         appBar: AppBar(
@@ -328,7 +328,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
           titleSpacing: 0,
           leadingWidth: 45,
           title: Container(
-            margin: EdgeInsets.only(right: marginHorizontalScreen),
+            margin: const EdgeInsets.only(right: Styles.defaultHorizontal),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -403,42 +403,60 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                 BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
-              //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
-
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Stack(
-                  children: [
-                    const CurvedLineWidget(),
-                    Positioned(
-                      top: 10,
-                      child: Container(
-                        width: wS - 20,
-                        alignment: Alignment.center,
-                        child: Text(
-                          "MÀN HÌNH",
-                          style: TextStyle(
-                              fontSize: Styles.titleFontSize,
-                              color: Styles.boldTextColor["dark_purple"]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              //chọn vị trí ghế
-              Expanded(
-                flex: 1,
+              SizedBox(
+                height: hS - 200,
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Column(children: renderSeatRow()),
+                  scrollDirection: Axis.vertical,
+                  child: SizedBox(
+                    height: seatRows.length > 10 ? hS : hS - 200,
+                    child: Column(children: [
+                      //chọn vị trí ghế
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            children: [
+                              Container(
+                                width: wS+200,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Stack(
+                                  children: [
+                                    const CurvedLineWidget(),
+                                    Positioned(
+                                      top: 10,
+                                      child: Container(
+                                        width: wS + 180,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "MÀN HÌNH",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Styles.titleFontSize,
+                                              color: Styles.boldTextColor[
+                                                  "dark_purple"]),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  child: Column(children: renderSeatRow())),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 5),
-                padding:
-                    EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Styles.defaultHorizontal),
                 child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -457,7 +475,6 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
               Container(
                   margin: const EdgeInsets.only(bottom: 15, left: 8, right: 8),
                   decoration: BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.circular(2),
                       boxShadow: [
                         BoxShadow(
