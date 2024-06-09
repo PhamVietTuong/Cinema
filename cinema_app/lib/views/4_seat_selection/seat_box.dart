@@ -99,7 +99,7 @@ class _SeatBoxState extends State<SeatBox> {
                           widget.seat.name,
                           style: TextStyle(
                               color: Styles.boldTextColor["dark_purple"],
-                              fontSize: 10,
+                              fontSize: Styles.textSize,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
