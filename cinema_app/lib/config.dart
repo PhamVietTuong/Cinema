@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var serverUrl = 'https://10.0.2.2:7209';
 
@@ -34,4 +35,15 @@ class Styles {
 
   static NumberFormat formatter =
       NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+}
+
+class Config {
+  static late SharedPreferences prefs;
+  static String mode = "a";
+
+  static Future<void> initialize() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  
 }

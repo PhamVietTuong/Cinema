@@ -142,6 +142,34 @@ class _ComboScreenState extends State<ComboScreen>
     setState(() {
       isLoading = false;
     });
+    _showErrorDialog();
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Lỗi"),
+            content: const Text(
+                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng hộp thoại
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Đóng"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Gọi hàm để tải dữ liệu lại
+                },
+                child: const Text("Tải lại"),
+              ),
+            ],
+          );
+        });
   }
 
   @override
