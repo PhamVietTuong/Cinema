@@ -64,13 +64,12 @@ namespace Cinema.Repository
 
                                             return new RowSeatViewModel
                                             {
-                                                Id = rowSeatViewModel.Id,
                                                 ColIndex = rowSeatViewModel.ColIndex,
                                                 IsSeat = rowSeatViewModel.IsSeat,
                                                 Name = name,
                                                 SeatTypeId = rowSeatViewModel.SeatTypeId,
                                                 SeatTypeName = rowSeatViewModel.SeatType?.Name,
-                                                SeatStatus = ticket.Any(x => x.SeatId == rowSeatViewModel.Id) ? SeatStatus.Sold : SeatStatus.Empty,
+                                                SeatStatus = ticket.Any(x => x.RoomId == rowSeatViewModel.RoomId && x.ColIndex == rowSeatViewModel.ColIndex && x.RowName == rowSeatViewModel.RowName) ? SeatStatus.Sold : SeatStatus.Empty,
                                             };
                                         }).OrderBy(x => x.ColIndex).ThenBy(x => x.Name)
                                         .ToList()

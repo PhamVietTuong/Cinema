@@ -12,7 +12,7 @@ import { DOMAIN } from '../../../Ustil/Settings/Config';
 import moment from 'moment';
 import { MovieDetailDTO } from '../../../Models/MovieDetailDTO';
 import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
-import { TicketBookingSuccess } from '../../../Models/TicketBookingSuccess';
+import { InfoTicketBooking, TicketBookingSuccess } from '../../../Models/InfoTicketBooking';
 import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
 import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
 import { connection } from '../../../connectionSignalR';
@@ -42,41 +42,41 @@ const Detail = () => {
     useEffect(() => {
         const showTimeIdHandle = async (showTimeId, roomId, theaterId) => {
             if (!connectionEstablished.current) {
-                connection.on("ListOfSeatsSold", (seatIds) => {
+                connection.on("ListOfSeatsSold", (seatInfos) => {
                     dispatch({
                         type: LIST_OF_SEATS_SOLD,
-                        seatIds
+                        seatInfos
                     })
                 })
 
-                connection.on("UpdateSeat", (seatId, seatStatus) => {
+                connection.on("UpdateSeat", (seatInfos, seatStatus) => {
                     dispatch({
                         type: UPDATE_SEAT,
-                        seatId, seatStatus
+                        seatInfos, seatStatus
                     })
                 })
 
-                connection.on("GetWaitingSeat", (seatIds) => {
+                connection.on("GetWaitingSeat", (seatInfos) => {
                     dispatch({
                         type: GET_WAITING_SEAT,
-                        seatIds
+                        seatInfos
                     })
                 })
 
-                connection.on("CheckForEmptySeats", (seatId, seatStatus) => {
+                connection.on("CheckForEmptySeats", (seatInfos, seatStatus) => {
                     dispatch({
                         type: CHECK_FOR_EMPTY_SEAT,
-                        seatId, seatStatus
+                        seatInfos, seatStatus
                     })
                 })
 
                 await connection.start();
                 connectionEstablished.current = true;
 
-                const ticketBookingSuccess = new TicketBookingSuccess()
-                ticketBookingSuccess.showTimeId = showTimeId
-                ticketBookingSuccess.roomId = roomId
-                await connection.invoke("JoinShowTime", ticketBookingSuccess)
+                const infoTicketBooking = new InfoTicketBooking()
+                infoTicketBooking.showTimeId = showTimeId
+                infoTicketBooking.roomId = roomId
+                await connection.invoke("JoinShowTime", infoTicketBooking)
             }
 
             const ticketTypeByShowTimeAndRoomDTO = new TicketTypeByShowTimeAndRoomDTO();

@@ -8,10 +8,10 @@ namespace Cinema
 {
     public class CinemaHub : Hub
     {
-        private readonly IDictionary<string, TicketBookingSuccess> _seatBeingSelected;
+        private readonly IDictionary<string, InfoTicketBooking> _seatBeingSelected;
         private readonly CinemaContext _context;
 
-        public CinemaHub(IDictionary<string, TicketBookingSuccess> seatBeingSelected, CinemaContext context)
+        public CinemaHub(IDictionary<string, InfoTicketBooking> seatBeingSelected, CinemaContext context)
         {
             _seatBeingSelected = seatBeingSelected;
             _context = context;
@@ -24,41 +24,51 @@ namespace Cinema
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            if (_seatBeingSelected.TryGetValue(Context.ConnectionId, out TicketBookingSuccess entity))
+            if (_seatBeingSelected.TryGetValue(Context.ConnectionId, out InfoTicketBooking entity))
             {
                 _seatBeingSelected.Remove(Context.ConnectionId);
-                Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("UpdateSeat", entity.SeatIds.ToList(), SeatStatus.Empty);
+                Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("UpdateSeat", entity.InfoSeats, SeatStatus.Empty);
             }
 
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SeatBeingSelected(TicketBookingSuccess entity)
+        public async Task SeatBeingSelected(InfoTicketBooking entity)
         {
-            var selfSeatIds = _seatBeingSelected[Context.ConnectionId].SeatIds;
-            var allSeatIdsExceptSelf = _seatBeingSelected.Values
+            var selfSeats = _seatBeingSelected[Context.ConnectionId].InfoSeats;
+            var allSeatsExceptSelf = _seatBeingSelected.Values
                 .Where(x => x.ShowTimeId == entity.ShowTimeId && x.RoomId == entity.RoomId)
-                .SelectMany(x => x.SeatIds)
-                .Except(selfSeatIds)
+                .SelectMany(x => x.InfoSeats)
+                .Except(selfSeats)
                 .ToList();
 
-            foreach (var seatId in allSeatIdsExceptSelf)
+            foreach (var seat in allSeatsExceptSelf)
             {
-                if (entity.SeatIds.Contains(seatId))
+                if (entity.InfoSeats.Any(y => y.RowName == seat.RowName && y.ColIndex == seat.ColIndex))
                 {
-                    await Clients.Caller.SendAsync("CheckForEmptySeats", seatId, SeatStatus.Waiting);
+                    await Clients.Caller.SendAsync("CheckForEmptySeats", seat, SeatStatus.Waiting);
                     return;
                 }
             }
 
-            var ticket = await _context.InvoiceTicket
-                                    .Include(x => x.Seat)
-                                    .Where(x => x.ShowTimeId == entity.ShowTimeId && x.Seat.RoomId == entity.RoomId && entity.SeatIds.Contains(x.SeatId))
-                                    .ToListAsync();
-
-            if (ticket.Any())
+            var bookedSeats = new List<InfoSeat>();
+            foreach (var infoSeat in entity.InfoSeats)
             {
-                await Clients.Caller.SendAsync("CheckForEmptySeats", ticket.Select(x => x.SeatId).Distinct(), SeatStatus.Sold);
+                var seats = await _context.InvoiceTicket
+                    .Include(x => x.Seat)
+                    .Where(x => x.ShowTimeId == entity.ShowTimeId &&
+                                x.Seat.RoomId == entity.RoomId &&
+                                x.Seat.RowName == infoSeat.RowName &&
+                                x.Seat.ColIndex == infoSeat.ColIndex)
+                    .Select(x => new InfoSeat { RowName = x.Seat.RowName, ColIndex = x.Seat.ColIndex })
+                    .ToListAsync();
+
+                bookedSeats.AddRange(seats);
+            }
+
+            if (bookedSeats.Any())
+            {
+                await Clients.Caller.SendAsync("CheckForEmptySeats", bookedSeats, SeatStatus.Sold);
                 return;
             }
 
@@ -70,46 +80,39 @@ namespace Cinema
 
             if (_seatBeingSelected.ContainsKey(Context.ConnectionId))
             {
-                var seatIds = _seatBeingSelected[Context.ConnectionId].SeatIds;
-                var seatsToRemove = new List<Guid>();
+                var seats = _seatBeingSelected[Context.ConnectionId].InfoSeats;
 
-                foreach (var seatId in seatIds)
-                {
-                    if (!entity.SeatIds.Contains(seatId))
-                    {
-                        seatsToRemove.Add(seatId);
-                    }
-                }
+                var seatsToRemove = seats.Where(seat => !entity.InfoSeats.Any(infoSeat => infoSeat.RowName == seat.RowName && infoSeat.ColIndex == seat.ColIndex)).ToList();
 
                 foreach (var seatIdToRemove in seatsToRemove)
                 {
-                    seatIds.Remove(seatIdToRemove);
+                    seats.Remove(seatIdToRemove);
                 }
 
-                var seatsToAdd = new List<Guid>();
+                var seatsToAdd = new List<InfoSeat>();
 
-                foreach (var seatId in entity.SeatIds)
+                foreach (var seat in entity.InfoSeats)
                 {
-                    if (!seatIds.Any(x => x == seatId))
+                    if (!seats.Any(x => x.ColIndex == seat.ColIndex && x.RowName == seat.RowName))
                     {
-                        seatIds.Add(seatId);
-                        seatsToAdd.Add(seatId);
+                        seats.Add(seat);
+                        seatsToAdd.Add(seat);
                     };
                 }
 
                 if (seatsToAdd.Any())
                 {
-                    await Clients.OthersInGroup(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("UpdateSeat", seatsToAdd.ToList(), SeatStatus.Waiting);
+                    await Clients.OthersInGroup(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("UpdateSeat", seatsToAdd, SeatStatus.Waiting);
                 }
 
                 if (seatsToRemove.Any())
                 {
-                    await Clients.OthersInGroup(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("UpdateSeat", seatsToRemove.ToList(), SeatStatus.Empty);
+                    await Clients.OthersInGroup(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("UpdateSeat", seatsToRemove, SeatStatus.Empty);
                 }
             }
         }
 
-        public async Task JoinShowTime(TicketBookingSuccess entity)
+        public async Task JoinShowTime(InfoTicketBooking entity)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, (GetGroupKey(entity.ShowTimeId, entity.RoomId)));
 
@@ -123,18 +126,19 @@ namespace Cinema
             try
             {
                 var tickets = await _context.InvoiceTicket
-                   .Include(x => x.Seat)
-                   .Where(x => x.ShowTimeId == entity.ShowTimeId && x.Seat.RoomId == entity.RoomId && entity.InvoiceTickets.Select(x => x.SeatId).Contains(x.SeatId))
-                   .ToListAsync();
+                     .Include(x => x.Seat)
+                     .Where(x => x.ShowTimeId == entity.ShowTimeId && x.RoomId == entity.RoomId)
+                     .ToListAsync();
 
-                var uniqueTickets = tickets
-                        .GroupBy(x => x.SeatId)
-                        .Select(g => g.First())
-                        .ToList();
+                var bookedSeats = tickets
+                    .Where(ticket => entity.InvoiceTickets.Any(invoiceSeat =>
+                        ticket.Seat.RowName == invoiceSeat.RowName &&
+                        ticket.Seat.ColIndex == invoiceSeat.ColIndex))
+                    .ToList();
 
-                if (uniqueTickets.Any())
+                if (bookedSeats.Any())
                 {
-                    await Clients.Caller.SendAsync("InforTicket", uniqueTickets, SeatStatus.Sold);
+                    await Clients.Caller.SendAsync("InforTicket", bookedSeats, SeatStatus.Sold);
                     return null;
                 }
                 else
@@ -142,8 +146,8 @@ namespace Cinema
                     var invoice = new Invoice
                     {
                         UserId = entity.UserId,
-                        Code = entity.UserId.ToString(),
-                        CreationTime = DateTime.UtcNow,
+                        Code = DateTime.Now.ToString("yyMMddhhmmss"),
+                        CreationTime = DateTime.Now,
                     };
 
                     await _context.Invoice.AddAsync(invoice);
@@ -154,9 +158,11 @@ namespace Cinema
                         {
                             InvoiceId = invoice.Id,
                             ShowTimeId = entity.ShowTimeId,
-                            SeatId = seat.SeatId,
+                            RoomId = entity.RoomId,
+                            ColIndex = seat.ColIndex,
+                            RowName = seat.RowName,
                             TicketTypeId = seat.TicketTypeId,
-                            Price = _context.SeatTypeTicketType.FirstOrDefault(x => x.TicketTypeId == seat.TicketTypeId && _context.Seat.FirstOrDefault(x => x.Id == seat.SeatId).SeatTypeId == x.SeatTypeId).Price,
+                            Price = await CalculatePriceAsync(seat.TicketTypeId, seat.RowName, seat.ColIndex, entity.RoomId)
                         };
 
                         await _context.InvoiceTicket.AddAsync(invoiceTicket);
@@ -179,7 +185,7 @@ namespace Cinema
 
                     await _context.SaveChangesAsync();
 
-                    await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.InvoiceTickets.Select(x => x.SeatId), SeatStatus.Sold);
+                    await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.InvoiceTickets.Select(x => new { x.RowName, x.ColIndex }), SeatStatus.Sold);
 
                     return entity;
                 }
@@ -191,17 +197,24 @@ namespace Cinema
             }
         }
 
-        public async Task TicketBookingSuccess(TicketBookingSuccess entity)
+        private async Task<double> CalculatePriceAsync(Guid ticketTypeId, string rowName, int colIndex, Guid roomId)
         {
-            if (_seatBeingSelected.TryGetValue(Context.ConnectionId, out TicketBookingSuccess ticketBookingSuccess))
+            var seatType = await _context.Seat.FirstOrDefaultAsync(x => x.RowName == rowName && x.ColIndex == colIndex && x.RoomId == roomId);
+            if (seatType == null)
             {
-                await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.SeatIds, SeatStatus.Sold);
+                return 0;
             }
+
+            return await _context.SeatTypeTicketType
+                    .Where(x => x.TicketTypeId == ticketTypeId && x.SeatTypeId == seatType.SeatTypeId)
+                    .Select(x => x.Price)
+                    .FirstOrDefaultAsync();
         }
+
 
         public Task GetWaitingSeat(Guid showTimeId, Guid roomId)
         {
-            var seatIds = _seatBeingSelected.Values.Where(x => x.ShowTimeId == showTimeId && x.RoomId == roomId).SelectMany(x => x.SeatIds);
+            var seatIds = _seatBeingSelected.Values.Where(x => x.ShowTimeId == showTimeId && x.RoomId == roomId).SelectMany(x => x.InfoSeats);
             return Clients.Caller.SendAsync("GetWaitingSeat", seatIds.ToList());
         }
     }

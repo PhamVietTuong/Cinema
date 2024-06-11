@@ -4,8 +4,9 @@ body {
   line-height: 1.55;
   font-weight: 400;
   color: #f8fafc !important;
-  overflow: hidden auto;
   min-height: 100vh;
+  padding-right: 0 !important;
+    overflow: visible !important;
 }
 
 body::before {
@@ -551,4 +552,53 @@ button {
   right: 0;
   top: 0;
   z-index: -5;
+}
+
+.btn--second {
+  color: #f8fafc;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn--second::before,
+.btn--second::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  transition: all 0.4s ease-in-out;
+}
+
+.btn--second::before {
+  width: 100%;
+  background: #639;;
+  z-index: -2;
+  right: 0;
+  top: 0;
+}
+
+.btn--second::after {
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #FF6D00 0%, #FFC107 100%);
+  z-index: -1;
+}
+
+.btn--second:hover {
+  color: var(--color-white);
+}
+
+.btn--second:hover img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
+}
+
+.btn--second:hover::before {
+  width: 0;
+}
+
+.btn--second:hover::after {
+  width: 100%;
 }

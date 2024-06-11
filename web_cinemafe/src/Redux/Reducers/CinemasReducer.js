@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -24,38 +24,29 @@ const stateDefault = {
     seatYourName: '',
     theaterList: [],
     theaterDetail: {},
-    listMovieByTheaterId: []
+    listMovieByTheaterId: [],
+    listMovieByTheaterIdBookQuickTicket: [],
 }
 
 const createSeatTypeMapping = (seatData) => {
     let mapping = {};
+
     seatData.rowName.forEach(row => {
         row.rowSeats.forEach(seat => {
             if (seat.seatTypeId && seat.isSeat !== false) {
-                mapping[seat.id] = seat.seatTypeId;
+                mapping[`${row.rowName}-${seat.colIndex}`] = seat.seatTypeId;
             }
         });
     });
+    
     return mapping;
-};
-
-const getSeatNames = (seatIds, seatData) => {
-    const seatNames = [];
-    seatData.rowName.forEach(row => {
-        row.rowSeats.forEach(seat => {
-            if (seatIds.includes(seat.id)) {
-                seatNames.push(seat.name);
-            }
-        });
-    });
-    return seatNames.join(', ');
 };
 
 const checkIfSeatsAreEnough = (seatYour, seatTypeMapping, totalSeatType) => {
     let seatCount = {};
 
-    seatYour.forEach(seatId => {
-        const seatTypeId = seatTypeMapping[seatId];
+    seatYour.forEach(seatInfo => {
+        const seatTypeId = seatTypeMapping[`${seatInfo.rowName}-${seatInfo.colIndex}`];
         if (seatTypeId) {
             if (!seatCount[seatTypeId]) {
                 seatCount[seatTypeId] = 0;
@@ -97,14 +88,14 @@ export const CinemasReducer = (state = stateDefault, action) => {
         }
 
         case SEAT_BEING_SELECTED: {
-            const { seatId } = action;
+            const { infoSeat } = action;
             const { seatTypeMapping, totalSeatType } = state;
-            const updatedSeatYour = state.seatYour.includes(seatId)
-                ? state.seatYour.filter(id => id !== seatId)
-                : [...state.seatYour, seatId]
+            const updatedSeatYour = state.seatYour.find(seat => seat.rowName === infoSeat.rowName && seat.colIndex === infoSeat.colIndex)
+                ? state.seatYour.filter(seat => !(seat.rowName === infoSeat.rowName && seat.colIndex === infoSeat.colIndex))
+                : [...state.seatYour, infoSeat]
 
-            const seatTypeId = seatTypeMapping[seatId];
-            const currentSelectedCount = updatedSeatYour.filter(seat => seatTypeMapping[seat] === seatTypeId).length;
+            const seatTypeId = seatTypeMapping[`${infoSeat.rowName}-${infoSeat.colIndex}`];
+            const currentSelectedCount = updatedSeatYour.filter(seat => seatTypeMapping[`${seat.rowName}-${seat.colIndex}`] === seatTypeId).length;
 
             if ((totalSeatType[seatTypeId] || 0) === 0) {
                 Swal.fire({
@@ -145,13 +136,13 @@ export const CinemasReducer = (state = stateDefault, action) => {
         }
 
         case UPDATE_SEAT: {
-            const { seatId, seatStatus } = action;
+            const { seatInfos, seatStatus } = action;
             let updatedSeats = [...state.updateSeat];
 
             if (seatStatus === SeatStatus.Waiting || seatStatus === SeatStatus.Sold) {
-                updatedSeats = [...new Set([...updatedSeats, ...seatId])];
+                updatedSeats = [...new Set([...updatedSeats, ...seatInfos])];
             } else if (seatStatus === 1) {
-                updatedSeats = updatedSeats.filter(id => !seatId.includes(id));
+                updatedSeats = updatedSeats.filter(info => !seatInfos.some(seat => seat.rowName === info.rowName && seat.colIndex === info.colIndex));
             }
 
             return {
@@ -163,32 +154,40 @@ export const CinemasReducer = (state = stateDefault, action) => {
         case GET_WAITING_SEAT: {
             return {
                 ...state,
-                updateSeat: [...new Set([...state.updateSeat, ...action.seatIds])],
+                updateSeat: [...new Set([...state.updateSeat, ...action.seatInfos])],
             }
         }
 
         case LIST_OF_SEATS_SOLD: {
-            state.listOfSeatSold = [...new Set([...state.listOfSeatSold, ...action.seatIds])]
-            return { ...state }
+            return { 
+                ...state,
+                listOfSeatSold: [...new Set([...state.listOfSeatSold, ...action.seatInfos])]
+             }
         }
 
         case CHECK_FOR_EMPTY_SEAT: {
-            const { seatId, seatStatus } = action;
+            const { seatInfos, seatStatus } = action;
+            const { seatTypeMapping, totalSeatType } = state;
+
             let updatedSeatsYour = [...state.seatYour];
 
+            const seatsToCheck = Array.isArray(seatInfos) ? seatInfos : [seatInfos];
+
             if (seatStatus === SeatStatus.Waiting || seatStatus === SeatStatus.Sold) {
-                updatedSeatsYour = updatedSeatsYour.filter(id => !seatId.includes(id))
+                updatedSeatsYour = updatedSeatsYour.filter(info => !seatsToCheck.some(seat => seat.rowName === info.rowName && seat.colIndex === info.colIndex))
             }
 
-            return { ...state, seatYour: updatedSeatsYour };
+            const updateCheckBooking = checkIfSeatsAreEnough(updatedSeatsYour, seatTypeMapping, totalSeatType);
+
+            return { ...state, seatYour: updatedSeatsYour, checkBooking: updateCheckBooking };
         }
 
         case REMOVE_SEAT_BEING_SELECTED: {
-            const { seatIds, seatStatus } = action;
+            const { seatInfos, seatStatus } = action;
             let updatedSeatsYour = [...state.seatYour];
 
             if (seatStatus === SeatStatus.Waiting || seatStatus === SeatStatus.Sold) {
-                updatedSeatsYour = updatedSeatsYour.filter(id => !seatIds.includes(id))
+                updatedSeatsYour = updatedSeatsYour.filter(info => !seatInfos.some(seat => seat.rowName === info.rowName && seat.colIndex === info.colIndex))
             }
 
             return { ...state, seatYour: updatedSeatsYour };
@@ -212,6 +211,10 @@ export const CinemasReducer = (state = stateDefault, action) => {
 
         case SET_LIST_MOVIE_BY_THEATER_ID: {
             return { ...state, listMovieByTheaterId: action.listMovieByTheaterId };
+        }
+
+        case SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET: {
+            return { ...state, listMovieByTheaterIdBookQuickTicket: action.listMovieByTheaterIdBookQuickTicket };
         }
 
         default: return { ...state };

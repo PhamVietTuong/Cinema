@@ -71,18 +71,19 @@ const BookTicket = (props) => {
                     ) :
                         (
                             filteredSchedules.map((schedule, index) => (
-                                <Accordion key={index} expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)}>
+                                <Accordion key={index} expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)} className='BKAccordion'>
                                     <AccordionSummary
-                                        expandIcon={<ExpandMore />}
+                                        expandIcon={<ExpandMore className='BKExpandMore'/>}
                                         aria-controls={`panel${index}-content`}
                                         id={`panel${index}-header`}
+                                        className='BKAccordionSummary'
                                     >
-                                        <Typography sx={{ flexShrink: 0 }}>
+                                        <Typography sx={{ flexShrink: 0 }} className='BKTypographyDate'>
                                             Ngày: {new Date(schedule.date).toLocaleDateString()}
                                         </Typography>
                                     </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Typography>
+                                    <AccordionDetails className='BKAccordionDetails'>
+                                        <Typography className='BKTypographyDes'>
                                             {schedule.theaters.map(theater => (
                                                 <>
                                                     {theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).length > 0 && (

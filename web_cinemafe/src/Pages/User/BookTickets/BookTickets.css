@@ -60,7 +60,6 @@
     padding-left: 50px;
 }
 
-/* Assuming typical mobile minimum breakpoint at min-width: 768px */
 @media (min-width: 768px) {
     .address-box {
         padding: 16px;
@@ -162,11 +161,11 @@
     padding-bottom: 40px;
 }
 
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+.BTSTab.Mui-selected {
     color: #f3ea28 !important;
 }
 
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+.BTSTab {
     color: #fff !important;
     font-family: "Anton",
         sans-serif !important;
@@ -176,12 +175,15 @@
     flex: 1;
 }
 
-.css-1aquho2-MuiTabs-indicator {
-    background-color: #f3ea28 !important;
-    height: 4px;
+.BTSTab.Mui-selected {
+    border-bottom: 4px solid #f3ea28 !important;
 }
 
-.css-1ujnqem-MuiTabs-root {
+.BTSTabList span{
+    background-color: transparent !important;
+}
+
+.BTSTabList {
     padding-top: 10px;
 }
 

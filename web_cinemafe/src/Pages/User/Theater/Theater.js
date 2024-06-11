@@ -10,8 +10,8 @@ import moment from 'moment';
 import 'moment/locale/vi';
 import { useDispatch, useSelector } from "react-redux";
 import { ComboAction, SeatAction, SeatBeingSelected, TicketBooking, TicketTypeAction, updateTotalSeatTypeAndProceed } from '../../../Redux/Actions/CinemasAction';
-import { TicketBookingSuccess } from '../../../Models/TicketBookingSuccess';
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
+import { InfoTicketBooking } from '../../../Models/InfoTicketBooking';
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
 import { connection } from '../../../connectionSignalR';
 import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
 import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
@@ -24,6 +24,100 @@ import Swal from 'sweetalert2';
 import TicketInfo from '../../../Components/ticketInfo/TicketInfo'
 import { InvoiceDTO } from '../../../Models/InvoiceDTO'
 import { SeatType } from '../../../Enum/SeatType'
+import { InfoSeat } from '../../../Models/InfoSeat'
+
+const generateDates = (numDays) => {
+    const dates = [];
+    for (let i = 0; i < numDays; i++) {
+        dates.push(moment().add(i, 'days'));
+    }
+    return dates;
+};
+
+const dates = generateDates(3);
+
+const findSeatByRowAndCol = (rowName, colIndex, seats) => {
+    for (let row of seats.rowName) {
+        for (let seat of row.rowSeats) {
+            if (row.rowName === rowName && seat.colIndex === colIndex && seat.isSeat !== false) {
+                return seat;
+            }
+        }
+    }
+
+    return null;
+};
+
+const assignTicketsToSeats = (selectedSeats, selectedTicketTypes, seats) => {
+    const result = [];
+    const seatTypeCount = {};
+
+    for (let seatTypeId in selectedTicketTypes) {
+        seatTypeCount[seatTypeId] = {};
+        for (let ticketTypeId in selectedTicketTypes[seatTypeId]) {
+            seatTypeCount[seatTypeId][ticketTypeId] = selectedTicketTypes[seatTypeId][ticketTypeId];
+        }
+    }
+
+    for (let seat of selectedSeats) {
+        const { rowName, colIndex } = seat;
+        const seatInfo = findSeatByRowAndCol(rowName, colIndex, seats);
+        if (seatInfo && seatInfo.isSeat !== false) {
+            const seatTypeId = seatInfo.seatTypeId;
+
+            if (seatTypeId && seatTypeCount[seatTypeId]) {
+                for (let ticketTypeId in seatTypeCount[seatTypeId]) {
+                    if (seatTypeCount[seatTypeId][ticketTypeId] > 0) {
+                        result.push({ rowName: rowName, colIndex: colIndex, ticketTypeId: ticketTypeId });
+                        seatTypeCount[seatTypeId][ticketTypeId] -= 1;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+};
+
+const getSeatNames = (seatInfos, seatData) => {
+    const seatNames = [];
+    seatData.rowName?.forEach(row => {
+        row.rowSeats.forEach(seat => {
+            if (seatInfos.some(info => info.rowName === row.rowName && info.colIndex === seat.colIndex) && seat.isSeat !== false) {
+                seatNames.push(seat.name);
+            }
+        });
+    });
+    return seatNames.join(', ');
+};
+
+const getTicketNames = (ticketTypes, selectedTicketTypes) => {
+    let ticketNames = {};
+
+    for (let seatTypeId in selectedTicketTypes) {
+        for (let ticketTypeId in selectedTicketTypes[seatTypeId]) {
+            const quantity = selectedTicketTypes[seatTypeId][ticketTypeId];
+            const ticketType = ticketTypes.find(ticket =>
+                ticket.ticketTypeId === ticketTypeId && ticket.seatTypeId === seatTypeId
+            );
+            if (ticketType) {
+                const seatTypeName = ticketType.seatTypeName === "Đôi" ? " (đôi)" : " (đơn)";
+                const ticketName = ticketType.ticketTypeName + seatTypeName;
+
+                if (quantity > 0) {
+                    if (ticketNames[ticketName]) {
+                        ticketNames[ticketName] += quantity;
+                    } else {
+                        ticketNames[ticketName] = quantity;
+                    }
+                }
+            }
+        }
+    }
+
+    return Object.entries(ticketNames).map(([name, count]) => `${count} ${name}`).join(', ');
+};
 
 const Theater = (props) => {
     const dispatch = useDispatch();
@@ -37,7 +131,6 @@ const Theater = (props) => {
         updateSeat,
         checkBooking,
     } = useSelector((state) => state.CinemasReducer);
-    const [activeIndex, setActiveIndex] = useState(0);
     const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
     const [selectedheaterName, setSelectedTheaterName] = useState(null);
     const [selectedShowTime, setSelectedShowTime] = useState(null);
@@ -68,6 +161,9 @@ const Theater = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [invoiceTickets, setInvoiceTickets] = useState([]);
+    const [activeDateIndex, setActiveDateIndex] = useState(0);
+    const [activeTheaterIndex, setActiveTheaterIndex] = useState([]);
+
     useEffect(() => {
         if (props.theaterId && props.showTimeId && props.roomId && props.selectedShowTime && props.selectedheaterName) {
             setSelectedShowTimeId(props.showTimeId)
@@ -153,12 +249,20 @@ const Theater = (props) => {
         return new Intl.NumberFormat('vi-VN').format(value) + ' VNĐ';
     };
 
-    const handleSeatSelect = (seatId) => {
+    const handleSeatSelect = (rowName, colIndex) => {
+        if (rowName == null || colIndex == null) {
+            return;
+        }
+
+        let infoSeat = new InfoSeat()
+        infoSeat.rowName = rowName
+        infoSeat.colIndex = colIndex
+
         setTimerRunning(false);
         setCountdown(300);
         setTimerRunning(true);
 
-        dispatch(SeatBeingSelected(seatId, selectedShowTimeId, selectedRoomId));
+        dispatch(SeatBeingSelected(infoSeat, selectedShowTimeId, selectedRoomId));
     }
 
     const showTimeIdHandele = async (showTimeId, roomId, theaterId) => {
@@ -173,40 +277,40 @@ const Theater = (props) => {
             setHasShownHSSVWarning(false)
         }
 
-        connection.on("ListOfSeatsSold", (seatIds) => {
+        connection.on("ListOfSeatsSold", (seatInfos) => {
             dispatch({
                 type: LIST_OF_SEATS_SOLD,
-                seatIds
+                seatInfos
             })
         })
 
-        connection.on("UpdateSeat", (seatId, seatStatus) => {
+        connection.on("UpdateSeat", (seatInfos, seatStatus) => {
             dispatch({
                 type: UPDATE_SEAT,
-                seatId, seatStatus
+                seatInfos, seatStatus
             })
         })
 
-        connection.on("GetWaitingSeat", (seatIds) => {
+        connection.on("GetWaitingSeat", (seatInfos) => {
             dispatch({
                 type: GET_WAITING_SEAT,
-                seatIds
+                seatInfos
             })
         })
 
-        connection.on("CheckForEmptySeats", (seatId, seatStatus) => {
+        connection.on("CheckForEmptySeats", (seatInfos, seatStatus) => {
             dispatch({
                 type: CHECK_FOR_EMPTY_SEAT,
-                seatId, seatStatus
+                seatInfos, seatStatus
             })
         })
 
         await connection.start();
 
-        const ticketBookingSuccess = new TicketBookingSuccess()
-        ticketBookingSuccess.showTimeId = showTimeId
-        ticketBookingSuccess.roomId = roomId
-        await connection.invoke("JoinShowTime", ticketBookingSuccess)
+        const infoTicketBooking = new InfoTicketBooking()
+        infoTicketBooking.showTimeId = showTimeId
+        infoTicketBooking.roomId = roomId
+        await connection.invoke("JoinShowTime", infoTicketBooking)
 
         const ticketTypeByShowTimeAndRoomDTO = new TicketTypeByShowTimeAndRoomDTO();
         ticketTypeByShowTimeAndRoomDTO.showTimeId = showTimeId;
@@ -319,106 +423,49 @@ const Theater = (props) => {
         });
     };
 
-    const findSeatById = (seatId, seats) => {
-        for (let row of seats.rowName) {
-            for (let seat of row.rowSeats) {
-                if (seat.id === seatId) {
-                    return seat;
-                }
-            }
+    useEffect(() => {
+        const selectedDate = dates[activeDateIndex].format("YYYY-MM-DD");
+        const schedule = props.MovieDetail?.schedules?.find(sch => moment(sch.date).format("YYYY-MM-DD") === selectedDate);
+        if (schedule) {
+            setActiveTheaterIndex(schedule.theaters.map((_, index) => index));
+        } else {
+            setActiveTheaterIndex([]);
         }
-        return null;
-    };
+    }, [activeDateIndex, props.MovieDetail]);
 
-    const assignTicketsToSeats = (selectedSeats, selectedTicketTypes, seats) => {
-        const result = [];
-        const seatTypeCount = {};
-
-        for (let seatTypeId in selectedTicketTypes) {
-            seatTypeCount[seatTypeId] = {};
-            for (let ticketTypeId in selectedTicketTypes[seatTypeId]) {
-                seatTypeCount[seatTypeId][ticketTypeId] = selectedTicketTypes[seatTypeId][ticketTypeId];
-            }
-        }
-
-        for (let seatId of selectedSeats) {
-            const seat = findSeatById(seatId, seats);
-
-            if (seat && seat.isSeat !== false) {
-                const seatTypeId = seat.seatTypeId;
-
-                if (seatTypeId && seatTypeCount[seatTypeId]) {
-                    for (let ticketTypeId in seatTypeCount[seatTypeId]) {
-                        if (seatTypeCount[seatTypeId][ticketTypeId] > 0) {
-                            result.push({ seatId: seat.id, ticketTypeId: ticketTypeId });
-                            seatTypeCount[seatTypeId][ticketTypeId] -= 1;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;
-    };
-
-    const getSeatNames = (seatIds, seatData) => {
-        const seatNames = [];
-        seatData.rowName?.forEach(row => {
-            row.rowSeats.forEach(seat => {
-                if (seatIds.includes(seat.id)) {
-                    seatNames.push(seat.name);
-                }
-            });
+    const renderTabs = () => {
+        return dates.map((date, index) => {
+            return (
+                <Nav.Item onClick={() => { setShowTicketType_Seat_Combo(false); setActiveDateIndex(index); }}>
+                    <Nav.Link eventKey={`tab-${index}`} className='swiper-slide'>
+                        <div class="box-time">
+                            <p class="date">{moment(date).format("DD/MM")}</p>
+                            <p class="day">{moment(date).format("dddd").replace(/^\w/, (c) => c.toUpperCase())}</p>
+                        </div>
+                    </Nav.Link>
+                </Nav.Item>
+            );
         });
-        return seatNames.join(', ');
-    };
-
-    const getTicketNames = (ticketTypes, selectedTicketTypes) => {
-        let ticketNames = {};
-
-        for (let seatTypeId in selectedTicketTypes) {
-            for (let ticketTypeId in selectedTicketTypes[seatTypeId]) {
-                const quantity = selectedTicketTypes[seatTypeId][ticketTypeId];
-                const ticketType = ticketTypes.find(ticket =>
-                    ticket.ticketTypeId === ticketTypeId && ticket.seatTypeId === seatTypeId
-                );
-                if (ticketType) {
-                    const seatTypeName = ticketType.seatTypeName === "Đôi" ? " (đôi)" : " (đơn)";
-                    const ticketName = ticketType.ticketTypeName + seatTypeName;
-
-                    if (quantity > 0) {
-                        if (ticketNames[ticketName]) {
-                            ticketNames[ticketName] += quantity;
-                        } else {
-                            ticketNames[ticketName] = quantity;
-                        }
-                    }
-                }
-            }
-        }
-
-        return Object.entries(ticketNames).map(([name, count]) => `${count} ${name}`).join(', ');
     };
 
     const renderSeats = (seatItem) => {
         return seatItem.rowSeats.map((rowSeatItem, rowSeatIndex) => {
             let classSeated = rowSeatItem.seatStatus === SeatStatus.Sold ? 'booked' : '';
-            let classSeatBeingSelected = seatYour.includes(rowSeatItem.id) ? 'choosing' : '';
+            let classSeatBeingSelected = seatYour.some(seat => seat.rowName === seatItem.rowName && seat.colIndex === rowSeatItem.colIndex) ? 'choosing' : '';
 
-            let classSeatSold = listOfSeatSold.includes(rowSeatItem.id) ? 'booked' : ''
+            let classSeatSold = listOfSeatSold.some(seat => seat.rowName === seatItem.rowName && seat.colIndex === rowSeatItem.colIndex) ? 'booked' : '';
 
-            let classUpdateSeat = updateSeat.includes(rowSeatItem.id) ? 'update' : ''
-            let classWattingSeat = listWattingSeat && listWattingSeat.includes(rowSeatItem.id) ? 'update' : '';
+            let classUpdateSeat = updateSeat.some(seat => seat.rowName === seatItem.rowName && seat.colIndex === rowSeatItem.colIndex) ? 'update' : '';
+            let classWattingSeat = listWattingSeat && listWattingSeat.some(seat => seat.rowName === seatItem.rowName && seat.colIndex === rowSeatItem.colIndex) ? 'update' : '';
 
             return (
                 rowSeatItem.name
                     ?
                     (
-                        <td className={`seat-td ${classSeatSold} ${classSeated}`}
+                        <td className={`seat-td ${classSeatSold} ${classSeated} ${classUpdateSeat}`}
                             onClick={() => {
                                 if (!rowSeatItem.isSold && !classUpdateSeat) {
-                                    handleSeatSelect(rowSeatItem.id)
+                                    handleSeatSelect(seatItem.rowName, rowSeatItem.colIndex)
                                 }
                             }}
                         >
@@ -441,6 +488,96 @@ const Theater = (props) => {
         })
     }
 
+    const renderSchedule = () => {
+        const selectedDate = dates[activeDateIndex].format("YYYY-MM-DD");
+        const schedule = props.MovieDetail?.schedules?.find(sch => moment(sch.date).format("YYYY-MM-DD") === selectedDate);
+
+        if (!schedule) {
+            return (
+                <div className="shtime-ft">
+                    <ul className="cinestar-list">
+                        <div className="none-time">
+                            <img src="/Images/movie-updating.png" alt="" />
+                            <div className="tt">Hiện chưa có lịch chiếu</div>
+                        </div>
+                    </ul>
+                </div >
+            )
+        }
+
+        return (
+            <div className="shtime-ft">
+                <ul className="cinestar-list">
+                    {schedule.theaters.map((theaterItem, theaterIndex) => (
+                        <React.Fragment key={theaterIndex}>
+                            <li className={`cinestar-item collapseItem ${activeTheaterIndex.includes(theaterIndex) ? 'active' : ''}`}>
+                                <div className="cinestar-heading" onClick={() => setActiveTheaterIndex(prev => prev.includes(theaterIndex) ? prev.filter(index => index !== theaterIndex) : [...prev, theaterIndex])}>
+                                    <h4 className="tittle">{theaterItem.theaterName}</h4>
+                                    <i className={`fa-solid fa-angle-${activeTheaterIndex.includes(theaterIndex) ? 'up' : 'down'} icon`} />
+                                </div>
+                                <Collapse isOpened={activeTheaterIndex.includes(theaterIndex)}>
+                                    <div className="cinestar-body collapseBody">
+                                        <p className="addr">
+                                            {theaterItem.theaterAddress}
+                                        </p>
+                                        <ul className="list-info">
+                                            {theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).length > 0 && (
+                                                <li className="item-info">
+                                                    <div className="tt">Standard</div>
+                                                    <ul className="list-time">
+                                                        {
+                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map((timeItem, timeIndex) => (
+                                                                <li key={timeIndex}
+                                                                    className={`item-time ${selectedShowTimeColorActiveId.showTimeId === timeItem.showTimeId && selectedShowTimeColorActiveId.roomId === timeItem.roomId ? 'active' : ''}`}
+
+                                                                    onClick={() => {
+                                                                        showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
+                                                                        setSelectedTheaterName(theaterItem.theaterName);
+                                                                        setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
+                                                                        setSelectedTheaterId(theaterItem.theaterId)
+                                                                        setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
+                                                                    }}>
+                                                                    {moment(timeItem.startTime).format("HH:mm")}
+                                                                </li>
+                                                            ))
+                                                        }
+                                                        <li className="disable item-time">08:15</li>
+                                                    </ul>
+                                                </li>
+                                            )}
+                                            {theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).length > 0 && (
+                                                <li className="item-info">
+                                                    <div className="tt">Deluxe</div>
+                                                    <ul className="list-time">
+                                                        {
+                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map((timeItem, timeIndex) => (
+                                                                <li key={timeIndex} className="item-time"
+                                                                    onClick={() => {
+                                                                        showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
+                                                                        setSelectedTheaterName(theaterItem.theaterName);
+                                                                        setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
+                                                                        setSelectedTheaterId(theaterItem.theaterId)
+                                                                        setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
+                                                                    }}>
+                                                                    {moment(timeItem.startTime).format("HH:mm")}
+                                                                </li>
+                                                            ))
+                                                        }
+                                                        <li className="disable item-time">18:15</li>
+                                                    </ul>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                </Collapse>
+                            </li>
+                        </React.Fragment>
+                    ))}
+                </ul>
+            </div>
+        );
+    };
+
     return (
         <>
             <section className="sec-shtime">
@@ -454,18 +591,7 @@ const Theater = (props) => {
                                         <div className="swiper-container">
                                             <Nav variant="pills" className='swiper'>
                                                 {
-                                                    props.MovieDetail?.schedules?.map((scheduleItem, scheduleIndex) => (
-                                                        <Nav.Item onClick={() => {
-                                                            setShowTicketType_Seat_Combo(false);
-                                                        }}>
-                                                            <Nav.Link eventKey={`tab-${scheduleIndex}`} className='swiper-slide'>
-                                                                <div class="box-time">
-                                                                    <p class="date">{moment(scheduleItem.date).format("DD/MM")}</p>
-                                                                    <p class="day">{moment(scheduleItem.date).format("dddd").replace(/^\w/, (c) => c.toUpperCase())}</p>
-                                                                </div>
-                                                            </Nav.Link>
-                                                        </Nav.Item>
-                                                    ))
+                                                    renderTabs()
                                                 }
                                             </Nav>
                                         </div>
@@ -475,81 +601,8 @@ const Theater = (props) => {
                                     <h2 className="heading">Danh sách Rạp</h2>
                                 </div>
                                 <Tab.Content>
-                                    {props.MovieDetail?.schedules?.map((scheduleItem, scheduleIndex) => (
-                                        <Tab.Pane key={scheduleIndex} eventKey={`tab-${scheduleIndex}`}>
-                                            <div className="shtime-ft">
-                                                <ul className="cinestar-list">
-                                                    {scheduleItem.theaters.map((theaterItem, theaterIndex) => (
-                                                        <React.Fragment key={theaterIndex}>
-                                                            <li className={`cinestar-item collapseItem ${activeIndex === theaterIndex ? 'active' : ''}`}>
-                                                                <div className="cinestar-heading" onClick={() => setActiveIndex(activeIndex === theaterIndex ? null : theaterIndex)}>
-                                                                    <h4 className="tittle">{theaterItem.theaterName}</h4>
-                                                                    <i className={`fa-solid fa-angle-${activeIndex === theaterIndex ? 'up' : 'down'} icon`} />
-                                                                </div>
-                                                                <Collapse isOpened={activeIndex === theaterIndex}>
-                                                                    <div className="cinestar-body collapseBody">
-                                                                        <p className="addr">
-                                                                            {theaterItem.theaterAddress}
-                                                                        </p>
-                                                                        <ul className="list-info">
-                                                                            {theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).length > 0 && (
-                                                                                <li className="item-info">
-                                                                                    <div className="tt">Standard</div>
-                                                                                    <ul className="list-time">
-                                                                                        {
-                                                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map((timeItem, timeIndex) => (
-                                                                                                <li key={timeIndex}
-                                                                                                    className={`item-time ${selectedShowTimeColorActiveId.showTimeId === timeItem.showTimeId && selectedShowTimeColorActiveId.roomId === timeItem.roomId ? 'active' : ''}`}
-
-                                                                                                    onClick={() => {
-                                                                                                        showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
-                                                                                                        setSelectedTheaterName(theaterItem.theaterName);
-                                                                                                        setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
-                                                                                                        setSelectedTheaterId(theaterItem.theaterId)
-                                                                                                        setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
-                                                                                                    }}>
-                                                                                                    {moment(timeItem.startTime).format("HH:mm")}
-                                                                                                </li>
-                                                                                            ))
-                                                                                        }
-                                                                                        <li className="disable item-time">08:15</li>
-                                                                                    </ul>
-                                                                                </li>
-                                                                            )}
-                                                                            {theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).length > 0 && (
-                                                                                <li className="item-info">
-                                                                                    <div className="tt">Deluxe</div>
-                                                                                    <ul className="list-time">
-                                                                                        {
-                                                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map((timeItem, timeIndex) => (
-                                                                                                <li key={timeIndex} className="item-time"
-                                                                                                    onClick={() => {
-                                                                                                        showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
-                                                                                                        setSelectedTheaterName(theaterItem.theaterName);
-                                                                                                        setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
-                                                                                                        setSelectedTheaterId(theaterItem.theaterId)
-                                                                                                        setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
-                                                                                                    }}>
-                                                                                                    {moment(timeItem.startTime).format("HH:mm")}
-                                                                                                </li>
-                                                                                            ))
-                                                                                        }
-                                                                                        <li className="disable item-time">18:15</li>
-                                                                                    </ul>
-                                                                                </li>
-                                                                            )}
-                                                                        </ul>
-                                                                    </div>
-                                                                </Collapse>
-                                                            </li>
-                                                        </React.Fragment>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </Tab.Pane>
-                                    ))}
-                                    <Tab.Pane eventKey="second">
-                                        content
+                                    <Tab.Pane eventKey={`tab-${activeDateIndex}`}>
+                                        {renderSchedule()}
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Tab.Container>
@@ -803,7 +856,6 @@ const Theater = (props) => {
                                                     invoiceDTO.theaterId = selectedTheaterId
                                                     invoiceDTO.invoiceTickets = invoiceTickets
                                                     invoiceDTO.foodAndDrinks = Object.entries(countCombos).map((e) => ({ foodAndDrinkId: e[0], quantity: e[1] }))
-                                                    console.log(invoiceDTO);
                                                     dispatch(TicketBooking(invoiceDTO))
                                                 }
                                             }}

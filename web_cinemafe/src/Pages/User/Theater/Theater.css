@@ -376,3 +376,27 @@ width: 105px;
     pointer-events: none !important;
     opacity: .4 !important;
 }
+
+.none-time {
+    padding: 16px;
+    margin-top: 20px; 
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.none-time img {
+    width: 20px;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+@media (max-width: 768px) {
+    .none-time {
+        padding: 10px; 
+        margin-top: 10px; 
+        font-size: 14px;
+    }
+}
