@@ -34,6 +34,7 @@ class SeatScreen extends StatefulWidget {
 class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   late ShowtimeRoom selectedShowtime;
   late SeatPresenter seatPr;
+  bool isLoading = true;
   late int countSignle;
   late int countCouple;
   final hubConnection =
@@ -288,8 +289,40 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     });
   }
 
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Lỗi"),
+            content: const Text(
+                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng hộp thoại
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Đóng"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Gọi hàm để tải dữ liệu lại
+                },
+                child: const Text("Tải lại"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
-  void onLoadError() {}
+  void onLoadError() {
+    setState(() {
+      isLoading = false;
+    });
+    _showErrorDialog();
+  }
 
   @override
   void initState() {
@@ -419,7 +452,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                           child: Column(
                             children: [
                               Container(
-                                width: wS+200,
+                                width: wS + 200,
                                 margin: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
                                 child: Stack(

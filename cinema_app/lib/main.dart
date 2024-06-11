@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'config.dart';
+
+void main() async {
   HttpOverrides.global = MyHttpOverrides();
+  await Config.initialize();
   runApp(const MyApp());
 }
 
