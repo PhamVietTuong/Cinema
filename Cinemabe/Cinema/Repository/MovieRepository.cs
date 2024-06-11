@@ -198,7 +198,9 @@ namespace Cinema.Repository
                         Trailer = movie.Trailer,
                         ProjectionForm = (int)ProjectionForm.Time2D,
                         AgeRestrictionName = movie.AgeRestriction.Name,
-                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation,
+                        ShowTimeTypeName = "2D",
+
                     });
                 }
 
@@ -215,7 +217,8 @@ namespace Cinema.Repository
                         Trailer = movie.Trailer,
                         ProjectionForm = (int)ProjectionForm.Time3D,
                         AgeRestrictionName = movie.AgeRestriction.Name,
-                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation
+                        AgeRestrictionAbbreviation = movie.AgeRestriction.Abbreviation,
+                        ShowTimeTypeName = "3D",
                     });
                 }
             }

@@ -16,7 +16,6 @@ namespace Cinema.DTOs
 
     public class RowSeatViewModel 
     {
-        public Guid Id { get; set; }
         public int ColIndex { get; set; }
         public bool IsSeat { get; set; }
         public string Name { get; set; }

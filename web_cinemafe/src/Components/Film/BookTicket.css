@@ -40,14 +40,14 @@
 }
 
 .movies-img .inner img {
-        height: 100%;
-            left: 50%;
-            -o-object-fit: cover;
-            object-fit: cover;
-            position: absolute;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
+    height: 100%;
+    left: 50%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
 }
 
 .movies-content {
@@ -68,14 +68,14 @@
 
 @media (max-width: 1200px) {
     .movies-name {
-    font-size: 18px;
+        font-size: 18px;
     }
 }
 
 @media (max-width: 800px) {
-        .movies-name {
-                    font-size: 16px;
-            }
+    .movies-name {
+        font-size: 16px;
+    }
 }
 
 .movies-type {
@@ -170,8 +170,8 @@
     display: flex;
     align-items: center;
     gap: 6px;
-                font-family: "Josefin Sans",
-                        sans-serif;
+    font-family: "Josefin Sans",
+        sans-serif;
 }
 
 .movies-rp-noti img {
@@ -208,12 +208,12 @@
 }
 
 .movies-time-item.active {
-    border-color:#f3ea28;
+    border-color: #f3ea28;
     color: #f3ea28;
 }
 
 .movies-time-item.active::before {
-    border-color:#f3ea28;
+    border-color: #f3ea28;
 }
 
 .movies-time-slider .swiper {
@@ -248,48 +248,46 @@
     height: 6px;
 }
 
-.css-1086bdv-MuiPaper-root-MuiAccordion-root {
+.BKAccordion {
+    margin: 0 !important;
     background-color: transparent !important;
-        border: 1px solid rgba(248, 250, 252, .5);
-            border-radius: 6px !important;
-            color: #f8fafc !important;
-}
-
-.css-8zfq7-MuiTypography-root {
-            font-size: 13px !important;
-            font-family: "Josefin Sans",
-                sans-serif !important;
-}
-
-.css-yw020d-MuiAccordionSummary-expandIconWrapper {
+    border: 1px solid rgba(248, 250, 252, .5);
+    border-radius: 6px !important;
     color: #f8fafc !important;
 }
 
-.css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root.Mui-expanded {
+.BKTypographyDate {
+    font-size: 13px !important;
+    font-family: "Josefin Sans",
+        sans-serif !important;
+}
+
+.MuiAccordionSummary-expandIconWrapper {
+    color: #f8fafc !important;
+}
+
+.BKAccordionSummary.Mui-expanded {
     min-height: 0 !important;
     font-size: 13px;
-} 
+}
 
-.css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root {
+.BKAccordionSummary {
     padding: 12px 8px !important;
 }
 
-.css-eqpfi5-MuiAccordionSummary-content.Mui-expanded {
+.BKAccordionSummary .Mui-expanded {
     margin: 0 !important;
 }
-.css-15v22id-MuiAccordionDetails-root {
+
+.BKAccordionDetails {
     padding: 8px !important;
 }
 
-.css-13xfq8m-MuiTabPanel-root {
+.MuiTabPanel-root {
     padding: 0px;
 }
 
-.css-1086bdv-MuiPaper-root-MuiAccordion-root.Mui-expanded {
-    margin: 0 !important;
-}
-
-.css-10mzr36-MuiGrid-root>.MuiGrid-item {
+.MuiGrid-container>.MuiGrid-item {
     margin-bottom: 24px;
 }
 
@@ -304,6 +302,6 @@
     top: 1px;
 }
 
-.css-eqpfi5-MuiAccordionSummary-content {
+.MuiAccordionSummary-content {
     margin: 0 !important;
 }

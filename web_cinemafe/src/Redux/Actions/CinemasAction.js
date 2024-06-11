@@ -1,9 +1,9 @@
 import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { TicketBookingSuccess } from "../../Models/TicketBookingSuccess";
+import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TICKET_BOOKING_SUCCESSFUL, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 import { history } from "../../Routers";
 
 export const MovieListAction = () => {
@@ -80,21 +80,25 @@ export const ComboAction = (theaterId) => {
     }
 }
 
-export const SeatBeingSelected = (seatId, showTimeId, roomId) => {
+export const SeatBeingSelected = (infoSeat, showTimeId, roomId) => {
     return async (dispatch, getState) => {
         try {
             await dispatch({
                 type: SEAT_BEING_SELECTED,
-                seatId
+                infoSeat
             });
 
             const { seatYour } = getState().CinemasReducer;
 
-            let ticketBookingSuccess = new TicketBookingSuccess()
-            ticketBookingSuccess.seatIds = seatYour
-            ticketBookingSuccess.showTimeId = showTimeId
-            ticketBookingSuccess.roomId = roomId
-            await connection.invoke("SeatBeingSelected", ticketBookingSuccess)
+            if (!seatYour || seatYour.length === 0) {
+                return;
+            }
+
+            let infoTicketBooking = new InfoTicketBooking()
+            infoTicketBooking.infoSeats = seatYour
+            infoTicketBooking.showTimeId = showTimeId
+            infoTicketBooking.roomId = roomId
+            await connection.invoke("SeatBeingSelected", infoTicketBooking)
 
         } catch (error) {
             console.log("SeatBeingSelected", error);
@@ -111,23 +115,45 @@ export const updateTotalSeatTypeAndProceed = (totalSeatType, showTimeId, roomId)
 
         const { seatYour } = getState().CinemasReducer;
 
-        let ticketBookingSuccess = new TicketBookingSuccess();
-        ticketBookingSuccess.seatIds = seatYour;
-        ticketBookingSuccess.showTimeId = showTimeId;
-        ticketBookingSuccess.roomId = roomId;
+        let infoTicketBooking = new InfoTicketBooking();
+        infoTicketBooking.infoSeats = seatYour;
+        infoTicketBooking.showTimeId = showTimeId;
+        infoTicketBooking.roomId = roomId;
         if (connection.state === 'Connected') {
-            await connection.invoke("SeatBeingSelected", ticketBookingSuccess);
+            await connection.invoke("SeatBeingSelected", infoTicketBooking);
         } 
     }
 }
 
+const findSeatByRowAndCol = (rowName, colIndex, seats) => {
+    for (let row of seats.rowName) {
+        for (let seat of row.rowSeats) {
+            if (row.rowName === rowName && seat.colIndex === colIndex && seat.isSeat !== false) {
+                return seat.name;
+            }
+        }
+    }
+
+    return null;
+};
+
 export const TicketBooking = (invoiceDTO) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         try {
             const handleInforTicket = async (tickets, seatStatus) => {
                 if (seatStatus === SeatStatus.Sold) {
-                    const seatNames = tickets.map(x => x.seat.name).join(", ");
-                    let seatIds = tickets.map(x => x.seat.id);
+                    const seatInfos = tickets.map(x => ({ rowName: x.rowName, colIndex: x.colIndex }));
+                    const { seat } = getState().CinemasReducer;
+
+                    const seatNames = seatInfos.map(seatInfo => {
+                        return findSeatByRowAndCol(seatInfo.rowName, seatInfo.colIndex, seat)
+                    }).join(", ");
+
+                    dispatch({
+                        type: REMOVE_SEAT_BEING_SELECTED,
+                        seatInfos, seatStatus
+                    });
+
                     Swal.fire({
                         title: `LƯU Ý !`,
                         text: "Đã có người mua ghế: " + seatNames,
@@ -139,21 +165,9 @@ export const TicketBooking = (invoiceDTO) => {
                         showCancelButton: false,
                         confirmButtonText: "Thử lại",
                     });
-                    dispatch({
-                        type: REMOVE_SEAT_BEING_SELECTED,
-                        seatIds, seatStatus
-                    });
                 }
-                // else {
-                //     const ticketBooking = await cinemasService.PostTicket(invoiceDTO);
-
-                //     if (ticketBooking.status === 200) {
-                //         await connection.invoke("TicketBookingSuccess", invoiceDTO);
-                //         window.location.reload();
-                //         alert("Đặt vé thành công");
-                //     }
-                // }
             };
+
             await connection.on("InforTicket", handleInforTicket);
             await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO).then((result) => {
                 if(result) {
@@ -171,10 +185,12 @@ export const TheaterListAction = () => {
     return async (dispatch) => {
         try {
             const result = await cinemasService.GetTheaterList();
+
             dispatch({
                 type: SET_THEATER_LIST,
                 theaterList: result.data,
             })
+
         } catch (error) {
             console.log("listMovieAction: ", error);
         }
@@ -185,10 +201,12 @@ export const TheaterAction = (id) => {
     return async (dispatch) => {
         try {
             const result = await cinemasService.GetTheaterId(id);
+
             dispatch({
                 type: SET_THEATER_DETAIL,
                 theaterDetail: result.data,
             })
+
         } catch (error) {
             console.log("listMovieAction: ", error);
         }
@@ -199,10 +217,28 @@ export const ShowTimeByTheaterIdAction = (id) => {
     return async (dispatch) => {
         try {
             const result = await cinemasService.GetShowTimeByTheaterId(id);
+
             dispatch({
                 type: SET_LIST_MOVIE_BY_THEATER_ID,
                 listMovieByTheaterId: result.data,
             })
+
+        } catch (error) {
+            console.log("listMovieAction: ", error);
+        }
+    }
+}
+
+export const ListMovieByTheaterIdAction = (id) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetListMovieByTheaterId(id);
+
+            dispatch({
+                type: SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET,
+                listMovieByTheaterIdBookQuickTicket: result.data,
+            })
+            
         } catch (error) {
             console.log("listMovieAction: ", error);
         }

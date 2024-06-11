@@ -55,15 +55,14 @@ const BookTickets = () => {
                 <section className="sec-movies">
                     <div className="movies sc-pd-b">
                         <div className="container">
-
-                            <Box sx={{ width: '100%', typography: 'body1' }}>
-                                <TabContext value={value}>
-                                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                        <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                            <Tab label="Phim đang chiếu" value="1" />
-                                            <Tab label="Phim sắp chiếu" value="2" />
-                                            <Tab label="Suất chiếu đặc biệt" value="3" />
-                                            <Tab label="Bảng giá vé" value="4" />
+                            <Box sx={{ width: '100%', typography: 'body1' }} className='BTSBox'>
+                                <TabContext value={value} className='BTSTabContent'>
+                                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className='BTSTabContentBox'>
+                                        <TabList onChange={handleChange} aria-label="lab API tabs example" className='BTSTabList'>
+                                            <Tab label="Phim đang chiếu" value="1" className='BTSTab' />
+                                            <Tab label="Phim sắp chiếu" value="2" className='BTSTab' />
+                                            <Tab label="Suất chiếu đặc biệt" value="3" className='BTSTab' />
+                                            <Tab label="Bảng giá vé" value="4" className='BTSTab' />
                                         </TabList>
                                     </Box>
                                     <TabPanel value="1">
