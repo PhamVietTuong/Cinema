@@ -30,10 +30,11 @@ class _PayScreenState extends State<PayScreen> {
   List<TicketBox> tBoxs = List.filled(
       0,
       const TicketBox(
+        col: 0,
+        rowName: "",
         name: "",
         price: 0,
         ticketTypeId: "",
-        seatId: "",
       ),
       growable: true);
   final List<PaymentOption> paymentOptions = [
@@ -66,7 +67,8 @@ class _PayScreenState extends State<PayScreen> {
         var count = type.quantity;
         while (count > 0) {
           tBoxs.add(TicketBox(
-            seatId: seatSingle[index].id,
+            col: seatSingle[index].colIndex,
+            rowName: seatSingle[index].name.substring(0, 1),
             name: seatSingle[index].name,
             price: type.price,
             ticketTypeId: type.ticketTypeId,
@@ -91,7 +93,8 @@ class _PayScreenState extends State<PayScreen> {
         var count = type.quantity;
         while (count > 0) {
           tBoxs.add(TicketBox(
-            seatId: seatCouple[index].id,
+            col: seatCouple[index].colIndex,
+            rowName: seatCouple[index].name.substring(0, 1),
             name: seatCouple[index].name,
             price: type.price,
             ticketTypeId: type.ticketTypeId,
@@ -119,6 +122,16 @@ class _PayScreenState extends State<PayScreen> {
     super.initState();
     setState(() {
       loadTicketBoxs();
+    });
+    widget.hub.on("InforTicket", (data) {
+      var seats = data![0] as List;
+      int state = data[1] as int;
+      if (state == 0) {
+        print("it out: ${seats.map((e) => {
+              e["ColIndex"],
+              e["RowName"]
+            }).toList().join(", ")}");
+      }
     });
   }
 
@@ -405,17 +418,19 @@ class _PayScreenState extends State<PayScreen> {
                   print("Thanh Toán");
                   await widget.hub.invoke("CheckTheSeatBeforeBooking", args: [
                     {
-                      "showTimeId": widget.booking.showtime.showTimeId,
-                      "roomId": widget.booking.showtime.roomId,
-                      "theaterId": widget.booking.theater.id,
-                      "userId": '5f24b03d-1cbd-4141-017d-08dc73cfa571',
-                      "invoiceTickets": tBoxs
+                      "ShowTimeId": widget.booking.showtime.showTimeId,
+                      "RoomId": widget.booking.showtime.roomId,
+                      "TheaterId": widget.booking.theater.id,
+                      "UserId": '5f24b03d-1cbd-4141-017d-08dc73cfa571',
+                      "InvoiceTickets": tBoxs
                           .map((e) => {
-                                "SeatId": e.seatId,
+                                // "SeatId": e.seatId,
+                                "RowName": e.rowName,
+                                "ColIndex": e.col,
                                 "TicketTypeId": e.ticketTypeId
                               })
                           .toList(),
-                      "foodAndDrinks": widget.booking.theater.combos
+                      "FoodAndDrinks": widget.booking.theater.combos
                           .where((element) => element.quantity > 0)
                           .map((e) =>
                               {"FoodAndDrinkId": e.id, "Quantity": e.quantity})
