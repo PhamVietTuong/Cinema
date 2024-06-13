@@ -161,7 +161,7 @@ const Theater = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [invoiceTickets, setInvoiceTickets] = useState([]);
-    const [activeDateIndex, setActiveDateIndex] = useState(0);
+    const [activeDateIndex, setActiveDateIndex] = useState(props.activeDateIndex || 0);
     const [activeTheaterIndex, setActiveTheaterIndex] = useState([]);
 
     useEffect(() => {
@@ -173,9 +173,10 @@ const Theater = (props) => {
             setSelectedTheaterName(props.selectedheaterName)
             setSelectedShowTime(props.selectedShowTime)
             setSelectedShowTimeColorActiveId({ showTimeId: props.showTimeId, roomId: props.roomId })
-
         }
-    }, [props.showTimeId, props.theaterId, props.roomId, props.showTicketType_Seat_Combo, props.selectedShowTime, props.selectedheaterName]);
+
+    }, [props.showTimeId, props.theaterId, props.roomId, props.showTicketType_Seat_Combo, props.selectedShowTime, props.selectedheaterName, props.activeDateIndex]);
+
 
     useEffect(() => {
         if (timerRunning && countdown > 0) {
@@ -348,7 +349,7 @@ const Theater = (props) => {
             //     return prevCounts
             // }
             if (
-                !!ticketType.find(x => x.ticketTypeName === "Hssv - Người cao tuổi" && x.ticketTypeId === ticketTypeId && x.seatTypeId === seatTypeId) &&
+                !!ticketType.find(x => x.ticketTypeName === "HSSV-Người Cao Tuổi" && x.ticketTypeId === ticketTypeId && x.seatTypeId === seatTypeId) &&
                 !hasShownHSSVWarning
             ) {
                 Swal.fire({
@@ -375,7 +376,7 @@ const Theater = (props) => {
 
     const decrementTicketType = (ticketTypeId, seatTypeId) => {
         setCountTicketTypes(prevCounts => {
-            let hssv = ticketType.find(x => x.ticketTypeName === "Hssv - Người cao tuổi" && x.ticketTypeId === ticketTypeId && x.seatTypeId === seatTypeId)
+            let hssv = ticketType.find(x => x.ticketTypeName === "HSSV-Người Cao Tuổi" && x.ticketTypeId === ticketTypeId && x.seatTypeId === seatTypeId)
             if (!!hssv) {
                 let currentCount = prevCounts[hssv.seatTypeId]?.[hssv.ticketTypeId] || 0;
 
@@ -584,7 +585,7 @@ const Theater = (props) => {
                 <div className="shtime">
                     <div className="container">
                         <div className="shtime-wr">
-                            <Tab.Container id="left-tabs-example" defaultActiveKey="tab-0">
+                            <Tab.Container id="left-tabs-example" defaultActiveKey={`tab-${activeDateIndex}`}>
                                 <div className="shtime-heading">
                                     <h2 className="heading">LỊCH CHIẾU</h2>
                                     <div className="shtime-slider time-list">

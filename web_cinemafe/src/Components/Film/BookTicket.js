@@ -98,7 +98,8 @@ const BookTicket = (props) => {
                                                                                     theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map(showTime => (
                                                                                         <div key={showTime.showTimeId} className="swiper-slide col">
                                                                                             <Link to={`/movie/${props.bookTicket.id}/?id=${theater.theaterId}&show_time=${showTime.showTimeId}&room=${showTime.roomId}`} 
-                                                                                            state={{ selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm"),
+                                                                                            state={{ 
+                                                                                                selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm"),
                                                                                                 selectedheaterName: theater.theaterName,
                                                                                                 projectionForm: props.bookTicket.projectionForm
                                                                                              }} className="movies-time-item">
@@ -125,7 +126,12 @@ const BookTicket = (props) => {
                                                                                 {
                                                                                     theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map(showTime => (
                                                                                         <div key={showTime.showTimeId} className="swiper-slide col">
-                                                                                            <Link to={`/movie/${props.bookTicket.id}/?id=${theater.theaterId}&show_time=${showTime.showTimeId}&room=${showTime.roomId}`} state={{ selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm") }} className="movies-time-item">
+                                                                                            <Link to={`/movie/${props.bookTicket.id}/?id=${theater.theaterId}&show_time=${showTime.showTimeId}&room=${showTime.roomId}`} 
+                                                                                            state={{ 
+                                                                                                selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm"),
+                                                                                                selectedheaterName: theater.theaterName,
+                                                                                                projectionForm: props.bookTicket.projectionForm
+                                                                                            }} className="movies-time-item">
                                                                                                 {moment(new Date(showTime.startTime)).format("HH:mm")}
                                                                                             </Link>
                                                                                         </div>

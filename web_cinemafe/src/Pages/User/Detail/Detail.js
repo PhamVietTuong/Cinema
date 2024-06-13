@@ -21,7 +21,7 @@ const Detail = () => {
     let { id } = useParams();
     const { movieDetail } = useSelector((state) => state.CinemasReducer)
     let location = useLocation();
-    let { projectionForm, selectedShowTime, selectedheaterName } = location.state ?? {};
+    let { projectionForm, selectedShowTime, selectedheaterName, activeDateIndex } = location.state ?? {};
     const queryParams = new URLSearchParams(location.search);
     const theaterId = queryParams.get('id');
     const showTimeId = queryParams.get('show_time');
@@ -35,7 +35,6 @@ const Detail = () => {
         let movieDetailDTO = new MovieDetailDTO();
         movieDetailDTO.id = id;
         movieDetailDTO.projectionForm = projectionForm
-
         dispatch(MovieDetailAction(movieDetailDTO))
     }, [id, projectionForm]);
     
@@ -209,6 +208,7 @@ const Detail = () => {
                     showTicketType_Seat_Combo={showTicketType_Seat_Combo}
                     selectedShowTime={selectedShowTime}
                     selectedheaterName={selectedheaterName}
+                    activeDateIndex={activeDateIndex}
                 />
                 </div>
         </>

@@ -245,16 +245,21 @@ namespace Cinema.Repository
                 .Where(sr => sr.ShowTime.MovieId == movieID && sr.ShowTime.StartTime.Date == date.Date && sr.ShowTime.ProjectionForm == ProjectionForm)
                 .ToListAsync();
 
-            var showtimeViewModels = showTimeRoom.Select(sr => new ShowTimeRowViewModel
+            var showtimeViewModels = showTimeRoom.Select(sr =>
             {
-                ShowTimeId = sr.ShowTime.Id,
-                StartTime = sr.ShowTime.StartTime,
-                EndTime = sr.ShowTime.EndTime,
-                RoomId = sr.Room.Id,
-                RoomName = sr.Room.Name,
+                bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == sr.RoomId).Any(x => x.SeatType.Name == "Nằm");
 
+                return new ShowTimeRowViewModel
+                {
+                    ShowTimeId = sr.ShowTime.Id,
+                    StartTime = sr.ShowTime.StartTime,
+                    EndTime = sr.ShowTime.EndTime,
+                    RoomId = sr.Room.Id,
+                    RoomName = sr.Room.Name,
+                    ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
+                };
             }).ToList();
-
+            
             return showtimeViewModels;
         }
 
