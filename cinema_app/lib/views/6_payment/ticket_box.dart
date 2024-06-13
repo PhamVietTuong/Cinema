@@ -2,16 +2,18 @@ import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class TicketBox extends StatelessWidget {
-  const TicketBox(
-      {super.key,
-      required this.name,
-      required this.price,
-      required this.ticketTypeId,
-      required this.seatId});
+  const TicketBox({
+    super.key,
+    required this.name,
+    required this.price,
+    required this.ticketTypeId,
+    required this.col, required this.rowName
+  });
   final String name;
   final int price;
   final String ticketTypeId;
-  final String seatId;
+  final int col;
+  final String rowName;
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/seat.dart';
+import 'package:cinema_app/data/models/seat_info.dart';
 import 'package:cinema_app/data/models/seat_row.dart';
 import 'package:cinema_app/presenters/seat_presenter.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_screen.dart';
@@ -58,10 +59,11 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         showtime: selectedShowtime);
   }
 
-  bool coutSeat(Seat seat, bool state) {
+  bool countSeat(Seat seat, bool state) {
     for (var row in seatRows) {
       for (var item in row.seats) {
-        if (item.id == seat.id) {
+        if (item.colIndex == seat.colIndex &&
+            item.name.substring(0, 1) == row.rowName) {
           //tìm được đúng ghế cần xử lý
 
           if (item.seatTypeName.compareTo("Ðôi") == 0) {
@@ -138,7 +140,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     }
 
     //kiểm tra chọn đúng loại ghế đã chọn theo vé
-    if (!coutSeat(seat, state)) {
+    if (!countSeat(seat, state)) {
       return false;
     }
     setState(() {
@@ -148,7 +150,10 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
       {
         "showTimeId": selectedShowtime.showTimeId,
         "roomId": selectedShowtime.roomId,
-        "seatIds": selectedSeats.map((e) => e.id).toList(),
+        "InfoSeats": selectedSeats
+            .map((e) =>
+                {"RowName": e.name.substring(0, 1), "ColIndex": e.colIndex})
+            .toList(),
       }
     ]);
 
@@ -160,18 +165,26 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
       hubConnection.on("CheckForEmptySeats", handleCheckForEmptySeats);
       hubConnection.on("ListOfSeatsSold", handleListOfSeatsSold);
       hubConnection.on("UpdateSeat", (data) {
-        List ids = data![0] as List;
+        List<SeatInfo> ids =
+            (data![0] as List).map((e) => SeatInfo.fromJson(e)).toList();
         int state = data[1] as int;
 
         for (var row in seatRows) {
           for (var seat in row.seats) {
-            if (ids.contains(seat.id)) {
+            var seatToCheck = ids.firstWhere(
+                (element) =>
+                    element.colIndex == seat.colIndex &&
+                    element.rowName == row.rowName,
+                orElse: () => SeatInfo());
+            if (seatToCheck.rowName != "") {
               if (seat.status == 0) {
                 continue;
               }
               setState(() {
                 seat.status = state;
-                ids.remove(seat.id);
+                ids.removeWhere((element) =>
+                    element.rowName == row.rowName &&
+                    element.colIndex == seat.colIndex);
               });
               if (ids.isEmpty) break;
             }
@@ -199,7 +212,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         {
           "showTimeId": selectedShowtime.showTimeId,
           "roomId": selectedShowtime.roomId,
-          "seatIds": [],
+          "InfoSeats": [],
         }
       ]);
     } catch (e) {
@@ -208,12 +221,12 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
   void handleCheckForEmptySeats(data) {
-    String id = data![0] as String;
+    SeatInfo id = SeatInfo.fromJson(data![0]);
     int state = data[1] as int;
 
     if (state == 0 || state == 3) {
       print("Ghế đã được người khác mua hoặc chọn trước rồi!");
-      var seat = findSeatById(id);
+      var seat = findSeatById(id.rowName, id.colIndex);
       if (seat != null) {
         setState(() {
           seat.status = state;
@@ -227,18 +240,32 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
   void handleListOfSeatsSold(data) {
-    List ids = (data![0] as List);
+    var ids = (data![0] as List).map((e) => SeatInfo.fromJson(e)).toList();
     int state = data[1] as int;
     setState(() {
+      bool shouldBreak = false;
+
       for (var row in seatRows) {
         for (var seat in row.seats) {
-          if (ids.contains(seat.id)) {
+          var seatToCheck = ids.firstWhere(
+              (element) =>
+                  element.colIndex == seat.colIndex &&
+                  element.rowName == row.rowName,
+              orElse: () => SeatInfo());
+          if (seatToCheck.rowName != "") {
             seat.status = state;
-            ids.remove(seat.id);
-            if (ids.isEmpty) break;
+            ids.removeWhere((element) =>
+                element.rowName == row.rowName &&
+                element.colIndex == seat.colIndex);
+            if (ids.isEmpty) {
+              shouldBreak = true;
+              break;
+            }
           }
         }
-        if (ids.isEmpty) break;
+        if (shouldBreak) {
+          break;
+        }
       }
     });
   }
@@ -246,17 +273,22 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   void handleGetWaitingSeat(data) {
     if (hubConnection.state == HubConnectionState.Connected) {
       setState(() {
-        waitingSeatIds = data[0];
+        waitingSeatIds =
+            (data[0] as List).map((e) => SeatInfo.fromJson(e)).toList();
         seatPr.fetchSeatsByRoomId(
             selectedShowtime.roomId, selectedShowtime.showTimeId);
       });
     }
   }
 
-  Seat? findSeatById(String seatId) {
-    for (var row in seatRows) {
+  Seat? findSeatById(String rowName, int colIndex) {
+    var row = seatRows.firstWhere(
+      (element) => element.rowName == rowName,
+      orElse: () => SeatRowData(),
+    );
+    if (row.rowName != "") {
       for (var seat in row.seats) {
-        if (seat.id == seatId) {
+        if (seat.colIndex == colIndex) {
           return seat;
         }
       }
@@ -270,12 +302,19 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
       seatRows = seatLst;
 
       bool shouldBreak = false;
+
       for (var row in seatRows) {
         for (var seat in row.seats) {
-          if (waitingSeatIds.contains(seat.id)) {
+          var seatToCheck = waitingSeatIds.firstWhere(
+              (element) =>
+                  element.rowName == row.rowName &&
+                  element.colIndex == seat.colIndex,
+              orElse: () => SeatInfo());
+          if (seatToCheck.rowName != "") {
             seat.status = 3;
-
-            waitingSeatIds.remove(seat.id);
+            waitingSeatIds.removeWhere((element) =>
+                element.rowName == row.rowName &&
+                element.colIndex == seat.colIndex);
             if (waitingSeatIds.isEmpty) {
               shouldBreak = true;
               break;

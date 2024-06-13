@@ -114,7 +114,7 @@ namespace Cinema
 
         public async Task JoinShowTime(InfoTicketBooking entity)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, (GetGroupKey(entity.ShowTimeId, entity.RoomId)));
+            await Groups.AddToGroupAsync(Context.ConnectionId, GetGroupKey(entity.ShowTimeId, entity.RoomId));
 
             _seatBeingSelected[Context.ConnectionId] = entity;
 

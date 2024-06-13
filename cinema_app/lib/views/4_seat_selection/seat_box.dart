@@ -47,8 +47,7 @@ class _SeatBoxState extends State<SeatBox> {
 
   @override
   Widget build(BuildContext context) {
-    //String seatName =
-    //  '${widget.name}${widget.index.toString().padLeft(2, '0')}';
+
     Map<int, Color> colorMap = {
       1: Styles.singleSeatColor,
       2: Styles.coupleSeatColor,
@@ -56,8 +55,7 @@ class _SeatBoxState extends State<SeatBox> {
       4: Styles.selectedSeatColor,
       5: Styles.waitingSeatColor
     };
-    //int rowIndex = widget.seat.rowIndex;
-    //print('id: ${widget.seat.id } - stt: ${widget.seat.status}');
+   
     return GestureDetector(
       onTap: () {
         int stt = widget.seat.status;
