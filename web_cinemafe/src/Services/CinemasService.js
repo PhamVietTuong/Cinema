@@ -44,6 +44,10 @@ export class CinemasService extends baseService {
     GetListMovieByTheaterId = (id) => {
         return this.get(`api/Cinemas/GetMovieTheaterId${id}`)
     }
+
+    GetListShowTimeByMovieId = (movieId, date, projetionForm) => {
+        return this.get(`api/Cinemas/GetShowTimeByMovieId/${movieId}/${date}/${projetionForm}`)
+    }
 }
 
 export const cinemasService = new CinemasService()

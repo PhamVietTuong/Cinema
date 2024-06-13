@@ -76,10 +76,11 @@
 
 .sec-heading {
     margin-bottom: 40px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 40px;
 }
 
 .sec-heading .desc {
@@ -88,16 +89,28 @@
 
 @media screen and (max-width: 1200px) {
     .sec-heading {
-        margin-bottom: 32px;
+        margin-bottom: 0;
+            margin-top: 20px;
+            gap: 8px;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
     .sec-heading {
         margin-bottom: 24px;
         gap: 8px;
     }
 }
+
+.sec-heading .heading {
+     margin-bottom: 12px;
+ }
+
+ @media (max-width: 768px) {
+    .sec-heading .heading {
+         margin-bottom: 8px;
+     }
+ }
 
 .seat-screen .txt {
     text-align: center;

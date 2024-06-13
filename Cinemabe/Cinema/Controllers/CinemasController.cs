@@ -241,11 +241,6 @@ namespace Cinema.Controllers
             {
                 var showtimeViewModels = await _uow.MovieRepository.GetShowTimeByMovieID(movieId, date, ProjectionForm);
 
-                if (showtimeViewModels == null || !showtimeViewModels.Any())
-                {
-                    return NotFound();
-                }
-
                 return Ok(showtimeViewModels);
             }
             catch (Exception e)

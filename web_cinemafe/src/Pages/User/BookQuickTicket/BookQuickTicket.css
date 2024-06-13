@@ -52,6 +52,7 @@
 }
 
 .navigate-filter-btn {
+    user-select: none;
     flex: 1 0 auto;
     max-width: 100px;
 }
@@ -106,4 +107,8 @@
 
 .isActive {
     background: #f3ea28;
+}
+
+.MuiFormControl-root.NotHasValue {
+    pointer-events: none;
 }

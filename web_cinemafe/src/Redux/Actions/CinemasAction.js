@@ -3,7 +3,7 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 import { history } from "../../Routers";
 
 export const MovieListAction = () => {
@@ -192,7 +192,7 @@ export const TheaterListAction = () => {
             })
 
         } catch (error) {
-            console.log("listMovieAction: ", error);
+            console.log("TheaterListAction: ", error);
         }
     }
 }
@@ -208,7 +208,7 @@ export const TheaterAction = (id) => {
             })
 
         } catch (error) {
-            console.log("listMovieAction: ", error);
+            console.log("TheaterAction: ", error);
         }
     }
 }
@@ -224,7 +224,7 @@ export const ShowTimeByTheaterIdAction = (id) => {
             })
 
         } catch (error) {
-            console.log("listMovieAction: ", error);
+            console.log("ShowTimeByTheaterIdAction: ", error);
         }
     }
 }
@@ -240,7 +240,23 @@ export const ListMovieByTheaterIdAction = (id) => {
             })
             
         } catch (error) {
-            console.log("listMovieAction: ", error);
+            console.log("ListMovieByTheaterIdAction: ", error);
+        }
+    }
+}
+
+export const ListShowTimeByMovieIdAction = (movieId, date, projetionForm) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetListShowTimeByMovieId(movieId, date, projetionForm);
+
+            dispatch({
+                type: SET_LIST_SHOWTIME_BY_MOVIEID,
+                listShowTimeByMovieId: result.data,
+            })
+
+        } catch (error) {
+            console.log("ListShowTimeByMovieIdAction: ", error);
         }
     }
 }

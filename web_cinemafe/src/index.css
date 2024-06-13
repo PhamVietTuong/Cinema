@@ -602,3 +602,54 @@ button {
 .btn--second:hover::after {
   width: 100%;
 }
+
+.btn--white {
+  color: #fff !important;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease-in-out !important;
+  border: 1px solid #fff !important;
+}
+
+.btn--white::before,
+.btn--white::after {
+  content: '';
+  height: 100%;
+  width: 1px;
+  transition: all 0.4s ease-in-out;
+  position: absolute;
+}
+
+.btn--white::before {
+  width: 100%;
+  background: transparent;
+  z-index: -2;
+  right: 0;
+  top: 0;
+}
+
+.btn--white::after {
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #FF6D00 0%, #FFC107 100%);
+  z-index: -1;
+}
+
+.btn--white:hover {
+  color: #fff;
+}
+
+.btn--white:hover img {
+  transition: all .2s;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
+}
+
+.btn--white:hover::before {
+  width: 0;
+}
+
+.btn--white:hover::after {
+  width: 100%;
+}
