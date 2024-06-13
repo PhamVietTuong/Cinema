@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
-  List<Movie> moviesWithTrailer = List.filled(0, Movie(), growable: true);
-
+  //List<Movie> moviesWithTrailer = List.filled(0, Movie(), growable: true);
+  late List<String>trailers;
   @override
   void initState() {
     super.initState();
@@ -64,11 +64,13 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               e.releaseDate.isAfter(today) &&
               e.releaseDate.difference(today).inDays < 7)
           .toList();
-      moviesWithTrailer =
-          // ignore: unnecessary_null_comparison
-          showingMovies.where((movie) => movie.trailer != null).toList();
+          
+      trailers = showingMovies
+          .where((movie) => movie.trailer.isNotEmpty)
+          .map((movie) => movie.trailer).toSet() // Lấy ra trailer của các phim
+          .toList();
       isLoadingData = false;
-      // print(" $moviesWithTrailer ");
+      //print("$moviesWithTrailer");
     });
   }
 
@@ -138,7 +140,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               icon: Icon(Icons.search,
                   size: Styles.iconInAppBar,
                   color: Styles.boldTextColor["dark_purple"]),
-
             ),
           ),
         ],
@@ -258,7 +259,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                             : BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                color: const Color(0xFF802EF7),
+                                                color: Styles.primaryColor,
                                               ),
                                         child: Text(
                                           "Chiếu sớm",
@@ -285,7 +286,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                             : BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                color: const Color(0xFF802EF7),
+                                                color: Styles.primaryColor,
                                               ),
                                         child: Text(
                                           "Sắp chiếu",
@@ -379,7 +380,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                 height: MediaQuery.of(context).size.height / 3,
                                 child: PageView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: moviesWithTrailer.length,
+                                  itemCount: trailers.length,
                                   itemBuilder: (context, index) {
                                     return SizedBox(
                                       width: MediaQuery.of(context).size.width -
@@ -389,7 +390,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                               3,
                                       child: WebView(
                                         initialUrl:
-                                            'https://www.youtube.com/embed/${moviesWithTrailer[index].trailer}',
+                                            'https://www.youtube.com/embed/${trailers[index]}',
                                         javascriptMode:
                                             JavascriptMode.unrestricted,
                                       ),
