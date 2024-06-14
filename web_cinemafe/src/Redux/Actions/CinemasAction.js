@@ -140,11 +140,9 @@ const findSeatByRowAndCol = (rowName, colIndex, seats) => {
 export const TicketBooking = (invoiceDTO) => {
     return async (dispatch, getState) => {
         try {
-            const handleInforTicket = async (tickets, seatStatus) => {
+            const handleInforTicket = async (seatInfos, seatStatus) => {
                 if (seatStatus === SeatStatus.Sold) {
-                    const seatInfos = tickets.map(x => ({ rowName: x.rowName, colIndex: x.colIndex }));
                     const { seat } = getState().CinemasReducer;
-
                     const seatNames = seatInfos.map(seatInfo => {
                         return findSeatByRowAndCol(seatInfo.rowName, seatInfo.colIndex, seat)
                     }).join(", ");
@@ -164,6 +162,10 @@ export const TicketBooking = (invoiceDTO) => {
                         },
                         showCancelButton: false,
                         confirmButtonText: "Thử lại",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
                     });
                 }
             };
@@ -173,6 +175,7 @@ export const TicketBooking = (invoiceDTO) => {
                 if(result) {
                     history.push("/");
                     window.location.reload();
+                    console.log(result);
                 }
             })
         } catch (error) {

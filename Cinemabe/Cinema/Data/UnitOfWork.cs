@@ -23,5 +23,6 @@ namespace Cinema.Data
 		public ITicketTypeRepository TicketTypeRepository => new TicketTypeRepository(_context);
 		public ISeatRepository SeatRepository => new SeatRepository(_context);
 		public ITheaterRepository TheaterRepository => new TheaterRepository(_context);
+		public IInvoiceRepository InvoiceRepository => new InvoiceRepository(_context);
     }
 }

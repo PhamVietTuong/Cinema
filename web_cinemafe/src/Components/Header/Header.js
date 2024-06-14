@@ -130,7 +130,7 @@ const Header = (props) => {
                                         </span>
                                         <div className="hd-regi-list hd-regi-list-custom --second custom-position-left">
                                             {
-                                                props.theaterList.map((item) => (
+                                                props.theaterList.length > 0 && props.theaterList.map((item) => (
                                                     <Link to={`book-tickets/${item.id}`} className="link">
                                                         {item.name}
                                                     </Link>

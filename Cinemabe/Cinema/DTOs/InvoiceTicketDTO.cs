@@ -6,6 +6,7 @@ namespace Cinema.DTOs
     {
         public string RowName { get; set; }
         public int ColIndex { get; set; }
+        public string SeatName { get; set; }
         public Guid TicketTypeId { get; set; }
     }
 }

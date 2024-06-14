@@ -62,13 +62,14 @@ const assignTicketsToSeats = (selectedSeats, selectedTicketTypes, seats) => {
     for (let seat of selectedSeats) {
         const { rowName, colIndex } = seat;
         const seatInfo = findSeatByRowAndCol(rowName, colIndex, seats);
+        console.log(seatInfo);
         if (seatInfo && seatInfo.isSeat !== false) {
             const seatTypeId = seatInfo.seatTypeId;
 
             if (seatTypeId && seatTypeCount[seatTypeId]) {
                 for (let ticketTypeId in seatTypeCount[seatTypeId]) {
                     if (seatTypeCount[seatTypeId][ticketTypeId] > 0) {
-                        result.push({ rowName: rowName, colIndex: colIndex, ticketTypeId: ticketTypeId });
+                        result.push({ rowName: rowName, colIndex: colIndex, seatName: seatInfo.name, ticketTypeId: ticketTypeId });
                         seatTypeCount[seatTypeId][ticketTypeId] -= 1;
                         break;
                     }
@@ -490,6 +491,7 @@ const Theater = (props) => {
     }
 
     const renderSchedule = () => {
+        const currentTime = moment();
         const selectedDate = dates[activeDateIndex].format("YYYY-MM-DD");
         const schedule = props.MovieDetail?.schedules?.find(sch => moment(sch.date).format("YYYY-MM-DD") === selectedDate);
 
@@ -527,22 +529,30 @@ const Theater = (props) => {
                                                     <div className="tt">Standard</div>
                                                     <ul className="list-time">
                                                         {
-                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map((timeItem, timeIndex) => (
-                                                                <li key={timeIndex}
-                                                                    className={`item-time ${selectedShowTimeColorActiveId.showTimeId === timeItem.showTimeId && selectedShowTimeColorActiveId.roomId === timeItem.roomId ? 'active' : ''}`}
+                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map((timeItem, timeIndex) => {
+                                                                const showTime = moment(timeItem.startTime);
+                                                                const isPast = showTime.isBefore(currentTime);
+                                                                return (
+                                                                    <li key={timeIndex}
+                                                                        className={`item-time 
+                                                                            ${selectedShowTimeColorActiveId.showTimeId === timeItem.showTimeId && selectedShowTimeColorActiveId.roomId === timeItem.roomId ? 'active' : ''}
+                                                                            ${isPast ? 'disable' : ''}
+                                                                        `}
 
-                                                                    onClick={() => {
-                                                                        showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
-                                                                        setSelectedTheaterName(theaterItem.theaterName);
-                                                                        setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
-                                                                        setSelectedTheaterId(theaterItem.theaterId)
-                                                                        setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
-                                                                    }}>
-                                                                    {moment(timeItem.startTime).format("HH:mm")}
-                                                                </li>
-                                                            ))
+                                                                        onClick={() => {
+                                                                            if (!isPast) {
+                                                                                showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
+                                                                                setSelectedTheaterName(theaterItem.theaterName);
+                                                                                setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
+                                                                                setSelectedTheaterId(theaterItem.theaterId)
+                                                                                setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
+                                                                            }
+                                                                        }}>
+                                                                        {moment(timeItem.startTime).format("HH:mm")}
+                                                                    </li>
+                                                                )
+                                                            })
                                                         }
-                                                        <li className="disable item-time">08:15</li>
                                                     </ul>
                                                 </li>
                                             )}
@@ -551,20 +561,30 @@ const Theater = (props) => {
                                                     <div className="tt">Deluxe</div>
                                                     <ul className="list-time">
                                                         {
-                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map((timeItem, timeIndex) => (
-                                                                <li key={timeIndex} className="item-time"
-                                                                    onClick={() => {
-                                                                        showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
-                                                                        setSelectedTheaterName(theaterItem.theaterName);
-                                                                        setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
-                                                                        setSelectedTheaterId(theaterItem.theaterId)
-                                                                        setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
-                                                                    }}>
-                                                                    {moment(timeItem.startTime).format("HH:mm")}
-                                                                </li>
-                                                            ))
+                                                            theaterItem.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map((timeItem, timeIndex) => {
+                                                                const showTime = moment(timeItem.startTime);
+                                                                const isPast = showTime.isBefore(currentTime);
+                                                                return (
+                                                                    <li
+                                                                        key={timeIndex}
+                                                                        className={`item-time 
+                                                                            ${selectedShowTimeColorActiveId.showTimeId === timeItem.showTimeId && selectedShowTimeColorActiveId.roomId === timeItem.roomId ? 'active' : ''}
+                                                                            ${isPast ? 'disable' : ''}
+                                                                        `}
+                                                                        onClick={() => {
+                                                                            if (!isPast) {
+                                                                                showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
+                                                                                setSelectedTheaterName(theaterItem.theaterName);
+                                                                                setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
+                                                                                setSelectedTheaterId(theaterItem.theaterId)
+                                                                                setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
+                                                                            }
+                                                                        }}>
+                                                                        {moment(timeItem.startTime).format("HH:mm")}
+                                                                    </li>
+                                                                )
+                                                            })
                                                         }
-                                                        <li className="disable item-time">18:15</li>
                                                     </ul>
                                                 </li>
                                             )}

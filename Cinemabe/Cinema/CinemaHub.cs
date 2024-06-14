@@ -121,7 +121,7 @@ namespace Cinema
             await GetWaitingSeat(entity.ShowTimeId, entity.RoomId);
         }
 
-        public async Task<InvoiceDTO> CheckTheSeatBeforeBooking(InvoiceDTO entity)
+        public async Task<string> CheckTheSeatBeforeBooking(InvoiceDTO entity)
         {
             try
             {
@@ -134,6 +134,7 @@ namespace Cinema
                     .Where(ticket => entity.InvoiceTickets.Any(invoiceSeat =>
                         ticket.Seat.RowName == invoiceSeat.RowName &&
                         ticket.Seat.ColIndex == invoiceSeat.ColIndex))
+                    .Select(x => new { x.RowName, x.ColIndex })
                     .ToList();
 
                 if (bookedSeats.Any())
@@ -147,6 +148,7 @@ namespace Cinema
                     {
                         UserId = entity.UserId,
                         Code = DateTime.Now.ToString("yyMMddhhmmss"),
+                        Status = true,
                         CreationTime = DateTime.Now,
                     };
 
@@ -156,12 +158,13 @@ namespace Cinema
                     {
                         var invoiceTicket = new InvoiceTicket
                         {
-                            InvoiceId = invoice.Id,
+                            Code = invoice.Code,
                             ShowTimeId = entity.ShowTimeId,
                             RoomId = entity.RoomId,
                             ColIndex = seat.ColIndex,
                             RowName = seat.RowName,
                             TicketTypeId = seat.TicketTypeId,
+                            SeatName = seat.SeatName,
                             Price = await CalculatePriceAsync(seat.TicketTypeId, seat.RowName, seat.ColIndex, entity.RoomId)
                         };
 
@@ -174,7 +177,7 @@ namespace Cinema
 
                         var invoiceFoodAndDrink = new InvoiceFoodAndDrink
                         {
-                            InvoiceId = invoice.Id,
+                            Code = invoice.Code,
                             FoodAndDrinkId = item.FoodAndDrinkId,
                             Quantity = item.Quantity,
                             Price = _context.FoodAndDrinkTheater.FirstOrDefault(x => x.FoodAndDrinkId == item.FoodAndDrinkId && x.TheaterId == entity.TheaterId).Price,
@@ -187,7 +190,7 @@ namespace Cinema
 
                     await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.InvoiceTickets.Select(x => new { x.RowName, x.ColIndex }), SeatStatus.Sold);
 
-                    return entity;
+                    return invoice.Code;
                 }
             }
             catch (Exception ex)

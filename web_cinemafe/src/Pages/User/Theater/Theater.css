@@ -269,8 +269,8 @@ width: 110px;
 }
 
 .shtime-ft .cinestar-item .item-time.disable {
-    border: 0.5px solid #64748B;
-    color: #64748B;
+    border: 0.5px solid #64748B !important;
+    color: #64748B !important;
 }
 
 .shtime-ft .cinestar-item .item-time {

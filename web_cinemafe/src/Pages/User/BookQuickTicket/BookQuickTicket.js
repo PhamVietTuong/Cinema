@@ -54,6 +54,10 @@ const BookQuickTicket = (props) => {
     }, [dispatch, movieId, projectionForm, dateMovie]);
 
     const handleTheaterChange = (e) => {
+        if (!e.target.value.includes('|')) {
+            return
+        }
+
         const [id, name] = e.target.value.split('|');
         setTheater(e.target.value);
         setTheaterId(id);
@@ -74,6 +78,9 @@ const BookQuickTicket = (props) => {
     };
 
     const handleMovieChange = (e) => {
+        if (!e.target.value.includes('|')) {
+            return
+        }
         const [id, projectionForm] = e.target.value.split('|');
         setMovie(e.target.value);
         setProjectionForm(projectionForm)
@@ -81,6 +88,9 @@ const BookQuickTicket = (props) => {
     };
 
     const handleDateChange = (e) => {
+        if (!e.target.value.includes('|')) {
+            return
+        }
         const [date, index] = e.target.value.split('|');
         setDate(e.target.value)
         setActiveDateIndex(index);
@@ -130,9 +140,21 @@ const BookQuickTicket = (props) => {
                                 className={`${theaterId ? "isActive" : ""} BQTSelect`}
                             >
                                 {
-                                    props.theaterList.map((item) => (
-                                        <MenuItem value={`${item.id}|${item.name}`} className='BQTMenuItem'>{item.name}</MenuItem>
-                                    ))
+                                    props.theaterList.length !== 0 ?
+                                        props.theaterList.length > 0 && props.theaterList.map((item) => (
+                                            <MenuItem value={`${item.id}|${item.name}`} className='BQTMenuItem'>{item.name}</MenuItem>
+                                        ))
+                                        :
+                                        (
+                                            <MenuItem
+                                                className='BQTMenuItem NotHasValue'
+                                            >
+                                                <div class="movies-rp-noti navigate-notfound">
+                                                    <div class="dark-image">
+                                                        <img src="/Images/movie-updating.png" alt="" />
+                                                    </div>Chưa có rạp</div>
+                                            </MenuItem>
+                                        )
                                 }
                             </Select>
                         </FormControl>
@@ -145,15 +167,27 @@ const BookQuickTicket = (props) => {
                                 onChange={handleMovieChange}
                             >
                                 {
-                                    listMovieByTheaterIdBookQuickTicket.map((item) => (
-                                        <MenuItem
-                                            key={item.id}
-                                            value={`${item.id}|${item.projectionForm}`}
-                                            className='BQTMenuItem'
-                                        >
-                                            {item.name} {item.showTimeTypeName} {`(${item.ageRestrictionName})`}
-                                        </MenuItem>
-                                    ))
+                                    listMovieByTheaterIdBookQuickTicket.length !== 0 ?
+                                        listMovieByTheaterIdBookQuickTicket.map((item) => (
+                                            <MenuItem
+                                                key={item.id}
+                                                value={`${item.id}|${item.projectionForm}`}
+                                                className='BQTMenuItem'
+                                            >
+                                                {item.name} {item.showTimeTypeName} {`(${item.ageRestrictionName})`}
+                                            </MenuItem>
+                                        ))
+                                        :
+                                        (
+                                            <MenuItem 
+                                                className='BQTMenuItem NotHasValue'
+                                            >
+                                                <div class="movies-rp-noti navigate-notfound">
+                                                    <div class="dark-image">
+                                                        <img src="/Images/movie-updating.png" alt="" />
+                                                    </div>Chưa có phim</div>
+                                            </MenuItem >
+                                        )
                                 }
                             </Select>
                         </FormControl>
@@ -166,15 +200,27 @@ const BookQuickTicket = (props) => {
                                 onChange={handleDateChange}
                             >
                                 {
-                                    dates.map((date, index) => (
-                                        <MenuItem
-                                            key={moment(date).format("YYYY-MM-DDTHH:mm:ss")}
-                                            value={`${moment(date).format("YYYY-MM-DDTHH:mm:ss") }|${index}`}
-                                            className='BQTMenuItem'
-                                        >
-                                            {moment(date).format("dddd").replace(/^\w/, (c) => c.toUpperCase()) + ', '} {moment(date).format("DD/MM")}
-                                        </MenuItem>
-                                    ))
+                                    dates.length !== 0 ?
+                                        dates.map((date, index) => (
+                                            <MenuItem
+                                                key={moment(date).format("YYYY-MM-DDTHH:mm:ss")}
+                                                value={`${moment(date).format("YYYY-MM-DDTHH:mm:ss")}|${index}`}
+                                                className='BQTMenuItem'
+                                            >
+                                                {moment(date).format("dddd").replace(/^\w/, (c) => c.toUpperCase()) + ', '} {moment(date).format("DD/MM")}
+                                            </MenuItem>
+                                        ))
+                                        :
+                                        (
+                                            <MenuItem
+                                                className='BQTMenuItem NotHasValue'
+                                            >
+                                                <div class="movies-rp-noti navigate-notfound">
+                                                    <div class="dark-image">
+                                                        <img src="/Images/movie-updating.png" alt="" />
+                                                    </div>Chưa có ngày chiếu</div>
+                                            </MenuItem>
+                                        )
                                 }
                             </Select>
                         </FormControl>
@@ -187,15 +233,27 @@ const BookQuickTicket = (props) => {
                                 onChange={handleShowTimeChange}
                             >
                                 {
-                                    listShowTimeByMovieId.map((item) => (
-                                        <MenuItem
-                                            key={item.showTimeId}
-                                            value={`${item.showTimeId}|${item.roomId}|${moment(new Date(item.startTime)).format("HH:mm") }`}
-                                            className='BQTMenuItem'
-                                        >
-                                            {moment(new Date(item.startTime)).format("HH:mm") + " - "} {item.showTimeType === ShowTimeType.Deluxe ? "Deluxe" : "Standard"}
-                                        </MenuItem>
-                                    ))
+                                    listShowTimeByMovieId.length !== 0 ?
+                                        listShowTimeByMovieId.map((item) => (
+                                            <MenuItem
+                                                key={item.showTimeId}
+                                                value={`${item.showTimeId}|${item.roomId}|${moment(new Date(item.startTime)).format("HH:mm")}`}
+                                                className='BQTMenuItem'
+                                            >
+                                                {moment(new Date(item.startTime)).format("HH:mm") + " - "} {item.showTimeType === ShowTimeType.Deluxe ? "Deluxe" : "Standard"}
+                                            </MenuItem>
+                                        ))
+                                        :
+                                        (
+                                            <MenuItem
+                                                className='BQTMenuItem NotHasValue'
+                                            >
+                                                <div class="movies-rp-noti navigate-notfound">
+                                                    <div class="dark-image">
+                                                        <img src="/Images/movie-updating.png" alt="" />
+                                                    </div>Chưa có suất chiếu</div>
+                                            </MenuItem>
+                                        )
                                 }
                             </Select>
                         </FormControl>

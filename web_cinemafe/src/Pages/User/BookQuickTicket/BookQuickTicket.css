@@ -112,3 +112,15 @@
 .MuiFormControl-root.NotHasValue {
     pointer-events: none;
 }
+
+.navigate-notfound {
+    gap: 1rem !important
+}
+
+.dark-image {
+    filter: brightness(0);
+}
+
+.NotHasValue {
+    pointer-events: none;
+}
