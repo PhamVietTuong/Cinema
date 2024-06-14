@@ -2,6 +2,7 @@
 using Cinema.Data.Enum;
 using Cinema.Data.Models;
 using Cinema.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ using System.Net;
 
 namespace Cinema.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class CinemasController : ControllerBase
     {
+        private const string user = "user";
+        private const string connectedRole = "user,admin";
+
         private readonly IUnitOfWork _uow;
 
         public CinemasController(IUnitOfWork uow)
@@ -54,6 +59,7 @@ namespace Cinema.Controllers
         #region Movie
 
         [HttpGet("GetMovieList")]
+        //[Authorize(Roles = user)]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()
         {
             try
@@ -200,7 +206,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAysn(vm);
+                var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAsync(vm);
                 return Ok(result);
             }
             catch (Exception e)
@@ -248,6 +254,25 @@ namespace Cinema.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+        #endregion
+
+        #region Invoice
+
+        [HttpGet("GetInvoice/{code}")]
+        public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetInvoice(string code)
+        {
+            try
+            {
+                var result = await _uow.InvoiceRepository.GetInvoiceAsync(code);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         #endregion
     }
 }

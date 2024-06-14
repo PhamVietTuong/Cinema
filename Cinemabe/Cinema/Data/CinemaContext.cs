@@ -15,7 +15,7 @@ namespace Cinema.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<InvoiceTicket>()
-                .HasKey(x => new { x.InvoiceId, x.ShowTimeId, x.TicketTypeId, x.RoomId, x.ColIndex, x.RowName });
+                .HasKey(x => new { x.Code, x.ShowTimeId, x.TicketTypeId, x.RoomId, x.ColIndex, x.RowName });
 
             modelBuilder.Entity<Seat>()
                 .HasKey(x => new { x.RoomId, x.ColIndex, x.RowName });
@@ -32,12 +32,11 @@ namespace Cinema.Data
             modelBuilder.Entity<FoodAndDrinkTheater>()
                .HasKey(x => new { x.FoodAndDrinkId, x.TheaterId });
 
-
-
             modelBuilder.Entity<InvoiceFoodAndDrink>()
-                .HasKey(x => new { x.InvoiceId, x.FoodAndDrinkId });
+                .HasKey(x => new { x.Code, x.FoodAndDrinkId });
 
-
+            modelBuilder.Entity<Invoice>()
+                .HasKey(x => new { x.Code });
         }
 
         public DbSet<User> User { get; set; }

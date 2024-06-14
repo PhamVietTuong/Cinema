@@ -1,0 +1,67 @@
+﻿using Cinema.Contracts;
+using Cinema.Data;
+using Cinema.Data.Enum;
+using Cinema.Data.Models;
+using Cinema.DTOs;
+using Microsoft.EntityFrameworkCore;
+
+namespace Cinema.Repository
+{
+    public class InvoiceRepository : IInvoiceRepository
+    {
+        private readonly CinemaContext _context;
+
+        public InvoiceRepository(CinemaContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<InvoiceViewModel> GetInvoiceAsync(string code)
+        {
+            var invoice = await _context.Invoice
+                .FirstOrDefaultAsync(x => x.Code == code);
+            var invoiceTicket = await _context.InvoiceTicket
+                .Include(x => x.ShowTime)
+                    .ThenInclude(x => x.Movie)
+                        .ThenInclude(x => x.AgeRestriction)
+                .Include(x => x.Room)
+                    .ThenInclude(x => x.Theater)
+                .Where(x => x.Code == invoice.Code).ToListAsync();
+            var invoiceTicketShowTime = invoiceTicket.Select(x => x.ShowTime).FirstOrDefault();
+            var invoiceTicketRoom = invoiceTicket.Select(x => x.Room).FirstOrDefault();
+            var invoiceFoodAndDrink = await _context.InvoiceFoodAndDrink
+                .Include(x => x.FoodAndDrink)
+                .Where(x => x.Code == invoice.Code).ToListAsync();
+            var resultFoodAndDrinks = new List<InvoiceFoodAndDrinkViewModel>();
+
+            bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == invoiceTicketRoom.Id).Any(x => x.SeatType.Name == "Nằm");
+
+            foreach (var item in invoiceFoodAndDrink)
+            {
+                resultFoodAndDrinks.Add(new InvoiceFoodAndDrinkViewModel
+                {
+                    FoodAndDrinkName = item.FoodAndDrink.Name,
+                    Quantity = item.Quantity,
+                });
+            }
+
+            var result = new InvoiceViewModel
+            {
+                MovieName = invoiceTicketShowTime.Movie.Name,
+                ProjectionFormText = invoiceTicketShowTime.ProjectionForm == ProjectionForm.Time2D ? "2D" : "3D",
+                AgeRestrictionDescription = invoiceTicketShowTime.Movie.AgeRestriction.Description,
+                AgeRestrictionName = invoiceTicketShowTime.Movie.AgeRestriction.Name,
+                TheaterName = invoiceTicketRoom.Theater.Name,
+                Code = invoice.Code,
+                ShowTimeStartTime = invoiceTicketShowTime.StartTime,
+                RoomName = invoiceTicketRoom.Name,
+                NumberTicket = invoiceTicket.Count(),
+                ShowTimeType = isDulexe ? "Deluxe" : "Standard",
+                SeatName = String.Join(", ", invoiceTicket.Select(x => x.SeatName)),
+                FoodAndDrinks = resultFoodAndDrinks,
+            };
+
+            return result;
+        }
+    }
+}

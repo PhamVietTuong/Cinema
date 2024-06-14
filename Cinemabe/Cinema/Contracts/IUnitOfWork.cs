@@ -8,5 +8,6 @@
 		ITicketTypeRepository TicketTypeRepository { get; }
 		ISeatRepository SeatRepository { get; }
 		ITheaterRepository TheaterRepository { get; }
+		IInvoiceRepository InvoiceRepository { get; }
     }
 }
