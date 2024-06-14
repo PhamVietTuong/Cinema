@@ -69,7 +69,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<IDictionary<string, TicketBookingSuccess>>(options => new Dictionary<string, TicketBookingSuccess>());
+builder.Services.AddSingleton<IDictionary<string, InfoTicketBooking>>(options => new Dictionary<string, InfoTicketBooking>());
 
 var app = builder.Build();
 
