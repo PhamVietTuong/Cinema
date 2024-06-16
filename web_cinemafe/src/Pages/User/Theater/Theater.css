@@ -75,7 +75,6 @@ width: 110px;
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-left: 32px;
 }
 
 @media (max-width: 700px) {
