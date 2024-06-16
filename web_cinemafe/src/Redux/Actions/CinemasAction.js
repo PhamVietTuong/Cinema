@@ -4,7 +4,6 @@ import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
 import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
-import { history } from "../../Routers";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -137,7 +136,7 @@ const findSeatByRowAndCol = (rowName, colIndex, seats) => {
     return null;
 };
 
-export const TicketBooking = (invoiceDTO) => {
+export const TicketBooking = (invoiceDTO, navigate) => {
     return async (dispatch, getState) => {
         try {
             const handleInforTicket = async (seatInfos, seatStatus) => {
@@ -173,8 +172,7 @@ export const TicketBooking = (invoiceDTO) => {
             await connection.on("InforTicket", handleInforTicket);
             await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO).then((result) => {
                 if(result) {
-                    history.push("/");
-                    window.location.reload();
+                    navigate("/")
                     console.log(result);
                 }
             })
@@ -258,6 +256,17 @@ export const ListShowTimeByMovieIdAction = (movieId, date, projetionForm) => {
                 listShowTimeByMovieId: result.data,
             })
 
+        } catch (error) {
+            console.log("ListShowTimeByMovieIdAction: ", error);
+        }
+    }
+}
+
+export const GetInvoiceAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetInvoice(code);
+            console.log(result);
         } catch (error) {
             console.log("ListShowTimeByMovieIdAction: ", error);
         }

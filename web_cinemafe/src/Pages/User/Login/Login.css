@@ -1,0 +1,78 @@
+.loginTabPanel {
+    background-color: #f8fafc;
+}
+
+.regis {
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .action-auth {
+        width: 50%;
+    }
+}
+
+.required {
+    color: #ef4444;
+}
+
+.loginTab.Mui-selected {
+    color: #000 !important;
+    background: #f8fafc;
+    border-radius: 4px 4px 0 0;
+}
+
+.loginTab {
+    font-family: "Anton",
+            sans-serif !important;
+        font-size: 14px !important;
+        gap: 4px;
+        color: #f8fafc !important;
+}
+
+.loginTab::before {
+    background: rgba(248, 250, 252, .3);
+    border-radius: 4px;
+    height: calc(100% - .8rem);
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100% - .8rem);
+}
+
+.regis .loginTab.Mui-selected:after,
+.regis .loginTab:hover:before {
+    opacity: 1;
+    visibility: visible;
+}
+
+.regis .loginTab:after,
+.regis .loginTab:before {
+    content: "";
+    opacity: 0;
+    position: absolute;
+    transition: all .3s ease;
+    visibility: hidden;
+    z-index: -2;
+}
+
+.MuiTabs-indicator {
+    background-color: transparent !important;
+}
+
+.loginFormLabel {
+    color: rgb(15, 23, 42) !important;
+    font-size: 16px !important;
+    font-family: "Josefin Sans",
+        sans-serif !important;
+}
+
+.loginButton {
+    width: 100%;
+    padding: 10px;
+    margin-top: 30px;
+}
+
+.loginFormControl {
+    margin: 0 !important;
+}

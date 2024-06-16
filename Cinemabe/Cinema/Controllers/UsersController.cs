@@ -1,15 +1,9 @@
 ﻿using Cinema.Contracts;
-using Cinema.Data;
 using Cinema.Data.Models;
 using Cinema.DTOs;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Cinema.Controllers
 {
@@ -23,5 +17,50 @@ namespace Cinema.Controllers
 		{
 			_uow = uow;
 		}
-	}
+
+        [HttpPost("LoginUser")]
+        [ProducesResponseType(typeof(AuthenticationResponse), 200)]
+        [ProducesResponseType(typeof(void), 400)]
+        [ProducesResponseType(typeof(void), 401)]
+        [AllowAnonymous]
+        public async Task<ActionResult<AuthenticationResponse>> LoginUser([FromBody] LoginInfo loginInfo)
+        {
+            try
+            {
+                User user = await _uow.UserRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "user");
+                if (user == null) 
+                { 
+                    return BadRequest("Thông tin chưa chính xác, đăng nhập thất bại!."); 
+                }
+
+                TokenInfo token = await _uow.UserRepository.GenerateToken(loginInfo.Username, "user");
+                return new AuthenticationResponse(user, loginInfo.Username, token.Authority, token.Token, token.ExpirationTime);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        [HttpPost("LoginAdmin")]
+        [ProducesResponseType(typeof(AuthenticationResponse), 200)]
+        [ProducesResponseType(typeof(void), 400)]
+        [ProducesResponseType(typeof(void), 401)]
+        [AllowAnonymous]
+        public async Task<AuthenticationResponse> LoginAdmin([FromBody] LoginInfo loginInfo)
+        {
+            try
+            {
+                User user = await _uow.UserRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "admin");
+                if (user == null) { return null; }
+
+                TokenInfo token = await _uow.UserRepository.GenerateToken(loginInfo.Username, "admin");
+                return new AuthenticationResponse(user, loginInfo.Username, token.Authority, token.Token, token.ExpirationTime);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+    }
 }

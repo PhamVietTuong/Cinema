@@ -1,10 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Header.css'
 import { faCalendar, faCircleUser } from '@fortawesome/free-regular-svg-icons';
-import { faCaretDown, faLocationDot, faMagnifyingGlass, faTicket } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faLocationDot, faMagnifyingGlass, faSignOutAlt, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { TOKEN, USER_LOGIN } from '../../Ustil/Settings/Config';
 
 const Header = (props) => {
+    const {
+        loginInfo,
+    } = useSelector((state) => state.UserReducer);
+
     return (
         <>
             <header className="hd --second">
@@ -85,12 +92,34 @@ const Header = (props) => {
                                         <div className="hd-regi-ava" >
                                             <img src="/Images/HeaderAndFooter/ic-header-auth.svg" alt="" />
                                         </div>
-                                        <div className="hd-regi-list" >
-                                            <a className="link dang-nhap" href="/login/?prevUrl=/">
-                                                <FontAwesomeIcon className="icon" icon={faCircleUser} />
-                                                Đăng nhập
-                                            </a>
-                                        </div>
+                                        {
+                                            loginInfo && Object.keys(loginInfo).length !== 0
+                                                ? 
+                                                <>
+                                                    <span class="hd-regi-name">{loginInfo?.fullName}</span> 
+                                                    <div className="hd-regi-list --second">
+                                                        <Link className="link" href="">
+                                                            <FontAwesomeIcon icon={faUser} />
+                                                            Thông tin cá nhân
+                                                        </Link>
+                                                        <span className="dot">/</span>
+                                                        <span className="link" onClick={() => {
+                                                            localStorage.removeItem(USER_LOGIN);
+                                                            localStorage.removeItem(TOKEN);
+                                                            window.location.reload();
+                                                        }}>
+                                                            <FontAwesomeIcon icon={faSignOutAlt} />
+                                                            Đăng xuất
+                                                        </span>
+                                                    </div>
+                                                </>
+                                                :   <div className="hd-regi-list" >
+                                                        <Link to={`/login`} className="link dang-nhap">
+                                                            Đăng nhập
+                                                        </Link>
+                                                    </div>
+                                        }
+                                        
                                     </div>
                                 </div>
                                 <div className="hd-lg" >
