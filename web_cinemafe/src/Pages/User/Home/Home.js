@@ -8,11 +8,12 @@ import BookQuickTicket from "../BookQuickTicket/BookQuickTicket";
 const Home = () => {
     const dispatch = useDispatch();
     const { movieList, theaterList } = useSelector((state) => state.CinemasReducer)
+    
     useEffect(() => {
         dispatch(MovieListAction());
         dispatch(TheaterListAction());
-
     }, [dispatch]);
+    
     return (
         <>
             <BookQuickTicket theaterList={theaterList}></BookQuickTicket>

@@ -1,0 +1,28 @@
+body::before {
+    background-color: #ebeef2;
+}
+
+.IndexAdminDrawerHeader {
+    background-color: #232e3e;
+    color: #e9ecef;
+}
+
+.IndexAdminToolbar {
+    background-color: rgba(255, 255, 255, .95);
+    color: #1e2226;
+}
+
+.MuiListItemIcon-root {
+    color: #fff !important;
+}
+
+.MuiBox-root, .MuiTypography-root {
+    font-family: "Josefin Sans",
+        sans-serif !important;
+        font-size: 16px !important;
+}
+
+.IndexAdminDrawer .MuiPaper-root {
+    background-color: #1f2937 !important;
+    color: #e9ecef !important;
+}
