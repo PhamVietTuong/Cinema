@@ -287,5 +287,62 @@ namespace Cinema.Controllers
         }
 
         #endregion
+
+        #region AgeRestriction
+
+        [HttpGet("GetAgeRestrictionList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<AgeRestrictionDTO>>> GetAgeRestrictionList()
+        {
+            try
+            {
+                var result = await _uow.AgeRestrictionRepository.GetAgeRestrictionListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateAgeRestriction")]
+        [AllowAnonymous]
+        public async Task<ActionResult<AgeRestrictionDTO>> UpdateAgeRestriction(AgeRestrictionDTO entity)
+        {
+            try
+            {
+                if (!await _uow.AgeRestrictionRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _uow.AgeRestrictionRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateAgeRestriction")]
+        [AllowAnonymous]
+        public async Task<ActionResult<AgeRestrictionDTO>> CreateAgeRestriction(AgeRestrictionDTO entity)
+        {
+            try
+            {
+                var result = await _uow.AgeRestrictionRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
     }
 }

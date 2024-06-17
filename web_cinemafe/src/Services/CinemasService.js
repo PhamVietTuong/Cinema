@@ -52,6 +52,18 @@ export class CinemasService extends baseService {
     GetInvoice = (code) => {
         return this.get(`api/Cinemas/GetInvoice/${code}`)
     }
+
+    GetAgeRestrictionList = () => {
+        return this.get(`api/Cinemas/GetAgeRestrictionList`)
+    }
+
+    UpdateAgeRestriction = (ageRestrictionDTO) => {
+        return this.post(`api/Cinemas/UpdateAgeRestriction`, ageRestrictionDTO)
+    }
+
+    CreateAgeRestriction = (ageRestrictionDTO) => {
+        return this.post(`api/Cinemas/CreateAgeRestriction`, ageRestrictionDTO)
+    }
 }
 
 export const cinemasService = new CinemasService()
