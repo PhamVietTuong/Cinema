@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                           fontSize: Styles.titleFontSize,
                           fontWeight: FontWeight.bold,
                           color: Styles.textColor["dark_purple"]),
-                    )
+                    ),
                   ],
                 )
               : SingleChildScrollView(

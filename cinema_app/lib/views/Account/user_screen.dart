@@ -1,6 +1,7 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/Account/login_screen.dart';
 import 'package:cinema_app/views/Account/registration_screen.dart';
+import 'package:cinema_app/views/Account/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 class User extends StatefulWidget {
@@ -28,10 +29,10 @@ class _UserState extends State<User> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
             },
           ),
         ],

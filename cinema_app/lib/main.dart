@@ -1,11 +1,15 @@
 import 'dart:io';
-
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cinema_app/components/bottom_nav.dart';
+import 'package:cinema_app/views/Account/mode_theme.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final themeService=await ThemeService.instance;
+  var initTheme=themeService.initial;
+  runApp( MyApp(theme: initTheme,));
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -18,24 +22,22 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.theme});
+  final ThemeData theme;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+   return ThemeProvider(initTheme: theme,
+   builder: (_, theme)
+   {
+     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          },
-        ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: theme,
       home: const BottomNav(),
     );
+   },
+   );
   }
 }
