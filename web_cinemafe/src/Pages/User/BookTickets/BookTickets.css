@@ -1,0 +1,196 @@
+.app-content .ht:first-child {
+    padding-top: 0;
+}
+
+.sec-hbooking .custom-spacing {
+    padding-bottom: 0;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1024px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 768px;
+    }
+}
+
+@media (min-width: 640px) {
+    .container {
+        max-width: 640px;
+    }
+}
+
+.hbooking-new {
+    display: flex;
+    max-height: 200px;
+}
+
+.hbooking-new .hbooking-left {
+    flex: 0 0 35%;
+}
+
+.hbooking-new .hbooking-left img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.hbooking-new .hbooking-right {
+    flex: 1;
+    margin: 0;
+    background: linear-gradient(106deg, rgba(102, 51, 153, 0.8) 0%, rgba(51, 102, 204, 0.8) 102.69%);
+}
+
+.hbooking-new .hbooking-right .address-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding-left: 50px;
+}
+
+@media (min-width: 768px) {
+    .address-box {
+        padding: 16px;
+    }
+
+    .address-box .cinema-rental-footer .item .txt {
+        --lc: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: var(--lc);
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+    }
+
+    .address-box .cinema-rental-footer .item .txt-address {
+        height: var(--heightTxt);
+    }
+}
+
+.address-box {
+    padding: 24px;
+    background: linear-gradient(106deg, rgba(102, 51, 153, 0.80) 0%, rgba(51, 102, 204, 0.80) 102.69%);
+    text-align: left;
+    height: 100%;
+}
+
+@media (max-width: 1200px) {
+    .address-box {
+        padding: 12px;
+    }
+}
+
+@media (min-width:  768px) {
+    .address-box {
+        pointer-events: none;
+    }
+}
+
+.address-box:hover .cinema-rental-footer .item .txt {
+    display: block;
+}
+
+.hbooking-new .hbooking-right .address-box .sub-tittle {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.hbooking-new .hbooking-right .address-box .link {
+    align-items: start;
+}
+
+.hbooking-new .hbooking-right .address-box .link .ic {
+    margin-top: 2px;
+}
+
+@media (max-width: 1024px) {
+    .hbooking-new .hbooking-right .address-box {
+        padding-left: 30px;
+    }
+
+    .hbooking-new .hbooking-right .address-box .sub-tittle {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hbooking-new .hbooking-right .address-box {
+        padding: 12px;
+    }
+
+    .hbooking-new .hbooking-right .address-box .sub-tittle {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .hbooking-new .hbooking-right .address-box .link .txt {
+        font-size: 12px;
+    }
+
+    .hbooking-new .hbooking-right .address-box .link .ic {
+        margin-top: 0;
+    }
+}
+
+.txt-upper {
+    text-transform: uppercase;
+}
+
+.address-box .link {
+    display: flex;
+    align-items: center;
+    color: #f8fafc;
+    gap: 0 8px;
+    pointer-events: visible;
+}
+
+.sc-pd-b {
+    padding-bottom: 40px;
+}
+
+.BTSTab.Mui-selected {
+    color: #f3ea28 !important;
+}
+
+.BTSTab {
+    color: #fff !important;
+    font-family: "Anton",
+        sans-serif !important;
+    font-size: 18px !important;
+    padding: 10px !important;
+    text-align: center !important;
+    flex: 1;
+}
+
+.BTSTab.Mui-selected {
+    border-bottom: 4px solid #f3ea28 !important;
+}
+
+.BTSTabList span{
+    background-color: transparent !important;
+}
+
+.BTSTabList {
+    padding-top: 10px;
+}
+
+.re-head {
+    margin-bottom: 32px;
+}
+
+.--t-center {
+    text-align: center;
+}

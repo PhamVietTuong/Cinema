@@ -24,6 +24,14 @@
     transition: none;
 }
 
+.choosing {
+    color: #f3ea28;
+}
+
+.choosing img {
+    filter: brightness(0) saturate(100%) invert(82%) sepia(85%) saturate(423%) hue-rotate(357deg) brightness(92%) contrast(107%);
+}
+
 .seat-wr.choosing {
     color: #f3ea28;
 }
@@ -32,17 +40,33 @@
     filter: brightness(0) saturate(100%) invert(82%) sepia(85%) saturate(423%) hue-rotate(357deg) brightness(92%) contrast(107%);
 }
 
-.seat-wr.booked {
+.booked {
     pointer-events: none;
     cursor: default;
-    color: #475569;
+    color: #475569 !important;
+}
+
+.booked img {
+    filter: brightness(0) saturate(100%) invert(32%) sepia(9%) saturate(1380%) hue-rotate(176deg) brightness(94%) contrast(88%);
 }
 
 .seat-wr.booked img {
     filter: brightness(0) saturate(100%) invert(32%) sepia(9%) saturate(1380%) hue-rotate(176deg) brightness(94%) contrast(88%);
 }
 
+.update {
+        pointer-events: none;
+            cursor: default;
+    color: red;
+}
+
+.update img {
+    filter: brightness(0) saturate(100%) invert(19%) sepia(91%) saturate(7480%) hue-rotate(359deg) brightness(102%) contrast(107%);
+}
+
 .seat-wr.update {
+    pointer-events: none;
+    cursor: default;
     color: red;
 }
 
@@ -52,10 +76,11 @@
 
 .sec-heading {
     margin-bottom: 40px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 40px;
 }
 
 .sec-heading .desc {
@@ -64,16 +89,28 @@
 
 @media screen and (max-width: 1200px) {
     .sec-heading {
-        margin-bottom: 32px;
+        margin-bottom: 0;
+            margin-top: 20px;
+            gap: 8px;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
     .sec-heading {
         margin-bottom: 24px;
         gap: 8px;
     }
 }
+
+.sec-heading .heading {
+     margin-bottom: 12px;
+ }
+
+ @media (max-width: 768px) {
+    .sec-heading .heading {
+         margin-bottom: 8px;
+     }
+ }
 
 .seat-screen .txt {
     text-align: center;

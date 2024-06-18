@@ -1,19 +1,21 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data.Enum;
-using Cinema.Data.Models;
 using Cinema.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using System.Net;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace Cinema.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class CinemasController : ControllerBase
     {
+        private const string user = "user";
+        private const string connectedRole = "user,admin";
+
         private readonly IUnitOfWork _uow;
 
         public CinemasController(IUnitOfWork uow)
@@ -23,6 +25,7 @@ namespace Cinema.Controllers
 
         #region Search theater, movie
         [HttpGet("SearchByName{name}")]
+        [AllowAnonymous]
         public async Task<ActionResult> Search(string name)
         {
 
@@ -54,6 +57,7 @@ namespace Cinema.Controllers
         #region Movie
 
         [HttpGet("GetMovieList")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()
         {
             try
@@ -68,6 +72,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("MovieDetail")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
         {
             try
@@ -82,6 +87,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetMovieTheaterId{theaterId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieTheaterId(Guid theaterId)
         {
             try
@@ -100,6 +106,7 @@ namespace Cinema.Controllers
         #region FoodAndDrink
 
         [HttpGet("ComboByTheaterId/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<ComboViewModel>>> ComboByTheaterId(Guid id)
         {
             try
@@ -119,6 +126,7 @@ namespace Cinema.Controllers
 
         #region Seat
         [HttpPost("SeatByShowTimeAndRoomId")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<SeatViewModel>>> SeatByShowTimeAndRoomId(SeatByShowTimeAndRoomDTO vm)
         {
             try
@@ -137,6 +145,7 @@ namespace Cinema.Controllers
         #region Theater
 
         [HttpGet("GetTheaterList")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<TheaterDTO>>> GetTheaterList()
         {
             try
@@ -157,6 +166,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetShowTimeByTheaterId{theaterId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetShowTimeByTheaterId(Guid theaterId)
         {
 
@@ -172,6 +182,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetTheater/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TheaterDTO>> GetTheater(Guid id)
         {
             try
@@ -196,11 +207,12 @@ namespace Cinema.Controllers
         #region TicketType
 
         [HttpPost("TicketTypeByShowTimeAndRoomId")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<TicketTypeViewModel>>> TicketTypeByShowTimeAndRoomId(TicketTypeByShowTimeAndRoomDTO vm)
         {
             try
             {
-                var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAysn(vm);
+                var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAsync(vm);
                 return Ok(result);
             }
             catch (Exception e)
@@ -212,7 +224,9 @@ namespace Cinema.Controllers
         #endregion
 
         #region Date
+
         [HttpGet("GetDateByMovieId/{movieId}/{ProjectionForm}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<DateTime>>> GetDateByMovieID(Guid movieId, ProjectionForm ProjectionForm)
         {
             try
@@ -231,20 +245,18 @@ namespace Cinema.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
         #endregion
 
         #region ShowtimeByDate
+
         [HttpGet("GetShowTimeByMovieID/{movieId}/{date}/{ProjectionForm}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetShowTimeByMovieID(Guid movieId, DateTime date, ProjectionForm ProjectionForm)
         {
             try
             {
                 var showtimeViewModels = await _uow.MovieRepository.GetShowTimeByMovieID(movieId, date, ProjectionForm);
-
-                if (showtimeViewModels == null || !showtimeViewModels.Any())
-                {
-                    return NotFound();
-                }
 
                 return Ok(showtimeViewModels);
             }
@@ -253,6 +265,27 @@ namespace Cinema.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        #endregion
+
+        #region Invoice
+
+        [HttpGet("GetInvoice/{code}")]
+        [Authorize(Roles = user)]
+        public async Task<ActionResult<InvoiceViewModel>> GetInvoice(string code)
+        {
+            try
+            {
+                var result = await _uow.InvoiceRepository.GetInvoiceAsync(code);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         #endregion
     }
 }

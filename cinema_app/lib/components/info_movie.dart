@@ -25,7 +25,7 @@ class InfoMovie extends StatelessWidget {
                   )),
         );
       },
-      child: Container(
+      child: SizedBox(
         width: wImage,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -106,6 +106,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
         title: Text(
           widget.booking.theater.name,
           style: TextStyle(
+              fontWeight: FontWeight.bold,
               color: Styles.boldTextColor["dark_purple"],
               fontSize: Styles.appbarFontSize),
         ),
@@ -170,7 +171,13 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: lstShowTimeMovie.isNotEmpty
                           ? lstShowTimeMovie
-                          : [const Text("Trống")]),
+                          : [
+                              Text(
+                                "Trống",
+                                style: TextStyle(
+                                    color: Styles.boldTextColor["dark_purple"]),
+                              )
+                            ]),
                 ),
               ),
             ),
@@ -200,5 +207,39 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
     setState(() {
       isLoadingData = false;
     });
+    _showErrorDialog();
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Lỗi"),
+            content: const Text(
+                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng hộp thoại
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Đóng"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Gọi hàm để tải dữ liệu lại
+                  setState(() {
+                    isLoadingData = true;
+                  });
+                  showtimePr
+                      .fetchShowtimesByTheaterId(widget.booking.theater.id);
+                  Navigator.pop(context);
+                },
+                child: const Text("Tải lại"),
+              ),
+            ],
+          );
+        });
   }
 }

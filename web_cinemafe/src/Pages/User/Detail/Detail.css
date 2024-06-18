@@ -12,25 +12,25 @@
     gap: 32px;
 }
 
-@media screen and (max-width: 1199px) {
+@media (max-width: 1199px) {
 
 .detail-ct {
     gap: 24px;
 }}
 
-@media screen and (max-width: 1024px) {
+@media (max-width: 1024px) {
     .detail-ct {
         gap: 16px;
     }
 }
 
-@media screen and (max-width: 700px) {
+@media (max-width: 700px) {
     .detail-ct {
         gap: 12px;
     }
 }
 
-@media screen and (max-width: 460px) {
+@media (max-width: 460px) {
     .detail-ct {
         gap: 8px;
     }
@@ -61,7 +61,7 @@
 
 }
 
-@media screen and (max-width: 1199px) {
+@media (max-width: 1199px) {
     .detail .info-detail {
         gap: 12px;
     }
@@ -155,21 +155,21 @@
     }
 }
 
-@media screen and (max-width: 1199px) {
+@media (max-width: 1199px) {
     .detail-ct-bd .dt {
     font-size: 16px;
     gap: 8px;
 }
 }
 
-@media screen and (max-width: 1024px) {.detail-ct-bd .ct .dt {
+@media (max-width: 1024px) {.detail-ct-bd .ct .dt {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease-in-out 0s;
 }
 }
 
-@media screen and (max-width: 700px) {
+@media (max-width: 700px) {
     .detail-ct .detail-ct-bd {
         display: none;
     }
@@ -222,39 +222,16 @@
     object-fit: cover;
 }
 
-.app-main,
-.main {
-    position: relative;
-}
-
-.app-main,
-.main {
-    min-height: 68vh;
-    padding-top: calc(60px + 50px + 40px);
-}
-
-.app-main::before,
-.main::before {
-    background-color: rgb(15, 23, 42);
-    bottom: 0px;
-    content: "";
-    left: 0px;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    z-index: -5;
-}
-
-@media screen and (max-width: 700px) {.dt-mobile {
+@media (max-width: 700px) {.dt-mobile {
     margin-top: 10px;
 }
 }
 
-@media screen and (max-width: 700px) {.dt-mobile .tt.sub-tittle {
+@media (max-width: 700px) {.dt-mobile .tt.sub-tittle {
     font-size: 16px;
 }}
 
-@media screen and (max-width: 1199px) {.detail-ct-bd .tt.sub-tittle {
+@media (max-width: 1199px) {.detail-ct-bd .tt.sub-tittle {
     font-size: 18px;
 }}
 
@@ -262,22 +239,22 @@
     margin-bottom: 8px;
 }
 
-@media screen and (max-width: 700px) {.sub-tittle {
+@media (max-width: 700px) {.sub-tittle {
     font-size: 18px;
 }}
 
-@media screen and (max-width: 700px) {.dt-mobile .ct .dt,
+@media (max-width: 700px) {.dt-mobile .ct .dt,
 .dt-mobile .desc {
     font-size: 12px;
 }}
 
-@media screen and (max-width: 1024px) {.detail-ct-bd .ct .dt {
+@media (max-width: 1024px) {.detail-ct-bd .ct .dt {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease-in-out 0s;
 }}
 
-@media screen and (max-width: 1199px) {.detail-ct-bd .dt {
+@media (max-width: 1199px) {.detail-ct-bd .dt {
     font-size: 16px;
     gap: 8px;
 }}
@@ -303,6 +280,7 @@ ul {
 }
 .description{
     font-size: 16px;
+    line-height: 27.9px;
 }
 .font-family-actor > li {
     font-family: "Josefin Sans",
@@ -313,21 +291,25 @@ ul {
     font-size: 16px;
 }
 
-@media screen and (max-width: 1199px) {
+@media (max-width: 1199px) {
     .detail-ct-h .heading {
     font-size: 24px;
 }}
 
-@media screen and (max-width: 700px) {.detail-ct-ft .video .ic {
+@media (max-width: 700px) {.detail-ct-ft .video .ic {
     height: 16px;
     width: 16px;
 }}
 
-@media screen and (max-width: 1199px) {.detail-ct-ft .video .ic {
+@media (max-width: 1199px) {.detail-ct-ft .video .ic {
     height: 32px;
     width: 32px;
 }}
 
 .web-movie-box .image {
     font-size: 10px;
+}
+
+.detail-right ul {
+    line-height: 24.8px;
 }

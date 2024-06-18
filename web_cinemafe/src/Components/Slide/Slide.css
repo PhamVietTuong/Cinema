@@ -10,9 +10,9 @@
 .swiper-slide {
     text-align: center;
     font-size: 18px;
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
 
     width: 100%;
     height: auto;

@@ -67,12 +67,14 @@
 }
 
 .shtime-slider .nav-pills .nav-link {
-    width: 105px;
+width: 110px;
     height: 90px;
     border-radius: 5px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 @media (max-width: 700px) {
@@ -143,10 +145,6 @@
 
 .shtime-wr .shtime-slider .nav-pills .nav-link .box-time .day {
     color: #f3ea28;
-}
-
-.shtime-slider .nav-item {
-    margin-left: 32px;
 }
 
 .shtime-body {
@@ -270,8 +268,8 @@
 }
 
 .shtime-ft .cinestar-item .item-time.disable {
-    border: 0.5px solid #64748B;
-    color: #64748B;
+    border: 0.5px solid #64748B !important;
+    color: #64748B !important;
 }
 
 .shtime-ft .cinestar-item .item-time {
@@ -376,4 +374,28 @@
 .bill-right .enableButton {
     pointer-events: none !important;
     opacity: .4 !important;
+}
+
+.none-time {
+    padding: 16px;
+    margin-top: 20px; 
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.none-time img {
+    width: 20px;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+@media (max-width: 768px) {
+    .none-time {
+        padding: 10px; 
+        margin-top: 10px; 
+        font-size: 14px;
+    }
 }

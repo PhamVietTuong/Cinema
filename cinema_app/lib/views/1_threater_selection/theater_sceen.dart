@@ -35,6 +35,7 @@ class _TheaterScreenState extends State<TheaterScreen>
         title: Text(
           "MUA VÉ",
           style: TextStyle(
+              fontWeight: FontWeight.bold,
               color: Styles.boldTextColor["dark_purple"],
               fontSize: Styles.appbarFontSize),
         ),
@@ -68,7 +69,7 @@ class _TheaterScreenState extends State<TheaterScreen>
                 ),
               )
             : SingleChildScrollView(
-                physics:const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: theaterItemLst,
@@ -115,9 +116,11 @@ class _TheaterScreenState extends State<TheaterScreen>
               TextButton(
                 onPressed: () {
                   // Gọi hàm để tải dữ liệu lại
-                  theaterPr
-                      .fetchTheaters()
-                      .then((value) => Navigator.of(context).pop());
+                  setState(() {
+                    isLoadingData = true;
+                  });
+                  theaterPr.fetchTheaters();
+                  Navigator.of(context).pop();
                 },
                 child: const Text("Tải lại"),
               ),

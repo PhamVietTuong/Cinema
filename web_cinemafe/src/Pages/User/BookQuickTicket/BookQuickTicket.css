@@ -1,0 +1,126 @@
+.navigate-wrap {
+    display: flex;
+    gap: 40px;
+    padding: 15px 30px;
+    border-radius: 4px;
+    background-color: #ecf2ffff;
+}
+
+.navigate-wrap .heading {
+    font-size: 30px;
+    align-self: center;
+    color: rgb(70, 69, 69);
+}
+
+.navigate-wrap .preventClick {
+    pointer-events: none;
+}
+
+@media (max-width: 1040px) {
+    .navigate-wrap .heading {
+        font-size: 22px;
+    }
+
+    .navigate-wrap {
+        padding: 10px 20px;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .navigate-wrap {
+        flex-direction: column;
+        border: 1px solid rgb(74, 73, 73);
+        padding: 12px 20px;
+        border-radius: 4px;
+    }
+}
+
+.navigate-filter {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.BQTInputLabel {
+    color: #639 !important;
+        letter-spacing: 1px !important;
+            text-transform: capitalize;
+            font-family: "Anton",
+                sans-serif !important;
+}
+
+.navigate-filter-btn {
+    user-select: none;
+    flex: 1 0 auto;
+    max-width: 100px;
+}
+
+.navigate-filter-btn .btn {
+    height: 100%;
+    border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+    .navigate-filter-btn .btn {
+        justify-content: flex-start;
+        border-radius: 6px;
+    }
+}
+
+.navigate-filter-btn.active .btn {
+    border: 1px solid var(--color-second);
+    color: var(--color-second);
+}
+
+.BQTSelect .MuiSelect-select {
+    color: #639 !important;
+        letter-spacing: 1px !important;
+        text-transform: capitalize;
+        font-family: "Anton",
+            sans-serif !important;
+}
+
+.BQTMenuItem.Mui-selected {
+    color: rgba(0, 0, 0, 0.88);
+        font-weight: 600;
+        background-color: #F3EA28 !important;
+        border-radius: 4px;
+}
+
+.BQTMenuItem {
+    color: rgba(0, 0, 0, 0.88);
+    font-family: -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        "Noto Sans",
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+
+.isActive {
+    background: #f3ea28;
+}
+
+.MuiFormControl-root.NotHasValue {
+    pointer-events: none;
+}
+
+.navigate-notfound {
+    gap: 1rem !important
+}
+
+.dark-image {
+    filter: brightness(0);
+}
+
+.NotHasValue {
+    pointer-events: none;
+}

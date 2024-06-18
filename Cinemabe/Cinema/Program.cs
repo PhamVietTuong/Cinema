@@ -1,29 +1,31 @@
 using Cinema.Contracts;
-using Cinema.Data.Models;
 using Cinema.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
 using Cinema.Data;
 using Cinema;
 using Cinema.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
 
-////Config cho Identity
-//builder.Services.AddIdentity<User, IdentityRole>()
-//                .AddEntityFrameworkStores<CinemaContext>()
-//                .AddDefaultTokenProviders();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Config cho Authentication
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+                   "CorsPolicy",
+                   builder => builder.WithOrigins("http://localhost:3000")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()
+                   .AllowCredentials());
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -31,7 +33,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 
-// Config cho JWT
 .AddJwtBearer(options =>
 {
     options.SaveToken = true;
@@ -47,56 +48,38 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add services to the container.
 builder.Services.AddControllers();
-
-// Config CORS
-builder.Services.AddCors(option =>
-{
-    option.AddDefaultPolicy(builder =>
-    {
-        builder
-			  .WithOrigins("http://localhost:3000")
-				.AllowAnyHeader()
-				.AllowAnyMethod()
-				.AllowCredentials();
-    });
-});
 
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<IDictionary<string, TicketBookingSuccess>>(options => new Dictionary<string, TicketBookingSuccess>());
+builder.Services.AddSingleton<IDictionary<string, InfoTicketBooking>>(options => new Dictionary<string, InfoTicketBooking>());
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
+app.UseCors("CorsPolicy");
+
 app.UseStaticFiles();
-
-app.UseAuthentication();
-
-app.UseCors();
-
-app.UseAuthorization();
 
 app.UseRouting();
 
+app.UseAuthorization();
+
 app.UseEndpoints(endpoints =>
 {
-	endpoints.MapHub<CinemaHub>("/cinema");
+    app.MapControllers();
+    endpoints.MapHub<CinemaHub>("/cinema");
 });
 
-app.MapControllers();
 
 app.Run();

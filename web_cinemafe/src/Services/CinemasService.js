@@ -28,6 +28,30 @@ export class CinemasService extends baseService {
     PostTicket = (ticketBookingSuccess) => {
         return this.post(`api/Cinemas/Ticket`, ticketBookingSuccess);
     }
+
+    GetTheaterList = () => {
+        return this.get(`api/Cinemas/GetTheaterList`)
+    }
+
+    GetTheaterId = (id) => {
+        return this.get(`api/Cinemas/GetTheater/${id}`)
+    }
+
+    GetShowTimeByTheaterId = (id) => {
+        return this.get(`api/Cinemas/GetShowTimeByTheaterId${id}`)
+    }
+
+    GetListMovieByTheaterId = (id) => {
+        return this.get(`api/Cinemas/GetMovieTheaterId${id}`)
+    }
+
+    GetListShowTimeByMovieId = (movieId, date, projetionForm) => {
+        return this.get(`api/Cinemas/GetShowTimeByMovieId/${movieId}/${date}/${projetionForm}`)
+    }
+
+    GetInvoice = (code) => {
+        return this.get(`api/Cinemas/GetInvoice/${code}`)
+    }
 }
 
 export const cinemasService = new CinemasService()

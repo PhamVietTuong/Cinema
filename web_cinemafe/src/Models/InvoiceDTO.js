@@ -2,7 +2,7 @@ export class InvoiceDTO {
     showTimeId = '';
     roomId = '';
     theaterId = '';
-    userId = '5f24b03d-1cbd-4141-017d-08dc73cfa571';
+    userId = 'f24be976-edc9-4323-605a-08dc89e278af';
     invoiceTickets = [];
     foodAndDrinks = []
 }

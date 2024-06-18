@@ -1,9 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Header.css'
 import { faCalendar, faCircleUser } from '@fortawesome/free-regular-svg-icons';
-import { faCaretDown, faLocationDot, faMagnifyingGlass, faTicket } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faLocationDot, faMagnifyingGlass, faSignOutAlt, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { TOKEN, USER_LOGIN } from '../../Ustil/Settings/Config';
 
-const Header = () => {
+const Header = (props) => {
+    const {
+        loginInfo,
+    } = useSelector((state) => state.UserReducer);
+
     return (
         <>
             <header className="hd --second">
@@ -84,12 +92,34 @@ const Header = () => {
                                         <div className="hd-regi-ava" >
                                             <img src="/Images/HeaderAndFooter/ic-header-auth.svg" alt="" />
                                         </div>
-                                        <div className="hd-regi-list" >
-                                            <a className="link dang-nhap" href="/login/?prevUrl=/">
-                                                <FontAwesomeIcon className="icon" icon={faCircleUser} />
-                                                Đăng nhập
-                                            </a>
-                                        </div>
+                                        {
+                                            loginInfo && Object.keys(loginInfo).length !== 0
+                                                ? 
+                                                <>
+                                                    <span class="hd-regi-name">{loginInfo?.fullName}</span> 
+                                                    <div className="hd-regi-list --second">
+                                                        <Link className="link" href="">
+                                                            <FontAwesomeIcon icon={faUser} />
+                                                            Thông tin cá nhân
+                                                        </Link>
+                                                        <span className="dot">/</span>
+                                                        <span className="link" onClick={() => {
+                                                            localStorage.removeItem(USER_LOGIN);
+                                                            localStorage.removeItem(TOKEN);
+                                                            window.location.reload();
+                                                        }}>
+                                                            <FontAwesomeIcon icon={faSignOutAlt} />
+                                                            Đăng xuất
+                                                        </span>
+                                                    </div>
+                                                </>
+                                                :   <div className="hd-regi-list" >
+                                                        <Link to={`/login`} className="link dang-nhap">
+                                                            Đăng nhập
+                                                        </Link>
+                                                    </div>
+                                        }
+                                        
                                     </div>
                                 </div>
                                 <div className="hd-lg" >
@@ -127,55 +157,14 @@ const Header = () => {
                                             <FontAwesomeIcon className="icon" icon={faLocationDot} />
                                             <span className="txt">Chọn rạp</span>
                                         </span>
-                                        <div className="hd-regi-list hd-regi-list-custom --second custom-position-left"                              >
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/8f3a5832-8340-4a43-89bc-6653817162f1"
-                                            >
-                                                Cinestar Quốc Thanh
-                                            </a>
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/667c7727-857e-4aac-8aeb-771a8f86cd14"
-                                            >
-                                                Cinestar Hai Bà Trưng (TP.HCM)
-                                            </a>
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/cf13e1ce-2c1f-4c73-8ce5-7ef65472db3c"
-                                            >
-                                                Cinestar Sinh Viên (Bình Dương)
-                                            </a>
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/8f54df74-3796-42ea-896e-cd638eec1fe3"
-                                            >
-                                                Cinestar Mỹ Tho
-                                            </a>
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/4a51b9ee-f143-4411-9dbb-5f54a1c382c0"
-                                            >
-                                                Cinestar Kiên Giang
-                                            </a>
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/104509be-034e-47c1-bf1b-aba7f2df4f28"
-                                            >
-                                                Cinestar Lâm Đồng
-                                            </a>
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/e08f986a-1937-419e-b1b1-759b7c74728b"
-                                            >
-                                                Cinestar Đà Lạt
-                                            </a>
-                                            <a
-                                                className="link"
-                                                href="/book-tickets/f8a60463-5c34-49a9-9ae8-52081e387bb8"
-                                            >
-                                                Cinestar Huế
-                                            </a>
+                                        <div className="hd-regi-list hd-regi-list-custom --second custom-position-left">
+                                            {
+                                                props.theaterList.length > 0 && props.theaterList.map((item) => (
+                                                    <Link to={`book-tickets/${item.id}`} className="link">
+                                                        {item.name}
+                                                    </Link>
+                                                ))
+                                            }
                                         </div>
                                     </div>
                                 </div>

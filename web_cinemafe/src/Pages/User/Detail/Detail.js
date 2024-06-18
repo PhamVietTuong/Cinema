@@ -6,29 +6,104 @@ import 'swiper/css/pagination';
 import './Detail.css'   
 import { Pagination } from 'swiper/modules';
 import Theater from '../Theater/Theater';
-import { useEffect } from 'react';
-import { MovieDetailAction } from '../../../Redux/Actions/CinemasAction';
+import { useEffect, useRef, useState } from 'react';
+import { ComboAction, MovieDetailAction, SeatAction, TicketTypeAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
 import moment from 'moment';
 import { MovieDetailDTO } from '../../../Models/MovieDetailDTO';
+import { SeatByShowTimeAndRoomDTO } from '../../../Models/SeatByShowTimeAndRoomDTO';
+import { InfoTicketBooking, TicketBookingSuccess } from '../../../Models/InfoTicketBooking';
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
+import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
+import { connection } from '../../../connectionSignalR';
 const Detail = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const { movieDetail } = useSelector((state) => state.CinemasReducer)
     let location = useLocation();
-    let projectionForm = location.state?.projectionForm; 
-
+    let { projectionForm, selectedShowTime, selectedheaterName, activeDateIndex } = location.state ?? {};
+    const queryParams = new URLSearchParams(location.search);
+    const theaterId = queryParams.get('id');
+    const showTimeId = queryParams.get('show_time');
+    const roomId = queryParams.get('room');
+    const connectionEstablished = useRef(false);
+    const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
+    const [selectedShowTimeId, setSelectedShowTimeId] = useState(null);
+    const [selectedTheaterId, setSelectedTheaterId] = useState(null);
+    const [selectedRoomId, setselectedRoomId] = useState(null);
     useEffect(() => {
         let movieDetailDTO = new MovieDetailDTO();
         movieDetailDTO.id = id;
         movieDetailDTO.projectionForm = projectionForm
-
         dispatch(MovieDetailAction(movieDetailDTO))
-    }, [dispatch, id, projectionForm]);
+    }, [id, projectionForm]);
+    
+    useEffect(() => {
+        const showTimeIdHandle = async (showTimeId, roomId, theaterId) => {
+            if (!connectionEstablished.current) {
+                connection.on("ListOfSeatsSold", (seatInfos) => {
+                    dispatch({
+                        type: LIST_OF_SEATS_SOLD,
+                        seatInfos
+                    })
+                })
+
+                connection.on("UpdateSeat", (seatInfos, seatStatus) => {
+                    dispatch({
+                        type: UPDATE_SEAT,
+                        seatInfos, seatStatus
+                    })
+                })
+
+                connection.on("GetWaitingSeat", (seatInfos) => {
+                    dispatch({
+                        type: GET_WAITING_SEAT,
+                        seatInfos
+                    })
+                })
+
+                connection.on("CheckForEmptySeats", (seatInfos, seatStatus) => {
+                    dispatch({
+                        type: CHECK_FOR_EMPTY_SEAT,
+                        seatInfos, seatStatus
+                    })
+                })
+
+                await connection.start();
+                connectionEstablished.current = true;
+
+                const infoTicketBooking = new InfoTicketBooking()
+                infoTicketBooking.showTimeId = showTimeId
+                infoTicketBooking.roomId = roomId
+                await connection.invoke("JoinShowTime", infoTicketBooking)
+            }
+
+            const ticketTypeByShowTimeAndRoomDTO = new TicketTypeByShowTimeAndRoomDTO();
+            ticketTypeByShowTimeAndRoomDTO.showTimeId = showTimeId;
+            ticketTypeByShowTimeAndRoomDTO.roomId = roomId;
+
+            dispatch(TicketTypeAction(ticketTypeByShowTimeAndRoomDTO))
+
+            const seatByShowTimeAndRoomDTO = new SeatByShowTimeAndRoomDTO();
+            seatByShowTimeAndRoomDTO.showTimeId = showTimeId;
+            seatByShowTimeAndRoomDTO.roomId = roomId;
+
+            dispatch(SeatAction(seatByShowTimeAndRoomDTO))
+            dispatch(ComboAction(theaterId))
+
+            setShowTicketType_Seat_Combo(true)
+            setSelectedShowTimeId(showTimeId)
+            setSelectedTheaterId(theaterId)
+            setselectedRoomId(roomId)
+        };
+
+        if (theaterId && showTimeId && roomId) {
+            showTimeIdHandle(showTimeId, roomId, theaterId)
+        }
+    }, [theaterId, showTimeId, roomId, dispatch]);
 
     return (
         <>
-        <main className='app-main'>
                 <div className="app-content">
                     <section className="sec-detail">
                         <div className="detail ht">
@@ -125,9 +200,17 @@ const Detail = () => {
                             </div>
                         </div>
                     </section>
-                    <Theater MovieDetail={movieDetail}></Theater>
+                <Theater 
+                    MovieDetail={movieDetail} 
+                    theaterId={selectedTheaterId}
+                    showTimeId={selectedShowTimeId}
+                    roomId={selectedRoomId}
+                    showTicketType_Seat_Combo={showTicketType_Seat_Combo}
+                    selectedShowTime={selectedShowTime}
+                    selectedheaterName={selectedheaterName}
+                    activeDateIndex={activeDateIndex}
+                />
                 </div>
-        </main>
         </>
     );
 }

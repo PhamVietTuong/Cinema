@@ -151,16 +151,14 @@ CREATE TABLE [SeatTypeTicketType] (
 )
 
 CREATE TABLE [Seat] (
-	[Id] uniqueidentifier NOT NULL,
 	[RoomId] uniqueidentifier NOT NULL,
-	[SeatTypeId] uniqueidentifier NULL,
 	[ColIndex] int NOT NULL,
 	[RowName] nvarchar(255) NOT NULL,
+	[SeatTypeId] uniqueidentifier NULL,
 	[IsSeat] bit NOT NULL,
-	PRIMARY KEY (Id),
+	CONSTRAINT PK_Seat PRIMARY KEY ([RoomId], [ColIndex], [RowName]),
 	CONSTRAINT FK_Seat_Room FOREIGN KEY ([RoomId]) REFERENCES [Room] (Id),
 	CONSTRAINT FK_Seat_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES SeatType(Id),
-	CONSTRAINT UQ_Seat_RoomId_ColIndex_RowName UNIQUE (RoomId, ColIndex, RowName)
 )
 
 CREATE TABLE [ShowTime] (
@@ -202,34 +200,37 @@ CREATE TABLE FoodAndDrinkTheater (
 )
 
 CREATE TABLE [Invoice] (
-	Id uniqueidentifier NOT NULL,
 	[UserId] uniqueidentifier NOT NULL,
-	[Code] nvarchar(255)  NOT NULL,
+	[Code] nvarchar(100)  NOT NULL,
 	[CreationTime] datetime NOT NULL,
-	PRIMARY KEY (Id),
+	[Status] bit NOT NULL,
+	PRIMARY KEY ([Code]),
 	CONSTRAINT FK_Invoice_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
 )
 
 CREATE TABLE [InvoiceTicket] (
-	[InvoiceId] uniqueidentifier NOT NULL,
+	[Code] nvarchar(100)  NOT NULL,
 	[ShowTimeId] uniqueidentifier NOT NULL,
-	[SeatId] uniqueidentifier NOT NULL,
 	[TicketTypeId] uniqueidentifier NOT NULL,
+	[RoomId] uniqueidentifier NOT NULL,
+	[ColIndex] int NOT NULL,
+	[RowName] nvarchar(255) NOT NULL,
+	[SeatName] nvarchar(255) NOT NULL,
 	[Price] float NOT NULL,
-	PRIMARY KEY ([InvoiceId], [ShowTimeId], [SeatId], [TicketTypeId]),
-	CONSTRAINT FK_InvoiceTicket_Invoice FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
+	CONSTRAINT PK_InvoiceTicket PRIMARY KEY ([Code], [ShowTimeId], [RoomId], [ColIndex], [RowName], [TicketTypeId]),
+	CONSTRAINT FK_InvoiceTicket_Code FOREIGN KEY ([Code]) REFERENCES [Invoice] ([Code]),
 	CONSTRAINT FK_InvoiceTicket_ShowTime FOREIGN KEY ([ShowTimeId]) REFERENCES [ShowTime] (Id),
-	CONSTRAINT FK_InvoiceTicket_Seat FOREIGN KEY ([SeatId]) REFERENCES [Seat] (Id),
 	CONSTRAINT FK_InvoiceTicket_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
+	CONSTRAINT FK_InvoiceTicket_Seat FOREIGN KEY ([RoomId], [ColIndex], [RowName]) REFERENCES [Seat] ([RoomId], [ColIndex], [RowName])
 )
 
 CREATE TABLE [InvoiceFoodAndDrink] (
-	[InvoiceId] uniqueidentifier NOT NULL,
+	[Code] nvarchar(100) NOT NULL,
 	[FoodAndDrinkId] uniqueidentifier NOT NULL,
 	[Quantity] int NOT NULL,
 	[Price] float NOT NULL,
-	PRIMARY KEY ([InvoiceId], [FoodAndDrinkId]),
-	CONSTRAINT FK_InvoiceFoodAndDrink_Invoice FOREIGN KEY ([InvoiceId]) REFERENCES [Invoice] (Id),
+	PRIMARY KEY ([Code], [FoodAndDrinkId]),
+	CONSTRAINT FK_InvoiceFoodAndDrink_Invoice FOREIGN KEY ([Code]) REFERENCES [Invoice] ([Code]),
 	CONSTRAINT FK_InvoiceFoodAndDrink_FoodAndDrink FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
 )
 

@@ -4,8 +4,9 @@ body {
   line-height: 1.55;
   font-weight: 400;
   color: #f8fafc !important;
-  overflow: hidden auto;
   min-height: 100vh;
+  padding-right: 0 !important;
+    overflow: visible !important;
 }
 
 body::before {
@@ -19,7 +20,19 @@ body::before {
   background-color: #0F172A;
 }
 
-@media screen and (min-width: 2000px) {
+.app-main,
+.main {
+  position: relative;
+}
+
+.app-main,
+.main {
+  min-height: 68vh;
+  padding-top: 190px;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+@media (min-width: 2000px) {
   body {
     font-size: 20px;
   }
@@ -529,4 +542,114 @@ button {
     padding: 0;
 }
 
+.app-main:before,
+.main:before {
+  background-color: #0f172a;
+  bottom: 0;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -5;
+}
 
+.btn--second {
+  color: #f8fafc;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn--second::before,
+.btn--second::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  transition: all 0.4s ease-in-out;
+}
+
+.btn--second::before {
+  width: 100%;
+  background: #639;;
+  z-index: -2;
+  right: 0;
+  top: 0;
+}
+
+.btn--second::after {
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #FF6D00 0%, #FFC107 100%);
+  z-index: -1;
+}
+
+.btn--second:hover {
+  color: var(--color-white);
+}
+
+.btn--second:hover img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
+}
+
+.btn--second:hover::before {
+  width: 0;
+}
+
+.btn--second:hover::after {
+  width: 100%;
+}
+
+.btn--white {
+  color: #fff !important;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease-in-out !important;
+  border: 1px solid #fff !important;
+}
+
+.btn--white::before,
+.btn--white::after {
+  content: '';
+  height: 100%;
+  width: 1px;
+  transition: all 0.4s ease-in-out;
+  position: absolute;
+}
+
+.btn--white::before {
+  width: 100%;
+  background: transparent;
+  z-index: -2;
+  right: 0;
+  top: 0;
+}
+
+.btn--white::after {
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #FF6D00 0%, #FFC107 100%);
+  z-index: -1;
+}
+
+.btn--white:hover {
+  color: #fff;
+}
+
+.btn--white:hover img {
+  transition: all .2s;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7487%) hue-rotate(198deg) brightness(105%) contrast(101%);
+}
+
+.btn--white:hover::before {
+  width: 0;
+}
+
+.btn--white:hover::after {
+  width: 100%;
+}
