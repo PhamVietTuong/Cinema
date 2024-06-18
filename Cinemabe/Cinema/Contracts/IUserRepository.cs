@@ -10,5 +10,6 @@ namespace Cinema.Contracts
 		Task<string> SendAuthenticationCode(string email);
         Task<TokenInfo> GenerateToken(string userIdentifier, string userType = null);
         Task<User> ValidateLogin(string identifier, string password, string userType = null);
+		Task<bool> ChangePassword(string changePassword, string userName);
     }
 }

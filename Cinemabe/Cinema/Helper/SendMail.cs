@@ -1,30 +1,31 @@
+using System;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 public class SendMail
 {
     private readonly string _smtpServer;
-    private readonly int _smtpPort;
     private readonly string _smtpUser;
     private readonly string _smtpPass;
 
-    public SendMail(string smtpPass = "0203ckccinema", string smtpUser = "ckccinema@gmail.com", int smtpPort = 587, string smtpServer = "smtp.gmail.com")
+    //username and password: ckccinema@gmail.com | 0203ckccinema
+    public SendMail(string smtpPass = "ngos xncu ntiz anyp", string smtpUser = "ckccinema@gmail.com", string smtpServer = "smtp.gmail.com")
     {
         _smtpServer = smtpServer;
-        _smtpPort = smtpPort;
         _smtpUser = smtpUser;
         _smtpPass = smtpPass;
     }
 
-    public async Task SendEmailAsync(string toEmail, string subject, string body)
+    public async Task<bool> SendEmailAsync(string toEmail, string subject, dynamic body)
     {
         try
         {
             var smtpClient = new SmtpClient(_smtpServer)
             {
-                Port = _smtpPort,
+                Port = 587,
                 Credentials = new NetworkCredential(_smtpUser, _smtpPass),
-                EnableSsl = true,
+                EnableSsl = true, // Sử dụng STARTTLS
             };
 
             var mailMessage = new MailMessage
@@ -39,11 +40,26 @@ public class SendMail
 
             await smtpClient.SendMailAsync(mailMessage);
             Console.WriteLine("Email sent successfully.");
+            return true;
+        }
+        catch (SmtpException smtpEx)
+        {
+            Console.WriteLine($"SMTP error: {smtpEx.Message}");
+            Console.WriteLine($"StatusCode: {smtpEx.StatusCode}");
+            if (smtpEx.InnerException != null)
+            {
+                Console.WriteLine($"Inner exception: {smtpEx.InnerException.Message}");
+            }
+            return false;
         }
         catch (Exception ex)
         {
-            // Xử lý lỗi khi gửi email
             Console.WriteLine($"Gửi email thất bại: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+            }
+            return false;
         }
     }
 }

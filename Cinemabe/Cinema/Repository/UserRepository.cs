@@ -14,15 +14,15 @@ namespace Cinema.Repository
 	public class UserRepository : IUserRepository
 	{
 		private readonly CinemaContext _context;
-        private readonly IConfiguration _configuration;
+		private readonly IConfiguration _configuration;
 
-        public UserRepository(CinemaContext context, IConfiguration configuration)
-        {
-            _context = context;
-            _configuration = configuration;
-        }
+		public UserRepository(CinemaContext context, IConfiguration configuration)
+		{
+			_context = context;
+			_configuration = configuration;
+		}
 
-        public async Task<User> CreateAsync(User entity)
+		public async Task<User> CreateAsync(User entity)
 		{
 			PasswordHashSalt passwordHashSalt = PasswordUtils.EncryptPassword(entity.PasswordHash);
 			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "User");
@@ -131,95 +131,95 @@ namespace Cinema.Repository
 			//return new OkResult();
 		}
 
-        public async Task<User> ValidateLogin(string userName, string password, string userType = null)
-        {
-            User userToValidate = null;
+		public async Task<User> ValidateLogin(string userName, string password, string userType = null)
+		{
+			User userToValidate = null;
 
-            if (userType == "user")
-            {
-                userToValidate = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
-            }
-            else if (userType == "admin")
-            {
-                userToValidate = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
-            }
+			if (userType == "user")
+			{
+				userToValidate = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+			}
+			else if (userType == "admin")
+			{
+				userToValidate = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+			}
 
-            return ValidateLogin(userToValidate, password);
-        }
+			return ValidateLogin(userToValidate, password);
+		}
 
-        public User ValidateLogin(User userToValidate, string password)
-        {
-            if (userToValidate != null)
-            {
-                PasswordHashSalt passwordHashSalt = new PasswordHashSalt
-                {
-                    Hash = userToValidate.PasswordHash,
-                    Salt = userToValidate.PasswordSalt
-                };
+		public User ValidateLogin(User userToValidate, string password)
+		{
+			if (userToValidate != null)
+			{
+				PasswordHashSalt passwordHashSalt = new PasswordHashSalt
+				{
+					Hash = userToValidate.PasswordHash,
+					Salt = userToValidate.PasswordSalt
+				};
 
-                if (PasswordUtils.ValidatePassword(password, passwordHashSalt))
-                {
-                    return userToValidate;
-                }
-            }
+				if (PasswordUtils.ValidatePassword(password, passwordHashSalt))
+				{
+					return userToValidate;
+				}
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        public async Task<TokenInfo> GenerateToken(string userName, string userType = null)
-        {
-            User user = null;
-            string authority = string.Empty;
-            int allowedHours = 3;
+		public async Task<TokenInfo> GenerateToken(string userName, string userType = null)
+		{
+			User user = null;
+			string authority = string.Empty;
+			int allowedHours = 3;
 
-            if (userType == "user")
-            {
-                user = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+			if (userType == "user")
+			{
+				user = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
 				authority = "user";
-            }
-            else if (userType == "admin")
-            {
-                user = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
-                authority = "admin";
-            }
+			}
+			else if (userType == "admin")
+			{
+				user = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+				authority = "admin";
+			}
 
-            if (user != null)
-            {
-                user.UserType = await _context.UserType.FindAsync(user.UserTypeId);
+			if (user != null)
+			{
+				user.UserType = await _context.UserType.FindAsync(user.UserTypeId);
 
-                var role = user.UserType.Name;
-                var userId = user.Id.ToString();
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]);
-                DateTime expirationTime = DateTime.Now.AddHours(allowedHours);
+				var role = user.UserType.Name;
+				var userId = user.Id.ToString();
+				var tokenHandler = new JwtSecurityTokenHandler();
+				var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]);
+				DateTime expirationTime = DateTime.Now.AddHours(allowedHours);
 
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.Role, role), new Claim(ClaimTypes.NameIdentifier, userId) }),
-                    Issuer = _configuration["JWT:ValidIssuer"],
-                    Audience = _configuration["JWT:ValidAudience"],
-                    Expires = expirationTime,
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
+				var tokenDescriptor = new SecurityTokenDescriptor
+				{
+					Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.Role, role), new Claim(ClaimTypes.NameIdentifier, userId) }),
+					Issuer = _configuration["JWT:ValidIssuer"],
+					Audience = _configuration["JWT:ValidAudience"],
+					Expires = expirationTime,
+					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+				};
+				var token = tokenHandler.CreateToken(tokenDescriptor);
 
-                return new TokenInfo
-                {
-                    Token = tokenHandler.WriteToken(token),
-                    ExpirationTime = expirationTime,
-                    Authority = authority
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
+				return new TokenInfo
+				{
+					Token = tokenHandler.WriteToken(token),
+					ExpirationTime = expirationTime,
+					Authority = authority
+				};
+			}
+			else
+			{
+				return null;
+			}
+		}
 
 		//create method send authentication code via email
 		public async Task<string> SendAuthenticationCode(string email)
 		{
-			var user = await _context.User.FirstOrDefaultAsync(x => x.Email == email);
+			var user = await _context.User.Where(x => x.Email == email).FirstOrDefaultAsync();
 
 			if (user == null)
 			{
@@ -228,19 +228,27 @@ namespace Cinema.Repository
 
 			var code = new Random().Next(100000, 999999).ToString();
 
-			//send mail
-			try
-			{
-				// Gửi email
-				SendMail provider = new();
-				await provider.SendEmailAsync(email, "Mã xác nhận của bạn", $"Mã xác nhận của bạn là: {code}");
-				return code;
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"error: {ex.Message}");
-			}
-			return null;
+
+			// Gửi email
+			SendMail provider = new();
+			var result = await provider.SendEmailAsync(email, "Mã xác nhận của bạn", $"<H1>Mã xác nhận của bạn là: {code}</H1>");
+			return result ? code : null;
 		}
-    }
+
+		public async Task<bool> ChangePassword(string PassWord, string UserName)
+		{
+			var user = await _context.User.Where(x => x.UserName == UserName || x.Phone == UserName || x.Email == UserName).FirstOrDefaultAsync();
+
+			if (user == null)
+			{
+				return false;
+			}
+			var passwordHashSalt = PasswordUtils.EncryptPassword(PassWord);
+			user.PasswordHash = passwordHashSalt.Hash;
+			user.PasswordSalt = passwordHashSalt.Salt;
+			_context.User.Update(user);
+			await _context.SaveChangesAsync();
+			return true;
+		}
+	}
 }
