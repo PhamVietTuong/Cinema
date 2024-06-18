@@ -42,12 +42,12 @@ class TicketBox extends StatelessWidget {
                   color: Styles.boldTextColor["dark_purple"],
                   fontSize: Styles.textSize),
             ),
-            Text(
-              Styles.formatter.format(price),
-              style: TextStyle(
-                  color: Styles.boldTextColor["dark_purple"],
-                  fontSize: Styles.textSize),
-            ),
+            // Text(
+            //   Styles.formatter.format(price),
+            //   style: TextStyle(
+            //       color: Styles.boldTextColor["dark_purple"],
+            //       fontSize: Styles.textSize),
+            // ),
           ],
         ),
       ),

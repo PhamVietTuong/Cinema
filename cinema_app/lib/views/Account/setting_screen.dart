@@ -1,8 +1,5 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/Account/language_dropdown.dart';
-import 'package:cinema_app/views/Account/mode_theme.dart';
-import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -117,25 +114,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ],
                     ),
-                    ThemeSwitchingArea(child: ThemeSwitcher(
-                      builder: (context) {
-                        bool isDarkMode =
-                            ThemeModelInheritedNotifier.of(context)
-                                    .theme
-                                    .brightness ==
-                                Brightness.light;
-                        String themeName = isDarkMode ? 'dark' : 'light';
-                        return DayNightSwitcherIcon(
-                            isDarkModeEnabled: isDarkMode,
-                            onStateChanged: (bool darkMode) async {
-                              var service = await ThemeService.instance
-                                ..save(darkMode ? 'light' : 'dark');
-                              var theme = service.getByName(themeName);
-                              ThemeSwitcher.of(context).changeTheme(
-                                  theme: theme, isReversed: darkMode);
-                            });
-                      },
-                    ))
                   ],
                 ),
               ),

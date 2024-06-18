@@ -56,11 +56,11 @@ class _ComboItemState extends State<ComboItem> {
                       style: TextStyle(
                           fontSize: Styles.textSize,
                           color: Styles.textColor["dark_purple"])),
-                  Text(Styles.formatter.format(widget.item.price),
-                      style: TextStyle(
-                          fontSize: Styles.textSize,
-                          fontWeight: FontWeight.bold,
-                          color: Styles.textColor["dark_purple"])),
+                  // Text(Styles.formatter.format(widget.item.price),
+                  //     style: TextStyle(
+                  //         fontSize: Styles.textSize,
+                  //         fontWeight: FontWeight.bold,
+                  //         color: Styles.textColor["dark_purple"])),
                 ],
               ),
             ),

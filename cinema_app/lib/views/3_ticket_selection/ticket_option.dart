@@ -57,14 +57,14 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
                 ),
                 Row(
                   children: [
-                    Container(
-                        margin: const EdgeInsets.only(right: 15),
-                        child: Text(
-                          Styles.formatter.format(widget.option.price),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Styles.boldTextColor["dark_purple"]),
-                        )),
+                    // Container(
+                    //     margin: const EdgeInsets.only(right: 15),
+                    //     child: Text(
+                    //       Styles.formatter.format(widget.option.price),
+                    //       style: TextStyle(
+                    //           fontWeight: FontWeight.bold,
+                    //           color: Styles.boldTextColor["dark_purple"]),
+                    //     )),
                     BtnUpDown(
                         colorText: Styles.btnColor["dark_purple"],
                         upDown: updown),

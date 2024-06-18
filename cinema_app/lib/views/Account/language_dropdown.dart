@@ -1,6 +1,6 @@
-import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:cinema_app/config.dart';
 
 class LanguageDropdown extends StatefulWidget {
   const LanguageDropdown({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class LanguageDropdown extends StatefulWidget {
 class _LanguageDropdownState extends State<LanguageDropdown> {
   @override
   Widget build(BuildContext context) {
-    final locale = EasyLocalization.of(context)?.locale ?? Locale('en');
+    final locale = EasyLocalization.of(context)?.locale ?? const Locale('en');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -20,24 +20,21 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
         DropdownButton<String>(
           value: locale.languageCode,
           onChanged: (String? newValue) {
-            setState(() {
-              EasyLocalization.of(context)?.setLocale(Locale(newValue!));
-            });
+            if (newValue != null) {
+              setState(() {
+                EasyLocalization.of(context)?.setLocale(Locale(newValue!));
+              });
+            }
           },
-          dropdownColor: Styles.backgroundContent["dark_purple"],
+          dropdownColor: Styles.backgroundContent["dark_purple"], // Cần đảm bảo Styles.backgroundContent["dark_purple"] đã được định nghĩa trong config.dart
           underline: Container(),
-          icon: Icon(Icons.keyboard_arrow_right,),
-             // color: Styles.boldTextColor["dark_purple"]),
+          icon: const Icon(Icons.keyboard_arrow_right),
           items: <String>['en', 'vi']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value == 'vi' ? 'English' : 'Tiếng Việt',
-               // style: TextStyle(color: Styles.boldTextColor["dark_purple"]),
-              ),
-            );
-          }).toList(),
+              .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value == 'vi' ? 'English' : 'Tiếng Việt'),
+                  ))
+              .toList(),
         ),
       ],
     );

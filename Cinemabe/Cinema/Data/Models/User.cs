@@ -18,6 +18,7 @@ namespace Cinema.Data.Models
 		[JsonIgnore]
 		public string PasswordSalt { get; set; }
 		public bool Gender { get; set; }
+        [JsonIgnore]
         public bool Status { get; set; }
     }
 }

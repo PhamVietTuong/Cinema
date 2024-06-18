@@ -89,12 +89,12 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                 botBorderW: bW,
                 titleMinWith: sW * 0.21,
               ),
-              InfoBar(
-                title: "Tổng cộng",
-                value: Styles.formatter.format(widget.booking.getTotalPrice()),
-                botBorderW: 0.5,
-                titleMinWith: sW * 0.21,
-              ),
+              // InfoBar(
+              //   title: "Tổng cộng",
+              //   value: Styles.formatter.format(widget.booking.getTotalPrice()),
+              //   botBorderW: 0.5,
+              //   titleMinWith: sW * 0.21,
+              // ),
               InfoBar(
                 title: "Trạng thái",
                 value: "Thành công",

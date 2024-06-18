@@ -1,39 +1,6 @@
 import 'package:flutter/material.dart';
 
 var serverUrl = 'https://10.0.2.2:7209';
-
-ThemeData lightTheme = ThemeData.light();
-
-ThemeData darkTheme = ThemeData.dark().copyWith(
-  // màu nền scaffold
-  scaffoldBackgroundColor: Styles.backgroundColor["dark_purple"],
-  
-  primaryColor: Styles.backgroundContent["dark_purple"],
-  textTheme: TextTheme(
-    bodySmall: TextStyle(color: Styles.textColor["dark_purple"]),
-    bodyLarge: TextStyle(color: Styles.textColor["dark_purple"]),
-    titleLarge: TextStyle(color: Styles.boldTextColor["dark_purple"]),
-    titleSmall: TextStyle(color: Styles.titleColor["dark_purple"]),
-  ),
-  buttonTheme: ButtonThemeData(
-    buttonColor: Styles.btnColor["dark_purple"],
-  ),
-  colorScheme: ColorScheme.dark(
-    primary: Styles.btnColor["dark_purple"]!,
-    onPrimary: Styles.boldTextColor["dark_purple"]!,
-    surface: Styles.backgroundContent["dark_purple"]!,
-    onSurface: Styles.textColor["dark_purple"]!,
-).copyWith(
-    secondary: Styles.gradientBot["dark_purple"],
-),
-
-  textSelectionTheme: TextSelectionThemeData(
-    cursorColor: Styles.textSelectionColor["dark_purple"],
-    selectionColor: Styles.textSelectionColor["dark_purple"],
-    selectionHandleColor: Styles.textSelectionColor["dark_purple"],
-  ),
-);
-
 class Styles {
   static const backgroundColor = {
     "dark_purple": Color(0xFF272042),
