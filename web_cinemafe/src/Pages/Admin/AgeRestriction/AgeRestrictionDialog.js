@@ -61,7 +61,6 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
     };
 
     const validateField = async (name, value) => {
-        if (value) {
             try {
                 await yup.reach(schema, name).validate(value);
                 setErrors({
@@ -74,13 +73,11 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                     [name]: error.errors[0],
                 });
             }
-        }
     };
 
     const handleSubmit = async () => {
         try {
             await schema.validate(formData, { abortEarly: false });
-            console.log(schema.validate(formData, { abortEarly: false }));
             if (isEditing) {
                 dispatch(UpdateAgeRestrictionAction(formData));
             } else {
@@ -112,7 +109,6 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                     </DialogTitle>
                     <DialogContent>
                         <TextField
-                            autoFocus
                             margin="dense"
                             name="name"
                             label="Name"
