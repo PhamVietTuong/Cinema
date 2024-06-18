@@ -22,6 +22,7 @@ const BookTicket = (props) => {
         );
         setFilteredSchedules(filtered);
     }, [props.bookTicket.schedules]);
+    
     return (
         <>
             <div className="movies-wr">

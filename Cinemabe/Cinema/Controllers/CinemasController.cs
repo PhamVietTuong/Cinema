@@ -1,18 +1,15 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data.Enum;
-using Cinema.Data.Models;
 using Cinema.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using System.Net;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace Cinema.Controllers
 {
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class CinemasController : ControllerBase
     {
@@ -28,6 +25,7 @@ namespace Cinema.Controllers
 
         #region Search theater, movie
         [HttpGet("SearchByName{name}")]
+        [AllowAnonymous]
         public async Task<ActionResult> Search(string name)
         {
 
@@ -59,7 +57,7 @@ namespace Cinema.Controllers
         #region Movie
 
         [HttpGet("GetMovieList")]
-        //[Authorize(Roles = user)]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()
         {
             try
@@ -74,6 +72,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("MovieDetail")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieDetail(MovieDetailDTO movieDetailDTO)
         {
             try
@@ -88,6 +87,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetMovieTheaterId{theaterId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieTheaterId(Guid theaterId)
         {
             try
@@ -106,6 +106,7 @@ namespace Cinema.Controllers
         #region FoodAndDrink
 
         [HttpGet("ComboByTheaterId/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<ComboViewModel>>> ComboByTheaterId(Guid id)
         {
             try
@@ -125,6 +126,7 @@ namespace Cinema.Controllers
 
         #region Seat
         [HttpPost("SeatByShowTimeAndRoomId")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<SeatViewModel>>> SeatByShowTimeAndRoomId(SeatByShowTimeAndRoomDTO vm)
         {
             try
@@ -143,6 +145,7 @@ namespace Cinema.Controllers
         #region Theater
 
         [HttpGet("GetTheaterList")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<TheaterDTO>>> GetTheaterList()
         {
             try
@@ -163,6 +166,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetShowTimeByTheaterId{theaterId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetShowTimeByTheaterId(Guid theaterId)
         {
 
@@ -178,6 +182,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetTheater/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TheaterDTO>> GetTheater(Guid id)
         {
             try
@@ -202,6 +207,7 @@ namespace Cinema.Controllers
         #region TicketType
 
         [HttpPost("TicketTypeByShowTimeAndRoomId")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<TicketTypeViewModel>>> TicketTypeByShowTimeAndRoomId(TicketTypeByShowTimeAndRoomDTO vm)
         {
             try
@@ -218,7 +224,9 @@ namespace Cinema.Controllers
         #endregion
 
         #region Date
+
         [HttpGet("GetDateByMovieId/{movieId}/{ProjectionForm}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<DateTime>>> GetDateByMovieID(Guid movieId, ProjectionForm ProjectionForm)
         {
             try
@@ -237,10 +245,13 @@ namespace Cinema.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
         #endregion
 
         #region ShowtimeByDate
+
         [HttpGet("GetShowTimeByMovieID/{movieId}/{date}/{ProjectionForm}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetShowTimeByMovieID(Guid movieId, DateTime date, ProjectionForm ProjectionForm)
         {
             try
@@ -254,16 +265,75 @@ namespace Cinema.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
         #endregion
 
         #region Invoice
 
         [HttpGet("GetInvoice/{code}")]
-        public async Task<ActionResult<List<ShowTimeRowViewModel>>> GetInvoice(string code)
+        [Authorize(Roles = user)]
+        public async Task<ActionResult<InvoiceViewModel>> GetInvoice(string code)
         {
             try
             {
                 var result = await _uow.InvoiceRepository.GetInvoiceAsync(code);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region AgeRestriction
+
+        [HttpGet("GetAgeRestrictionList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<AgeRestrictionDTO>>> GetAgeRestrictionList()
+        {
+            try
+            {
+                var result = await _uow.AgeRestrictionRepository.GetAgeRestrictionListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateAgeRestriction")]
+        [AllowAnonymous]
+        public async Task<ActionResult<AgeRestrictionDTO>> UpdateAgeRestriction(AgeRestrictionDTO entity)
+        {
+            try
+            {
+                if (!await _uow.AgeRestrictionRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _uow.AgeRestrictionRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateAgeRestriction")]
+        [AllowAnonymous]
+        public async Task<ActionResult<AgeRestrictionDTO>> CreateAgeRestriction(AgeRestrictionDTO entity)
+        {
+            try
+            {
+                var result = await _uow.AgeRestrictionRepository.CreateAsync(entity);
 
                 return Ok(result);
             }

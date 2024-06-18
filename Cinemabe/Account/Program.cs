@@ -18,13 +18,13 @@ namespace Cinema.Account
 			   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 			IConfigurationRoot config = builder.Build();
 
-			var optionsBuilder = new DbContextOptionsBuilder<CinemaContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<CinemaContext>();
 			optionsBuilder.UseSqlServer(config.GetSection("ConnectionStrings").GetValue<string>("CinemaContext"));
 			using (var context = new CinemaContext(optionsBuilder.Options))
 			{
-				IUserRepository userRepository = new UserRepository(context);
+				IUserRepository userRepository = new UserRepository(context, config);
 
-				var newUser = new Data.Models.User
+				var newUser = new User
 				{
 					UserName = "User",
 					PasswordHash = "Hacker2k3@",
@@ -36,7 +36,7 @@ namespace Cinema.Account
 				};
 				var registeredUser = await userRepository.CreateAsync(newUser);
 
-                Console.WriteLine($"Register success: {"UserName: " + registeredUser.UserName }");
+                Console.WriteLine($"Register success: {"UserName: " + registeredUser.UserName + "Password: " + newUser.PasswordHash}");
                 Console.ReadLine();
             };
 

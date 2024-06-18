@@ -25,6 +25,7 @@ import TicketInfo from '../../../Components/ticketInfo/TicketInfo'
 import { InvoiceDTO } from '../../../Models/InvoiceDTO'
 import { SeatType } from '../../../Enum/SeatType'
 import { InfoSeat } from '../../../Models/InfoSeat'
+import { useNavigate } from 'react-router-dom'
 
 const generateDates = (numDays) => {
     const dates = [];
@@ -62,7 +63,6 @@ const assignTicketsToSeats = (selectedSeats, selectedTicketTypes, seats) => {
     for (let seat of selectedSeats) {
         const { rowName, colIndex } = seat;
         const seatInfo = findSeatByRowAndCol(rowName, colIndex, seats);
-        console.log(seatInfo);
         if (seatInfo && seatInfo.isSeat !== false) {
             const seatTypeId = seatInfo.seatTypeId;
 
@@ -164,6 +164,7 @@ const Theater = (props) => {
     const [invoiceTickets, setInvoiceTickets] = useState([]);
     const [activeDateIndex, setActiveDateIndex] = useState(props.activeDateIndex || 0);
     const [activeTheaterIndex, setActiveTheaterIndex] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (props.theaterId && props.showTimeId && props.roomId && props.selectedShowTime && props.selectedheaterName) {
@@ -439,7 +440,11 @@ const Theater = (props) => {
         return dates.map((date, index) => {
             return (
                 <Nav.Item onClick={() => { setShowTicketType_Seat_Combo(false); setActiveDateIndex(index); }}>
-                    <Nav.Link eventKey={`tab-${index}`} className='swiper-slide'>
+                    <Nav.Link 
+                        eventKey={`tab-${index}`} 
+                        className='swiper-slide'
+                        style={{ marginRight: '32px' }}
+                    >
                         <div class="box-time">
                             <p class="date">{moment(date).format("DD/MM")}</p>
                             <p class="day">{moment(date).format("dddd").replace(/^\w/, (c) => c.toUpperCase())}</p>
@@ -877,7 +882,7 @@ const Theater = (props) => {
                                                     invoiceDTO.theaterId = selectedTheaterId
                                                     invoiceDTO.invoiceTickets = invoiceTickets
                                                     invoiceDTO.foodAndDrinks = Object.entries(countCombos).map((e) => ({ foodAndDrinkId: e[0], quantity: e[1] }))
-                                                    dispatch(TicketBooking(invoiceDTO))
+                                                    dispatch(TicketBooking(invoiceDTO, navigate))
                                                 }
                                             }}
                                             disabled={!checkBooking}

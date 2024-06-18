@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { ShowTimeByTheaterIdAction, TheaterAction } from '../../../Redux/Actions/CinemasAction';
+import { GetInvoiceAction, ShowTimeByTheaterIdAction, TheaterAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
 
 const BookTickets = () => {
@@ -25,6 +25,7 @@ const BookTickets = () => {
         dispatch(TheaterAction(id))
         dispatch(ShowTimeByTheaterIdAction(id))
     }, [dispatch, id]);
+    
     return (
         <>
             <div className="app-content">
@@ -58,7 +59,7 @@ const BookTickets = () => {
                             <Box sx={{ width: '100%', typography: 'body1' }} className='BTSBox'>
                                 <TabContext value={value} className='BTSTabContent'>
                                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className='BTSTabContentBox'>
-                                        <TabList onChange={handleChange} aria-label="lab API tabs example" className='BTSTabList'>
+                                        <TabList onChange={handleChange} aria-label="lab API tabs example" className='BTSTabList' variant="fullWidth">
                                             <Tab label="Phim đang chiếu" value="1" className='BTSTab' />
                                             <Tab label="Phim sắp chiếu" value="2" className='BTSTab' />
                                             <Tab label="Suất chiếu đặc biệt" value="3" className='BTSTab' />

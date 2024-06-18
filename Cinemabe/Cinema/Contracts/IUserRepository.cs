@@ -6,7 +6,9 @@ namespace Cinema.Contracts
 {
 	public interface IUserRepository
 	{
-		Task<User> CreateAsync(User entity); 
+		Task<User> CreateAsync(User entity);
 		Task<string> SendAuthenticationCode(string email);
-	}
+        Task<TokenInfo> GenerateToken(string userIdentifier, string userType = null);
+        Task<User> ValidateLogin(string identifier, string password, string userType = null);
+    }
 }
