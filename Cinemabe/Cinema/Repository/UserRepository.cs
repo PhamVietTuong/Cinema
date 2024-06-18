@@ -14,9 +14,9 @@ namespace Cinema.Repository
 		private readonly CinemaContext _context;
 
 		public UserRepository(CinemaContext context)
-        {
-            _context = context;
-        }
+		{
+			_context = context;
+		}
 
 
 		public async Task<User> CreateAsync(User entity)
@@ -48,7 +48,7 @@ namespace Cinema.Repository
 				entity.PasswordSalt = passwordHashSalt.Salt;
 				await _context.AddAsync(entity);
 			}
-			
+
 			await _context.SaveChangesAsync();
 
 			return entity;
@@ -126,6 +126,33 @@ namespace Cinema.Repository
 			//	await _userManager.AddToRoleAsync(user, "User");
 			//}
 			//return new OkResult();
+		}
+
+		//create method send authentication code via email
+		public async Task<string> SendAuthenticationCode(string email)
+		{
+			var user = await _context.User.FirstOrDefaultAsync(x => x.Email == email);
+
+			if (user == null)
+			{
+				return null;
+			}
+
+			var code = new Random().Next(100000, 999999).ToString();
+
+			//send mail
+			try
+			{
+				// Gửi email
+				SendMail provider = new();
+				await provider.SendEmailAsync(email, "Mã xác nhận của bạn", $"Mã xác nhận của bạn là: {code}");
+				return code;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"error: {ex.Message}");
+			}
+			return null;
 		}
 	}
 }

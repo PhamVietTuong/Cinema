@@ -70,7 +70,7 @@ class InfoMovie extends StatelessWidget {
                 movie.name,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Styles.boldTextColor["dark_purple"],
+                  color: Styles.boldTextColor[Config.themeMode],
                   fontSize: Styles.titleFontSize,
                   fontWeight: FontWeight.w500,
                 ),

@@ -7,6 +7,7 @@ import 'config.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
   await Config.initialize();
   runApp(const MyApp());
 }

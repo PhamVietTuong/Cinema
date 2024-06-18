@@ -38,12 +38,40 @@ class Styles {
 }
 
 class Config {
-  static late SharedPreferences prefs;
-  static String mode = "a";
+  static late SharedPreferences _prefs;
+  static late String? themeMode;
+  static late String? languageMode;
 
   static Future<void> initialize() async {
-    prefs = await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();
+    await loadMode();
   }
 
-  
+  static Future<void> setThemeMode(String mode) async {
+    await _prefs.setString(Constants.themeKey, mode);
+    themeMode = mode;
+  }
+
+  static Future<void> setLanguageMode(String mode) async {
+    await _prefs.setString(Constants.languageKey, mode);
+    languageMode = mode;
+  }
+
+  static Future<void> loadMode() async {
+    themeMode = _prefs.getString(Constants.themeKey);
+    if (themeMode==null) {
+      await setThemeMode(Constants.defaultTheme);
+      themeMode = Constants.defaultTheme;
+    }
+
+    languageMode = _prefs.getString(Constants.languageKey) ?? 'vi_VN';
+  }
+}
+
+class Constants {
+  static const String themeKey = "themeMode";
+  static const String languageKey = "languageMode";
+  static const String defaultTheme = "dark_purple";
+
+  //static const String serverUrl = 'https://10.0.2.2:7209';
 }

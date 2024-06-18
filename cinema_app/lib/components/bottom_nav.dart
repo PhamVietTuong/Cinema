@@ -34,7 +34,7 @@ class _BottomNavState extends State<BottomNav> {
           height: 52,
           child: CurvedNavigationBar(
             index: index,
-            backgroundColor: Styles.backgroundContent["dark_purple"]!,
+            backgroundColor: Styles.backgroundContent[Config.themeMode]!,
             items: const [
               CurvedNavigationBarItem(
                 child: Icon(Icons.home_outlined),

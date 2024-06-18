@@ -14,13 +14,13 @@ class TimeBox extends StatelessWidget {
         children: [
           Icon(
             Icons.timer_outlined,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
           Text(
             "$time phút",
             style: TextStyle(
                 fontSize: Styles.textSize,
-                color: Styles.textColor["dark_purple"]),
+                color: Styles.textColor[Config.themeMode]),
           )
         ],
       ),

@@ -61,7 +61,7 @@ class _ComboScreenState extends State<ComboScreen>
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         leading: IconButton(
           alignment: Alignment.center,
           onPressed: () {
@@ -71,7 +71,7 @@ class _ComboScreenState extends State<ComboScreen>
             Navigator.pop(this.context);
           },
           icon: Icon(Icons.arrow_back_ios_new,
-              color: Styles.boldTextColor["dark_purple"]),
+              color: Styles.boldTextColor[Config.themeMode]),
         ),
         titleSpacing: 0,
         leadingWidth: 45,
@@ -80,13 +80,13 @@ class _ComboScreenState extends State<ComboScreen>
           style: TextStyle(
               fontSize: Styles.appbarFontSize,
               fontWeight: FontWeight.bold,
-              color: Styles.boldTextColor["dark_purple"]),
+              color: Styles.boldTextColor[Config.themeMode]),
         ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        decoration: BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: Column(
           children: [
             Expanded(

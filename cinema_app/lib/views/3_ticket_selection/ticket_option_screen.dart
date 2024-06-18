@@ -113,7 +113,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Styles.backgroundContent["dark_purple"],
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
           leading: IconButton(
             alignment: Alignment.center,
             onPressed: () {
@@ -122,7 +122,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
             },
             icon: Icon(
               Icons.arrow_back_ios_new,
-              color: Styles.boldTextColor["dark_purple"],
+              color: Styles.boldTextColor[Config.themeMode],
             ),
           ),
           titleSpacing: 0,
@@ -132,13 +132,13 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Styles.appbarFontSize,
-                color: Styles.boldTextColor["dark_purple"]),
+                color: Styles.boldTextColor[Config.themeMode]),
           ),
         ),
         body: Center(
           child: Container(
             decoration:
-                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+                BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
@@ -214,7 +214,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                     '${widget.movie.name} ${widget.movie.showTimeTypeName} (${widget.movie.ageRestrictionName})',
                                     style: TextStyle(
                                         color:
-                                            Styles.boldTextColor["dark_purple"],
+                                            Styles.boldTextColor[Config.themeMode],
                                         fontSize: Styles.titleFontSize,
                                         fontWeight: FontWeight.bold)),
                               ),
@@ -227,7 +227,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                       Icons.location_on,
                                       size: Styles.iconSizeInLineText,
                                       color:
-                                          Styles.boldTextColor["dark_purple"],
+                                          Styles.boldTextColor[Config.themeMode],
                                     ),
                                     Expanded(
                                       flex: 1,
@@ -237,7 +237,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                             "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
                                             style: TextStyle(
                                               color: Styles
-                                                  .textColor["dark_purple"],
+                                                  .textColor[Config.themeMode],
                                               fontSize: Styles.textSize,
                                             )),
                                       ),
@@ -251,7 +251,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                   Icon(
                                     Icons.av_timer_rounded,
                                     size: Styles.iconSizeInLineText,
-                                    color: Styles.boldTextColor["dark_purple"],
+                                    color: Styles.boldTextColor[Config.themeMode],
                                   ),
                                   Expanded(
                                     flex: 1,
@@ -262,7 +262,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                           softWrap: true,
                                           style: TextStyle(
                                             color:
-                                                Styles.textColor["dark_purple"],
+                                                Styles.textColor[Config.themeMode],
                                             fontSize: Styles.textSize,
                                           )),
                                     ),
@@ -291,7 +291,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                           Text(
                             "Đang tải...",
                             style: TextStyle(
-                                color: Styles.boldTextColor["dark_purple"],
+                                color: Styles.boldTextColor[Config.themeMode],
                                 fontSize: Styles.titleFontSize),
                           )
                         ],

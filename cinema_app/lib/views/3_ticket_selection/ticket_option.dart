@@ -29,15 +29,15 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
               begin: Alignment.bottomLeft,
               end: Alignment.bottomRight,
               colors: [
-                Styles.gradientTop["dark_purple"]!,
-                Styles.gradientBot["dark_purple"]!
+                Styles.gradientTop[Config.themeMode]!,
+                Styles.gradientBot[Config.themeMode]!
               ])),
       child: Container(
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.only(bottom: 3),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(3.0),
-            color: Styles.backgroundContent["dark_purple"]),
+            color: Styles.backgroundContent[Config.themeMode]),
         child: Column(
           children: [
             Row(
@@ -49,7 +49,7 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: Styles.textSize,
-                        color: Styles.boldTextColor["dark_purple"]),
+                        color: Styles.boldTextColor[Config.themeMode]),
                   ),
                 ),
                 const SizedBox(
@@ -63,22 +63,22 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
                           Styles.formatter.format(widget.option.price),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Styles.boldTextColor["dark_purple"]),
+                              color: Styles.boldTextColor[Config.themeMode]),
                         )),
                     BtnUpDown(
-                        colorText: Styles.btnColor["dark_purple"],
+                        colorText: Styles.btnColor[Config.themeMode],
                         upDown: updown),
                     Container(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Text(
                           widget.option.quantity.toString().padLeft(2, '0'),
                           style: TextStyle(
-                              color: Styles.boldTextColor["dark_purple"],
+                              color: Styles.boldTextColor[Config.themeMode],
                               fontWeight: FontWeight.bold),
                         )),
                     BtnUpDown(
                       isUp: true,
-                      colorText: Styles.btnColor["dark_purple"],
+                      colorText: Styles.btnColor[Config.themeMode],
                       upDown: updown,
                     ),
                   ],
