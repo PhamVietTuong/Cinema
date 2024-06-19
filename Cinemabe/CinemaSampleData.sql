@@ -21,13 +21,17 @@ DELETE FROM FoodAndDrink;
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 
+--user type
+set @NEW_GUID =NEWID();
+insert UserType(Id, Name) values (@NEW_GUID, N'Admin')
+set @NEW_GUID =NEWID();
+insert UserType(Id, Name) values (@NEW_GUID, N'User')
+
 DECLARE @GUID_theater1 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater2 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater3 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater4 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater5 UNIQUEIDENTIFIER;
-
-
 
 --theater
 SET @GUID_theater1 = NEWID();

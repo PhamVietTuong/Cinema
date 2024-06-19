@@ -23,8 +23,8 @@ class TicketBox extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           gradient: LinearGradient(colors: [
-            Styles.gradientTop["dark_purple"]!,
-            Styles.gradientBot["dark_purple"]!,
+            Styles.gradientTop[Config.themeMode]!,
+            Styles.gradientBot[Config.themeMode]!,
           ])),
       child: Container(
         constraints: const BoxConstraints(minWidth: 55),
@@ -32,22 +32,23 @@ class TicketBox extends StatelessWidget {
           horizontal: 5,
         ),
         decoration: BoxDecoration(
-            color: Styles.backgroundContent["dark_purple"],
+            color: Styles.backgroundContent[Config.themeMode],
             borderRadius: BorderRadius.circular(5)),
         child: Column(
           children: [
             Text(
               name,
               style: TextStyle(
-                  color: Styles.boldTextColor["dark_purple"],
+                  color: Styles.boldTextColor[Config.themeMode],
                   fontSize: Styles.textSize),
             ),
-            // Text(
-            //   Styles.formatter.format(price),
-            //   style: TextStyle(
-            //       color: Styles.boldTextColor["dark_purple"],
-            //       fontSize: Styles.textSize),
-            // ),
+
+            Text(
+              Styles.formatter.format(price),
+              style: TextStyle(
+                  color: Styles.boldTextColor[Config.themeMode],
+                  fontSize: Styles.textSize),
+            ),
           ],
         ),
       ),

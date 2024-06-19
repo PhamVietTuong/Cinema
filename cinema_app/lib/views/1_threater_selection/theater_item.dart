@@ -32,7 +32,7 @@ class TheaterItem extends StatelessWidget {
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10, top:8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
-            color: Styles.backgroundContent["dark_purple"],
+            color: Styles.backgroundContent[Config.themeMode],
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.5),
@@ -73,7 +73,7 @@ class TheaterItem extends StatelessWidget {
                       Text(
                         data.name,
                         style: TextStyle(
-                            color: Styles.boldTextColor["dark_purple"],
+                            color: Styles.boldTextColor[Config.themeMode],
                             fontWeight: FontWeight.bold,
                             fontSize: 18),
                       ),
@@ -81,7 +81,7 @@ class TheaterItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                            Icon(Icons.location_on,
-                              size: Styles.iconSizeInLineText, color: Styles.boldTextColor["dark_purple"],),
+                              size: Styles.iconSizeInLineText, color: Styles.boldTextColor[Config.themeMode],),
                           Expanded(
                             flex: 1,
                             child: Container(
@@ -89,7 +89,7 @@ class TheaterItem extends StatelessWidget {
                               child: Text(
                                 data.address,
                                 style:
-                                     TextStyle(fontSize: Styles.textSize, color:Styles.textColor["dark_purple"] ),
+                                     TextStyle(fontSize: Styles.textSize, color:Styles.textColor[Config.themeMode] ),
                                 softWrap: true,
                               ),
                             ),
@@ -101,7 +101,7 @@ class TheaterItem extends StatelessWidget {
                         children: [
                            Icon(Icons.phone_in_talk_rounded,
                               size: Styles.iconSizeInLineText,
-                            color: Styles.boldTextColor["dark_purple"],
+                            color: Styles.boldTextColor[Config.themeMode],
                           ),
                           Container(
                             margin: const EdgeInsets.only(left: 5),
@@ -111,7 +111,7 @@ class TheaterItem extends StatelessWidget {
                                   : "Đang cập nhật",
                               style: TextStyle(
                                   fontSize: Styles.textSize,
-                                  color: Styles.textColor["dark_purple"]),
+                                  color: Styles.textColor[Config.themeMode]),
                             ),
                           )
                         ],

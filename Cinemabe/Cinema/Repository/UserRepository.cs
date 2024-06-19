@@ -296,3 +296,39 @@ namespace Cinema.Repository
 
 	}
 }
+		//create method send authentication code via email
+		public async Task<string> SendAuthenticationCode(string email)
+		{
+			var user = await _context.User.Where(x => x.Email == email).FirstOrDefaultAsync();
+
+			if (user == null)
+			{
+				return null;
+			}
+
+			var code = new Random().Next(100000, 999999).ToString();
+
+
+			// Gửi email
+			SendMail provider = new();
+			var result = await provider.SendEmailAsync(email, "Mã xác nhận của bạn", $"<H1>Mã xác nhận của bạn là: {code}</H1>");
+			return result ? code : null;
+		}
+
+		public async Task<bool> ChangePassword(string PassWord, string UserName)
+		{
+			var user = await _context.User.Where(x => x.UserName == UserName || x.Phone == UserName || x.Email == UserName).FirstOrDefaultAsync();
+
+			if (user == null)
+			{
+				return false;
+			}
+			var passwordHashSalt = PasswordUtils.EncryptPassword(PassWord);
+			user.PasswordHash = passwordHashSalt.Hash;
+			user.PasswordSalt = passwordHashSalt.Salt;
+			_context.User.Update(user);
+			await _context.SaveChangesAsync();
+			return true;
+		}
+	}
+}

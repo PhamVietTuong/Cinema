@@ -5,7 +5,7 @@ import { TheaterListAction } from "../../Redux/Actions/CinemasAction";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer.js/Footer";
 
-const Index = () => {
+const IndexUser = () => {
     const dispatch = useDispatch();
     const { theaterList } = useSelector((state) => state.CinemasReducer)
 
@@ -24,4 +24,4 @@ const Index = () => {
     );
 }
 
-export default Index;
+export default IndexUser;

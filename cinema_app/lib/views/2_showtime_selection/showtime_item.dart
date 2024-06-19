@@ -42,21 +42,21 @@ class ShowtimeItem extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Styles.gradientTop["dark_purple"]!,
-                Styles.gradientBot["dark_purple"]!
+                Styles.gradientTop[Config.themeMode]!,
+                Styles.gradientBot[Config.themeMode]!
               ]),
         ),
         child: Container(
           width: 75,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3.0),
-              color: Styles.backgroundContent["dark_purple"]),
+              color: Styles.backgroundContent[Config.themeMode]),
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
           child: Center(
               child: Text(showtimeRoom.getFormatTime(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Styles.boldTextColor["dark_purple"]))),
+                      color: Styles.boldTextColor[Config.themeMode]))),
         ),
       ),
     );

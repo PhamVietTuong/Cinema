@@ -3,6 +3,7 @@ using Cinema.Data.Models;
 using Cinema.DTOs;
 using Cinema.Helper;
 using Cinema.Repository;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,11 @@ namespace Cinema.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
+
+        public UsersController(IUnitOfWork uow)
+        {
+            _uow = uow;
+        }
 
         public UsersController(IUnitOfWork uow)
         {
@@ -86,5 +92,35 @@ namespace Cinema.Controllers
         }
 
 
+        [HttpPost("SendAuthCode")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SendAuthenticationCode(string email)
+        {
+            if (string.IsNullOrEmpty(email.Trim()))
+            {
+                return BadRequest("Email is empty");
+            }
+
+            if (!Validate.IsEmail(email.Trim()))
+            {
+                return BadRequest("Email is not valid");
+            }
+
+            var authenticationCode = await _uow.UserRepository.SendAuthenticationCode(email.Trim());
+            return authenticationCode != null ? Ok(authenticationCode) : NotFound("Not found user or send email error");
+
+        }
+
+        [HttpPost("ChangePassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangePassword(string changePassword, string userName)
+        {
+            if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(changePassword.Trim())) return BadRequest(" UserName or Password is empty");
+
+            if(Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
+
+            var result = await _uow.UserRepository.ChangePassword(changePassword, userName);
+            return result ? Ok() : NotFound("Not found user");
+        }
     }
 }

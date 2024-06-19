@@ -25,7 +25,7 @@ class _ComboItemState extends State<ComboItem> {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
-          color: Styles.backgroundContent["dark_purple"],
+          color: Styles.backgroundContent[Config.themeMode],
           borderRadius: BorderRadius.circular(4)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,17 +50,18 @@ class _ComboItemState extends State<ComboItem> {
                     style: TextStyle(
                         fontSize: Styles.titleFontSize,
                         fontWeight: FontWeight.bold,
-                        color: Styles.boldTextColor["dark_purple"]),
+                        color: Styles.boldTextColor[Config.themeMode]),
                   ),
                   Text(widget.item.description,
                       style: TextStyle(
                           fontSize: Styles.textSize,
-                          color: Styles.textColor["dark_purple"])),
-                  // Text(Styles.formatter.format(widget.item.price),
-                  //     style: TextStyle(
-                  //         fontSize: Styles.textSize,
-                  //         fontWeight: FontWeight.bold,
-                  //         color: Styles.textColor["dark_purple"])),
+
+                          color: Styles.textColor[Config.themeMode])),
+                  Text(Styles.formatter.format(widget.item.price),
+                      style: TextStyle(
+                          fontSize: Styles.textSize,
+                          fontWeight: FontWeight.bold,
+                          color: Styles.textColor[Config.themeMode])),
                 ],
               ),
             ),
@@ -73,7 +74,7 @@ class _ComboItemState extends State<ComboItem> {
                 BtnUpDown(
                   isUp: true,
                   upDown: updown,
-                  colorText: Styles.btnColor["dark_purple"],
+                  colorText: Styles.btnColor[Config.themeMode],
                 ),
                 Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -82,11 +83,11 @@ class _ComboItemState extends State<ComboItem> {
                       style: TextStyle(
                           fontSize: Styles.textSize,
                           fontWeight: FontWeight.bold,
-                          color: Styles.boldTextColor["dark_purple"]),
+                          color: Styles.boldTextColor[Config.themeMode]),
                     )),
                 BtnUpDown(
                   upDown: updown,
-                  colorText: Styles.btnColor["dark_purple"],
+                  colorText: Styles.btnColor[Config.themeMode],
                 )
               ],
             ),

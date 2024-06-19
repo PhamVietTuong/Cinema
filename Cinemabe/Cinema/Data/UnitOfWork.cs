@@ -26,5 +26,6 @@ namespace Cinema.Data
 		public ISeatRepository SeatRepository => new SeatRepository(_context);
 		public ITheaterRepository TheaterRepository => new TheaterRepository(_context);
 		public IInvoiceRepository InvoiceRepository => new InvoiceRepository(_context);
+		public IAgeRestrictionRepository AgeRestrictionRepository => new AgeRestrictionRepository(_context, _mapper);
     }
 }

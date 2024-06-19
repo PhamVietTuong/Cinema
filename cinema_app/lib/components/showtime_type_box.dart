@@ -17,8 +17,8 @@ class ShowtimeTypeBox extends StatelessWidget {
       padding:  EdgeInsets.all(padding),
       margin: EdgeInsets.only(left: marginLeft),
       decoration: BoxDecoration(
-       border: Border.all(width: 1,color: Styles.boldTextColor["dark_purple"]!),
-        color: Styles.boldTextColor["dark_purple"],
+       border: Border.all(width: 1,color: Styles.boldTextColor[Config.themeMode]!),
+        color: Styles.boldTextColor[Config.themeMode],
         borderRadius: BorderRadius.circular(3.0),
       ),
       child: Text(

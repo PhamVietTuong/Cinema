@@ -6,12 +6,8 @@ import 'package:cinema_app/components/bottom_nav.dart';
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String initialLanguageCode = prefs.getString('language_code') ?? 'en';
-
-
-  runApp(MyApp(initialLanguageCode: initialLanguageCode));
+  await Config.initialize();
+  runApp(const MyApp());
 }
 
 class MyHttpOverrides extends HttpOverrides {

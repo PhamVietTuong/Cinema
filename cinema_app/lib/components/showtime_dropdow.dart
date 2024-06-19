@@ -35,15 +35,15 @@ class _ShowtimeDropDownState extends State<ShowtimeDropDown> {
       margin: EdgeInsets.only(left: widget.marginLeft),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          color: Styles.btnColor["dark_purple"],
+          color: Styles.btnColor[Config.themeMode],
           borderRadius: BorderRadius.circular(4)),
       child: DropdownButton(
-          dropdownColor: Styles.btnColor["dark_purple"],
+          dropdownColor: Styles.btnColor[Config.themeMode],
           underline: const SizedBox(),
           isDense: true,
           itemHeight: null,
           icon: Icon(Icons.keyboard_arrow_down_outlined,
-              color: Styles.boldTextColor["dark_purple"]),
+              color: Styles.boldTextColor[Config.themeMode]),
           value: selectedItem,
           menuMaxHeight: 400,
           items: widget.showtimes.map((value) {
@@ -51,7 +51,7 @@ class _ShowtimeDropDownState extends State<ShowtimeDropDown> {
               value: value,
               child: Text(
                 value.getFormatTime(),
-                style: TextStyle(color: Styles.boldTextColor["dark_purple"]),
+                style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
               ),
             );
           }).toList(),

@@ -30,7 +30,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
         ),
         margin: const EdgeInsets.only(bottom: 6),
         decoration:
-            BoxDecoration(color: Styles.backgroundContent["dark_purple"]),
+            BoxDecoration(color: Styles.backgroundContent[Config.themeMode]),
         child: Column(children: [
           Container(
             margin: const EdgeInsets.only(bottom: 8),
@@ -70,7 +70,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                           Text(
                             '${movie.name} ${movie.showTimeTypeName} (${movie.ageRestrictionName})',
                             style: TextStyle(
-                                color: Styles.boldTextColor["dark_purple"],
+                                color: Styles.boldTextColor[Config.themeMode],
                                 fontSize: Styles.titleFontSize,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -111,7 +111,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: Styles.titleFontSize,
-                      color: Styles.boldTextColor["dark_purple"]),
+                      color: Styles.boldTextColor[Config.themeMode]),
                 ),
                 Wrap(
                   spacing: 5,
@@ -141,7 +141,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: Styles.titleFontSize,
-                        color: Styles.boldTextColor["dark_purple"])),
+                        color: Styles.boldTextColor[Config.themeMode])),
                 Wrap(
                   spacing: 5,
                   runSpacing: 5,

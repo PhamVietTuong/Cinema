@@ -16,7 +16,7 @@ class TitleInfoMovie extends StatelessWidget {
           style:  TextStyle(
             fontSize: Styles.textSize,
             fontWeight: FontWeight.w500,
-            color: Styles.titleColor["dark_purple"],
+            color: Styles.titleColor[Config.themeMode],
           ),
         ));
   }
