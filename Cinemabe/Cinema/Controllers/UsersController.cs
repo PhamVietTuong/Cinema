@@ -1,6 +1,7 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data.Models;
 using Cinema.DTOs;
+using Cinema.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -71,8 +72,14 @@ namespace Cinema.Controllers
             {
                 return BadRequest("Email is empty");
             }
+
+            if (!Validate.IsEmail(email.Trim()))
+            {
+                return BadRequest("Email is not valid");
+            }
+
             var authenticationCode = await _uow.UserRepository.SendAuthenticationCode(email.Trim());
-            return authenticationCode != null ? Ok(authenticationCode) : NotFound("Không tìm thấy người dùng hoặc gửi email thất bại");
+            return authenticationCode != null ? Ok(authenticationCode) : NotFound("Not found user or send email error");
 
         }
 
@@ -82,8 +89,10 @@ namespace Cinema.Controllers
         {
             if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(changePassword.Trim())) return BadRequest(" UserName or Password is empty");
 
+            if(Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
+
             var result = await _uow.UserRepository.ChangePassword(changePassword, userName);
-            return result ? Ok() : NotFound("Không tìm thấy người dùng");
+            return result ? Ok() : NotFound("Not found user");
         }
     }
 }
