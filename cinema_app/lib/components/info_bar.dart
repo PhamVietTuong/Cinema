@@ -26,13 +26,13 @@ class InfoBar extends StatelessWidget {
             begin: Alignment.bottomRight,
             end: Alignment.bottomLeft,
             colors: [
-              Styles.gradientTop["dark_purple"]!,
-              Styles.gradientBot["dark_purple"]!,
+              Styles.gradientTop[Config.themeMode]!,
+              Styles.gradientBot[Config.themeMode]!,
             ]),
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: Row(
           mainAxisAlignment: (titleMinWith != 0.0)
               ? MainAxisAlignment.start
@@ -54,7 +54,7 @@ class InfoBar extends StatelessWidget {
                     style: TextStyle(
                         fontSize: Styles.titleFontSize,
                         fontWeight: FontWeight.bold,
-                        color: Styles.boldTextColor["dark_purple"]),
+                        color: Styles.boldTextColor[Config.themeMode]),
                   ),
                 ),
               ],
@@ -72,7 +72,7 @@ class InfoBar extends StatelessWidget {
                     style: TextStyle(
                         fontSize: Styles.titleFontSize,
                         fontWeight: FontWeight.bold,
-                        color: Styles.boldTextColor["dark_purple"]),
+                        color: Styles.boldTextColor[Config.themeMode]),
                   ),
                 ],
               ),

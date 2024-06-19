@@ -68,7 +68,7 @@ class _PayScreenState extends State<PayScreen> {
         while (count > 0) {
           tBoxs.add(TicketBox(
             col: seatSingle[index].colIndex,
-            rowName: seatSingle[index].name.substring(0, 1),
+            rowName: seatSingle[index].getRowName(),
             name: seatSingle[index].name,
             price: type.price,
             ticketTypeId: type.ticketTypeId,
@@ -94,7 +94,7 @@ class _PayScreenState extends State<PayScreen> {
         while (count > 0) {
           tBoxs.add(TicketBox(
             col: seatCouple[index].colIndex,
-            rowName: seatCouple[index].name.substring(0, 1),
+            rowName: seatCouple[index].getRowName(),
             name: seatCouple[index].name,
             price: type.price,
             ticketTypeId: type.ticketTypeId,
@@ -141,7 +141,7 @@ class _PayScreenState extends State<PayScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -154,7 +154,7 @@ class _PayScreenState extends State<PayScreen> {
                     widget.booking.theater.name,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Styles.boldTextColor["dark_purple"],
+                        color: Styles.boldTextColor[Config.themeMode],
                         fontSize: Styles.titleFontSize),
                   ),
                 ),
@@ -164,7 +164,7 @@ class _PayScreenState extends State<PayScreen> {
                     '${widget.booking.showtime.getFormatDate()} - ${widget.booking.showtime.getFormatTime()} | Phòng: ${widget.booking.showtime.roomName}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Styles.boldTextColor["dark_purple"],
+                        color: Styles.boldTextColor[Config.themeMode],
                         fontSize: Styles.titleFontSize),
                   ),
                 ),
@@ -184,7 +184,7 @@ class _PayScreenState extends State<PayScreen> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
         titleSpacing: 0,
@@ -195,7 +195,7 @@ class _PayScreenState extends State<PayScreen> {
         child: Center(
           child: Container(
             decoration:
-                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+                BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
             child: Column(children: [
               //thông tin phim
               Container(
@@ -227,7 +227,7 @@ class _PayScreenState extends State<PayScreen> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: Styles.titleFontSize,
-                                color: Styles.boldTextColor["dark_purple"]),
+                                color: Styles.boldTextColor[Config.themeMode]),
                           ),
                           const SizedBox(
                             height: 5,
@@ -272,7 +272,7 @@ class _PayScreenState extends State<PayScreen> {
                                   style: TextStyle(
                                       fontSize: Styles.titleFontSize,
                                       color:
-                                          Styles.boldTextColor["dark_purple"])))
+                                          Styles.boldTextColor[Config.themeMode])))
                         ],
                       ),
                     )
@@ -319,7 +319,7 @@ class _PayScreenState extends State<PayScreen> {
               //nhập khuyến mãi
               Container(
                 decoration: BoxDecoration(
-                    color: Styles.backgroundContent["dark_purple"]),
+                    color: Styles.backgroundContent[Config.themeMode]),
                 width: wS,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -333,28 +333,28 @@ class _PayScreenState extends State<PayScreen> {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Styles.gradientTop["dark_purple"]!,
-                              Styles.gradientBot["dark_purple"]!,
+                              Styles.gradientTop[Config.themeMode]!,
+                              Styles.gradientBot[Config.themeMode]!,
                             ]),
                       ),
                       child: Container(
                           padding: const EdgeInsets.only(
                               left: 15, right: 5, top: 5, bottom: 5),
                           decoration: BoxDecoration(
-                              color: Styles.backgroundContent["dark_purple"],
+                              color: Styles.backgroundContent[Config.themeMode],
                               borderRadius: BorderRadius.circular(5)),
                           child: TextField(
                             style: TextStyle(
                                 fontSize: Styles.titleFontSize,
-                                color: Styles.boldTextColor["dark_purple"]),
+                                color: Styles.boldTextColor[Config.themeMode]),
                             decoration: InputDecoration(
                                 hintText: "Mã khuyến mãi",
                                 hintStyle: TextStyle(
-                                    color: Styles.boldTextColor["dark_purple"]),
+                                    color: Styles.boldTextColor[Config.themeMode]),
                                 border: InputBorder.none,
                                 suffixIcon: Icon(Icons.redeem_outlined,
                                     color:
-                                        Styles.boldTextColor["dark_purple"])),
+                                        Styles.boldTextColor[Config.themeMode])),
                           )),
                     ),
                     GestureDetector(
@@ -366,7 +366,7 @@ class _PayScreenState extends State<PayScreen> {
                         margin: const EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color: Styles.btnColor["dark_purple"]),
+                            color: Styles.btnColor[Config.themeMode]),
                         child: const Text(
                           "ÁP DỤNG",
                           style: TextStyle(
@@ -427,7 +427,8 @@ class _PayScreenState extends State<PayScreen> {
                                 // "SeatId": e.seatId,
                                 "RowName": e.rowName,
                                 "ColIndex": e.col,
-                                "TicketTypeId": e.ticketTypeId
+                                "TicketTypeId": e.ticketTypeId,
+                                "SeatName": e.name
                               })
                           .toList(),
                       "FoodAndDrinks": widget.booking.theater.combos
@@ -456,12 +457,12 @@ class _PayScreenState extends State<PayScreen> {
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
-                      color: Styles.btnColor["dark_purple"],
+                      color: Styles.btnColor[Config.themeMode],
                       borderRadius: BorderRadius.circular(8)),
                   child: Text(
                     "THANH TOÁN",
                     style: TextStyle(
-                        color: Styles.boldTextColor["dark_purple"],
+                        color: Styles.boldTextColor[Config.themeMode],
                         fontWeight: FontWeight.bold,
                         fontSize: Styles.titleFontSize),
                   ),

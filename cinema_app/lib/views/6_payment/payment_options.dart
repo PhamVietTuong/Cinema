@@ -21,7 +21,7 @@ class PaymentOption extends StatelessWidget {
           style: TextStyle(
               fontSize: Styles.titleFontSize,
               fontWeight: FontWeight.bold,
-              color: Styles.boldTextColor["dark_purple"]),
+              color: Styles.boldTextColor[Config.themeMode]),
         )),
       ],
     );

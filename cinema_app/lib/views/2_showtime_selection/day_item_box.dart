@@ -35,13 +35,13 @@ class DayItemBox extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 6),
         margin: const EdgeInsets.only(right: 8),
         decoration: BoxDecoration(
-            color: isSelected?null: Styles.btnColor["dark_purple"],
+            color: isSelected?null: Styles.btnColor[Config.themeMode],
             gradient:isSelected? LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors:[
-              Styles.gradientTop["dark_purple"]!,
-              Styles.gradientBot["dark_purple"]!
+              Styles.gradientTop[Config.themeMode]!,
+              Styles.gradientBot[Config.themeMode]!
             ]):null,
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         child: Column(
@@ -49,13 +49,13 @@ class DayItemBox extends StatelessWidget {
             Text(
               titleDay!,
               style:   TextStyle(
-                  color: Styles.boldTextColor["dark_purple"],
+                  color: Styles.boldTextColor[Config.themeMode],
                   fontWeight: FontWeight.bold, fontSize: Styles.titleFontSize),
             ),
             Text(
               "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}",
               style:TextStyle( fontWeight: FontWeight.bold, fontSize: Styles.titleFontSize,
-                  color: !isSelected ? Styles.boldTextColor["dark_purple"] : Styles.textSelectionColor["dark_purple"]),
+                  color: !isSelected ? Styles.boldTextColor[Config.themeMode] : Styles.textSelectionColor[Config.themeMode]),
             )
           ],
         ),

@@ -47,7 +47,7 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Styles.backgroundContent["dark_purple"],
+              color: Styles.backgroundContent[Config.themeMode],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,7 +55,7 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
                 Text(
                   widget.item.theaterName,
                   style: TextStyle(
-                    color: Styles.boldTextColor["dark_purple"],
+                    color: Styles.boldTextColor[Config.themeMode],
                     fontWeight: FontWeight.bold,
                     fontSize: Styles.titleFontSize,
                   ),
@@ -65,7 +65,7 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
                       ? Icons.arrow_drop_up_sharp
                       : Icons.arrow_drop_down_sharp,
                   size: Styles.iconSizeInLineText,
-                  color: Styles.boldTextColor["dark_purple"],
+                  color: Styles.boldTextColor[Config.themeMode],
                 ),
               ],
             ),
@@ -82,7 +82,7 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
                   child: Text(
                     widget.item.theaterAddress,
                     style: TextStyle(
-                      color: Styles.textColor["dark_purple"],
+                      color: Styles.textColor[Config.themeMode],
                       fontSize: Styles.textSize,
                     ),
                   ),

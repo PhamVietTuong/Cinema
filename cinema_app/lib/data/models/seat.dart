@@ -16,9 +16,8 @@ class Seat {
   int status; //0= đá bán, 1 còn trống, 2 đang chọn, 3 đang chờ
 
   Seat(
-      {
-      this.colIndex = 0,
-     // this.roomId = "",
+      {this.colIndex = 0,
+      // this.roomId = "",
       this.name = "",
       this.seatTypeId = "",
       this.seatTypeName = "",
@@ -26,14 +25,17 @@ class Seat {
       this.status = 1});
 
   Seat.fromJson(Map<String, dynamic> json)
-      :
-        colIndex = json['colIndex'] ?? 0,
-      //  roomId = json['roomId'] ?? "",
+      : colIndex = json['colIndex'] ?? 0,
+        //  roomId = json['roomId'] ?? "",
         name = json["name"] ?? "",
         seatTypeId = json['seatTypeId'] ?? "",
         seatTypeName = json['seatTypeName'] ?? "",
         status = json['seatStatus'] ?? 1,
         isSeat = json['isSeat'] ?? false;
+
+  String getRowName() {
+    return name.isNotEmpty ? name.split('').first : '';
+  }
 }
 
 abstract class SeatRepository {

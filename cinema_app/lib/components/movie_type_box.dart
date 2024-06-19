@@ -28,18 +28,18 @@ class MovieTypeBox extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Styles.gradientTop["dark_purple"]!,
-                Styles.gradientBot["dark_purple"]!
+                Styles.gradientTop[Config.themeMode]!,
+                Styles.gradientBot[Config.themeMode]!
               ])),
       child: Container(
         margin: const EdgeInsets.all(2),
         padding: EdgeInsets.all(padding),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(3.0),
-            color: Styles.backgroundContent["dark_purple"]),
+            color: Styles.backgroundContent[Config.themeMode]),
         child: Text(
           title,
-          style: TextStyle(color: Styles.boldTextColor["dark_purple"]),
+          style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
         ),
       ),
     );
