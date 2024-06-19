@@ -91,13 +91,13 @@ class BookingSummaryBox extends StatelessWidget {
                         style: TextStyle(
                             color: Styles.boldTextColor[Config.themeMode],
                             fontSize: Styles.titleFontSize),
-                        children: [
-                          const TextSpan(text: "Tổng cộng "),
-                          TextSpan(
-                              text: Styles.formatter.format(
-                                  totalPrice ?? booking.getTotalPrice()),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
+                        children: const [
+                          TextSpan(text: "Tổng cộng "),
+                          // TextSpan(
+                          //     text: Styles.formatter.format(
+                          //         totalPrice ?? booking.getTotalPrice()),
+                          //     style:
+                          //         const TextStyle(fontWeight: FontWeight.bold)),
                         ]),
                   ),
                 ],

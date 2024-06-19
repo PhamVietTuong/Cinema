@@ -2,6 +2,8 @@
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Cinema.Helper;
+using Cinema.Repository;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +21,10 @@ namespace Cinema.Controllers
             _uow = uow;
         }
 
+        public UsersController(IUnitOfWork uow)
+        {
+            _uow = uow;
+        }
         [HttpPost("LoginUser")]
         [ProducesResponseType(typeof(AuthenticationResponse), 200)]
         [ProducesResponseType(typeof(void), 400)]
@@ -63,6 +69,28 @@ namespace Cinema.Controllers
                 return null;
             }
         }
+
+        [HttpPost("register")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Register([FromBody] Register model)
+        {
+            try
+            {
+                var registeredUser = await _uow.UserRepository.Register(
+                    model
+                );
+
+
+                return Ok(registeredUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
 
         [HttpPost("SendAuthCode")]
         [AllowAnonymous]

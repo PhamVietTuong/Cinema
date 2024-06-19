@@ -55,6 +55,7 @@ class _ComboItemState extends State<ComboItem> {
                   Text(widget.item.description,
                       style: TextStyle(
                           fontSize: Styles.textSize,
+
                           color: Styles.textColor[Config.themeMode])),
                   Text(Styles.formatter.format(widget.item.price),
                       style: TextStyle(

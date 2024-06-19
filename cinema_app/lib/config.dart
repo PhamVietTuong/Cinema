@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 var serverUrl = 'https://10.0.2.2:7209';
-
 class Styles {
   static const backgroundColor = {
     "dark_purple": Color(0xFF272042),
@@ -32,6 +29,7 @@ class Styles {
   static const iconSizeInLineText = 20.0;
   static const iconSizeInTitle = 30.0;
   static const iconInAppBar = 25.0;
+
 
   static NumberFormat formatter =
       NumberFormat.currency(locale: 'vi_VN', symbol: '₫');

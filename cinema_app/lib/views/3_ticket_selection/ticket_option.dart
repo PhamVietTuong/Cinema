@@ -57,6 +57,7 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
                 ),
                 Row(
                   children: [
+
                     Container(
                         margin: const EdgeInsets.only(right: 15),
                         child: Text(

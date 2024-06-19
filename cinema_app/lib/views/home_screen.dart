@@ -1,5 +1,5 @@
 import 'package:cinema_app/components/info_movie.dart';
-import 'package:cinema_app/components/search_movie.dart';
+import 'package:cinema_app/views/search_movie.dart';
 import 'package:cinema_app/components/slide_show.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/movie.dart';
@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
-  //List<Movie> moviesWithTrailer = List.filled(0, Movie(), growable: true);
   late List<String>trailers;
   @override
   void initState() {
@@ -164,7 +163,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                           fontSize: Styles.titleFontSize,
                           fontWeight: FontWeight.bold,
                           color: Styles.textColor["dark_purple"]),
-                    )
+                    ),
                   ],
                 )
               : SingleChildScrollView(

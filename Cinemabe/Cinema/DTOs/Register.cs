@@ -4,13 +4,16 @@ namespace Cinema.DTOs
 {
 	public class Register
 	{
+		public Guid UserTypeId { get; set; }
 		public string UserName { get; set; }
-		[JsonIgnore]
-		public string PasswordHash { get; set; }
-		[JsonIgnore]
-		public string PasswordSalt { get; set; }
-		public string Email { get; set; }
 		public string FullName { get; set; }
+		public string Email { get; set; }
+		public string Phone { get; set; }
+		public DateTime BirthDay { get; set; }
+		public string Password { get; set; }
+		public string ConfirmPassword { get; set; }
+		public bool Gender { get; set; }
+		[JsonIgnore]
 		public bool Status { get; set; }
 	}
 }

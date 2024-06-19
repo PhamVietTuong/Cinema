@@ -42,6 +42,7 @@ class TicketBox extends StatelessWidget {
                   color: Styles.boldTextColor[Config.themeMode],
                   fontSize: Styles.textSize),
             ),
+
             Text(
               Styles.formatter.format(price),
               style: TextStyle(

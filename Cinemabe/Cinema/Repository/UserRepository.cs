@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace Cinema.Repository
 {
@@ -216,6 +217,85 @@ namespace Cinema.Repository
 			}
 		}
 
+		public async Task<User> Register(Register register)
+		{
+			try
+			{
+				if (string.IsNullOrEmpty(register.UserName) || string.IsNullOrEmpty(register.FullName) ||
+					string.IsNullOrEmpty(register.Password) || string.IsNullOrEmpty(register.ConfirmPassword))
+				{
+					throw new ArgumentException("Tên người dùng, họ và tên, mật khẩu không được để trống.");
+				}
+
+				var existingUser = await _context.User.FirstOrDefaultAsync(u => u.UserName.ToLower() == register.UserName.ToLower());
+				if (existingUser != null)
+				{
+					throw new ArgumentException("Tên người dùng đã tồn tại.");
+				}
+
+				if (!string.IsNullOrEmpty(register.Email))
+				{
+
+					var existingEmail = await _context.User.FirstOrDefaultAsync(u => u.Email.ToLower() == register.Email.ToLower());
+					if (existingEmail != null)
+					{
+						throw new ArgumentException("Email đã được đăng ký trước đó.");
+					}
+				}
+
+				if (!string.IsNullOrEmpty(register.Phone))
+				{
+					var existingPhone = await _context.User.FirstOrDefaultAsync(u => u.Phone == register.Phone);
+					if (existingPhone != null)
+					{
+						throw new ArgumentException("Số điện thoại đã được sử dụng để đăng ký trước đó.");
+					}
+				}
+
+				if (register.Password != register.ConfirmPassword)
+				{
+					throw new ArgumentException("Mật khẩu và mật khẩu nhập lại không khớp.");
+				}
+
+				var passwordHashSalt = PasswordUtils.EncryptPassword(register.Password);
+				// var userType = _context.UserType.SingleOrDefault(ut => ut.Id == register.UserTypeId);
+				// if (userType == null)
+				// {
+				// 	throw new Exception("UserType not found");
+				// }
+				var newUser = new User
+				{
+					Id = Guid.NewGuid(),
+					UserTypeId = register.UserTypeId,
+					UserName = register.UserName,
+					FullName = register.FullName,
+					Email = register.Email,
+					Phone = register.Phone,
+					BirthDay = register.BirthDay,
+					Gender = register.Gender,
+					Status = true,
+					PasswordSalt = passwordHashSalt.Salt,
+					PasswordHash = passwordHashSalt.Hash,
+				};
+
+				await _context.User.AddAsync(newUser);
+				await _context.SaveChangesAsync();
+
+				return newUser;
+			}
+			catch (ArgumentException)
+			{
+				throw;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Đăng ký người dùng thất bại.", ex);
+			}
+		}
+
+
+	}
+}
 		//create method send authentication code via email
 		public async Task<string> SendAuthenticationCode(string email)
 		{

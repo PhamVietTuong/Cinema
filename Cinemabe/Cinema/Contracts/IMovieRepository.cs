@@ -12,7 +12,7 @@ namespace Cinema.Contracts
 		Task<MovieDetailViewModel> GetMovieDetail(MovieDetailDTO movieDetailDTO);
 		Task<List<MovieDetailViewModel>> GetMovieTheaterId(Guid theaterId);
 		 Task<List<MovieDetailViewModel>> GetMoviesByName(string name);
-		 Task<List<DateTime>>GetDateByMovieID(Guid movieID, ProjectionForm ProjectionForm);
+		 Task<List<DateTime>> GetDateByMovieID(Guid movieID, ProjectionForm ProjectionForm);
 		 Task<List<ShowTimeRowViewModel>> GetShowTimeByMovieID(Guid movieID, DateTime date, ProjectionForm ProjectionForm);
 
 	}
