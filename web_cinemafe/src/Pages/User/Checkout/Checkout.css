@@ -1,15 +1,172 @@
+.checkoutStepLabel .Mui-active,
+.checkoutStepLabel .Mui-disabled,
+.checkoutStepLabel .Mui-completed {
+    font-family: Anton, sans-serif;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 400;
+}
 
-/* .seat-name-row {
-    float: left;
-    position: relative;
-    background-color: white;
+.checkoutStepLabel .MuiStepLabel-label.Mui-completed,
+.checkoutStepLabel .MuiStepLabel-label.Mui-active {
+    color: #f3ea28;
+}
+
+.checkoutIcon {
     display: flex;
-    text-align: center;
-    width: 15px;
-    font-size: 14px;
-    font-weight: bold;
-    z-index: 1;
-    color: black;
-    justify-content: center;
     align-items: center;
-} */
+    justify-content: center;
+    width: 24;
+    height: 24;
+    border-radius: 50%;
+    background-color: #0F172A;
+    font-family: Anton, sans-serif;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+.checkoutStepLabel .Mui-active .checkoutIcon,
+.checkoutStepLabel .Mui-completed .checkoutIcon {
+    color: #f3ea28;
+}
+
+.checkoutStepLabel .MuiStepLabel-label.Mui-disabled {
+    color: #f8fafc;
+}
+
+.MuiStepConnector-root.Mui-active {
+    border-color: #f3ea28;
+    border-top-style: solid;
+    border-top-width: 2px;
+}
+
+.MuiStepConnector-root {
+    border-color: #f8fafc;
+    border-top-style: solid;
+    border-top-width: 2px;
+}
+
+.form-checkout-cus .bill-coundown-custom.inner-info-row {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 6px;
+}
+
+.form-checkout-cus .bill-coundown-custom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.form-checkout-cus .bill-coundown-custom .txt {
+    font-family: "Josefin Sans",
+        sans-serif;
+    font-size: 16px;
+}
+
+.form-checkout-cus .bill-coundown {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 2px 10px;
+    width: fit-content;
+}
+
+.form-checkout-cus .bill-time {
+    font-size: 16px;
+}
+
+.form-checkout-cus .dt {
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .form-checkout-cus .dt {
+        font-size: 10px;
+    }
+}
+
+.form-checkout-cus {
+    line-height: 24.8px;
+}
+
+.CheckoutOutlinedInput {
+    background-color: #fff;
+}
+
+.CheckoutFormControl {
+    margin: 0 !important;
+}
+
+.CheckoutFormLabel {
+    color: #f8fafc !important;
+    font-size: 16px !important;
+    font-family: "Josefin Sans",
+        sans-serif !important;
+}
+
+.CheckoutButton {
+    width: 100%;
+    padding: 10px;
+    margin-top: 30px;
+}
+
+.CheckoutIcon {
+    display: flex;
+    border: 1px solid #64748b;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    align-items: center;
+    gap: 16px;
+    padding: 12px !important;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+
+    .CheckoutIcon {
+        padding: 8px 10px;
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .CheckoutIcon {
+        gap: 8px;
+    }
+}
+
+.CheckoutHover:hover .text {
+    color: #0f172a;
+}
+
+.CheckoutHover:hover {
+    background-color: #f8fafc;
+}
+
+.checkoutStepper {
+    margin-bottom: 40px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+@media screen and (max-width: 1200px) {
+    .checkoutStepper {
+        margin-bottom: 32px;
+        margin-top: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkoutStepper {
+        margin-bottom: 24px;
+        gap: 8px;
+    }
+}
