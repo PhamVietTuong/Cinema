@@ -10,6 +10,9 @@ import { ShowTimeType } from '../../Enum/ShowTimeType';
 const BookTicket = (props) => {
     const [expanded, setExpanded] = useState("panel0");
     const [filteredSchedules, setFilteredSchedules] = useState([]);
+    const currentTime = moment();
+    const [dates, setDates] = useState([]);
+    const [activeDateIndex, setActiveDateIndex] = useState(0);
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -17,12 +20,33 @@ const BookTicket = (props) => {
 
     useEffect(() => {
         const currentDate = new Date();
-        const filtered = props.bookTicket.schedules.filter(schedule =>
-            new Date(schedule.date) >= currentDate
-        );
+        const threeDaysLater = new Date();
+        threeDaysLater.setDate(currentDate.getDate() + 2);
+
+        const filtered = props.bookTicket.schedules.filter(schedule => {
+            const scheduleDate = new Date(schedule.date);
+            return scheduleDate >= currentDate && scheduleDate <= threeDaysLater;
+        });
+        
         setFilteredSchedules(filtered);
+
+        const generatedDates = [];
+        for (let i = 0; i < 3; i++) {
+            const date = new Date();
+            date.setDate(currentDate.getDate() + i);
+            generatedDates.push(date);
+        }
+        setDates(generatedDates);
     }, [props.bookTicket.schedules]);
-    
+
+    const handleDateSelection = (selectedDate) => {
+        const selectedDateOnly = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+        return dates.findIndex(date => {
+            const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            return dateOnly.getTime() === selectedDateOnly.getTime();
+        });
+    };
+
     return (
         <>
             <div className="movies-wr">
@@ -64,95 +88,107 @@ const BookTicket = (props) => {
                             </li>
                         </ul>
                     </div>
-                    {filteredSchedules.length === 0 ? (
-                        <div className="movies-rp-noti">
-                            <img src="/Images/movie-updating.png" alt="" />
-                            Chưa có suất chiếu
-                        </div>
-                    ) :
-                        (
-                            filteredSchedules.map((schedule, index) => (
-                                <Accordion key={index} expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)} className='BKAccordion'>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMore className='BKExpandMore'/>}
-                                        aria-controls={`panel${index}-content`}
-                                        id={`panel${index}-header`}
-                                        className='BKAccordionSummary'
-                                    >
-                                        <Typography sx={{ flexShrink: 0 }} className='BKTypographyDate'>
-                                            Ngày: {new Date(schedule.date).toLocaleDateString()}
-                                        </Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails className='BKAccordionDetails'>
-                                        <Typography className='BKTypographyDes'>
-                                            {schedule.theaters.map(theater => (
-                                                <>
-                                                    {theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).length > 0 && (
-                                                        <div className='movies-rp-item'>
-                                                            <p className="movies-rp-title">Standard</p>
-                                                            <div className="movies-time">
-                                                                <div className="movies-time-slider">
-                                                                    <div className="swiper-container">
-                                                                        <div className="swiper rows">
-                                                                            <div className="swiper-wrapper">
-                                                                                {
-                                                                                    theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map(showTime => (
-                                                                                        <div key={showTime.showTimeId} className="swiper-slide col">
-                                                                                            <Link to={`/movie/${props.bookTicket.id}/?id=${theater.theaterId}&show_time=${showTime.showTimeId}&room=${showTime.roomId}`} 
-                                                                                            state={{ 
-                                                                                                selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm"),
-                                                                                                selectedheaterName: theater.theaterName,
-                                                                                                projectionForm: props.bookTicket.projectionForm
-                                                                                             }} className="movies-time-item">
-                                                                                                {moment(new Date(showTime.startTime)).format("HH:mm")}
-                                                                                            </Link>
-                                                                                        </div>
-                                                                                    ))
-                                                                                }
+                    {
+                        filteredSchedules.length === 0 ?
+                            (
+                                <div className="movies-rp-noti">
+                                    <img src="/Images/movie-updating.png" alt="" />
+                                    Chưa có suất chiếu
+                                </div>
+                            )
+                            :
+                            (
+                                filteredSchedules.map((schedule, index) => (
+                                    <Accordion key={index} expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)} className='BKAccordion'>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMore className='BKExpandMore' />}
+                                            aria-controls={`panel${index}-content`}
+                                            id={`panel${index}-header`}
+                                            className='BKAccordionSummary'
+                                        >
+                                            <Typography 
+                                                sx={{ flexShrink: 0 }} 
+                                                className='BKTypographyDate' 
+                                                
+                                            >
+                                                Ngày: {new Date(schedule.date).toLocaleDateString()}
+                                            </Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails className='BKAccordionDetails'>
+                                            <Typography className='BKTypographyDes'>
+                                                {schedule.theaters.map(theater => (
+                                                    <>
+                                                        {theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).length > 0 && (
+                                                            <div className='movies-rp-item'>
+                                                                <p className="movies-rp-title">Standard</p>
+                                                                <div className="movies-time">
+                                                                    <div className="movies-time-slider">
+                                                                        <div className="swiper-container">
+                                                                            <div className="swiper rows">
+                                                                                <div className="swiper-wrapper">
+                                                                                    {
+                                                                                        theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Standard).map(showTime => (
+                                                                                            <div key={showTime.showTimeId} className="swiper-slide col">
+                                                                                                <Link to={`/movie/${props.bookTicket.id}/?id=${theater.theaterId}&show_time=${showTime.showTimeId}&room=${showTime.roomId}`}
+                                                                                                    state={{
+                                                                                                        selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm"),
+                                                                                                        selectedheaterName: theater.theaterName,
+                                                                                                        projectionForm: props.bookTicket.projectionForm,
+                                                                                                        activeDateIndex: handleDateSelection(new Date(showTime.startTime))
+                                                                                                    }} 
+                                                                                                    className="movies-time-item"
+                                                                                                    >
+                                                                                                    {moment(new Date(showTime.startTime)).format("HH:mm")}
+                                                                                                </Link>
+                                                                                            </div>
+                                                                                        )
+                                                                                        )
+                                                                                    }
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                    {theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).length > 0 && (
-                                                        <div className='movies-rp-item'>
-                                                            <p className="movies-rp-title">Deluxe</p>
-                                                            <div className="movies-time">
-                                                                <div className="movies-time-slider">
-                                                                    <div className="swiper-container">
-                                                                        <div className="swiper rows">
-                                                                            <div className="swiper-wrapper">
-                                                                                {
-                                                                                    theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map(showTime => (
-                                                                                        <div key={showTime.showTimeId} className="swiper-slide col">
-                                                                                            <Link to={`/movie/${props.bookTicket.id}/?id=${theater.theaterId}&show_time=${showTime.showTimeId}&room=${showTime.roomId}`} 
-                                                                                            state={{ 
-                                                                                                selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm"),
-                                                                                                selectedheaterName: theater.theaterName,
-                                                                                                projectionForm: props.bookTicket.projectionForm
-                                                                                            }} className="movies-time-item">
-                                                                                                {moment(new Date(showTime.startTime)).format("HH:mm")}
-                                                                                            </Link>
-                                                                                        </div>
-                                                                                    ))
-                                                                                }
+                                                        )}
+                                                        {theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).length > 0 && (
+                                                            <div className='movies-rp-item'>
+                                                                <p className="movies-rp-title">Deluxe</p>
+                                                                <div className="movies-time">
+                                                                    <div className="movies-time-slider">
+                                                                        <div className="swiper-container">
+                                                                            <div className="swiper rows">
+                                                                                <div className="swiper-wrapper">
+                                                                                    {
+                                                                                        theater.showTimes.filter(timeItem => timeItem.showTimeType === ShowTimeType.Deluxe).map(showTime => (
+                                                                                            <div key={showTime.showTimeId} className="swiper-slide col">
+                                                                                                <Link to={`/movie/${props.bookTicket.id}/?id=${theater.theaterId}&show_time=${showTime.showTimeId}&room=${showTime.roomId}`}
+                                                                                                    state={{
+                                                                                                        selectedShowTime: moment(new Date(showTime.startTime)).format("HH:mm"),
+                                                                                                        selectedheaterName: theater.theaterName,
+                                                                                                        projectionForm: props.bookTicket.projectionForm,
+                                                                                                        activeDateIndex: activeDateIndex
+                                                                                                    }} className="movies-time-item">
+                                                                                                    {moment(new Date(showTime.startTime)).format("HH:mm")}
+                                                                                                </Link>
+                                                                                            </div>
+                                                                                        ))
+                                                                                    }
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                </>
-                                            )
-                                            )}
-                                        </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
-                            ))
-                        )
+                                                        )}
+                                                    </>
+                                                )
+                                                )}
+                                            </Typography>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                ))
+                            )
                     }
                 </div>
             </div>

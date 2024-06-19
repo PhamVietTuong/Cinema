@@ -299,9 +299,7 @@ export const GetAgeRestrictionListAction = (code) => {
 export const UpdateAgeRestrictionAction = (ageRestrictionDTO) => {
     return async (dispatch) => {
         try {
-            console.log(ageRestrictionDTO);
             const result = await cinemasService.UpdateAgeRestriction(ageRestrictionDTO);
-            console.log(result);
 
             if (result.status === 200) {
                 await Swal.fire({
@@ -333,9 +331,7 @@ export const UpdateAgeRestrictionAction = (ageRestrictionDTO) => {
 export const CreateAgeRestrictionAction = (ageRestrictionDTO) => {
     return async (dispatch) => {
         try {
-            console.log(ageRestrictionDTO);
             const result = await cinemasService.CreateAgeRestriction(ageRestrictionDTO);
-            console.log(result);
 
             if (result.status === 200) {
                 await Swal.fire({

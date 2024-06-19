@@ -166,3 +166,5 @@ ADD CONSTRAINT UQ_Room_TheaterId_Name UNIQUE (TheaterId, Name)
 
 ALTER TABLE Seat
 DROP COLUMN Name
+
+--Please create again db and run data sample

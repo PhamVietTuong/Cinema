@@ -19,7 +19,7 @@ const PageViews = () => {
             }
         };
 
-        if (location.pathname === '/') {
+        if (location.pathname === '/' || location.pathname.startsWith('/book-tickets/')) {
             disconnectAction();
         }
     }, [location, dispatch]);
