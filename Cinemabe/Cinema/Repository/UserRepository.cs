@@ -294,8 +294,7 @@ namespace Cinema.Repository
 		}
 
 
-	}
-}
+
 		//create method send authentication code via email
 		public async Task<string> SendAuthenticationCode(string email)
 		{
