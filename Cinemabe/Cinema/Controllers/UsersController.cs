@@ -21,10 +21,6 @@ namespace Cinema.Controllers
             _uow = uow;
         }
 
-        public UsersController(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
         [HttpPost("LoginUser")]
         [ProducesResponseType(typeof(AuthenticationResponse), 200)]
         [ProducesResponseType(typeof(void), 400)]
@@ -70,7 +66,7 @@ namespace Cinema.Controllers
             }
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
