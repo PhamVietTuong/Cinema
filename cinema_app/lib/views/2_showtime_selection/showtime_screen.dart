@@ -89,7 +89,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         toolbarHeight: 140,
         titleSpacing: 0,
         leadingWidth: 45,
@@ -100,13 +100,14 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
         title: Text(
           widget.booking.theater.name,
           style: TextStyle(
-              color: Styles.boldTextColor["dark_purple"],
+              fontWeight: FontWeight.bold,
+              color: Styles.boldTextColor[Config.themeMode],
               fontSize: Styles.appbarFontSize),
         ),
         bottom: PreferredSize(
@@ -115,14 +116,14 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
             children: [
               Container(
                 color:
-                    Styles.backgroundColor["dark_purple"], // Màu của đường viền
+                    Styles.backgroundColor[Config.themeMode], // Màu của đường viền
                 height: 1, // Độ dày của đường viền
               ),
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
-                    color: Styles.backgroundContent["dark_purple"]),
+                    color: Styles.backgroundContent[Config.themeMode]),
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
@@ -134,7 +135,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
               Container(
                 margin: const EdgeInsets.only(bottom: 5),
                 color:
-                    Styles.backgroundColor["dark_purple"], // Màu của đường viền
+                    Styles.backgroundColor[Config.themeMode], // Màu của đường viền
                 height: spaceBottom, // Độ dày của đường viền
               ),
             ],
@@ -155,7 +156,7 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                   Text(
                     "Đang tải...",
                     style: TextStyle(
-                        color: Styles.boldTextColor["dark_purple"],
+                        color: Styles.boldTextColor[Config.themeMode],
                         fontSize: Styles.titleFontSize),
                   )
                 ],
@@ -165,12 +166,18 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
               child: Center(
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Styles.backgroundColor["dark_purple"]),
+                      color: Styles.backgroundColor[Config.themeMode]),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: lstShowTimeMovie.isNotEmpty
                           ? lstShowTimeMovie
-                          : [const Text("Trống")]),
+                          : [
+                              Text(
+                                "Trống",
+                                style: TextStyle(
+                                    color: Styles.boldTextColor[Config.themeMode]),
+                              )
+                            ]),
                 ),
               ),
             ),
@@ -200,5 +207,39 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
     setState(() {
       isLoadingData = false;
     });
+    _showErrorDialog();
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Lỗi"),
+            content: const Text(
+                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng hộp thoại
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Đóng"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Gọi hàm để tải dữ liệu lại
+                  setState(() {
+                    isLoadingData = true;
+                  });
+                  showtimePr
+                      .fetchShowtimesByTheaterId(widget.booking.theater.id);
+                  Navigator.pop(context);
+                },
+                child: const Text("Tải lại"),
+              ),
+            ],
+          );
+        });
   }
 }

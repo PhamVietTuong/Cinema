@@ -1,3 +1,4 @@
+import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class TitleBar extends StatelessWidget {
@@ -9,10 +10,12 @@ class TitleBar extends StatelessWidget {
     return Container(
       width: wS,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      decoration: const BoxDecoration(color: Color(0xFF9E9E9E)),
-      child:  Text(
-        title,
-        style: const TextStyle(fontSize: 20, color: Color(0xFF65328F)),
+      decoration:  BoxDecoration(color: Styles.backgroundContent[Config.themeMode]),
+      child:  Center(
+        child: Text(
+          title.toUpperCase(),
+          style:  TextStyle(fontSize: 20, color: Styles.titleColor[Config.themeMode]),
+        ),
       ),
     );
   }

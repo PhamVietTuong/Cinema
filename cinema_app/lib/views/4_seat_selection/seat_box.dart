@@ -13,14 +13,13 @@ class SeatBox extends StatefulWidget {
 
   final Seat seat;
   final String name;
-  final bool Function(String id, bool state) selectSeat;
+  final bool Function(Seat seat, bool state) selectSeat;
 
   @override
   State<SeatBox> createState() => _SeatBoxState();
 }
 
 class _SeatBoxState extends State<SeatBox> {
-
   bool isSelected = false;
   int loadSeatColor() {
     //trạng thái đã bán
@@ -30,7 +29,7 @@ class _SeatBoxState extends State<SeatBox> {
 
     //trạng thái trống
     if (widget.seat.status == 1) {
-      return widget.seat.seatTypeName.compareTo("Đơn")==0?1:2;
+      return widget.seat.seatTypeName.compareTo("Đơn") == 0 ? 1 : 2;
     }
     // trạng thái đang chọn
     if (widget.seat.status == 2) {
@@ -48,8 +47,7 @@ class _SeatBoxState extends State<SeatBox> {
 
   @override
   Widget build(BuildContext context) {
-    //String seatName =
-    //  '${widget.name}${widget.index.toString().padLeft(2, '0')}';
+
     Map<int, Color> colorMap = {
       1: Styles.singleSeatColor,
       2: Styles.coupleSeatColor,
@@ -57,15 +55,14 @@ class _SeatBoxState extends State<SeatBox> {
       4: Styles.selectedSeatColor,
       5: Styles.waitingSeatColor
     };
-    //int rowIndex = widget.seat.rowIndex;
-    //print('id: ${widget.seat.id } - stt: ${widget.seat.status}');
+   
     return GestureDetector(
       onTap: () {
         int stt = widget.seat.status;
         if (stt == 0 || stt == 3) {
           return;
         }
-        widget.selectSeat(widget.seat.id, isSelected)
+        widget.selectSeat(widget.seat, isSelected)
             ? setState(() {
                 if (!isSelected) {
                   widget.seat.status = 2;
@@ -81,22 +78,26 @@ class _SeatBoxState extends State<SeatBox> {
         children: [
           Expanded(
             child: AspectRatio(
-              aspectRatio: widget.seat.seatTypeName.compareTo("Đơn")==0 ? 1.1 : 2.2,
+              aspectRatio:
+                  widget.seat.seatTypeName.compareTo("Đơn") == 0 ? 1.2 : 2.4,
               child: widget.seat.isSeat
                   ? Container(
-                      margin: const EdgeInsets.only(right: 3, bottom: 3),
+                      margin: const EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(1),
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 2, color: colorMap[loadSeatColor()]!)),
+                          border: Border.all(color: colorMap[loadSeatColor()]!),
+                          borderRadius: BorderRadius.circular(4)),
                       child: Container(
                         alignment: Alignment.center,
-                        margin: const EdgeInsets.all(1.5),
-                        decoration:
-                            BoxDecoration(color: colorMap[loadSeatColor()]!),
+                        margin: const EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                            color: colorMap[loadSeatColor()]!,
+                            borderRadius: BorderRadius.circular(2)),
                         child: Text(
-                          "A10",
-                          style:  TextStyle(
-                              color: Styles.boldTextColor["dark_purple"],
+                          widget.seat.name,
+                          style: TextStyle(
+                              color: Styles.boldTextColor[Config.themeMode],
+                              fontSize: Styles.textSize,
                               fontWeight: FontWeight.bold),
                         ),
                       ),

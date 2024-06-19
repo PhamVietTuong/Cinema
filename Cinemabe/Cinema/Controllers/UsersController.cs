@@ -1,22 +1,25 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data.Models;
 using Cinema.DTOs;
+using Cinema.Helper;
+using Cinema.Repository;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace Cinema.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class UsersController : ControllerBase
-	{
-		private readonly IUnitOfWork _uow;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
+    {
+        private readonly IUnitOfWork _uow;
 
-		public UsersController( IUnitOfWork uow )
-		{
-			_uow = uow;
-		}
+        public UsersController(IUnitOfWork uow)
+        {
+            _uow = uow;
+        }
 
         [HttpPost("LoginUser")]
         [ProducesResponseType(typeof(AuthenticationResponse), 200)]
@@ -28,9 +31,9 @@ namespace Cinema.Controllers
             try
             {
                 User user = await _uow.UserRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "user");
-                if (user == null) 
-                { 
-                    return BadRequest("Thông tin chưa chính xác, đăng nhập thất bại!."); 
+                if (user == null)
+                {
+                    return BadRequest("Thông tin chưa chính xác, đăng nhập thất bại!.");
                 }
 
                 TokenInfo token = await _uow.UserRepository.GenerateToken(loginInfo.Username, "user");
@@ -61,6 +64,59 @@ namespace Cinema.Controllers
             {
                 return null;
             }
+        }
+
+        [HttpPost("Register")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Register([FromBody] Register model)
+        {
+            try
+            {
+                var registeredUser = await _uow.UserRepository.Register(
+                    model
+                );
+
+
+                return Ok(registeredUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+
+        [HttpPost("SendAuthCode")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SendAuthenticationCode(string email)
+        {
+            if (string.IsNullOrEmpty(email.Trim()))
+            {
+                return BadRequest("Email is empty");
+            }
+
+            if (!Validate.IsEmail(email.Trim()))
+            {
+                return BadRequest("Email is not valid");
+            }
+
+            var authenticationCode = await _uow.UserRepository.SendAuthenticationCode(email.Trim());
+            return authenticationCode != null ? Ok(authenticationCode) : NotFound("Not found user or send email error");
+
+        }
+
+        [HttpPost("ChangePassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangePassword(string changePassword, string userName)
+        {
+            if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(changePassword.Trim())) return BadRequest(" UserName or Password is empty");
+
+            if(Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
+
+            var result = await _uow.UserRepository.ChangePassword(changePassword, userName);
+            return result ? Ok() : NotFound("Not found user");
         }
     }
 }

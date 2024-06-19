@@ -3,15 +3,13 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/seat.dart';
+import 'package:cinema_app/data/models/seat_info.dart';
 import 'package:cinema_app/data/models/seat_row.dart';
 import 'package:cinema_app/presenters/seat_presenter.dart';
 import 'package:cinema_app/views/5_combo_selection/combo_screen.dart';
-import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/components/chair_type_color_box.dart';
-import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_dropdow.dart';
-import 'package:cinema_app/components/showtime_type_box.dart';
 import 'package:cinema_app/views/4_seat_selection/seat_row.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
@@ -37,14 +35,14 @@ class SeatScreen extends StatefulWidget {
 class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   late ShowtimeRoom selectedShowtime;
   late SeatPresenter seatPr;
+  bool isLoading = true;
   late int countSignle;
   late int countCouple;
   final hubConnection =
       HubConnectionBuilder().withUrl("$serverUrl/cinema").build();
-
   List<SeatRowData> seatRows = List.filled(0, SeatRowData(), growable: true);
-  List waitingSeatIds = List.filled(0, "", growable: true);
-  List<String> selectedSeats = List.filled(0, "", growable: true);
+  List<SeatInfo> waitingSeatIds = List.filled(0, SeatInfo(), growable: true);
+  List<Seat> selectedSeats = List.filled(0, Seat(), growable: true);
 
   bool handel() {
     if (selectedSeats.isEmpty || countCouple != 0 || countSignle != 0) {
@@ -55,17 +53,22 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   Widget nextScreen() {
     return ComboScreen(
+        hub: hubConnection,
         booking: widget.booking,
-        selectedSeatIds: selectedSeats,
+        selectedSeats: selectedSeats,
         showtime: selectedShowtime);
   }
 
-  bool coutSeat(String seatId, bool state) {
+  bool countSeat(Seat seat, bool state) {
     for (var row in seatRows) {
-      for (var seat in row.seats) {
-        if (seat.id == seatId) {
+      for (var item in row.seats) {
+        if (item.colIndex == seat.colIndex &&
+            item.getRowName().compareTo(seat.getRowName()) == 0) {
           //tìm được đúng ghế cần xử lý
-          if (seat.seatTypeName.compareTo("Đôi") == 0) {
+          print(item.name);
+          print(item.getRowName());
+          print(row.rowName);
+          if (item.seatTypeName.compareTo("Ðôi") == 0) {
             //state ==true thì xử lý bỏ chọn.
             if (state == true) {
               setState(() {
@@ -105,7 +108,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     return false;
   }
 
-  List<SeatRow> renderSeatRow() {
+  List<Widget> renderSeatRow() {
     return seatRows
         .map((e) => SeatRow(
               selelctSeat: selectSeat,
@@ -131,7 +134,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
 //truyền vào mã và trạng thái hiện tại
-  bool selectSeat(String seatId, bool state) {
+  bool selectSeat(Seat seat, bool state) {
     if (state == false &&
         selectedSeats.length >= widget.booking.getTotalTickets()) {
       print("Đã chọn đủ số lượng ghế!");
@@ -139,17 +142,19 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     }
 
     //kiểm tra chọn đúng loại ghế đã chọn theo vé
-    if (!coutSeat(seatId, state)) {
+    if (!countSeat(seat, state)) {
       return false;
     }
     setState(() {
-      state ? selectedSeats.remove(seatId) : selectedSeats.add(seatId);
+      state ? selectedSeats.remove(seat) : selectedSeats.add(seat);
     });
     hubConnection.invoke("SeatBeingSelected", args: [
       {
         "showTimeId": selectedShowtime.showTimeId,
         "roomId": selectedShowtime.roomId,
-        "seatIds": selectedSeats,
+        "InfoSeats": selectedSeats
+            .map((e) => {"RowName": e.getRowName(), "ColIndex": e.colIndex})
+            .toList(),
       }
     ]);
 
@@ -161,18 +166,26 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
       hubConnection.on("CheckForEmptySeats", handleCheckForEmptySeats);
       hubConnection.on("ListOfSeatsSold", handleListOfSeatsSold);
       hubConnection.on("UpdateSeat", (data) {
-        List ids = data![0] as List;
+        List<SeatInfo> ids =
+            (data![0] as List).map((e) => SeatInfo.fromJson(e)).toList();
         int state = data[1] as int;
 
         for (var row in seatRows) {
           for (var seat in row.seats) {
-            if (ids.contains(seat.id)) {
+            var seatToCheck = ids.firstWhere(
+                (element) =>
+                    element.colIndex == seat.colIndex &&
+                    element.rowName.compareTo(row.rowName) == 0,
+                orElse: () => SeatInfo());
+            if (seatToCheck.rowName != "") {
               if (seat.status == 0) {
                 continue;
               }
               setState(() {
                 seat.status = state;
-                ids.remove(seat.id);
+                ids.removeWhere((element) =>
+                    element.rowName.compareTo(row.rowName) == 0 &&
+                    element.colIndex == seat.colIndex);
               });
               if (ids.isEmpty) break;
             }
@@ -200,7 +213,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         {
           "showTimeId": selectedShowtime.showTimeId,
           "roomId": selectedShowtime.roomId,
-          "seatIds": [],
+          "InfoSeats": [],
         }
       ]);
     } catch (e) {
@@ -209,16 +222,16 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
   void handleCheckForEmptySeats(data) {
-    String id = data![0] as String;
+    SeatInfo id = SeatInfo.fromJson(data![0]);
     int state = data[1] as int;
 
     if (state == 0 || state == 3) {
       print("Ghế đã được người khác mua hoặc chọn trước rồi!");
-      var seat = findSeatById(id);
+      var seat = findSeatById(id.rowName, id.colIndex);
       if (seat != null) {
         setState(() {
           seat.status = state;
-          selectedSeats.remove(seat.id);
+          selectedSeats.remove(seat);
           seat.seatTypeName.compareTo("Đơn") == 0
               ? countSignle++
               : countCouple++;
@@ -228,18 +241,32 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   }
 
   void handleListOfSeatsSold(data) {
-    List ids = (data![0] as List);
+    var ids = (data![0] as List).map((e) => SeatInfo.fromJson(e)).toList();
     int state = data[1] as int;
     setState(() {
+      bool shouldBreak = false;
+
       for (var row in seatRows) {
         for (var seat in row.seats) {
-          if (ids.contains(seat.id)) {
+          var seatToCheck = ids.firstWhere(
+              (element) =>
+                  element.colIndex == seat.colIndex &&
+                  element.rowName.compareTo(row.rowName) == 0,
+              orElse: () => SeatInfo());
+          if (seatToCheck.rowName != "") {
             seat.status = state;
-            ids.remove(seat.id);
-            if (ids.isEmpty) break;
+            ids.removeWhere((element) =>
+                element.rowName.compareTo(row.rowName) == 0 &&
+                element.colIndex == seat.colIndex);
+            if (ids.isEmpty) {
+              shouldBreak = true;
+              break;
+            }
           }
         }
-        if (ids.isEmpty) break;
+        if (shouldBreak) {
+          break;
+        }
       }
     });
   }
@@ -247,17 +274,22 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   void handleGetWaitingSeat(data) {
     if (hubConnection.state == HubConnectionState.Connected) {
       setState(() {
-        waitingSeatIds = data[0];
+        waitingSeatIds =
+            (data[0] as List).map((e) => SeatInfo.fromJson(e)).toList();
         seatPr.fetchSeatsByRoomId(
             selectedShowtime.roomId, selectedShowtime.showTimeId);
       });
     }
   }
 
-  Seat? findSeatById(String seatId) {
-    for (var row in seatRows) {
+  Seat? findSeatById(String rowName, int colIndex) {
+    var row = seatRows.firstWhere(
+      (element) => element.rowName.compareTo(rowName) == 0,
+      orElse: () => SeatRowData(),
+    );
+    if (row.rowName != "") {
       for (var seat in row.seats) {
-        if (seat.id == seatId) {
+        if (seat.colIndex == colIndex) {
           return seat;
         }
       }
@@ -267,17 +299,23 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   @override
   void onLoadSeatComplete(List<SeatRowData> seatLst) {
-    print(seatLst);
     setState(() {
       seatRows = seatLst;
 
       bool shouldBreak = false;
+
       for (var row in seatRows) {
         for (var seat in row.seats) {
-          if (waitingSeatIds.contains(seat.id)) {
+          var seatToCheck = waitingSeatIds.firstWhere(
+              (element) =>
+                  element.rowName.compareTo(row.rowName) == 0 &&
+                  element.colIndex == seat.colIndex,
+              orElse: () => SeatInfo());
+          if (seatToCheck.rowName != "") {
             seat.status = 3;
-
-            waitingSeatIds.remove(seat.id);
+            waitingSeatIds.removeWhere((element) =>
+                element.rowName.compareTo(row.rowName) == 0 &&
+                element.colIndex == seat.colIndex);
             if (waitingSeatIds.isEmpty) {
               shouldBreak = true;
               break;
@@ -291,8 +329,40 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     });
   }
 
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Lỗi"),
+            content: const Text(
+                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng hộp thoại
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Đóng"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Gọi hàm để tải dữ liệu lại
+                },
+                child: const Text("Tải lại"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
-  void onLoadError() {}
+  void onLoadError() {
+    setState(() {
+      isLoading = false;
+    });
+    _showErrorDialog();
+  }
 
   @override
   void initState() {
@@ -309,12 +379,13 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
+    var hS = MediaQuery.of(context).size.height;
+
     var marginLeft = 10.0;
-    var marginHorizontalScreen = 15.0;
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Styles.backgroundContent["dark_purple"],
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
           toolbarHeight: 50,
           leading: IconButton(
             alignment: Alignment.center,
@@ -324,57 +395,77 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
             },
             icon: Icon(
               Icons.arrow_back_ios_new,
-              color: Styles.boldTextColor["dark_purple"],
+              color: Styles.boldTextColor[Config.themeMode],
             ),
           ),
           titleSpacing: 0,
           leadingWidth: 45,
           title: Container(
-            margin: EdgeInsets.only(right: marginHorizontalScreen),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            margin: const EdgeInsets.only(right: Styles.defaultHorizontal),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.location_on,
-                      size: Styles.iconSizeInLineText,
-                      color: Styles.boldTextColor["dark_purple"],
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: Styles.iconSizeInLineText,
+                          color: Styles.boldTextColor[Config.themeMode],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
+                            style: TextStyle(
+                                color: Styles.boldTextColor[Config.themeMode],
+                                fontSize: Styles.titleFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
-                        style: TextStyle(
-                            color: Styles.textColor["dark_purple"],
-                            fontSize: Styles.textSize,
-                            fontWeight: FontWeight.bold),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.av_timer_rounded,
+                          size: Styles.iconSizeInLineText,
+                          color: Styles.boldTextColor[Config.themeMode],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
+                            softWrap: true,
+                            style: TextStyle(
+                                color: Styles.boldTextColor[Config.themeMode],
+                                fontSize: Styles.titleFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.av_timer_rounded,
-                      size: Styles.iconSizeInLineText,
-                      color: Styles.boldTextColor["dark_purple"],
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
-                        softWrap: true,
-                        style: TextStyle(
-                            color: Styles.textColor["dark_purple"],
-                            fontSize: Styles.textSize,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
+                ShowtimeDropDown(
+                  marginLeft: marginLeft,
+                  showtime: selectedShowtime,
+                  showtimes: widget.booking.movie.schedules
+                      .firstWhere((element) =>
+                          element.date.day == widget.selectedDate.day &&
+                          element.date.month == widget.selectedDate.month)
+                      .theaters
+                      .firstWhere(
+                          (element) =>
+                              element.theaterId == widget.booking.theater.id,
+                          orElse: () => TheaterShowtime())
+                      .showtimes,
+                  selectShowtime: selectShowtime,
+                )
               ],
             ),
           ),
@@ -382,90 +473,63 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         body: Center(
           child: Container(
             decoration:
-                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+                BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
-              Text(
-                "${widget.booking.movie.name} ${widget.booking.movie.showTimeTypeName} (${widget.booking.movie.ageRestrictionName})",
-                style: TextStyle(
-                    fontSize: Styles.titleFontSize,
-                    color: Styles.boldTextColor["dark_purple"]),
-              ),
-              //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
-              Container(
-                padding:
-                    EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
-                margin: const EdgeInsets.only(bottom: 5),
-                child: Row(
-                  children: [
-                    MovieTypeBox(
-                      title: widget.booking.movie.movieType,
-                      maxBoxWith: wS * 0.5 - 10,
-                      padding: 5,
-                    ),
-                    ShowtimeTypeBox(
-                      title: widget.booking.movie.showTimeTypeName,
-                      marginLeft: marginLeft,
-                    ),
-                    AgeRestrictionBox(
-                        title: widget.booking.movie.ageRestrictionName,
-                        marginLeft: marginLeft,
-                        fontSizeCus: 15),
-                    ShowtimeDropDown(
-                      marginLeft: marginLeft,
-                      showtime: selectedShowtime,
-                      showtimes: widget.booking.movie.schedules
-                          .firstWhere((element) =>
-                              element.date.day == widget.selectedDate.day &&
-                              element.date.month == widget.selectedDate.month)
-                          .theaters
-                          .firstWhere(
-                              (element) =>
-                                  element.theaterId ==
-                                  widget.booking.theater.id,
-                              orElse: () => TheaterShowtime())
-                          .showtimes,
-                      selectShowtime: selectShowtime,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Stack(
-                  children: [
-                    const CurvedLineWidget(),
-                    Positioned(
-                      top: 10,
-                      child: Container(
-                        width: wS - 20,
-                        alignment: Alignment.center,
-                        child: Text(
-                          "MÀN HÌNH",
-                          style: TextStyle(
-                              fontSize: Styles.titleFontSize,
-                              color: Styles.boldTextColor["dark_purple"]),
+              SizedBox(
+                height: hS - 200,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  child: SizedBox(
+                    height: seatRows.length > 10 ? hS : hS - 200,
+                    child: Column(children: [
+                      //chọn vị trí ghế
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            children: [
+                              Container(
+                                width: wS + 200,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Stack(
+                                  children: [
+                                    const CurvedLineWidget(),
+                                    Positioned(
+                                      top: 10,
+                                      child: Container(
+                                        width: wS + 180,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "MÀN HÌNH",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Styles.titleFontSize,
+                                              color: Styles.boldTextColor[
+                                                  Config.themeMode]),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  child: Column(children: renderSeatRow())),
+                            ],
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              //chọn vị trí ghế
-              Expanded(
-                flex: 1,
-                child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-
-                  scrollDirection: Axis.horizontal,
-                  child: Column(children: renderSeatRow()),
+                    ]),
+                  ),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 5),
-                padding:
-                    EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Styles.defaultHorizontal),
                 child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -484,7 +548,6 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
               Container(
                   margin: const EdgeInsets.only(bottom: 15, left: 8, right: 8),
                   decoration: BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.circular(2),
                       boxShadow: [
                         BoxShadow(
@@ -514,7 +577,7 @@ class CurvedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Styles.titleColor["dark_purple"]!
+      ..color = Styles.titleColor[Config.themeMode]!
       ..strokeWidth = 6
       ..style = PaintingStyle.stroke;
 

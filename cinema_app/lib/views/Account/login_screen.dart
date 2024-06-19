@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               "Đăng nhập",
             ),
             const SizedBox(height: 20),
@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             ElevatedButton(
               onPressed: () {},
-              child: Text(
+              child: const Text(
                 'Đăng nhập',
               ),
             ),
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
+                const Text(
                   "Người dùng mới!",
     
                 ),
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Đăng ký",
                    
                   ),

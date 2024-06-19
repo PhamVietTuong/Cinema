@@ -35,16 +35,17 @@ class _TheaterScreenState extends State<TheaterScreen>
         title: Text(
           "MUA VÉ",
           style: TextStyle(
-              color: Styles.boldTextColor["dark_purple"],
+              fontWeight: FontWeight.bold,
+              color: Styles.boldTextColor[Config.themeMode],
               fontSize: Styles.appbarFontSize),
         ),
         centerTitle: true,
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         elevation: 1,
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: isLoadingData
             ? Center(
                 child: Column(
@@ -52,7 +53,7 @@ class _TheaterScreenState extends State<TheaterScreen>
                   children: [
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          Styles.boldTextColor["dark_purple"]!),
+                          Styles.boldTextColor[Config.themeMode]!),
                     ),
                     const SizedBox(
                       height: 20,
@@ -62,13 +63,13 @@ class _TheaterScreenState extends State<TheaterScreen>
                       style: TextStyle(
                           fontSize: Styles.titleFontSize,
                           fontWeight: FontWeight.bold,
-                          color: Styles.boldTextColor["dark_purple"]),
+                          color: Styles.boldTextColor[Config.themeMode]),
                     )
                   ],
                 ),
               )
             : SingleChildScrollView(
-                physics:const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: theaterItemLst,
@@ -115,9 +116,11 @@ class _TheaterScreenState extends State<TheaterScreen>
               TextButton(
                 onPressed: () {
                   // Gọi hàm để tải dữ liệu lại
-                  theaterPr
-                      .fetchTheaters()
-                      .then((value) => Navigator.of(context).pop());
+                  setState(() {
+                    isLoadingData = true;
+                  });
+                  theaterPr.fetchTheaters();
+                  Navigator.of(context).pop();
                 },
                 child: const Text("Tải lại"),
               ),

@@ -1,10 +1,12 @@
 import 'dart:io';
-
-import 'package:cinema_app/components/bottom_nav.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
-
-void main() {
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cinema_app/components/bottom_nav.dart';
+void main() async {
   HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Config.initialize();
   runApp(const MyApp());
 }
 
@@ -16,25 +18,21 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialLanguageCode;
 
-  // This widget is the root of your application.
+  const MyApp({Key? key, required this.initialLanguageCode}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Cinema App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          },
-        ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      locale: Locale(initialLanguageCode),
+      supportedLocales: const [
+        Locale('en'),
+        Locale('vi'),
+      ],
       home: const BottomNav(),
     );
   }

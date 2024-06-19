@@ -2,7 +2,6 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/btn_up_down.dart';
 import 'package:cinema_app/data/models/ticket_option.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class TicketOptionItem extends StatefulWidget {
   const TicketOptionItem(
@@ -14,8 +13,6 @@ class TicketOptionItem extends StatefulWidget {
 }
 
 class _TicketOptionItemState extends State<TicketOptionItem> {
-  var formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
-
   void updown(bool isUp) {
     setState(() {
       widget.upDownQuantity(isUp, widget);
@@ -32,15 +29,15 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
               begin: Alignment.bottomLeft,
               end: Alignment.bottomRight,
               colors: [
-                Styles.gradientTop["dark_purple"]!,
-                Styles.gradientBot["dark_purple"]!
+                Styles.gradientTop[Config.themeMode]!,
+                Styles.gradientBot[Config.themeMode]!
               ])),
       child: Container(
-       padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.only(bottom: 3),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(3.0),
-            color: Styles.backgroundContent["dark_purple"]),
+            color: Styles.backgroundContent[Config.themeMode]),
         child: Column(
           children: [
             Row(
@@ -52,7 +49,7 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: Styles.textSize,
-                        color: Styles.boldTextColor["dark_purple"]),
+                        color: Styles.boldTextColor[Config.themeMode]),
                   ),
                 ),
                 const SizedBox(
@@ -60,30 +57,29 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
                 ),
                 Row(
                   children: [
+
                     Container(
                         margin: const EdgeInsets.only(right: 15),
                         child: Text(
-                          formatter.format(widget.option.price),
+                          Styles.formatter.format(widget.option.price),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Styles.boldTextColor["dark_purple"]),
+                              color: Styles.boldTextColor[Config.themeMode]),
                         )),
                     BtnUpDown(
-                        colorText: Styles.btnColor["dark_purple"],
-                        opt: widget.option,
+                        colorText: Styles.btnColor[Config.themeMode],
                         upDown: updown),
                     Container(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Text(
                           widget.option.quantity.toString().padLeft(2, '0'),
                           style: TextStyle(
-                              color: Styles.boldTextColor["dark_purple"],
+                              color: Styles.boldTextColor[Config.themeMode],
                               fontWeight: FontWeight.bold),
                         )),
                     BtnUpDown(
                       isUp: true,
-                      colorText: Styles.btnColor["dark_purple"],
-                      opt: widget.option,
+                      colorText: Styles.btnColor[Config.themeMode],
                       upDown: updown,
                     ),
                   ],

@@ -3,19 +3,21 @@ class FoodAndDrink {
   String name;
   String description;
   String image;
-  double price;
+  int price;
+  int quantity;
 
   FoodAndDrink(
       {this.description = "",
       this.id = "",
       this.image = "",
       this.name = "",
-      this.price = 0.0});
+      this.price = 0, this.quantity=0});
 
   FoodAndDrink.fromJson(Map<String, dynamic> json)
-      : id = json["id"]??"",
-        name = json["name"]??"",
-        description = json["description"]??"",
-        image = json["image"]??"",
-        price = json["price"]??0.0;
+      : id = json["id"] ?? "",
+        name = json["name"] ?? "",
+        description = json["description"] ?? "",
+        image = json["image"] ?? "",
+        quantity=0,
+        price = json["price"] ?? 0;
 }

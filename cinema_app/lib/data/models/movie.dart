@@ -70,6 +70,10 @@ class Movie {
                 .map((e) => Schedule.fromJson(e as Map<String, dynamic>))
                 .toList()
             : [];
+
+  String getFullName() {
+    return '$name $showTimeTypeName ($ageRestrictionName)';
+  }
 }
 
 class Schedule {
@@ -93,10 +97,11 @@ class TheaterShowtime {
   String theaterAddress;
   List<ShowtimeRoom> showtimes = List.filled(0, ShowtimeRoom(), growable: true);
 
-  TheaterShowtime({this.theaterName = "", this.theaterAddress = "", this.theaterId=""});
+  TheaterShowtime(
+      {this.theaterName = "", this.theaterAddress = "", this.theaterId = ""});
   TheaterShowtime.fromJson(Map<String, dynamic> json)
       : theaterAddress = json["theaterAddress"] ?? "",
-      theaterId=json["theaterId"]??"",
+        theaterId = json["theaterId"] ?? "",
         theaterName = json["theaterName"] ?? "",
         showtimes = (json["showTimes"] as List)
             .map((e) => ShowtimeRoom.fromJson(e as Map<String, dynamic>))

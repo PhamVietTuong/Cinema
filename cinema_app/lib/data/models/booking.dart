@@ -1,3 +1,4 @@
+import 'package:cinema_app/data/models/seat.dart';
 import 'package:cinema_app/data/models/showtime.dart';
 import 'package:cinema_app/data/models/theater.dart';
 import 'package:cinema_app/data/models/ticket_option.dart';
@@ -10,7 +11,7 @@ class Booking {
   ShowtimeRoom showtime = ShowtimeRoom();
 
   List<TicketOption> tickets = List.filled(0, TicketOption(), growable: true);
-  List<String> seatIds = List.filled(0, "", growable: true);
+  List<Seat> seats = List.filled(0, Seat(), growable: true);
 
   Booking({Theater? theater, Movie? movie})
       : theater = theater ?? Theater(),
@@ -24,10 +25,32 @@ class Booking {
     return result;
   }
 
-  int getTotalPrice() {
+  int getPriceTickets() {
     int result = 0;
+
     for (TicketOption opt in tickets) {
       result += (opt.quantity * opt.price);
+    }
+    return result;
+  }
+
+  int getPriceCombos() {
+    int result = 0;
+
+    for (var item in theater.combos) {
+      result += (item.quantity * item.price);
+    }
+    return result;
+  }
+
+  int getTotalPrice() {
+    return getPriceTickets() + getPriceCombos();
+  }
+
+  int getTotalCombo() {
+    int result = 0;
+    for (var item in theater.combos) {
+      result += item.quantity;
     }
     return result;
   }
@@ -42,7 +65,7 @@ class Booking {
 
   int countingCouple() {
     return tickets
-        .where((e) => e.seatTypeName.compareTo("Đôi") == 0)
+        .where((e) => e.seatTypeName.compareTo("Ðôi") == 0)
         .toList()
         .map((a) => a.quantity)
         .fold(0, (previousValue, element) => previousValue + element);

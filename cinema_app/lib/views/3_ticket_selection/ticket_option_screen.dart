@@ -49,6 +49,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
 
   void selectShowtime(ShowtimeRoom showtime) {
     setState(() {
+      isLoadingData = true;
       selectedShowtime = showtime;
       totalTicket = 0;
       totalPrice = 0;
@@ -109,17 +110,19 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
     var wS = MediaQuery.of(context).size.width;
     var marginLeft = 10.0;
     var marginHorizontalScreen = 15.0;
+
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Styles.backgroundContent["dark_purple"],
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
           leading: IconButton(
             alignment: Alignment.center,
             onPressed: () {
+              widget.booking.movie = Movie();
               Navigator.pop(this.context);
             },
             icon: Icon(
               Icons.arrow_back_ios_new,
-              color: Styles.boldTextColor["dark_purple"],
+              color: Styles.boldTextColor[Config.themeMode],
             ),
           ),
           titleSpacing: 0,
@@ -127,14 +130,15 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
           title: Text(
             'CHỌN VÉ',
             style: TextStyle(
+                fontWeight: FontWeight.bold,
                 fontSize: Styles.appbarFontSize,
-                color: Styles.boldTextColor["dark_purple"]),
+                color: Styles.boldTextColor[Config.themeMode]),
           ),
         ),
         body: Center(
           child: Container(
             decoration:
-                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+                BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               //phần thông tin cơ bản, thể loại, hình thức chiếu, suất chiếu
@@ -154,9 +158,9 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                       marginLeft: marginLeft,
                     ),
                     AgeRestrictionBox(
-                        title: widget.movie.ageRestrictionName,
-                        marginLeft: marginLeft,
-                        fontSizeCus: 15),
+                      title: widget.movie.ageRestrictionName,
+                      marginLeft: marginLeft,
+                    ),
                     ShowtimeDropDown(
                       marginLeft: marginLeft,
                       showtime: selectedShowtime,
@@ -210,7 +214,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                     '${widget.movie.name} ${widget.movie.showTimeTypeName} (${widget.movie.ageRestrictionName})',
                                     style: TextStyle(
                                         color:
-                                            Styles.boldTextColor["dark_purple"],
+                                            Styles.boldTextColor[Config.themeMode],
                                         fontSize: Styles.titleFontSize,
                                         fontWeight: FontWeight.bold)),
                               ),
@@ -223,7 +227,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                       Icons.location_on,
                                       size: Styles.iconSizeInLineText,
                                       color:
-                                          Styles.boldTextColor["dark_purple"],
+                                          Styles.boldTextColor[Config.themeMode],
                                     ),
                                     Expanded(
                                       flex: 1,
@@ -233,7 +237,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                             "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
                                             style: TextStyle(
                                               color: Styles
-                                                  .textColor["dark_purple"],
+                                                  .textColor[Config.themeMode],
                                               fontSize: Styles.textSize,
                                             )),
                                       ),
@@ -247,7 +251,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                   Icon(
                                     Icons.av_timer_rounded,
                                     size: Styles.iconSizeInLineText,
-                                    color: Styles.boldTextColor["dark_purple"],
+                                    color: Styles.boldTextColor[Config.themeMode],
                                   ),
                                   Expanded(
                                     flex: 1,
@@ -258,7 +262,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                           softWrap: true,
                                           style: TextStyle(
                                             color:
-                                                Styles.textColor["dark_purple"],
+                                                Styles.textColor[Config.themeMode],
                                             fontSize: Styles.textSize,
                                           )),
                                     ),
@@ -272,18 +276,38 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                     ]),
               ),
               //chọn loại ghế
-              Expanded(
-                flex: 1,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: marginHorizontalScreen),
-                  child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-
-                    child: Column(children: options),
-                  ),
-                ),
-              ),
+              isLoadingData
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.black),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "Đang tải...",
+                            style: TextStyle(
+                                color: Styles.boldTextColor[Config.themeMode],
+                                fontSize: Styles.titleFontSize),
+                          )
+                        ],
+                      ),
+                    )
+                  : Expanded(
+                      flex: 1,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: marginHorizontalScreen),
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Column(children: options),
+                        ),
+                      ),
+                    ),
               Container(
                   margin: const EdgeInsets.only(bottom: 25, left: 8, right: 8),
                   decoration: BoxDecoration(
@@ -308,9 +332,12 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
   }
 
   @override
-
-  @override
-  void onLoadError() {}
+  void onLoadError() {
+    setState(() {
+      isLoadingData = false;
+    });
+    _showErrorDialog();
+  }
 
   @override
   void onLoadTicketOptionComplete(List<TicketOption> ticketOptions) {
@@ -320,6 +347,41 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
           .map((e) =>
               TicketOptionItem(option: e, upDownQuantity: upDownOptionQuantity))
           .toList();
+
+      isLoadingData = false;
     });
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Lỗi"),
+            content: const Text(
+                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng hộp thoại
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Đóng"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Gọi hàm để tải dữ liệu lại
+                  setState(() {
+                    isLoadingData = true;
+                  });
+                  ticketPre.fetchTicketOptions(
+                      selectedShowtime.showTimeId, selectedShowtime.roomId);
+                  Navigator.pop(context);
+                },
+                child: const Text("Tải lại"),
+              ),
+            ],
+          );
+        });
   }
 }
