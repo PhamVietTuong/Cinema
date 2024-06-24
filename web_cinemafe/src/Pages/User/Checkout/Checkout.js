@@ -5,7 +5,7 @@ import { Fragment, useState } from 'react';
 import * as yup from 'yup';
 import InfoTicketBooking from '../InfoTicketBooking/InfoTicketBooking';
 
-const steps = ['THÔNG TIN KHÁCH HÀNG', 'THANH TOÁN', 'THÔNG TIN VÉ PHIM'];
+const steps = ['THANH TOÁN', 'THÔNG TIN VÉ PHIM'];
 
 const schema = yup.object().shape({
     fullName: yup.string().required('Vui lòng nhập họ và tên'),
@@ -26,47 +26,11 @@ const CustomStepIcon = (props) => {
 };
 
 const Checkout = () => {
-    const dispatch = useDispatch();
     const [activeStep, setActiveStep] = useState(0);
-    const [formData, setFormData] = useState({
-        fullName: '',
-        phone: '',
-        email: '',
-    });
-    const [errors, setErrors] = useState({
-        fullName: '',
-        phone: '',
-        email: '',
-    });
-
-    const validateField = async (name, value) => {
-        try {
-            await yup.reach(schema, name).validate(value);
-            setErrors({
-                ...errors,
-                [name]: '',
-            });
-        } catch (error) {
-            setErrors({
-                ...errors,
-                [name]: error.errors[0],
-            });
-        }
-    };
-    const isStepOptional = (step) => step === 1;
-
 
     const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
     const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
 
     return (
         <>
@@ -106,52 +70,6 @@ const Checkout = () => {
                                                         <Typography sx={{ mt: 2, mb: 1 }}>
                                                             {
                                                                 activeStep === 0 && (
-                                                                    <>
-                                                                        <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="CheckoutFormControl">
-                                                                            <FormLabel sx={{ mb: 1 }} className="CheckoutFormLabel">Họ và tên <span className="required">*</span></FormLabel>
-                                                                            <OutlinedInput
-                                                                                className='CheckoutOutlinedInput'
-                                                                                name="fullName"
-                                                                                onChange={handleInputChange}
-                                                                                onBlur={(event) => validateField(event.target.name, event.target.value)}
-                                                                            />
-                                                                            {!!errors.fullName && (
-                                                                                <FormHelperText>{errors.fullName}</FormHelperText>
-                                                                            )}
-                                                                        </FormControl>
-                                                                        <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="CheckoutFormControl">
-                                                                            <FormLabel sx={{ mb: 1, mt: 2 }} className="CheckoutFormLabel">Số điện thoại <span className="required">*</span></FormLabel>
-                                                                            <OutlinedInput
-                                                                                className='CheckoutOutlinedInput'
-                                                                                name="phone"
-                                                                                onChange={handleInputChange}
-                                                                                onBlur={(event) => validateField(event.target.name, event.target.value)}
-                                                                            />
-                                                                            {!!errors.phone && (
-                                                                                <FormHelperText>{errors.phone}</FormHelperText>
-                                                                            )}
-                                                                        </FormControl>
-                                                                        <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="CheckoutFormControl">
-                                                                            <FormLabel sx={{ mb: 1, mt: 2 }} className="CheckoutFormLabel">Email <span className="required">*</span></FormLabel>
-                                                                            <OutlinedInput
-                                                                                className='CheckoutOutlinedInput'
-                                                                                name="email"
-                                                                                onChange={handleInputChange}
-                                                                                onBlur={(event) => validateField(event.target.name, event.target.value)}
-                                                                            />
-                                                                            {!!errors.email && (
-                                                                                <FormHelperText>{errors.email}</FormHelperText>
-                                                                            )}
-                                                                        </FormControl>
-
-                                                                        <Button class="btn btn--pri CheckoutButton">
-                                                                            Tiếp tục
-                                                                        </Button>
-                                                                    </>
-                                                                )
-                                                            }
-                                                            {
-                                                                activeStep === 1 && (
                                                                     <>
                                                                         <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="CheckoutFormControl">
                                                                             <FormLabel sx={{ mb: 1, mt: 2 }} className="CheckoutFormLabel CheckoutIcon CheckoutHover">
