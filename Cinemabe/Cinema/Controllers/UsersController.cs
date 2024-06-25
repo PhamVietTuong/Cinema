@@ -21,10 +21,6 @@ namespace Cinema.Controllers
             _uow = uow;
         }
 
-        public UsersController(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
         [HttpPost("LoginUser")]
         [ProducesResponseType(typeof(AuthenticationResponse), 200)]
         [ProducesResponseType(typeof(void), 400)]
