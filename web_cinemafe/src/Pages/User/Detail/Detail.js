@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import './Detail.css'   
+import './Detail.css'
 import { Pagination } from 'swiper/modules';
 import Theater from '../Theater/Theater';
 import { useEffect, useRef, useState } from 'react';
@@ -16,6 +16,7 @@ import { InfoTicketBooking, TicketBookingSuccess } from '../../../Models/InfoTic
 import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
 import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
 import { connection } from '../../../connectionSignalR';
+import { CSSTransition } from 'react-transition-group';
 const Detail = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
@@ -31,13 +32,15 @@ const Detail = () => {
     const [selectedShowTimeId, setSelectedShowTimeId] = useState(null);
     const [selectedTheaterId, setSelectedTheaterId] = useState(null);
     const [selectedRoomId, setselectedRoomId] = useState(null);
+    const [showTrailerPopup, setShowTrailerPopup] = useState(false);
+
     useEffect(() => {
         let movieDetailDTO = new MovieDetailDTO();
         movieDetailDTO.id = id;
         movieDetailDTO.projectionForm = projectionForm
         dispatch(MovieDetailAction(movieDetailDTO))
     }, [id, projectionForm]);
-    
+
     useEffect(() => {
         const showTimeIdHandle = async (showTimeId, roomId, theaterId) => {
             if (!connectionEstablished.current) {
@@ -104,94 +107,93 @@ const Detail = () => {
 
     return (
         <>
-                <div className="app-content">
-                    <section className="sec-detail">
-                        <div className="detail ht">
-                            <div className="container">
-                                <div className="detail-wr">
-                                    <div className="detail-row row">
-                                        <div className='detail-left col col-5'>
-                                            <div class="web-movie-box">
-                                                <div className="web-movie-box">
-                                                    <div className="image">
-                                                        <img src={`${DOMAIN}/Images/${movieDetail?.image}`} alt=""></img>
-                                                        <div className="attach">
-                                                            <div className="type-movie">
-                                                                <span className="txt">{movieDetail?.showTimeTypeName}</span>
-                                                            </div>
-                                                            <div className="age">
-                                                                <span className="number">
-                                                                    {movieDetail?.ageRestrictionName}
-                                                                </span>
-                                                                <span className="txt">
-                                                                    {movieDetail?.ageRestrictionAbbreviation ? movieDetail?.ageRestrictionAbbreviation.toUpperCase() : ''}
-                                                                </span>
-                                                            </div>
+            <div className="app-content">
+                <section className="sec-detail">
+                    <div className="detail ht">
+                        <div className="container">
+                            <div className="detail-wr">
+                                <div className="detail-row row">
+                                    <div className='detail-left col col-5'>
+                                        <div class="web-movie-box">
+                                            <div className="web-movie-box">
+                                                <div className="image">
+                                                    <img src={`${DOMAIN}/Images/${movieDetail?.image}`} alt=""></img>
+                                                    <div className="attach">
+                                                        <div className="type-movie">
+                                                            <span className="txt">{movieDetail?.showTimeTypeName}</span>
+                                                        </div>
+                                                        <div className="age">
+                                                            <span className="number">
+                                                                {movieDetail?.ageRestrictionName}
+                                                            </span>
+                                                            <span className="txt">
+                                                                {movieDetail?.ageRestrictionAbbreviation ? movieDetail?.ageRestrictionAbbreviation.toUpperCase() : ''}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='detail-right col col-7'>
-                                            <div className='detail-ct'>
-                                                <div className='detail-ct-h'>
-                                                    <h1 className='heading'>
-                                                        {movieDetail?.name} ({movieDetail?.ageRestrictionName})
-                                                    </h1>
-                                                    <ul className='info-detail'>
-                                                        <li className='info-item'>
-                                                            <span class="ic">
-                                                                <img src="/Images/movieType.svg" alt="Movie Type Icon" width="100" height="100"/>
-                                                            </span>
-                                                            <span class="txt">{movieDetail?.movieType}</span>
-                                                        </li>
-                                                        <li className='info-item'>
-                                                            <span class="ic">
-                                                                <img src="/Images/icon-clock.svg" alt="Clock icon" />
-                                                            </span>
-                                                            <span class="txt">{movieDetail?.time}'</span>
-                                                        </li>
-                                                        <li className='info-item'>
-                                                            <span class="ic">
-                                                                <img src="/Images/earth-americas.svg" alt="Earth americas Icon" width="100" height="100"/>
-                                                            </span>
-                                                            <span class="txt">Khác</span>
-                                                        </li>
-                                                        <li className='info-item'>
-                                                            <span class="ic">
-                                                                <img src="/Images/user-check.svg" alt="User check Icon" width="100" height="100" />
-                                                            </span>
-                                                            <span class="txt">{movieDetail?.ageRestrictionName}: {movieDetail?.ageRestrictionDescription}</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div className='detail-ct-bd'>
-                                                    <h3 className='tt sub-tittle'>
-                                                        Mô tả
-                                                    </h3>
-                                                    <ul className='font-family-actor'>
-                                                        <li>Đạo diễn: {movieDetail?.director}</li>
-                                                        <li>Diễn viên: {movieDetail?.actor}</li>
-                                                        <li>Khởi chiếu: {moment(movieDetail?.releaseDate).format("DD/MM/YYYY")}</li>
-                                                    </ul>
-                                                </div>
-                                                <div className='detail-ct-bd'>
-                                                    <h3 className='tt sub-tittle'>
-                                                        Nội dung phim
-                                                    </h3>
-                                                    <div className='ct'>
-                                                        <div className='dt'>
-                                                            <p class="txt line-clamp-6 description">{movieDetail?.description}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className='detail-ct-ft'>
-                                                    <div class="video pointer">
+                                    </div>
+                                    <div className='detail-right col col-7'>
+                                        <div className='detail-ct'>
+                                            <div className='detail-ct-h'>
+                                                <h1 className='heading'>
+                                                    {movieDetail?.name} ({movieDetail?.ageRestrictionName})
+                                                </h1>
+                                                <ul className='info-detail'>
+                                                    <li className='info-item'>
                                                         <span class="ic">
-                                                            <img src="https://cinestar.com.vn/assets/images/icon-play-vid.svg"></img>
+                                                            <img src="/Images/movieType.svg" alt="Movie Type Icon" width="100" height="100" />
                                                         </span>
-                                                        <span class="txt">Xem Trailer</span>
+                                                        <span class="txt">{movieDetail?.movieType}</span>
+                                                    </li>
+                                                    <li className='info-item'>
+                                                        <span class="ic">
+                                                            <img src="/Images/icon-clock.svg" alt="Clock icon" />
+                                                        </span>
+                                                        <span class="txt">{movieDetail?.time}'</span>
+                                                    </li>
+                                                    <li className='info-item'>
+                                                        <span class="ic">
+                                                            <img src="/Images/earth-americas.svg" alt="Earth americas Icon" width="100" height="100" />
+                                                        </span>
+                                                        <span class="txt">Khác</span>
+                                                    </li>
+                                                    <li className='info-item'>
+                                                        <span class="ic">
+                                                            <img src="/Images/user-check.svg" alt="User check Icon" width="100" height="100" />
+                                                        </span>
+                                                        <span class="txt">{movieDetail?.ageRestrictionName}: {movieDetail?.ageRestrictionDescription}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className='detail-ct-bd'>
+                                                <h3 className='tt sub-tittle'>
+                                                    Mô tả
+                                                </h3>
+                                                <ul className='font-family-actor'>
+                                                    <li>Đạo diễn: {movieDetail?.director}</li>
+                                                    <li>Diễn viên: {movieDetail?.actor}</li>
+                                                    <li>Khởi chiếu: {moment(movieDetail?.releaseDate).format("DD/MM/YYYY")}</li>
+                                                </ul>
+                                            </div>
+                                            <div className='detail-ct-bd'>
+                                                <h3 className='tt sub-tittle'>
+                                                    Nội dung phim
+                                                </h3>
+                                                <div className='ct'>
+                                                    <div className='dt'>
+                                                        <p class="txt line-clamp-6 description">{movieDetail?.description}</p>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div className='detail-ct-ft' onClick={() => setShowTrailerPopup(true)}>
+                                                <div class="video pointer">
+                                                    <span class="ic">
+                                                        <img src="https://cinestar.com.vn/assets/images/icon-play-vid.svg" alt=''></img>
+                                                    </span>
+                                                    <span class="txt">Xem Trailer</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -199,9 +201,10 @@ const Detail = () => {
                                 </div>
                             </div>
                         </div>
-                    </section>
-                <Theater 
-                    MovieDetail={movieDetail} 
+                    </div>
+                </section>
+                <Theater
+                    MovieDetail={movieDetail}
                     theaterId={selectedTheaterId}
                     showTimeId={selectedShowTimeId}
                     roomId={selectedRoomId}
@@ -210,7 +213,25 @@ const Detail = () => {
                     selectedheaterName={selectedheaterName}
                     activeDateIndex={activeDateIndex}
                 />
+            </div>
+
+            <CSSTransition
+                in={showTrailerPopup}
+                unmountOnExit
+                timeout={{ enter: 0, exit: 300 }}
+            >
+                <div className="modal" onClick={() => setShowTrailerPopup(false)}>
+                    <iframe
+                        style={{ position: "relative" }}
+                        title="title4"
+                        allowfullscreen="true"
+                        width="996px"
+                        height="500px"
+                        src={`https://www.youtube.com/embed/${movieDetail.trailer}`}
+                        frameborder="0"
+                    ></iframe>
                 </div>
+            </CSSTransition>
         </>
     );
 }

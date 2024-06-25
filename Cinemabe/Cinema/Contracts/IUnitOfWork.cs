@@ -9,5 +9,6 @@
 		ISeatRepository SeatRepository { get; }
 		ITheaterRepository TheaterRepository { get; }
 		IInvoiceRepository InvoiceRepository { get; }
+		IAgeRestrictionRepository AgeRestrictionRepository { get; }
     }
 }

@@ -21,13 +21,17 @@ DELETE FROM FoodAndDrink;
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 
+--user type
+set @NEW_GUID =NEWID();
+insert UserType(Id, Name) values (@NEW_GUID, N'Admin')
+set @NEW_GUID =NEWID();
+insert UserType(Id, Name) values (@NEW_GUID, N'User')
+
 DECLARE @GUID_theater1 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater2 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater3 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater4 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater5 UNIQUEIDENTIFIER;
-
-
 
 --theater
 SET @GUID_theater1 = NEWID();
@@ -395,62 +399,62 @@ INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie10, @GUID_movieT
 --kong
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-06-10T08:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-06-11T08:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-06-10T09:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-06-11T09:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,1, '2024-06-10T08:30:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,1, '2024-06-11T08:30:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 --spider
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,0, '2024-06-10T11:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,0, '2024-06-11T11:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-10T11:30:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-11T11:30:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-10T12:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-11T12:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 
 --dune
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-06-10T14:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-06-11T14:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-06-10T15:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-06-11T15:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --batman
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie4,0, '2024-06-10T14:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie4,0, '2024-06-11T14:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 --avatar
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-10T18:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-11T18:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-10T17:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-11T17:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-10T21:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-11T21:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --ticket type

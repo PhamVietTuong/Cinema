@@ -3,7 +3,7 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -38,7 +38,7 @@ export const TicketTypeAction = (ticketTypeByShowTimeDTO) => {
     return async (dispatch) => {
         try {
             const ticketType = await cinemasService.PostTicketTypeByShowTimeAndRoomId(ticketTypeByShowTimeDTO);
-            
+
             dispatch({
                 type: SET_TICKET_TYPE,
                 ticketType: ticketType.data,
@@ -120,7 +120,7 @@ export const updateTotalSeatTypeAndProceed = (totalSeatType, showTimeId, roomId)
         infoTicketBooking.roomId = roomId;
         if (connection.state === 'Connected') {
             await connection.invoke("SeatBeingSelected", infoTicketBooking);
-        } 
+        }
     }
 }
 
@@ -171,7 +171,7 @@ export const TicketBooking = (invoiceDTO, navigate) => {
 
             await connection.on("InforTicket", handleInforTicket);
             await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO).then((result) => {
-                if(result) {
+                if (result) {
                     navigate("/")
                     console.log(result);
                 }
@@ -239,7 +239,7 @@ export const ListMovieByTheaterIdAction = (id) => {
                 type: SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET,
                 listMovieByTheaterIdBookQuickTicket: result.data,
             })
-            
+
         } catch (error) {
             console.log("ListMovieByTheaterIdAction: ", error);
         }
@@ -269,6 +269,93 @@ export const GetInvoiceAction = (code) => {
             console.log(result);
         } catch (error) {
             console.log("ListShowTimeByMovieIdAction: ", error);
+        }
+    }
+}
+
+export const GetAgeRestrictionListAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetAgeRestrictionList(code);
+            dispatch({
+                type: SET_LIST_AGERESTRICTION,
+                ageRestrictionList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetAgeRestrictionListAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const UpdateAgeRestrictionAction = (ageRestrictionDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateAgeRestriction(ageRestrictionDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetAgeRestrictionListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateAgeRestrictionAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateAgeRestrictionAction = (ageRestrictionDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateAgeRestriction(ageRestrictionDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetAgeRestrictionListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateAgeRestrictionAction: ", error);
+                }
+            });
         }
     }
 }

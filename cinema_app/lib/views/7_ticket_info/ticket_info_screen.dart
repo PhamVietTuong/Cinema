@@ -33,13 +33,13 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
     var bW = 1.0;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         title: Text(
           "THÔNG TIN GIAO DỊCH",
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: Styles.appbarFontSize,
-              color: Styles.boldTextColor["dark_purple"]),
+              color: Styles.boldTextColor[Config.themeMode]),
         ),
         leading: const SizedBox(),
         centerTitle: true,
@@ -49,7 +49,7 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
         child: Center(
           child: Container(
             decoration:
-                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+                BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
             child: Column(children: [
               InfoBar(
                 title: "Người đặt",
@@ -111,13 +111,13 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                     Text(
                       "Mã vé",
                       style: TextStyle(
-                          color: Styles.titleColor["dark_purple"],
+                          color: Styles.titleColor[Config.themeMode],
                           fontWeight: FontWeight.bold,
                           fontSize: Styles.titleFontSize),
                     ),
-                    Text("111850955",
+                    Text(widget.result.toString(),
                         style: TextStyle(
-                            color: Styles.boldTextColor["dark_purple"],
+                            color: Styles.boldTextColor[Config.themeMode],
                             fontWeight: FontWeight.bold,
                             fontSize: Styles.titleFontSize)),
                     const SizedBox(
@@ -126,8 +126,8 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                     Container(
                       padding: const EdgeInsets.all(25),
                       decoration: const BoxDecoration(color: Colors.white),
-                      child: const QrBox(
-                        value: "111850955",
+                      child:  QrBox(
+                        value: widget.result.toString(),
                         size: 200.0,
                       ),
                     )
@@ -156,7 +156,7 @@ class _TicketInfoScreenState extends State<TicketInfoScreen> {
                               borderRadius: BorderRadius.circular(8)),
                           child: Text("XÁC NHẬN",
                               style: TextStyle(
-                                  color: Styles.boldTextColor["dark_purple"],
+                                  color: Styles.boldTextColor[Config.themeMode],
                                   fontWeight: FontWeight.bold,
                                   fontSize: Styles.titleFontSize)))),
                 ],

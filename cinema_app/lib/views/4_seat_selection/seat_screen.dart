@@ -41,7 +41,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   final hubConnection =
       HubConnectionBuilder().withUrl("$serverUrl/cinema").build();
   List<SeatRowData> seatRows = List.filled(0, SeatRowData(), growable: true);
-  List waitingSeatIds = List.filled(0, "", growable: true);
+  List<SeatInfo> waitingSeatIds = List.filled(0, SeatInfo(), growable: true);
   List<Seat> selectedSeats = List.filled(0, Seat(), growable: true);
 
   bool handel() {
@@ -63,9 +63,11 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     for (var row in seatRows) {
       for (var item in row.seats) {
         if (item.colIndex == seat.colIndex &&
-            item.name.substring(0, 1) == row.rowName) {
+            item.getRowName().compareTo(seat.getRowName()) == 0) {
           //tìm được đúng ghế cần xử lý
-
+          print(item.name);
+          print(item.getRowName());
+          print(row.rowName);
           if (item.seatTypeName.compareTo("Ðôi") == 0) {
             //state ==true thì xử lý bỏ chọn.
             if (state == true) {
@@ -151,8 +153,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         "showTimeId": selectedShowtime.showTimeId,
         "roomId": selectedShowtime.roomId,
         "InfoSeats": selectedSeats
-            .map((e) =>
-                {"RowName": e.name.substring(0, 1), "ColIndex": e.colIndex})
+            .map((e) => {"RowName": e.getRowName(), "ColIndex": e.colIndex})
             .toList(),
       }
     ]);
@@ -174,7 +175,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
             var seatToCheck = ids.firstWhere(
                 (element) =>
                     element.colIndex == seat.colIndex &&
-                    element.rowName == row.rowName,
+                    element.rowName.compareTo(row.rowName) == 0,
                 orElse: () => SeatInfo());
             if (seatToCheck.rowName != "") {
               if (seat.status == 0) {
@@ -183,7 +184,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
               setState(() {
                 seat.status = state;
                 ids.removeWhere((element) =>
-                    element.rowName == row.rowName &&
+                    element.rowName.compareTo(row.rowName) == 0 &&
                     element.colIndex == seat.colIndex);
               });
               if (ids.isEmpty) break;
@@ -250,12 +251,12 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
           var seatToCheck = ids.firstWhere(
               (element) =>
                   element.colIndex == seat.colIndex &&
-                  element.rowName == row.rowName,
+                  element.rowName.compareTo(row.rowName) == 0,
               orElse: () => SeatInfo());
           if (seatToCheck.rowName != "") {
             seat.status = state;
             ids.removeWhere((element) =>
-                element.rowName == row.rowName &&
+                element.rowName.compareTo(row.rowName) == 0 &&
                 element.colIndex == seat.colIndex);
             if (ids.isEmpty) {
               shouldBreak = true;
@@ -283,7 +284,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   Seat? findSeatById(String rowName, int colIndex) {
     var row = seatRows.firstWhere(
-      (element) => element.rowName == rowName,
+      (element) => element.rowName.compareTo(rowName) == 0,
       orElse: () => SeatRowData(),
     );
     if (row.rowName != "") {
@@ -307,13 +308,13 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         for (var seat in row.seats) {
           var seatToCheck = waitingSeatIds.firstWhere(
               (element) =>
-                  element.rowName == row.rowName &&
+                  element.rowName.compareTo(row.rowName) == 0 &&
                   element.colIndex == seat.colIndex,
               orElse: () => SeatInfo());
           if (seatToCheck.rowName != "") {
             seat.status = 3;
             waitingSeatIds.removeWhere((element) =>
-                element.rowName == row.rowName &&
+                element.rowName.compareTo(row.rowName) == 0 &&
                 element.colIndex == seat.colIndex);
             if (waitingSeatIds.isEmpty) {
               shouldBreak = true;
@@ -384,7 +385,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Styles.backgroundContent["dark_purple"],
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
           toolbarHeight: 50,
           leading: IconButton(
             alignment: Alignment.center,
@@ -394,7 +395,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
             },
             icon: Icon(
               Icons.arrow_back_ios_new,
-              color: Styles.boldTextColor["dark_purple"],
+              color: Styles.boldTextColor[Config.themeMode],
             ),
           ),
           titleSpacing: 0,
@@ -413,14 +414,14 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                         Icon(
                           Icons.location_on,
                           size: Styles.iconSizeInLineText,
-                          color: Styles.boldTextColor["dark_purple"],
+                          color: Styles.boldTextColor[Config.themeMode],
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 5),
                           child: Text(
                             "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
                             style: TextStyle(
-                                color: Styles.boldTextColor["dark_purple"],
+                                color: Styles.boldTextColor[Config.themeMode],
                                 fontSize: Styles.titleFontSize,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -433,7 +434,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                         Icon(
                           Icons.av_timer_rounded,
                           size: Styles.iconSizeInLineText,
-                          color: Styles.boldTextColor["dark_purple"],
+                          color: Styles.boldTextColor[Config.themeMode],
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 5),
@@ -441,7 +442,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                             "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
                             softWrap: true,
                             style: TextStyle(
-                                color: Styles.boldTextColor["dark_purple"],
+                                color: Styles.boldTextColor[Config.themeMode],
                                 fontSize: Styles.titleFontSize,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -472,7 +473,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         body: Center(
           child: Container(
             decoration:
-                BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+                BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               SizedBox(
@@ -508,7 +509,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                                               fontWeight: FontWeight.bold,
                                               fontSize: Styles.titleFontSize,
                                               color: Styles.boldTextColor[
-                                                  "dark_purple"]),
+                                                  Config.themeMode]),
                                         ),
                                       ),
                                     )
@@ -576,7 +577,7 @@ class CurvedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Styles.titleColor["dark_purple"]!
+      ..color = Styles.titleColor[Config.themeMode]!
       ..strokeWidth = 6
       ..style = PaintingStyle.stroke;
 

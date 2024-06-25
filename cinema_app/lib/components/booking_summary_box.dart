@@ -28,13 +28,13 @@ class BookingSummaryBox extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Styles.gradientTop["dark_purple"]!,
-                Styles.gradientBot["dark_purple"]!
+                Styles.gradientTop[Config.themeMode]!,
+                Styles.gradientBot[Config.themeMode]!
               ])),
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: Styles.backgroundContent["dark_purple"],
+          color: Styles.backgroundContent[Config.themeMode],
           borderRadius: BorderRadius.circular(3.0),
         ),
         child: Row(
@@ -59,27 +59,28 @@ class BookingSummaryBox extends StatelessWidget {
                               const TextSpan(text: " Ghế")
                             ],
                             style: TextStyle(
-                                color: Styles.boldTextColor["dark_purple"],
+                                color: Styles.boldTextColor[Config.themeMode],
                                 fontSize: Styles.titleFontSize)),
                       ),
                       const SizedBox(
                         width: 50,
                       ),
-                      booking.getTotalCombo()!=0?
-                      RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text:
-                                      '${booking.getTotalCombo()}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              const TextSpan(text: " Combo")
-                            ],
-                            style: TextStyle(
-                                color: Styles.boldTextColor["dark_purple"],
-                                fontSize: Styles.titleFontSize)),
-                      ): const SizedBox(),
+                      booking.getTotalCombo() != 0
+                          ? RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                        text: '${booking.getTotalCombo()}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    const TextSpan(text: " Combo")
+                                  ],
+                                  style: TextStyle(
+                                      color:
+                                          Styles.boldTextColor[Config.themeMode],
+                                      fontSize: Styles.titleFontSize)),
+                            )
+                          : const SizedBox(),
                     ],
                   ),
                   const SizedBox(
@@ -88,7 +89,7 @@ class BookingSummaryBox extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: Styles.boldTextColor["dark_purple"],
+                            color: Styles.boldTextColor[Config.themeMode],
                             fontSize: Styles.titleFontSize),
                         children: const [
                           TextSpan(text: "Tổng cộng "),
@@ -116,7 +117,7 @@ class BookingSummaryBox extends StatelessWidget {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   decoration: BoxDecoration(
-                      color: Styles.btnColor["dark_purple"],
+                      color: Styles.btnColor[Config.themeMode],
                       borderRadius: BorderRadius.circular(6)),
                   child: const Icon(
                     Icons.arrow_forward_ios_outlined,

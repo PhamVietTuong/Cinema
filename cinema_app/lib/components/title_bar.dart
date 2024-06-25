@@ -10,11 +10,11 @@ class TitleBar extends StatelessWidget {
     return Container(
       width: wS,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      decoration:  BoxDecoration(color: Styles.backgroundContent["dark_purple"]),
+      decoration:  BoxDecoration(color: Styles.backgroundContent[Config.themeMode]),
       child:  Center(
         child: Text(
           title.toUpperCase(),
-          style:  TextStyle(fontSize: 20, color: Styles.titleColor["dark_purple"]),
+          style:  TextStyle(fontSize: 20, color: Styles.titleColor[Config.themeMode]),
         ),
       ),
     );
