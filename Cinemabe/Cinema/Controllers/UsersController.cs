@@ -66,7 +66,7 @@ namespace Cinema.Controllers
             }
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
