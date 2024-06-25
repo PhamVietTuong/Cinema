@@ -1,8 +1,10 @@
 import 'dart:io';
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:cinema_app/components/bottom_nav.dart';
+import 'package:flutter/material.dart';
+
+import 'config.dart';
+
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,21 +20,25 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+
 class MyApp extends StatelessWidget {
-  final String initialLanguageCode;
+  const MyApp({super.key});
 
-  const MyApp({Key? key, required this.initialLanguageCode}) : super(key: key);
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cinema App',
+      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      locale: Locale(initialLanguageCode),
-      supportedLocales: const [
-        Locale('en'),
-        Locale('vi'),
-      ],
+      theme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          },
+        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
       home: const BottomNav(),
     );
   }
