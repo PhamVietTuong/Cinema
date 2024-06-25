@@ -10,28 +10,6 @@ const InfoTicketBooking = () => {
                             <h2 className="heading">
                                 Chúc mừng bạn thanh toán thành công bằng thẻ quốc tế
                             </h2>
-                            <ul className="process">
-                                <li className="process-item process-cus active">
-                                    {" "}
-                                    <a className="link" href="">
-                                        <span className="num">1 </span>
-                                        <span className="txt">Thông tin khách hàng</span>
-                                    </a>
-                                </li>
-                                <li className="process-item process-cus active">
-                                    <a className="link" href="">
-                                        <span className="num">2</span>
-                                        <span className="txt">Thanh toán</span>
-                                    </a>
-                                </li>
-                                <li className="process-item process-cus active">
-                                    {" "}
-                                    <a className="link" href="">
-                                        <span className="num">3</span>
-                                        <span className="txt">Thông tin vé phim </span>
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
                         <div className="checkout-success-content">
                             <div

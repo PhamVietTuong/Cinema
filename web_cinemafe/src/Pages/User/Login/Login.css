@@ -24,20 +24,20 @@
 
 .loginTab {
     font-family: "Anton",
-            sans-serif !important;
-        font-size: 14px !important;
-        gap: 4px;
-        color: #f8fafc !important;
+        sans-serif !important;
+    font-size: 14px !important;
+    gap: 4px;
+    color: #f8fafc !important;
 }
 
 .loginTab::before {
     background: rgba(248, 250, 252, .3);
     border-radius: 4px;
     height: calc(100% - .8rem);
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: calc(100% - .8rem);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - .8rem);
 }
 
 .regis .loginTab.Mui-selected:after,
@@ -75,4 +75,8 @@
 
 .loginFormControl {
     margin: 0 !important;
+}
+
+.MuiFormHelperText-root {
+    color: #ef4444 !important;
 }

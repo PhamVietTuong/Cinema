@@ -8,11 +8,12 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { GetInvoiceAction, ShowTimeByTheaterIdAction, TheaterAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
+import moment from 'moment';
 
 const BookTickets = () => {
     let { id } = useParams();
 
-    const currentDate = new Date();
+    const currentTime = moment();
     const dispatch = useDispatch();
     const [value, setValue] = useState('1');
     const { theaterDetail, listMovieByTheaterId } = useSelector((state) => state.CinemasReducer)
@@ -25,7 +26,7 @@ const BookTickets = () => {
         dispatch(TheaterAction(id))
         dispatch(ShowTimeByTheaterIdAction(id))
     }, [dispatch, id]);
-    
+
     return (
         <>
             <div className="app-content">
@@ -73,7 +74,23 @@ const BookTickets = () => {
                                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                             {
                                                 Array.isArray(listMovieByTheaterId) && listMovieByTheaterId?.map((item) => {
-                                                    if (new Date(item.releaseDate) < currentDate) {
+                                                    if (
+                                                        new Date(item.releaseDate) < currentTime
+                                                        && item.schedules.length > 0 && item.schedules.some(schedule =>
+                                                            schedule.theaters.some(theater =>
+                                                                theater.showTimes.some(timeItem => {
+                                                                    const currentDate = moment();
+                                                                    const threeDaysLater = moment(currentDate).add(2, 'days');
+
+                                                                    const scheduleDate = moment(schedule.date);
+                                                                    return (
+                                                                        scheduleDate.isBetween(currentDate, threeDaysLater, null, '[]') &&
+                                                                        moment(timeItem.startTime).isSameOrAfter(currentDate)
+                                                                    );
+                                                                }
+                                                                )
+                                                            )
+                                                        )) {
                                                         return (
                                                             <Grid item xs={6}>
                                                                 <BookTicket bookTicket={item}></BookTicket>
@@ -90,7 +107,7 @@ const BookTickets = () => {
                                         </div>
                                         {
                                             Array.isArray(listMovieByTheaterId) && listMovieByTheaterId?.map((item) => {
-                                                if (new Date(item.releaseDate) >= currentDate) {
+                                                if (new Date(item.releaseDate) >= currentTime) {
                                                     return (
                                                         <Grid item xs={6}>
                                                             <BookTicket bookTicket={item}></BookTicket>
