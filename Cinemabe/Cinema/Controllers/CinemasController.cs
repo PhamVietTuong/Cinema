@@ -221,6 +221,59 @@ namespace Cinema.Controllers
             }
         }
 
+        [HttpGet("GetTicketTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<TicketTypeDTO>>> GetTicketTypeList()
+        {
+            try
+            {
+                var result = await _uow.TicketTypeRepository.GetTicketTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateTicketType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TicketTypeDTO>> UpdateTicketType(TicketTypeDTO entity)
+        {
+            try
+            {
+                if (!await _uow.TicketTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _uow.TicketTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateTicketType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TicketTypeDTO>> CreateTicketType(TicketTypeDTO entity)
+        {
+            try
+            {
+                var result = await _uow.TicketTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         #endregion
 
         #region Date

@@ -10,6 +10,7 @@ import IndexAdmin from "./Pages/Admin/IndexAdmin";
 import AgeRestriction from "./Pages/Admin/AgeRestriction/AgeRestriction";
 import Test from "./Pages/Admin/Test";
 import Checkout from "./Pages/User/Checkout/Checkout";
+import TicketType from "./Pages/Admin/TicketType/TicketType";
 
 const Routers = () => {
     return (
@@ -29,6 +30,7 @@ const Routers = () => {
                     <Route path="/admin" element={<IndexAdmin />}>
                         <Route index path="admin" element={<AgeRestriction />} />
                         <Route path="AgeRestriction" element={<AgeRestriction />} />
+                        <Route path="TicketType" element={<TicketType />} />
                         <Route path="Drafts" element={<Test />} />
                     </Route>
                 </Routes>

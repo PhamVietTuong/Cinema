@@ -64,6 +64,18 @@ export class CinemasService extends baseService {
     CreateAgeRestriction = (ageRestrictionDTO) => {
         return this.post(`api/Cinemas/CreateAgeRestriction`, ageRestrictionDTO)
     }
+
+    GetTicketTypeList = () => {
+        return this.get(`api/Cinemas/GetTicketTypeList`)
+    }
+
+    UpdateTicketType = (ticketTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateTicketType`, ticketTypeDTO)
+    }
+
+    CreateTicketType = (ticketTypeDTO) => {
+        return this.post(`api/Cinemas/CreateTicketType`, ticketTypeDTO)
+    }
 }
 
 export const cinemasService = new CinemasService()

@@ -127,6 +127,15 @@ const IndexAdmin = () => {
                                 <ListItemText primary="AgeRestriction" />
                             </ListItemButton>
                         </Link>
+
+                        <Link to="TicketType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="TicketType" />
+                            </ListItemButton>
+                        </Link>
                     </List>
                 </Drawer>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

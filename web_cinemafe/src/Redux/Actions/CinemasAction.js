@@ -3,7 +3,7 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -354,6 +354,93 @@ export const CreateAgeRestrictionAction = (ageRestrictionDTO) => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log("CreateAgeRestrictionAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const GetTicketTypeListAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTicketTypeList(code);
+            dispatch({
+                type: SET_LIST_TICKETTYPE,
+                ticketTypeList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetTicketTypeListAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const UpdateTicketTypeAction = (ticketTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateTicketType(ticketTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTicketTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateTicketTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateTicketTypeAction = (ticketTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateTicketType(ticketTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTicketTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateTicketTypeAction: ", error);
                 }
             });
         }
