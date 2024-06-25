@@ -10,6 +10,7 @@ import IndexAdmin from "./Pages/Admin/IndexAdmin";
 import AgeRestriction from "./Pages/Admin/AgeRestriction/AgeRestriction";
 import Test from "./Pages/Admin/Test";
 import Checkout from "./Pages/User/Checkout/Checkout";
+import ProtectedRoute from "./Pages/User/ProtectedRoute";
 
 const Routers = () => {
     return (
@@ -24,7 +25,14 @@ const Routers = () => {
                         <Route path="movie/:movieId" element={<Detail />} />
                         <Route path="infoTicketBooking" element={<InfoTicketBooking />} />
                         <Route path="login" element={<Login />} />
-                        <Route path="checkout" element={<Checkout />} />
+                        <Route
+                            path="checkout"
+                            element={
+                                <ProtectedRoute>
+                                    <Checkout />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Route>
                     <Route path="/admin" element={<IndexAdmin />}>
                         <Route index path="admin" element={<AgeRestriction />} />

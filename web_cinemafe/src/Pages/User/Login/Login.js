@@ -1,6 +1,6 @@
 import { Label, Visibility, VisibilityOff } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Button, FormControl, FormHelperText, FormLabel, IconButton, InputAdornment, InputLabel, OutlinedInput, Tab, TextField } from "@mui/material";
+import { Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, IconButton, InputAdornment, InputLabel, OutlinedInput, Tab, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import './Login.css';
 import { useDispatch } from "react-redux";
@@ -26,6 +26,7 @@ const Login = () => {
         userName: '',
         password: '',
     });
+    const [rememberMe, setRememberMe] = useState(false); 
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -50,7 +51,7 @@ const Login = () => {
     const handleLogin = async () => {
         try {
             await schema.validate(formData, { abortEarly: false });
-            dispatch(LoginUserAction(formData, navigate));
+            dispatch(LoginUserAction(formData, rememberMe, navigate));
         } catch (validationErrors) {
             const newErrors = {};
             validationErrors.inner.forEach((error) => {
@@ -123,6 +124,13 @@ const Login = () => {
                                             <FormHelperText>{errors.password}</FormHelperText>
                                         )}
                                     </FormControl>
+
+                                    <FormControlLabel
+                                        control={<Checkbox checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />}
+                                        label="Lưu mật khẩu đăng nhập"
+                                        className="LoginFormControlLabel"
+                                    />
+
                                     <Button class="btn btn--pri loginButton" onClick={handleLogin}>
                                         Đăng nhập
                                     </Button>

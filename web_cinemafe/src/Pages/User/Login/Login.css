@@ -80,3 +80,7 @@
 .MuiFormHelperText-root {
     color: #ef4444 !important;
 }
+
+.LoginFormControlLabel {
+    color: rgb(0 0 0/1) !important;
+}

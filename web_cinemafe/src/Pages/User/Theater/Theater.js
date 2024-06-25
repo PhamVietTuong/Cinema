@@ -25,7 +25,7 @@ import TicketInfo from '../../../Components/ticketInfo/TicketInfo'
 import { InvoiceDTO } from '../../../Models/InvoiceDTO'
 import { SeatType } from '../../../Enum/SeatType'
 import { InfoSeat } from '../../../Models/InfoSeat'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const generateDates = (numDays) => {
     const dates = [];
@@ -132,6 +132,7 @@ const Theater = (props) => {
         updateSeat,
         checkBooking,
     } = useSelector((state) => state.CinemasReducer);
+
     const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
     const [selectedheaterName, setSelectedTheaterName] = useState(null);
     const [selectedShowTime, setSelectedShowTime] = useState(null);
@@ -873,17 +874,10 @@ const Theater = (props) => {
                                             <span className="txt">Tạm tính </span>
                                             <span className="num"> {formatCurrency(totalPrice)}</span>
                                         </div>
+
                                         <button className={`btn btn-warning opacity-100 ticketBooking ${!checkBooking ? 'enableButton' : ''}`}
                                             onClick={() => {
-                                                if (checkBooking) {
-                                                    const invoiceDTO = new InvoiceDTO();
-                                                    invoiceDTO.showTimeId = selectedShowTimeId
-                                                    invoiceDTO.roomId = selectedRoomId
-                                                    invoiceDTO.theaterId = selectedTheaterId
-                                                    invoiceDTO.invoiceTickets = invoiceTickets
-                                                    invoiceDTO.foodAndDrinks = Object.entries(countCombos).map((e) => ({ foodAndDrinkId: e[0], quantity: e[1] }))
-                                                    dispatch(TicketBooking(invoiceDTO, navigate))
-                                                }
+                                                navigate("/checkout")
                                             }}
                                             disabled={!checkBooking}
 

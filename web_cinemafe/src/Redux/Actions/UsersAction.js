@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import { userService } from "../../Services/UserService";
 import { LOGIN_USER } from "./Type/UserType";
 
-export const LoginUserAction = (loginInfo, navigate) => {
+export const LoginUserAction = (loginInfo, rememberMe, navigate) => {
     return async (dispatch) => {
         try {
             const result = await userService.LoginUser(loginInfo);
@@ -11,6 +11,7 @@ export const LoginUserAction = (loginInfo, navigate) => {
                 dispatch({
                     type: LOGIN_USER,
                     loginInfo: result.data,
+                    rememberMe: rememberMe
                 })
 
                 Swal.fire({
