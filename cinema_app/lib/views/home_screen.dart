@@ -1,9 +1,9 @@
 import 'package:cinema_app/components/info_movie.dart';
-import 'package:cinema_app/views/search_movie.dart';
 import 'package:cinema_app/components/slide_show.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
+import 'package:cinema_app/views/search_movie.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -33,53 +33,12 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
-  late List<String>trailers;
+  late List<String> trailers;
   @override
   void initState() {
     super.initState();
     moviePr = MoviePresenter(this);
     moviePr.fetchMovies();
-  }
-
-  @override
-  void onLoadMoviesComplete(List<Movie> movies) {
-    setState(() {
-      lstMovie = movies;
-      showingMovies = movies
-          .where((e) =>
-              e.releaseDate.isBefore(today) ||
-              (e.releaseDate.day == today.day &&
-                  e.releaseDate.month == today.month))
-          .toList();
-
-      upcomingMovies = movies
-          .where((e) =>
-              e.releaseDate.isAfter(today) &&
-              e.releaseDate.month == today.month)
-          .toList();
-
-      earlyMovies = movies
-          .where((e) =>
-              e.releaseDate.isAfter(today) &&
-              e.releaseDate.difference(today).inDays < 7)
-          .toList();
-          
-      trailers = showingMovies
-          .where((movie) => movie.trailer.isNotEmpty)
-          .map((movie) => movie.trailer).toSet() // Lấy ra trailer của các phim
-          .toList();
-      isLoadingData = false;
-      //print("$moviesWithTrailer");
-    });
-  }
-
-  @override
-  void onLoadMovieDetailComplete(Movie movies) {}
-  @override
-  void onLoadError() {
-    setState(() {
-      isLoadingData = false;
-    });
   }
 
   @override
@@ -90,56 +49,31 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
         title: Text(
           "Xin Chào !",
           style: TextStyle(
-              fontSize: Styles.appbarFontSize,
-              color: Styles.boldTextColor["dark_purple"]),
+            fontSize: Styles.appbarFontSize,
+            color: Styles.boldTextColor["dark_purple"],
+          ),
         ),
         actions: [
-          Container(
-            margin: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Styles.btnColor["dark_purple"],
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications,
+              size: Styles.iconInAppBar,
             ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications,
-                size: Styles.iconInAppBar,
-              ),
-              color: Styles.boldTextColor["dark_purple"],
-            ),
+            color: Styles.boldTextColor["dark_purple"],
           ),
-          Container(
-            margin: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Styles.btnColor["dark_purple"],
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
+            },
+            icon: const Icon(
+              Icons.search,
+              size: Styles.iconInAppBar,
             ),
-            child: IconButton(
-              onPressed: () {
-                setState(() {});
-                showSearch(context: context, delegate: SearchMovie(lstMovie));
-              },
-              icon: Icon(Icons.search,
-                  size: Styles.iconInAppBar,
-                  color: Styles.boldTextColor["dark_purple"]),
-            ),
+            color: Styles.boldTextColor["dark_purple"],
           ),
         ],
       ),
@@ -407,5 +341,52 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
         ),
       ),
     );
+  }
+
+  @override
+  void onSearchComplete(Map<String, dynamic> results) {
+    // TODO: implement onSearchComplete
+  }
+  @override
+  void onLoadMoviesComplete(List<Movie> movies) {
+    setState(() {
+      lstMovie = movies;
+      showingMovies = movies
+          .where((e) =>
+              e.releaseDate.isBefore(today) ||
+              (e.releaseDate.day == today.day &&
+                  e.releaseDate.month == today.month))
+          .toList();
+
+      upcomingMovies = movies
+          .where((e) =>
+              e.releaseDate.isAfter(today) &&
+              e.releaseDate.month == today.month)
+          .toList();
+
+      earlyMovies = movies
+          .where((e) =>
+              e.releaseDate.isAfter(today) &&
+              e.releaseDate.difference(today).inDays < 7)
+          .toList();
+
+      trailers = showingMovies
+          .where((movie) => movie.trailer.isNotEmpty)
+          .map((movie) => movie.trailer)
+          .toSet() // Lấy ra trailer của các phim
+          .toList();
+      isLoadingData = false;
+      //print("$moviesWithTrailer");
+    });
+  }
+
+  @override
+  void onLoadMovieDetailComplete(Movie movies) {}
+
+  @override
+  void onLoadError() {
+    setState(() {
+      isLoadingData = false;
+    });
   }
 }

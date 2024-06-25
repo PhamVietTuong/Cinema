@@ -57,7 +57,6 @@ class _MovieDetailState extends State<MovieDetail>
   }
 
   void scroll(){
-
    WidgetsBinding.instance.addPostFrameCallback((_) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
@@ -76,30 +75,7 @@ class _MovieDetailState extends State<MovieDetail>
    
   }
 
-  @override
-  void onLoadMovieDetailComplete(Movie movie) {
-    setState(() {
-      _movieDetail = movie;
-      schedule = _movieDetail.schedules.firstWhere(
-        (element) =>
-            element.date.day == selectedDate.day &&
-            element.date.month == selectedDate.month,
-        orElse: () => Schedule(),
-      );
-
-      isLoadingData = false;
-    });
-  }
-
-  @override
-  void onLoadError() {
-    setState(() {
-      isLoadingData = false;
-    });
-  }
-
-  @override
-  void onLoadMoviesComplete(List<Movie> movies) {}
+ 
   @override
   Widget build(BuildContext context) {
     days.clear();
@@ -498,4 +474,35 @@ class _MovieDetailState extends State<MovieDetail>
     _scrollController.dispose();
     super.dispose();
   }
+  
+  @override
+  void onSearchComplete(Map<String, dynamic> results) {
+    // TODO: implement onSearchComplete
+  }
+   @override
+  void onLoadMovieDetailComplete(Movie movie) {
+    setState(() {
+      _movieDetail = movie;
+      schedule = _movieDetail.schedules.firstWhere(
+        (element) =>
+            element.date.day == selectedDate.day &&
+            element.date.month == selectedDate.month,
+        orElse: () => Schedule(),
+      );
+
+      isLoadingData = false;
+    });
+  }
+
+  @override
+  void onLoadError() {
+    setState(() {
+      isLoadingData = false;
+    });
+  }
+
+  @override
+  void onLoadMoviesComplete(List<Movie> movies) {}
+
+  
 }

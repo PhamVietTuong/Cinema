@@ -1,8 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+//var serverUrl = 'https://10.0.2.2:7209';
 var serverUrl = 'http://103.104.122.137:9000';
+
+
 
 class Styles {
   static const backgroundColor = {
