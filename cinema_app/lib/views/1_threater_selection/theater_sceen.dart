@@ -1,14 +1,12 @@
-// ignore_for_file: avoid_print
-
+import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/food_and_drink.dart';
 import 'package:cinema_app/data/models/theater.dart';
-import 'package:cinema_app/config.dart';
 import 'package:cinema_app/presenters/theater_presenter.dart';
 import 'package:cinema_app/views/1_threater_selection/theater_item.dart';
 import 'package:flutter/material.dart';
 
 class TheaterScreen extends StatefulWidget {
-  const TheaterScreen({super.key});
+  const TheaterScreen({Key? key}) : super(key: key);
 
   @override
   State<TheaterScreen> createState() => _TheaterScreenState();
@@ -16,65 +14,64 @@ class TheaterScreen extends StatefulWidget {
 
 class _TheaterScreenState extends State<TheaterScreen>
     implements TheaterViewContract {
-  late TheaterPresenter theaterPr;
-  bool isLoadingData = true;
-  List<TheaterItem> theaterItemLst =
-      List.filled(0, TheaterItem(data: Theater()), growable: true);
+  late TheaterPresenter _theaterPresenter;
+  bool _isLoadingData = true;
+  List<TheaterItem> _theaterItemList = [];
 
   @override
   void initState() {
     super.initState();
-    theaterPr = TheaterPresenter(this);
-    theaterPr.fetchTheaters();
+    _theaterPresenter = TheaterPresenter(this);
+    _theaterPresenter.fetchTheaters();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.backgroundColor[Config.themeMode],
       appBar: AppBar(
-        title: Text(
-          "MUA VÉ",
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Styles.boldTextColor[Config.themeMode],
-              fontSize: Styles.appbarFontSize),
-        ),
+        title:  Text("MUA VÉ", style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),),
+      
         centerTitle: true,
         backgroundColor: Styles.backgroundContent[Config.themeMode],
         elevation: 1,
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
-        child: isLoadingData
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          Styles.boldTextColor[Config.themeMode]!),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Đang tải...",
-                      style: TextStyle(
-                          fontSize: Styles.titleFontSize,
-                          fontWeight: FontWeight.bold,
-                          color: Styles.boldTextColor[Config.themeMode]),
-                    )
-                  ],
-                ),
-              )
-            : SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: theaterItemLst,
-                ),
-              ),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return _isLoadingData ? _buildLoadingIndicator() : _buildTheaterList();
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                Styles.boldTextColor[Config.themeMode]!),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            "Đang tải...",
+            style: TextStyle(
+                fontSize: Styles.titleFontSize,
+                fontWeight: FontWeight.bold,
+                color: Styles.boldTextColor[Config.themeMode]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTheaterList() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: _theaterItemList,
       ),
     );
   }
@@ -83,16 +80,17 @@ class _TheaterScreenState extends State<TheaterScreen>
   void onLoadTheaterComplete(List<Theater> theaters) {
     setState(() {
       theaters.sort((a, b) => a.name.compareTo(b.name));
-      theaterItemLst =
-          theaters.map((theater) => TheaterItem(data: theater)).toList();
-      isLoadingData = false;
+      _theaterItemList =
+          (theaters.map((theater) => TheaterItem(theater: theater)).toList())
+              .cast<TheaterItem>();
+      _isLoadingData = false;
     });
   }
 
   @override
   void onLoadError() {
     setState(() {
-      isLoadingData = false;
+      _isLoadingData = false;
     });
     _showErrorDialog();
   }
@@ -108,18 +106,16 @@ class _TheaterScreenState extends State<TheaterScreen>
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  // Đóng hộp thoại
                   Navigator.of(context).pop();
                 },
                 child: const Text("Đóng"),
               ),
               TextButton(
                 onPressed: () {
-                  // Gọi hàm để tải dữ liệu lại
                   setState(() {
-                    isLoadingData = true;
+                    _isLoadingData = true;
                   });
-                  theaterPr.fetchTheaters();
+                  _theaterPresenter.fetchTheaters();
                   Navigator.of(context).pop();
                 },
                 child: const Text("Tải lại"),

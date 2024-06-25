@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:flutter/material.dart';
+import 'package:cinema_app/components/bottom_nav.dart';
 
 import 'config.dart';
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides();
+  //HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Config.initialize();
   runApp(const MyApp());
@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const BottomNav(),
+
     );
   }
 }
