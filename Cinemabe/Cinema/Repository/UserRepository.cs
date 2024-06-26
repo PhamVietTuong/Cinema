@@ -227,6 +227,21 @@ namespace Cinema.Repository
 					throw new ArgumentException("Tên người dùng, họ và tên, mật khẩu không được để trống.");
 				}
 
+				if (!Validate.IsValidPassword(register.Password))
+				{
+					throw new ArgumentException("Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
+				}
+
+				if (!string.IsNullOrEmpty(register.Email) && !Validate.IsEmail(register.Email))
+				{
+					throw new ArgumentException("Địa chỉ email không hợp lệ.");
+				}
+
+				if (!string.IsNullOrEmpty(register.Phone) && !Validate.IsPhoneNumber(register.Phone))
+				{
+					throw new ArgumentException("Số điện thoại không hợp lệ.");
+				}
+
 				var existingUser = await _context.User.FirstOrDefaultAsync(u => u.UserName.ToLower() == register.UserName.ToLower());
 				if (existingUser != null)
 				{
@@ -235,7 +250,6 @@ namespace Cinema.Repository
 
 				if (!string.IsNullOrEmpty(register.Email))
 				{
-
 					var existingEmail = await _context.User.FirstOrDefaultAsync(u => u.Email.ToLower() == register.Email.ToLower());
 					if (existingEmail != null)
 					{
@@ -258,11 +272,6 @@ namespace Cinema.Repository
 				}
 
 				var passwordHashSalt = PasswordUtils.EncryptPassword(register.Password);
-				// var userType = _context.UserType.SingleOrDefault(ut => ut.Id == register.UserTypeId);
-				// if (userType == null)
-				// {
-				// 	throw new Exception("UserType not found");
-				// }
 				var newUser = new User
 				{
 					Id = Guid.NewGuid(),
