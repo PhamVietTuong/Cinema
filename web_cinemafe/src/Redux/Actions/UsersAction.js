@@ -67,3 +67,33 @@ export const RegisterUserAction = (register, navigate) => {
         }
     }
 }
+
+export const ForgetPasswordAction = (email, navigate) => {
+    return async (dispatch) => {
+        try {
+            const result = await userService.ForgetPassword(email);
+
+            if (result.status === 200) {
+                Swal.fire({
+                    title: `ĐẶT LẠI MẬT KHẨU THÀNH CÔNG`,
+                    text: "Mật khẩu đã được đặt lại, vui lòng kiểm tra email và tiến hành đăng nhập.",
+                    padding: "15px",
+                    width: "650px",
+                    confirmButtonText: "Đăng nhập",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate("/login");
+                    }
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                text: error.response.data,
+                padding: "15px",
+                width: "425px",
+                confirmButtonText: "Thử lại",
+            });
+            console.log("LoginUserAction: ", error);
+        }
+    }
+}

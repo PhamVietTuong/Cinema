@@ -1,10 +1,6 @@
 ﻿using Cinema.Contracts;
 using Cinema.DTOs;
 using Cinema.Helper;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RestSharp;
-using System.Text;
 
 namespace Cinema.Repository
 {

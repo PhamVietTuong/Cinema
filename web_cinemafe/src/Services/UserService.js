@@ -8,6 +8,10 @@ export class UserService extends baseService {
     RegisterUser = (register) => {
         return this.post(`api/Users/Register`, register)
     }
+
+    ForgetPassword = (sendAuthCode) => {
+        return this.post(`api/Users/SendAuthCode`, sendAuthCode )
+    }
 }
 
 export const userService = new UserService();

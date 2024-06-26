@@ -4,28 +4,31 @@ using System;
 using Cinema.DTOs;
 using System.Collections.Generic;
 using Cinema.Helper;
-
-[ApiController]
-[Route("api/[controller]")]
-    [ApiController]
-public class PaymentsController : ControllerBase
+using Cinema.Contracts;
+namespace Cinema.Controllers
 {
-    private readonly IConfiguration _configuration;
-
-    public PaymentsController(IConfiguration configuration)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PaymentsController : ControllerBase
     {
-        _configuration = configuration;
-    }
+        private readonly IConfiguration _configuration;
+        private readonly IMomoRepository _momoRepository;
 
-    [HttpPost("VNPayCreatePayment")]
-    public IActionResult CreatePayment(PaymentRequest request)
-    {
-        var tmnCode = _configuration["VNPay:TmnCode"];
-        var hashSecret = _configuration["VNPay:HashSecret"];
-        var vnpUrl = _configuration["VNPay:VnpUrl"];
-        var returnUrl = request.ReturnUrl ?? _configuration["VNPay:ReturnUrl"];
-        var tick = DateTime.Now.Ticks.ToString();
-        var vnp_Params = new SortedList<string, string>
+        public PaymentsController(IConfiguration configuration, IMomoRepository momoRepository)
+        {
+            _configuration = configuration;
+            _momoRepository = momoRepository;
+        }
+
+        [HttpPost("VNPayCreatePayment")]
+        public IActionResult CreatePayment(PaymentRequest request)
+        {
+            var tmnCode = _configuration["VNPay:TmnCode"];
+            var hashSecret = _configuration["VNPay:HashSecret"];
+            var vnpUrl = _configuration["VNPay:VnpUrl"];
+            var returnUrl = request.ReturnUrl ?? _configuration["VNPay:ReturnUrl"];
+            var tick = DateTime.Now.Ticks.ToString();
+            var vnp_Params = new SortedList<string, string>
 {
     { "vnp_Amount", ((int)(request.Amount * 100)).ToString() },
     { "vnp_Command", "pay" },
@@ -43,7 +46,22 @@ public class PaymentsController : ControllerBase
 };
 
 
-        var paymentUrl = VnPayHelper.CreateRequestUrl(vnpUrl, hashSecret, vnp_Params);
-        return Ok(new PaymentResponse { PaymentUrl = paymentUrl });
+            var paymentUrl = VnPayHelper.CreateRequestUrl(vnpUrl, hashSecret, vnp_Params);
+            return Ok(new PaymentResponse { PaymentUrl = paymentUrl });
+        }
+
+        [HttpPost("CreateLinkCheckoutMomo")]
+        public async Task<IActionResult> CreateLinkCheckoutMomo([FromBody] PaymentRequest paymentRequest)
+        {
+            try
+            {
+                var response = await _momoRepository.CreatePaymentAsync(paymentRequest);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
