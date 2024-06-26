@@ -2,11 +2,8 @@
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Cinema.Helper;
-using Cinema.Repository;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace Cinema.Controllers
 {
@@ -87,19 +84,19 @@ namespace Cinema.Controllers
 
         [HttpPost("SendAuthCode")]
         [AllowAnonymous]
-        public async Task<IActionResult> SendAuthenticationCode(string email)
+        public async Task<IActionResult> SendAuthenticationCode(SendAuthCode sendAuthCode)
         {
-            if (string.IsNullOrEmpty(email.Trim()))
+            if (string.IsNullOrEmpty(sendAuthCode.Email.Trim()))
             {
                 return BadRequest("Email is empty");
             }
 
-            if (!Validate.IsEmail(email.Trim()))
+            if (!Validate.IsEmail(sendAuthCode.Email.Trim()))
             {
                 return BadRequest("Email is not valid");
             }
 
-            var authenticationCode = await _userRepository.SendAuthenticationCode(email.Trim());
+            var authenticationCode = await _userRepository.SendAuthenticationCode(sendAuthCode.Email.Trim());
             return authenticationCode != null ? Ok(authenticationCode) : NotFound("Not found user or send email error");
 
         }

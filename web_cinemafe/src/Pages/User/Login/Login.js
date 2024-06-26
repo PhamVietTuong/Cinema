@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import './Login.css';
 import { useDispatch } from "react-redux";
 import { LoginUserAction, RegisterUserAction } from "../../../Redux/Actions/UsersAction";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from 'yup';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -242,6 +242,10 @@ const Login = () => {
                                         label="Lưu mật khẩu đăng nhập"
                                         className="LoginFormControlLabel"
                                     />
+
+                                    <div className="passwordResetLink" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px', color: 'rgb(15, 23, 42)' }}>
+                                        <Link to="/change-pass">Quên mật khẩu?</Link>
+                                    </div>
 
                                     <Button class="btn btn--pri loginButton" onClick={handleLogin}>
                                         Đăng nhập
