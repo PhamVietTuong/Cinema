@@ -477,7 +477,6 @@ class _MovieDetailState extends State<MovieDetail>
   
   @override
   void onSearchComplete(Map<String, dynamic> results) {
-    // TODO: implement onSearchComplete
   }
    @override
   void onLoadMovieDetailComplete(Movie movie) {

@@ -19,11 +19,11 @@ class Styles {
   };
   static const Map<String, Color> boldTextColor = {
     "dark_purple": Color(0xffffffff),
-    "light_purple": Colors.white
+    "light_purple": Colors.black
   };
   static const Map<String, Color> textColor = {
     "dark_purple": Color(0xffcccbd5),
-    "light_purple": Colors.white
+    "light_purple": Colors.blueGrey
   };
   static const Map<String, Color> gradientTop = {
     "dark_purple": Color(0xff802ef7),
@@ -83,7 +83,7 @@ class Config {
   }
 
   static Future<void> loadMode() async {
-     // _prefs.remove(Constants.themeModeKey);
+    // _prefs.remove(Constants.themeModeKey);
     themeMode = _prefs.getString(Constants.themeModeKey);
     if (themeMode == null) {
       await setThemeMode(Constants.defaultTheme);
