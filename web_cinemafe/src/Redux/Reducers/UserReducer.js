@@ -1,5 +1,5 @@
 import { TOKEN, USER_LOGIN } from "../../Ustil/Settings/Config";
-import { LOGIN_USER, LOGOUT } from "../Actions/Type/UserType";
+import { LOGIN_USER, LOGOUT, REGISTER_USER } from "../Actions/Type/UserType";
 
 let user = {};
 if (localStorage.getItem(USER_LOGIN) || sessionStorage.getItem(USER_LOGIN)) {
@@ -26,11 +26,12 @@ export const UserReducer = (state = stateDefault, action) => {
 
             return {
                 ...state,
-                isLoggedIn: true, 
-                loginInfo: loginInfo };
+                isLoggedIn: true,
+                loginInfo: loginInfo
+            };
         }
 
-        case LOGOUT:
+        case LOGOUT: {
             sessionStorage.removeItem(USER_LOGIN);
             sessionStorage.removeItem(TOKEN);
             localStorage.removeItem(USER_LOGIN);
@@ -41,6 +42,7 @@ export const UserReducer = (state = stateDefault, action) => {
                 isLoggedIn: false,
                 user: null,
             };
+        }
 
         default: return { ...state };
     }
