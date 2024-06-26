@@ -7,20 +7,18 @@ using System.Text;
 using Cinema.Data;
 using Cinema;
 using Cinema.DTOs;
+using Cinema.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaContext") ?? throw new InvalidOperationException("Connection string 'CinemaContext' not found.")));
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
-                   "CorsPolicy",
-                   builder => builder.WithOrigins("http://localhost:3000")
+                   "CorsPolicy", builder => 
+                  builder.WithOrigins("http://localhost:3000", "http://103.104.122.137:9002")
                    .AllowAnyMethod()
                    .AllowAnyHeader()
                    .AllowCredentials());
@@ -49,6 +47,15 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IAgeRestrictionRepository, AgeRestrictionRepository>();
+builder.Services.AddScoped<IFoodAndDrinkRepository, FoodAndDrinkRepository>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<ITheaterRepository, TheaterRepository>();
+builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMomoRepository, MomoRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
@@ -72,6 +79,8 @@ app.UseCors("CorsPolicy");
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
