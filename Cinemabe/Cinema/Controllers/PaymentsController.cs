@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using Cinema.Helper;
 
 [ApiController]
-[Route("[controller]")]
-public class PaymentController : ControllerBase
+[Route("api/[controller]")]
+public class PaymentsController : ControllerBase
 {
     private readonly IConfiguration _configuration;
 
-    public PaymentController(IConfiguration configuration)
+    public PaymentsController(IConfiguration configuration)
     {
         _configuration = configuration;
     }
