@@ -111,6 +111,8 @@ class TheaterShowtime {
 abstract class MovieRepository {
   Future<List<Movie>> fetchMovies();
   Future<Movie> fetchMovieDetail(String movieID, int projectionForm);
+
+  Future<Map<String, dynamic>> searchByName(String name);
 }
 
 class MovieRepositoryIml implements MovieRepository {
@@ -147,4 +149,21 @@ class MovieRepositoryIml implements MovieRepository {
           'Failed to fetch movie detail, status code: ${response.statusCode}');
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> searchByName(String name) async {
+    String api = '$serverUrl/api/Cinemas/SearchByName$name';
+
+    final response = await http.get(Uri.parse(api));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      return jsonResponse;
+    } else {
+      throw Exception(
+          'Failed to search by name, status code: ${response.statusCode}');
+    }
+  }
+
+ 
 }

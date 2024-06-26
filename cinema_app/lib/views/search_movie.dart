@@ -1,128 +1,365 @@
-import 'dart:async';
-import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/views/detail/movie_detail.dart';
+import 'package:cinema_app/data/models/theater.dart';
 import 'package:flutter/material.dart';
+import 'package:cinema_app/config.dart';
+import 'package:cinema_app/data/models/booking.dart';
+import 'package:cinema_app/presenters/movie_presenter.dart';
+import 'package:cinema_app/views/2_showtime_selection/showtime_screen.dart';
+import 'package:cinema_app/views/detail/movie_detail.dart';
+import 'package:cinema_app/data/models/movie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SearchMovie extends SearchDelegate<String> {
-  final List<Movie> movieList;
-  late List<String> searchHistory;
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
-  SearchMovie(this.movieList) {
-    loadSearchHistory();
+  @override
+  // ignore: library_private_types_in_public_api
+  _SearchScreenState createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen>
+    implements MovieViewContract {
+  final TextEditingController _controller = TextEditingController();
+  MoviePresenter? _presenter;
+  Map<String, dynamic>? _searchResults;
+  List<String> _searchHistory = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _presenter = MoviePresenter(this);
+    _loadSearchHistory();
   }
 
-  Future<void> loadSearchHistory() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    searchHistory = prefs.getStringList('searchHistory') ?? [];
-  }
-
-  Future<void> saveSearchHistory(String query) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!searchHistory.contains(query)) {
-      searchHistory.add(query);
-      await prefs.setStringList('searchHistory', searchHistory);
+  void _search() {
+    String name = _controller.text.trim();
+    if (name.isNotEmpty) {
+      _presenter?.searchByName(name);
+    } else {
+      setState(() {
+        _searchResults = null;
+      });
     }
   }
 
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      ),
-    ];
+  Future<void> _loadSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _searchHistory = prefs.getStringList('searchHistory') ?? [];
+    });
+  }
+
+  Future<void> _saveSearchQuery([String? query]) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Kiểm tra xem query đã tồn tại trong danh sách _searchHistory hay chưa
+    if (query != null) {
+      if (!_searchHistory.contains(query)) {
+        _searchHistory.add(query);
+      }
+    }
+
+    setState(() {
+      final uniqueSearchHistory = _searchHistory.toSet().toList();
+      prefs.setStringList('searchHistory', uniqueSearchHistory);
+    });
+  }
+
+  Future<void> _clearSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _searchHistory.clear();
+      prefs.remove('searchHistory');
+    });
   }
 
   @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, '');
-      },
-    );
+  void onLoadMoviesComplete(List<Movie> movies) {}
+
+  @override
+  void onLoadMovieDetailComplete(Movie movie) {}
+
+  @override
+  void onSearchComplete(Map<String, dynamic> results) {
+    setState(() {
+      _searchResults = results;
+    });
   }
 
   @override
-  Widget buildSuggestions(BuildContext context) {
-    final List<String> suggestionList = query.isEmpty
-        ? searchHistory.reversed.toList()
-        : movieList
-            .where(
-              (movie) => movie.name.toLowerCase().contains(query.toLowerCase()),
-            )
-            .map((movie) => movie.name)
-            .toList();
+  void onLoadError() {
+    setState(() {
+      _searchResults = null;
+    });
+  }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Text(
-            'Lịch sử tìm kiếm',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          color: Styles.boldTextColor[Config.themeMode],
+          onPressed: () {
+            Navigator.pop(this.context);
+          },
+        ),
+        title: Text(
+          "Tìm kiếm",
+          style: TextStyle(
+            fontSize: Styles.appbarFontSize,
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: suggestionList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(suggestionList[index]),
-              onTap: () {
-                query = suggestionList[index];
-                showResults(context);
-              },
-            );
-          },
-        ),
-      ],
-    );
-  }
-  @override
-  Widget buildResults(BuildContext context) {
-    final resultList = movieList
-        .where((movie) =>
-            movie.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: resultList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(resultList[index].name),
-          onTap: () {
-            saveSearchHistory(query); // Save the search query to history
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MovieDetail(
-                  movieID: resultList[index].id,
-                  projectionForm: resultList[index].projectionForm,
+      ),
+      backgroundColor: Styles.backgroundColor[Config.themeMode],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+              horizontal: Styles.defaultHorizontal, vertical: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _controller,
+                onChanged: (value) {
+                  _search();
+                },
+                style: TextStyle(
+                  color: _controller.text.isNotEmpty
+                      ? Styles.textColor[Config.themeMode]
+                      : Colors.white,
+                  fontSize: Styles.textSize,
+                ),
+                decoration: InputDecoration(
+                  labelText: 'Nhập từ khóa',
+                  labelStyle:
+                      TextStyle(color: Styles.textColor[Config.themeMode]),
+                  suffixIcon: _controller.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: Styles.textColor[Config.themeMode],
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _controller.clear();
+                              _search();
+                            });
+                          },
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.search,
+                            color: Styles.textColor[Config.themeMode],
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _search();
+                            });
+                          },
+                        ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Styles.textColor[Config.themeMode]!),
+                    borderRadius:
+                        BorderRadius.circular(10.0), // Độ bo tròn các góc
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Styles.textColor[Config.themeMode]!),
+                    borderRadius:
+                        BorderRadius.circular(10.0), // Độ bo tròn các góc
+                  ),
                 ),
               ),
-            );
-          },
-        );
-      },
+              const SizedBox(height: 5), // Khoảng cách giữa các phần tử
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Lịch sử tìm kiếm',
+                        style: TextStyle(
+                          fontSize: Styles.titleFontSize,
+                          color: Styles.titleColor[Config.themeMode]!,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          _clearSearchHistory();
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                      height: 5), // Khoảng cách giữa tiêu đề và nút xóa
+                  Column(
+                    children: _buildSearchHistory(),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                  height:
+                      5), // Khoảng cách giữa lịch sử tìm kiếm và kết quả tìm kiếm
+              _searchResults != null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: _buildSearchResults(),
+                    )
+                  : const SizedBox.shrink(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  @override
-  void showResults(BuildContext context) {
-    saveSearchHistory(query); // Save the search query to history
-    super.showResults(context);
+  List<Widget> _buildSearchResults() {
+    List<Widget> results = [];
+    if (_searchResults!.containsKey('theaters')) {
+      results.add(
+        Text(
+          'Danh sách các rạp chiếu',
+          style: TextStyle(
+            fontSize: Styles.titleFontSize,
+            color: Styles.titleColor[Config.themeMode]!,
+          ),
+        ),
+      );
+      for (var theaterData in _searchResults!['theaters']) {
+        Theater theater = Theater.fromJson(theaterData);
+        results.add(
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ShowTimeSceen(
+                    booking: Booking(theater: theater),
+                  ),
+                ),
+              );
+              _saveSearchQuery(theater.name);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                color: Styles.backgroundContent[Config.themeMode],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    theater.name,
+                    style: TextStyle(
+                      fontSize: Styles.textSize,
+                      color: Styles.boldTextColor[Config.themeMode]!,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    }
+    if (_searchResults!.containsKey('movies')) {
+      results.add(
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Text(
+            'Danh sách phim',
+            style: TextStyle(
+              fontSize: Styles.titleFontSize,
+              color: Styles.titleColor[Config.themeMode]!,
+            ),
+          ),
+        ),
+      );
+      for (var movie in _searchResults!['movies']) {
+        results.add(
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MovieDetail(
+                    movieID: movie['id'],
+                    projectionForm: movie['projectionForm'],
+                  ),
+                ),
+              );
+              _saveSearchQuery(movie['name']);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                color: Styles.backgroundContent[Config.themeMode],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${movie['name']}(${movie['showTimeTypeName']})',
+                    style: TextStyle(
+                      fontSize: Styles.textSize,
+                      color: Styles.boldTextColor[Config.themeMode]!,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    return results;
   }
 
-  @override
-  void showSuggestions(BuildContext context) {
-    saveSearchHistory(query); // Save the search query to history
-    super.showSuggestions(context);
+  List<Widget> _buildSearchHistory() {
+    return _searchHistory.map((query) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                _controller.text = query;
+                setState(() {
+                  _search();
+                });
+              },
+              child: Text(
+                query,
+                style: TextStyle(
+                  fontSize: Styles.textSize,
+                  color: Styles.boldTextColor[Config.themeMode]!,
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.clear),
+            onPressed: () {
+              setState(() {
+                _searchHistory.remove(query);
+                _saveSearchQuery();
+              });
+            },
+          ),
+        ],
+      );
+    }).toList();
   }
 }

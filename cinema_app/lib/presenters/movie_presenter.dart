@@ -4,6 +4,7 @@ import 'package:cinema_app/data/models/movie.dart';
 abstract class MovieViewContract {
   void onLoadMoviesComplete(List<Movie> movies);
   void onLoadMovieDetailComplete(Movie movies);
+  void onSearchComplete(Map<String, dynamic> results);
   void onLoadError();
 }
 
@@ -35,4 +36,13 @@ class MoviePresenter {
       _view.onLoadError();
     }
   }
+   Future<void> searchByName(String name) async {
+    try {
+      Map<String, dynamic> results = await _repository.searchByName(name);
+      _view.onSearchComplete(results);
+    } catch (error) {
+      _view.onLoadError();
+    }
+  }
+
 }
