@@ -18,7 +18,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen>
     implements MovieViewContract {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   MoviePresenter? _presenter;
   Map<String, dynamic>? _searchResults;
   List<String> _searchHistory = [];
@@ -133,7 +133,8 @@ class _SearchScreenState extends State<SearchScreen>
                 ),
                 decoration: InputDecoration(
                   labelText: 'Nhập từ khóa',
-                  labelStyle: TextStyle(color: Styles.textColor[Config.themeMode]),
+                  labelStyle:
+                      TextStyle(color: Styles.textColor[Config.themeMode]),
                   suffixIcon: _controller.text.isNotEmpty
                       ? IconButton(
                           icon: Icon(
@@ -194,13 +195,14 @@ class _SearchScreenState extends State<SearchScreen>
                       ),
                     ],
                   ),
-                  SizedBox(height: 5), // Khoảng cách giữa tiêu đề và nút xóa
+                  const SizedBox(
+                      height: 5), // Khoảng cách giữa tiêu đề và nút xóa
                   Column(
                     children: _buildSearchHistory(),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                   height:
                       5), // Khoảng cách giữa lịch sử tìm kiếm và kết quả tìm kiếm
               _searchResults != null

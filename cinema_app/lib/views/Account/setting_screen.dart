@@ -79,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Container(
                 margin: const EdgeInsets.symmetric(
                     horizontal: Styles.defaultHorizontal, vertical: 10),
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   color: Styles.backgroundContent[Config.themeMode],
                   borderRadius: BorderRadius.circular(5),
@@ -99,16 +99,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         color: Styles.boldTextColor[Config.themeMode],
                         fontSize: Styles.titleFontSize),
                     isExpanded: true,
+                    isDense: true,
+                    icon: Icon(Icons.keyboard_arrow_down_outlined,
+                        color: Styles.boldTextColor[Config.themeMode]),
+                    underline: const SizedBox(),
                     items: Constants.themes.entries
                         .map((e) => DropdownMenuItem(
                               value: e.key,
-                              child: Text(e.value),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                      e.key.contains("light")
+                                          ? Icons.light_mode_outlined
+                                          : Icons.dark_mode_sharp,
+                                      color: Styles
+                                          .boldTextColor[Config.themeMode]),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(e.value),
+                                ],
+                              ),
                             ))
                         .toList(),
-                    onChanged: (e) {
-                      setState(() {
-                        Config.setThemeMode(e!);
-                      });
+                    onChanged: (e) async {
+                      await Config.setThemeMode(e!);
+                      setState(() {});
                     }),
               ),
             ]),

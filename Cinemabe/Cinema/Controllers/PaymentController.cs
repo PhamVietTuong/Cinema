@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using Cinema.DTOs;
 using System.Collections.Generic;
+using Cinema.Helper;
 
 [ApiController]
 [Route("[controller]")]

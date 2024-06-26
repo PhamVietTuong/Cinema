@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchScreen()),
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
               );
             },
             icon: const Icon(
@@ -345,7 +345,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
 
   @override
   void onSearchComplete(Map<String, dynamic> results) {
-    // TODO: implement onSearchComplete
   }
   @override
   void onLoadMoviesComplete(List<Movie> movies) {
