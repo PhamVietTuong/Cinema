@@ -16,7 +16,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new),
-            color: Styles.boldTextColor["dark_purple"], // Màu bạn muốn
+            color: Styles.boldTextColor[Config.themeMode], // Màu bạn muốn
             onPressed: () {
               Navigator.pop(this.context);
             },
@@ -25,15 +25,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             "Cài đặt",
             style: TextStyle(
               fontSize: Styles.appbarFontSize,
-              color: Styles.boldTextColor["dark_purple"],
+              color: Styles.boldTextColor[Config.themeMode],
             ),
           ),
-          backgroundColor: Styles.backgroundContent["dark_purple"],
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Container(
-            color: Styles.backgroundColor["dark_purple"],
+            color: Styles.backgroundColor[Config.themeMode],
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
@@ -42,7 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     horizontal: Styles.defaultHorizontal, vertical: 10),
                 padding: const EdgeInsets.all(5.0),
                 decoration: BoxDecoration(
-                  color: Styles.backgroundContent["dark_purple"],
+                  color: Styles.backgroundContent[Config.themeMode],
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
@@ -60,7 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Icon(
                           Icons.language_outlined,
-                          color: Styles.boldTextColor["dark_purple"],
+                          color: Styles.boldTextColor[Config.themeMode],
                         ),
                         const SizedBox(
                           width: 10,
@@ -69,11 +69,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           "Ngôn ngữ",
                           style: TextStyle(
                               fontSize: Styles.titleFontSize,
-                              color: Styles.boldTextColor["dark_purple"]),
+                              color: Styles.boldTextColor[Config.themeMode]),
                         )
                       ],
                     ),
-        
                   ],
                 ),
               ),
@@ -82,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     horizontal: Styles.defaultHorizontal, vertical: 10),
                 padding: const EdgeInsets.all(5.0),
                 decoration: BoxDecoration(
-                  color: Styles.backgroundContent["dark_purple"],
+                  color: Styles.backgroundContent[Config.themeMode],
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
@@ -93,28 +92,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.language_outlined,
-                          color: Styles.boldTextColor["dark_purple"],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Chế độ tối",
-                          style: TextStyle(
-                              fontSize: Styles.titleFontSize,
-                              color: Styles.boldTextColor["dark_purple"]),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                child: DropdownButton(
+                    value: Config.themeMode,
+                    dropdownColor: Styles.backgroundContent[Config.themeMode],
+                    style: TextStyle(
+                        color: Styles.boldTextColor[Config.themeMode],
+                        fontSize: Styles.titleFontSize),
+                    isExpanded: true,
+                    items: Constants.themes.entries
+                        .map((e) => DropdownMenuItem(
+                              value: e.key,
+                              child: Text(e.value),
+                            ))
+                        .toList(),
+                    onChanged: (e) {
+                      setState(() {
+                        Config.setThemeMode(e!);
+                      });
+                    }),
               ),
             ]),
           ),

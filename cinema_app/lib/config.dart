@@ -1,47 +1,43 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 //var serverUrl = 'https://10.0.2.2:7209';
 var serverUrl = 'http://103.104.122.137:9000';
 
-
-
 class Styles {
-  static const backgroundColor = {
+  static const Map<String, Color> backgroundColor = {
     "dark_purple": Color(0xFF272042),
   };
-  static const backgroundContent = {
+  static const Map<String, Color> backgroundContent = {
     "dark_purple": Color(0xFF332E59),
     "light_purple": Colors.white
   };
-  static const btnColor = {
+  static const Map<String, Color> btnColor = {
     "dark_purple": Color(0xff802ef7),
     "light_purple": Colors.white
   };
-  static const boldTextColor = {
+  static const Map<String, Color> boldTextColor = {
     "dark_purple": Color(0xffffffff),
     "light_purple": Colors.white
   };
-  static const textColor = {
+  static const Map<String, Color> textColor = {
     "dark_purple": Color(0xffcccbd5),
     "light_purple": Colors.white
   };
-  static const gradientTop = {
+  static const Map<String, Color> gradientTop = {
     "dark_purple": Color(0xff802ef7),
     "light_purple": Colors.white
   };
-  static const gradientBot = {
+  static const Map<String, Color> gradientBot = {
     "dark_purple": Color(0xffB654C3),
     "light_purple": Colors.white
   };
-  static const titleColor = {
+  static const Map<String, Color> titleColor = {
     "dark_purple": Color(0xff774ECB),
     "light_purple": Colors.white
   };
-  static const textSelectionColor = {
+  static const Map<String, Color> textSelectionColor = {
     "dark_purple": Color(0xffF3F647),
     "light_purple": Colors.white
   };
@@ -87,6 +83,7 @@ class Config {
   }
 
   static Future<void> loadMode() async {
+     // _prefs.remove(Constants.themeModeKey);
     themeMode = _prefs.getString(Constants.themeModeKey);
     if (themeMode == null) {
       await setThemeMode(Constants.defaultTheme);
@@ -100,12 +97,12 @@ class Config {
 class Constants {
   static const String themeModeKey = "themeMode";
   static const String languageModeKey = "languageMode";
-  static const String defaultTheme = "darkPurple";
+  static const String defaultTheme = darkPurpleTheme;
 
-  static const String darkPurpleTheme = "darkPurple";
-  static const String lightPurpleTheme = "light";
-  static final List<Map<String, String>> themes = [
-    {darkPurpleTheme: "Chủ đề tối - Tím"},
-    {lightPurpleTheme: "Chủ đề sáng - Tím"},
-  ];
+  static const String darkPurpleTheme = "dark_purple";
+  static const String lightPurpleTheme = "light_purple";
+  static final Map<String, String> themes = {
+    darkPurpleTheme: "Chủ đề tối - Tím",
+    lightPurpleTheme: "Chủ đề sáng - Tím",
+  };
 }

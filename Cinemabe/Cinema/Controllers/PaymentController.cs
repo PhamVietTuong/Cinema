@@ -22,7 +22,7 @@ public class PaymentController : ControllerBase
         var hashSecret = _configuration["VNPay:HashSecret"];
         var vnpUrl = _configuration["VNPay:VnpUrl"];
         var returnUrl = request.ReturnUrl ?? _configuration["VNPay:ReturnUrl"];
-
+        var tick = DateTime.Now.Ticks.ToString();
         var vnp_Params = new SortedList<string, string>
 {
     { "vnp_Amount", ((int)(request.Amount * 100)).ToString() },
@@ -36,7 +36,7 @@ public class PaymentController : ControllerBase
     { "vnp_OrderType", "other" },
     { "vnp_ReturnUrl", returnUrl },
     { "vnp_TmnCode", tmnCode },
-    { "vnp_TxnRef", request.OrderId },
+    { "vnp_TxnRef", tick },
     { "vnp_Version", "2.1.0" }
 };
 
