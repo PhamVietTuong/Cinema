@@ -73,7 +73,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )
                       ],
                     ),
-        
                   ],
                 ),
               ),
@@ -93,28 +92,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.sunny,
-                          color: Styles.boldTextColor[Config.themeMode],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Chế độ tối",
-                          style: TextStyle(
-                              fontSize: Styles.titleFontSize,
-                              color: Styles.boldTextColor[Config.themeMode]),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                child: DropdownButton(
+                    value: Config.themeMode,
+                    dropdownColor: Styles.backgroundContent[Config.themeMode],
+                    style: TextStyle(
+                        color: Styles.boldTextColor[Config.themeMode],
+                        fontSize: Styles.titleFontSize),
+                    isExpanded: true,
+                    items: Constants.themes.entries
+                        .map((e) => DropdownMenuItem(
+                              value: e.key,
+                              child: Text(e.value),
+                            ))
+                        .toList(),
+                    onChanged: (e) {
+                      setState(() {
+                        Config.setThemeMode(e!);
+                      });
+                    }),
               ),
             ]),
           ),

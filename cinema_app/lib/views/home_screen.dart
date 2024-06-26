@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Styles.gradientTop["dark_purple"]!,
-      Styles.gradientBot["dark_purple"]!
+      Styles.gradientTop[Config.themeMode]!,
+      Styles.gradientBot[Config.themeMode]!
     ],
   );
   List<Movie> lstMovie = List.filled(0, Movie(), growable: true);
@@ -45,12 +45,12 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         title: Text(
           "Xin Chào !",
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
         actions: [
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               Icons.notifications,
               size: Styles.iconInAppBar,
             ),
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
           IconButton(
             onPressed: () {
@@ -73,12 +73,12 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               Icons.search,
               size: Styles.iconInAppBar,
             ),
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: Center(
           child: isLoadingData
               ? Column(
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   children: [
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          Styles.textColor["dark_purple"]!),
+                          Styles.textColor[Config.themeMode]!),
                     ),
                     const SizedBox(
                       height: 20,
@@ -96,14 +96,14 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                       style: TextStyle(
                           fontSize: Styles.titleFontSize,
                           fontWeight: FontWeight.bold,
-                          color: Styles.textColor["dark_purple"]),
+                          color: Styles.textColor[Config.themeMode]),
                     ),
                   ],
                 )
               : SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Container(
-                    color: Styles.backgroundColor["dark_purple"],
+                    color: Styles.backgroundColor[Config.themeMode],
                     child: Column(
                       children: [
                         Container(
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               horizontal: Styles.defaultHorizontal),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Styles.backgroundContent["dark_purple"],
+                            color: Styles.backgroundContent[Config.themeMode],
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                   child: ToggleButtons(
                                     borderRadius: BorderRadius.circular(10),
                                     selectedColor:
-                                        Styles.boldTextColor["dark_purple"],
+                                        Styles.boldTextColor[Config.themeMode],
                                     fillColor: Colors.transparent,
                                     borderWidth: 0,
                                     onPressed: (int index) {
@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                                 color: Styles
-                                                    .btnColor["dark_purple"],
+                                                    .btnColor[Config.themeMode],
                                               ),
                                         child: Text(
                                           "Đang chiếu",
@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           style: TextStyle(
                                             fontSize: Styles.textSize,
                                             color: Styles
-                                                .boldTextColor["dark_purple"],
+                                                .boldTextColor[Config.themeMode],
                                           ),
                                         ),
                                       ),
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           style: TextStyle(
                                               fontSize: Styles.textSize,
                                               color: Styles.boldTextColor[
-                                                  "dark_purple"]),
+                                                  Config.themeMode]),
                                         ),
                                       ),
                                       Container(
@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           style: TextStyle(
                                               fontSize: Styles.textSize,
                                               color: Styles.boldTextColor[
-                                                  "dark_purple"]),
+                                                  Config.themeMode]),
                                         ),
                                       ),
                                     ],
@@ -254,7 +254,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 "Danh sách phim đang được cập nhật",
                                                 style: TextStyle(
                                                     color: Styles.textColor[
-                                                        "dark_purple"]),
+                                                        Config.themeMode]),
                                               ),
                                             ],
                                     )),
@@ -271,7 +271,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 "Danh sách phim đang được cập nhật",
                                                 style: TextStyle(
                                                     color: Styles.textColor[
-                                                        "dark_purple"]),
+                                                        Config.themeMode]),
                                               ),
                                             ],
                                     )),
@@ -288,7 +288,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 "Danh sách phim đang được cập nhật",
                                                 style: TextStyle(
                                                     color: Styles.textColor[
-                                                        "dark_purple"]),
+                                                        Config.themeMode]),
                                               ),
                                             ],
                                     )),
@@ -305,7 +305,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               Text(
                                 "Video",
                                 style: TextStyle(
-                                    color: Styles.boldTextColor["dark_purple"],
+                                    color: Styles.boldTextColor[Config.themeMode],
                                     fontSize: Styles.titleFontSize,
                                     fontWeight: FontWeight.bold),
                               ),

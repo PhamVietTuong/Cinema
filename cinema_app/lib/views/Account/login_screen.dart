@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          color: Styles.boldTextColor["dark_purple"], // Màu bạn muốn
+          color: Styles.boldTextColor[Config.themeMode], // Màu bạn muốn
           onPressed: () {
             Navigator.pop(this.context);
           },
@@ -28,13 +28,13 @@ class _LoginScreenState extends State<LoginScreen> {
           "Đăng nhập",
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
       ),
       body: Container(
-        color: Styles.backgroundColor["dark_purple"],
+        color: Styles.backgroundColor[Config.themeMode],
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Container(
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                         onPressed: () {},
                         child:  Text("Quên mật khẩu",
-                            style: TextStyle(fontSize: Styles.textSize,color: Styles.textColor["dark_purple"]))),
+                            style: TextStyle(fontSize: Styles.textSize,color: Styles.textColor[Config.themeMode]))),
                   ],
                 ),
                 ElevatedButton(

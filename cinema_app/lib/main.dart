@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:cinema_app/components/bottom_nav.dart';
 
@@ -24,11 +23,10 @@ class MyHttpOverrides extends HttpOverrides {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Cinema App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         pageTransitionsTheme: const PageTransitionsTheme(
@@ -36,10 +34,8 @@ class MyApp extends StatelessWidget {
             TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           },
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
       ),
-      home: const BottomNav(),
+      home:const BottomNav(),
     );
   }
 }
