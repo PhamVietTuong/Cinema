@@ -461,12 +461,6 @@ a {
     }
 }
 
-@media screen and (max-width: 1025px) {
-    .hd-regi-list {
-        display: none;
-    }
-}
-
 .hd-regi-list.--second {
     position: absolute;
     top: calc(100% + 10px);

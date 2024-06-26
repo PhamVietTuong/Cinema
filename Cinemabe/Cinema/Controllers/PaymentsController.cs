@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using Cinema.DTOs;
@@ -7,6 +7,7 @@ using Cinema.Helper;
 
 [ApiController]
 [Route("api/[controller]")]
+    [ApiController]
 public class PaymentsController : ControllerBase
 {
     private readonly IConfiguration _configuration;

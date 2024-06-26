@@ -4,10 +4,12 @@ import { faCalendar, faCircleUser } from '@fortawesome/free-regular-svg-icons';
 import { faCaretDown, faLocationDot, faMagnifyingGlass, faSignOutAlt, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TOKEN, USER_LOGIN } from '../../Ustil/Settings/Config';
+import { LOGOUT } from '../../Redux/Actions/Type/UserType';
 
 const Header = (props) => {
+    const dispatch = useDispatch();
     const {
         loginInfo,
     } = useSelector((state) => state.UserReducer);
@@ -90,7 +92,9 @@ const Header = (props) => {
                                 <div className="hd-regi" >
                                     <div className="hd-regi-wr" >
                                         <div className="hd-regi-ava" >
-                                            <img src="/Images/HeaderAndFooter/ic-header-auth.svg" alt="" />
+                                            <Link to={`/login`}>
+                                                <img src="/Images/HeaderAndFooter/ic-header-auth.svg" alt="" />
+                                            </Link>
                                         </div>
                                         {
                                             loginInfo && Object.keys(loginInfo).length !== 0
@@ -104,9 +108,9 @@ const Header = (props) => {
                                                         </Link>
                                                         <span className="dot">/</span>
                                                         <span className="link" onClick={() => {
-                                                            localStorage.removeItem(USER_LOGIN);
-                                                            localStorage.removeItem(TOKEN);
-                                                            window.location.reload();
+                                                            dispatch({
+                                                                type: LOGOUT,
+                                                            })
                                                         }}>
                                                             <FontAwesomeIcon icon={faSignOutAlt} />
                                                             Đăng xuất
