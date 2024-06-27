@@ -271,11 +271,18 @@ namespace Cinema.Repository
 					throw new ArgumentException("Mật khẩu và mật khẩu nhập lại không khớp.");
 				}
 
+				// Tìm UserTypeID từ UserTypeName
+				var userType = await _context.UserType.FirstOrDefaultAsync(ut => ut.Name == register.UserTypeName.ToLower());
+				if (userType == null)
+				{
+					throw new ArgumentException($"Loại người dùng '{register.UserTypeName}' không tồn tại.");
+				}
+
 				var passwordHashSalt = PasswordUtils.EncryptPassword(register.Password);
 				var newUser = new User
 				{
 					Id = Guid.NewGuid(),
-					UserTypeId = register.UserTypeId,
+					UserTypeId = userType.Id,
 					UserName = register.UserName,
 					FullName = register.FullName,
 					Email = register.Email,

@@ -1,6 +1,5 @@
 import 'package:cinema_app/config.dart';
-import 'package:cinema_app/views/Account/login_screen.dart';
-import 'package:cinema_app/views/Account/registration_screen.dart';
+import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:cinema_app/views/Account/setting_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +38,7 @@ class _UserState extends State<User> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -62,50 +61,13 @@ class _UserState extends State<User> {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegistrationScreen()),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  child: const Text(
-                    "Đăng ký",
-                 
-                    ),
-                  ),
-                
-                const SizedBox(width: 16),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    backgroundColor: Colors.grey,
-                  ),
-                  child: const Text(
-                    "Đăng nhập",
-                   
-                  ),
-                ),
-              ],
-            ),
+            TextButton(onPressed: (){
+                Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AccountScreen()),
+            );
+            }, child: Text("Quản lý tài khoản",
+            style: TextStyle(fontSize: Styles.titleFontSize, color: Styles.titleColor["dark_purple"]),)),
             Container(
               height: 5,
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
