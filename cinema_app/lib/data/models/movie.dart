@@ -4,7 +4,6 @@
 import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
-import 'package:cinema_app/data/models/theater.dart';
 import 'package:http/http.dart' as http;
 
 import 'showtime.dart';
@@ -151,6 +150,7 @@ class MovieRepositoryIml implements MovieRepository {
     }
   }
 
+  @override
   Future<Map<String, dynamic>> searchByName(String name) async {
     String api = '$serverUrl/api/Cinemas/SearchByName$name';
 

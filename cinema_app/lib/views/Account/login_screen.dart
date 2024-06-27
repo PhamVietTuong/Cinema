@@ -7,6 +7,7 @@ class LoginContent extends StatelessWidget {
   final TextEditingController _passController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -15,6 +16,7 @@ class LoginContent extends StatelessWidget {
             style: TextStyle(
               fontSize: Styles.titleFontSize,
               color: Styles.boldTextColor["dark_purple"],
+
             ),
           ),
         SizedBox(height: 15),

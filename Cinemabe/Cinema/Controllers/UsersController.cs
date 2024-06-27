@@ -2,11 +2,8 @@
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Cinema.Helper;
-using Cinema.Repository;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace Cinema.Controllers
 {
@@ -14,11 +11,11 @@ namespace Cinema.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(IUnitOfWork uow)
+        public UsersController(IUserRepository userRepository)
         {
-            _uow = uow;
+            _userRepository = userRepository;
         }
 
         [HttpPost("LoginUser")]
@@ -30,13 +27,13 @@ namespace Cinema.Controllers
         {
             try
             {
-                User user = await _uow.UserRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "user");
+                User user = await _userRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "user");
                 if (user == null)
                 {
                     return BadRequest("Thông tin chưa chính xác, đăng nhập thất bại!.");
                 }
 
-                TokenInfo token = await _uow.UserRepository.GenerateToken(loginInfo.Username, "user");
+                TokenInfo token = await _userRepository.GenerateToken(loginInfo.Username, "user");
                 return new AuthenticationResponse(user, loginInfo.Username, token.Authority, token.Token, token.ExpirationTime);
             }
             catch (Exception e)
@@ -54,10 +51,10 @@ namespace Cinema.Controllers
         {
             try
             {
-                User user = await _uow.UserRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "admin");
+                User user = await _userRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "admin");
                 if (user == null) { return null; }
 
-                TokenInfo token = await _uow.UserRepository.GenerateToken(loginInfo.Username, "admin");
+                TokenInfo token = await _userRepository.GenerateToken(loginInfo.Username, "admin");
                 return new AuthenticationResponse(user, loginInfo.Username, token.Authority, token.Token, token.ExpirationTime);
             }
             catch (Exception e)
@@ -74,10 +71,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var registeredUser = await _uow.UserRepository.Register(
-                    model
-                );
-
+                var registeredUser = await _userRepository.Register(model);
 
                 return Ok(registeredUser);
             }
@@ -90,19 +84,19 @@ namespace Cinema.Controllers
 
         [HttpPost("SendAuthCode")]
         [AllowAnonymous]
-        public async Task<IActionResult> SendAuthenticationCode(string email)
+        public async Task<IActionResult> SendAuthenticationCode(SendAuthCode sendAuthCode)
         {
-            if (string.IsNullOrEmpty(email.Trim()))
+            if (string.IsNullOrEmpty(sendAuthCode.Email.Trim()))
             {
                 return BadRequest("Email is empty");
             }
 
-            if (!Validate.IsEmail(email.Trim()))
+            if (!Validate.IsEmail(sendAuthCode.Email.Trim()))
             {
                 return BadRequest("Email is not valid");
             }
 
-            var authenticationCode = await _uow.UserRepository.SendAuthenticationCode(email.Trim());
+            var authenticationCode = await _userRepository.SendAuthenticationCode(sendAuthCode.Email.Trim());
             return authenticationCode != null ? Ok(authenticationCode) : NotFound("Not found user or send email error");
 
         }
@@ -115,7 +109,7 @@ namespace Cinema.Controllers
 
             if(Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
 
-            var result = await _uow.UserRepository.ChangePassword(changePassword, userName);
+            var result = await _userRepository.ChangePassword(changePassword, userName);
             return result ? Ok() : NotFound("Not found user");
         }
     }

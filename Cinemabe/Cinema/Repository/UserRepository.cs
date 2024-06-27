@@ -26,7 +26,7 @@ namespace Cinema.Repository
 		public async Task<User> CreateAsync(User entity)
 		{
 			PasswordHashSalt passwordHashSalt = PasswordUtils.EncryptPassword(entity.PasswordHash);
-			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "User");
+			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "user");
 
 			var userTypes = await _context.UserType.ToListAsync();
 
@@ -47,7 +47,7 @@ namespace Cinema.Repository
 			}
 			else
 			{
-				entity.UserTypeId = userTypes.First(x => x.Name == "User").Id;
+				entity.UserTypeId = userTypes.First(x => x.Name == "user").Id;
 				entity.PasswordHash = passwordHashSalt.Hash;
 				entity.PasswordSalt = passwordHashSalt.Salt;
 				await _context.AddAsync(entity);

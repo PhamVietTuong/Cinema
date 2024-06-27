@@ -88,7 +88,7 @@ class _MovieDetailState extends State<MovieDetail>
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new),
-            color: Styles.boldTextColor["dark_purple"], // Màu bạn muốn
+            color: Styles.boldTextColor[Config.themeMode], // Màu bạn muốn
             onPressed: () {
               Navigator.pop(this.context);
             },
@@ -97,14 +97,14 @@ class _MovieDetailState extends State<MovieDetail>
             "Phim",
             style: TextStyle(
               fontSize: Styles.appbarFontSize,
-              color: Styles.boldTextColor["dark_purple"],
+              color: Styles.boldTextColor[Config.themeMode],
             ),
           ),
-          backgroundColor: Styles.backgroundContent["dark_purple"],
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
         ),
         body: Container(
           decoration:
-              BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+              BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
           child: Center(
             child: isLoadingData
                 ? Column(
@@ -112,7 +112,7 @@ class _MovieDetailState extends State<MovieDetail>
                     children: [
                       CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            Styles.boldTextColor["dark_purple"]!),
+                            Styles.boldTextColor[Config.themeMode]!),
                       ),
                       const SizedBox(
                         height: 20,
@@ -121,7 +121,7 @@ class _MovieDetailState extends State<MovieDetail>
                           style: TextStyle(
                             fontSize: Styles.titleFontSize,
                             fontWeight: FontWeight.bold,
-                            color: Styles.boldTextColor["dark_purple"],
+                            color: Styles.boldTextColor[Config.themeMode],
                           ))
                     ],
                   )
@@ -175,7 +175,7 @@ class _MovieDetailState extends State<MovieDetail>
                                             Icons.play_circle_fill,
                                             size: 64,
                                             color: Styles
-                                                .boldTextColor["dark_purple"],
+                                                .boldTextColor[Config.themeMode],
                                           )
                                         : const Text(""),
                                   ),
@@ -190,7 +190,7 @@ class _MovieDetailState extends State<MovieDetail>
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 color: Styles.backgroundContent[
-                                    "dark_purple"], // Màu nền của container
+                                    Config.themeMode], // Màu nền của container
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(
@@ -223,7 +223,7 @@ class _MovieDetailState extends State<MovieDetail>
                                         softWrap: true,
                                         style: TextStyle(
                                             color: Styles
-                                                .boldTextColor["dark_purple"],
+                                                .boldTextColor[Config.themeMode],
                                             fontSize: Styles.titleFontSize),
                                       ),
                                       TimeBox(time: _movieDetail.time),
@@ -302,13 +302,13 @@ class _MovieDetailState extends State<MovieDetail>
                                                 : 'Đang cập nhật',
                                             style: TextStyle(
                                               color: Styles
-                                                  .textColor["dark_purple"],
-                                              fontSize: Styles.textSize,
-                                            ),
-                                            maxLines:
-                                                isDirectorExpanded ? null : 10,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+
+                                                  .textColor[Config.themeMode],
+                                              fontSize: Styles.textSize),
+                                          maxLines:
+                                              isDirectorExpanded ? null : 10,
+                                          overflow: TextOverflow.ellipsis,
+
                                         ),
                                         if (_movieDetail.director.length > 20)
                                           GestureDetector(
@@ -324,7 +324,7 @@ class _MovieDetailState extends State<MovieDetail>
                                                   : 'Xem thêm',
                                               style: TextStyle(
                                                   color: Styles
-                                                      .textColor["dark_purple"],
+                                                      .textColor[Config.themeMode],
                                                   fontSize:
                                                       Styles.titleFontSize),
                                             ),
@@ -344,7 +344,9 @@ class _MovieDetailState extends State<MovieDetail>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+
                                         ActorList(actors: _movieDetail.actor),
+
                                       ],
                                     ),
                                   ),
@@ -367,7 +369,7 @@ class _MovieDetailState extends State<MovieDetail>
                                               : 'Đang cập nhật',
                                           style: TextStyle(
                                               color: Styles
-                                                  .textColor["dark_purple"],
+                                                  .textColor[Config.themeMode],
                                               fontSize: Styles.textSize),
                                           softWrap: true,
                                         ),
@@ -383,7 +385,7 @@ class _MovieDetailState extends State<MovieDetail>
                                                   'Thu gọn',
                                                   style: TextStyle(
                                                       color: Styles.textColor[
-                                                          "dark_purple"],
+                                                          Config.themeMode],
                                                       fontSize:
                                                           Styles.textSize),
                                                 ),
@@ -398,7 +400,7 @@ class _MovieDetailState extends State<MovieDetail>
                                                   'Xem thêm',
                                                   style: TextStyle(
                                                       color: Styles.textColor[
-                                                          "dark_purple"],
+                                                          Config.themeMode],
                                                       fontSize:
                                                           Styles.textSize),
                                                 ),
@@ -413,7 +415,7 @@ class _MovieDetailState extends State<MovieDetail>
                           Container(
                             margin: const EdgeInsets.only(top: 5),
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            color: Styles.backgroundContent["dark_purple"],
+                            color: Styles.backgroundContent[Config.themeMode],
                             child: Container(
                               margin: const EdgeInsets.symmetric(
                                   horizontal: Styles.defaultHorizontal),
@@ -449,7 +451,7 @@ class _MovieDetailState extends State<MovieDetail>
                                               "Dữ liệu đang được cập nhật",
                                               style: TextStyle(
                                                   color: Styles
-                                                      .textColor["dark_purple"],
+                                                      .textColor[Config.themeMode],
                                                   fontSize: Styles.textSize),
                                             ))
                                           ]),
@@ -468,7 +470,6 @@ class _MovieDetailState extends State<MovieDetail>
 
   @override
   void onSearchComplete(Map<String, dynamic> results) {
-    // TODO: implement onSearchComplete
   }
   @override
   void onLoadMovieDetailComplete(Movie movie) {
