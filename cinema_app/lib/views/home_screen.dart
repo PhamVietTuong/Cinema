@@ -33,7 +33,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
-  late List<String> trailers;
+  late List<String> trailers = [];
+
   @override
   void initState() {
     super.initState();
@@ -311,7 +312,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               ),
                               SizedBox(
                                 height: MediaQuery.of(context).size.height / 3,
-                                child: PageView.builder(
+                                child: trailers.isNotEmpty? PageView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: trailers.length,
                                   itemBuilder: (context, index) {
@@ -329,7 +330,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                       ),
                                     );
                                   },
-                                ),
+                                ):SizedBox.shrink(),
                               ),
                             ],
                           ),
