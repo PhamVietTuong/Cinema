@@ -1,5 +1,4 @@
 import 'package:cinema_app/config.dart';
-import 'package:cinema_app/views/Account/language_dropdown.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -74,7 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )
                       ],
                     ),
-                    const LanguageDropdown(),
+        
                   ],
                 ),
               ),

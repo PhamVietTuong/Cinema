@@ -271,8 +271,8 @@ class _PayScreenState extends State<PayScreen> {
                               ],
                                   style: TextStyle(
                                       fontSize: Styles.titleFontSize,
-                                      color:
-                                          Styles.boldTextColor[Config.themeMode])))
+                                      color: Styles
+                                          .boldTextColor[Config.themeMode])))
                         ],
                       ),
                     )
@@ -295,10 +295,10 @@ class _PayScreenState extends State<PayScreen> {
                 ),
               ),
               InfoBar(title: "SỐ LƯỢNG", value: '${tBoxs.length}'),
-              // InfoBar(
-              //     title: "Tổng",
-              //     value: Styles.formatter
-              //         .format(widget.booking.getPriceTickets())),
+              InfoBar(
+                  title: "Tổng",
+                  value: Styles.formatter
+                      .format(widget.booking.getPriceTickets())),
               //thông bắp nước
               widget.booking.theater.combos
                       .any((element) => element.quantity > 0)
@@ -308,10 +308,10 @@ class _PayScreenState extends State<PayScreen> {
                         Column(
                           children: loadCombosInfo(),
                         ),
-                        // InfoBar(
-                        //     title: "Tổng",
-                        //     value: Styles.formatter
-                        //         .format(widget.booking.getPriceCombos())),
+                        InfoBar(
+                            title: "Tổng",
+                            value: Styles.formatter
+                                .format(widget.booking.getPriceCombos())),
                       ],
                     )
                   : const SizedBox(),
@@ -350,11 +350,12 @@ class _PayScreenState extends State<PayScreen> {
                             decoration: InputDecoration(
                                 hintText: "Mã khuyến mãi",
                                 hintStyle: TextStyle(
-                                    color: Styles.boldTextColor[Config.themeMode]),
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode]),
                                 border: InputBorder.none,
                                 suffixIcon: Icon(Icons.redeem_outlined,
-                                    color:
-                                        Styles.boldTextColor[Config.themeMode])),
+                                    color: Styles
+                                        .boldTextColor[Config.themeMode])),
                           )),
                     ),
                     GestureDetector(
@@ -383,19 +384,19 @@ class _PayScreenState extends State<PayScreen> {
                 height: 5,
               ),
               const TitleBar(title: "Thanh Toán"),
-              // InfoBar(
-              //   title: "Tổng cộng:",
-              //   value: Styles.formatter.format(widget.booking.getTotalPrice()),
-              // ),
-              // InfoBar(
-              //   title: "Giảm giá:",
-              //   value: Styles.formatter.format(discount),
-              // ),
-              // InfoBar(
-              //   title: "Còn lại:",
-              //   value: Styles.formatter
-              //       .format(widget.booking.getTotalPrice() - discount),
-              // ),
+              InfoBar(
+                title: "Tổng cộng:",
+                value: Styles.formatter.format(widget.booking.getTotalPrice()),
+              ),
+              InfoBar(
+                title: "Giảm giá:",
+                value: Styles.formatter.format(discount),
+              ),
+              InfoBar(
+                title: "Còn lại:",
+                value: Styles.formatter
+                    .format(widget.booking.getTotalPrice() - discount),
+              ),
               Column(
                 children: paymentOptions
                     .map((option) => RadioListTile<PaymentOption>(
