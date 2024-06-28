@@ -199,6 +199,63 @@ namespace Cinema.Controllers
 
         #endregion
 
+        #region SeatType
+
+        [HttpGet("GetSeatTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<SeatTypeDTO>>> GetSeatTypeList()
+        {
+            try
+            {
+                var result = await _uow.SeatTypeRepository.GetSeatTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateSeatType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<SeatTypeDTO>> UpdateSeatType(SeatTypeDTO entity)
+        {
+            try
+            {
+                if (!await _uow.SeatTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _uow.SeatTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateSeatType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<SeatTypeDTO>> CreateSeatType(SeatTypeDTO entity)
+        {
+            try
+            {
+                var result = await _uow.SeatTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
         #region Theater
 
         [HttpGet("GetTheaterList")]

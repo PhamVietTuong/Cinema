@@ -12,6 +12,7 @@ import Test from "./Pages/Admin/Test";
 import Checkout from "./Pages/User/Checkout/Checkout";
 import TicketType from "./Pages/Admin/TicketType/TicketType";
 import MovieType from "./Pages/Admin/MovieType/MovieType";
+import SeatType from "./Pages/Admin/SeatType/SeatType";
 
 const Routers = () => {
     return (
@@ -33,6 +34,7 @@ const Routers = () => {
                         <Route path="AgeRestriction" element={<AgeRestriction />} />
                         <Route path="TicketType" element={<TicketType />} />
                         <Route path="MovieType" element={<MovieType />} />
+                        <Route path="SeatType" element={<SeatType />} />
                         <Route path="Drafts" element={<Test />} />
                     </Route>
                 </Routes>

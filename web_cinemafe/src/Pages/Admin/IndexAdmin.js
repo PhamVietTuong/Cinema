@@ -145,6 +145,15 @@ const IndexAdmin = () => {
                                 <ListItemText primary="MovieType" />
                             </ListItemButton>
                         </Link>
+
+                        <Link to="SeatType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="SeatType" />
+                            </ListItemButton>
+                        </Link>
                     </List>
                 </Drawer>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

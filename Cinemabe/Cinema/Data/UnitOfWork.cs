@@ -25,7 +25,8 @@ namespace Cinema.Data
         public IFoodAndDrinkRepository FoodAndDrinkRepository => new FoodAndDrinkRepository(_context);
 		public ITicketTypeRepository TicketTypeRepository => new TicketTypeRepository(_context, _mapper);
 		public ISeatRepository SeatRepository => new SeatRepository(_context);
-		public ITheaterRepository TheaterRepository => new TheaterRepository(_context);
+        public ISeatTypeRepository SeatTypeRepository => new SeatTypeRepository(_context, _mapper);
+        public ITheaterRepository TheaterRepository => new TheaterRepository(_context);
 		public IInvoiceRepository InvoiceRepository => new InvoiceRepository(_context);
 		public IAgeRestrictionRepository AgeRestrictionRepository => new AgeRestrictionRepository(_context, _mapper);
     }

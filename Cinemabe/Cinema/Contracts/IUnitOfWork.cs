@@ -8,7 +8,8 @@
         IFoodAndDrinkRepository FoodAndDrinkRepository { get; }
 		ITicketTypeRepository TicketTypeRepository { get; }
 		ISeatRepository SeatRepository { get; }
-		ITheaterRepository TheaterRepository { get; }
+        ISeatTypeRepository SeatTypeRepository { get; }
+        ITheaterRepository TheaterRepository { get; }
 		IInvoiceRepository InvoiceRepository { get; }
 		IAgeRestrictionRepository AgeRestrictionRepository { get; }
     }

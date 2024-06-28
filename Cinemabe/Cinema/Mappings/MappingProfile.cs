@@ -14,6 +14,7 @@ namespace Cinema.Mappings
             CreateMap<AgeRestriction, AgeRestrictionDTO>().ReverseMap();
             CreateMap<TicketType, TicketTypeDTO>().ReverseMap();
             CreateMap<MovieType, MovieTypeDTO>().ReverseMap();
+            CreateMap<SeatType, SeatTypeDTO>().ReverseMap();
         }
     }
 }
