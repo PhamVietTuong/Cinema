@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -29,6 +29,7 @@ const stateDefault = {
     listShowTimeByMovieId: [],
     ageRestrictionList: [],
     ticketTypeList: [],
+    movieTypeList: [],
 }
 
 const createSeatTypeMapping = (seatData) => {
@@ -230,6 +231,10 @@ export const CinemasReducer = (state = stateDefault, action) => {
 
         case SET_LIST_TICKETTYPE: {
             return { ...state, ticketTypeList: action.ticketTypeList };
+        }
+
+        case SET_LIST_MOVIETYPE: {
+            return { ...state, movieTypeList: action.movieTypeList };
         }
 
         default: return { ...state };

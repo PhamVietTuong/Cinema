@@ -103,6 +103,63 @@ namespace Cinema.Controllers
 
         #endregion
 
+        #region MovieType
+
+        [HttpGet("GetMovieTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<MovieTypeDTO>>> GetMovieTypeList()
+        {
+            try
+            {
+                var result = await _uow.MovieTypeRepository.GetMovieTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateMovieType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<MovieTypeDTO>> UpdateMovieType(MovieTypeDTO entity)
+        {
+            try
+            {
+                if (!await _uow.MovieTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _uow.MovieTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateMovieType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<MovieTypeDTO>> CreateMovieType(MovieTypeDTO entity)
+        {
+            try
+            {
+                var result = await _uow.MovieTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
         #region FoodAndDrink
 
         [HttpGet("ComboByTheaterId/{id}")]

@@ -76,6 +76,18 @@ export class CinemasService extends baseService {
     CreateTicketType = (ticketTypeDTO) => {
         return this.post(`api/Cinemas/CreateTicketType`, ticketTypeDTO)
     }
+
+    GetMovieTypeList = () => {
+        return this.get(`api/Cinemas/GetMovieTypeList`)
+    }
+
+    UpdateMovieType = (movieTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateMovieType`, movieTypeDTO)
+    }
+
+    CreateMovieType = (movieTypeDTO) => {
+        return this.post(`api/Cinemas/CreateMovieType`, movieTypeDTO)
+    }
 }
 
 export const cinemasService = new CinemasService()
