@@ -3,9 +3,8 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { INFO_SEARCH, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { INFO_SEARCH, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 import { paymentsService } from "../../Services/PaymentsService";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -173,15 +172,15 @@ export const TicketBooking = (invoiceDTO) => {
 
             await connection.on("InforTicket", handleInforTicket);
             const result = await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO)
-                if(result) {
-                    const response = await paymentsService.CreateLinkCheckoutMomo(result);
-                    if (response.status === 200) {
-                        const data = response.data;
-                        window.location.href = data.paymentUrl;
-                    } else {
-                        console.error('Error creating payment:', response.data.error);
-                    }              
+            if (result) {
+                const response = await paymentsService.CreateLinkCheckoutMomo(result);
+                if (response.status === 200) {
+                    const data = response.data;
+                    window.location.href = data.paymentUrl;
+                } else {
+                    console.error('Error creating payment:', response.data.error);
                 }
+            }
         } catch (error) {
             console.log("TicketBooking", error);
         }
@@ -724,6 +723,9 @@ export const SaveBookingInfoAction = (invoiceDTO, movieInfoBooking) => {
 
         } catch (error) {
             console.log("SaveBookingInfoAction: ", error);
+        }
+    }
+}
 export const GetUserTypeListAction = (code) => {
     return async (dispatch) => {
         try {
@@ -759,6 +761,9 @@ export const SearchByNameAction = (name) => {
 
         } catch (error) {
             console.log("SaveBookingInfoAction: ", error);
+        }
+    }
+}
 export const UpdateUserTypeAction = (userTypeDTO) => {
     return async (dispatch) => {
         try {

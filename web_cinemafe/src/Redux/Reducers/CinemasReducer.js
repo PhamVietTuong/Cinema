@@ -1,7 +1,6 @@
 import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, INVOICE_CODE, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
-import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
+import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, INVOICE_CODE, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -48,7 +47,7 @@ const createSeatTypeMapping = (seatData) => {
             }
         });
     });
-    
+
     return mapping;
 };
 
@@ -83,7 +82,7 @@ export const CinemasReducer = (state = stateDefault, action) => {
         case SET_MOVIE_DETAIL: {
             return { ...state, movieDetail: action.movieDetail };
         }
-        
+
         case SET_TICKET_TYPE: {
             return { ...state, ticketType: action.ticketType };
         }
@@ -133,12 +132,12 @@ export const CinemasReducer = (state = stateDefault, action) => {
                     confirmButtonText: "Oki",
                     showCancelButton: false,
                 });
-                return state; 
+                return state;
             }
 
             const updateCheckBooking = checkIfSeatsAreEnough(updatedSeatYour, seatTypeMapping, totalSeatType);
 
-            return { ...state, seatYour: updatedSeatYour, checkBooking: updateCheckBooking};
+            return { ...state, seatYour: updatedSeatYour, checkBooking: updateCheckBooking };
         }
 
         case SEAT_HAS_BEEN_CHOSEN: {
@@ -159,7 +158,7 @@ export const CinemasReducer = (state = stateDefault, action) => {
                 ...state,
                 updateSeat: updatedSeats
             }
-        } 
+        }
 
         case GET_WAITING_SEAT: {
             return {
@@ -169,10 +168,10 @@ export const CinemasReducer = (state = stateDefault, action) => {
         }
 
         case LIST_OF_SEATS_SOLD: {
-            return { 
+            return {
                 ...state,
                 listOfSeatSold: [...new Set([...state.listOfSeatSold, ...action.seatInfos])]
-             }
+            }
         }
 
         case CHECK_FOR_EMPTY_SEAT: {
@@ -259,6 +258,7 @@ export const CinemasReducer = (state = stateDefault, action) => {
                 ...state,
                 code: action.code,
             };
+
         case SET_LIST_USERTYPE: {
             return { ...state, userTypeList: action.userTypeList };
         }
