@@ -143,8 +143,11 @@ namespace Cinema.Repository
                 Image = x.Image,
                 Name = x.Name,
                 Phone = x.Phone,
-                Status = x.Status
+                Status = x.Status,
+                CountRoom = _context.Room.Count(r => r.TheaterId == x.Id && r.Status == true),
+                CountSeat = _context.Seat.Count(s => s.Room.TheaterId == x.Id && s.IsSeat == true)
             }).ToListAsync();
+
             var filteredTheaters = theaters.Where(x => x.Name.ToLower().RemoveDiacritics().Contains(input)).ToList();
             return filteredTheaters;
         }

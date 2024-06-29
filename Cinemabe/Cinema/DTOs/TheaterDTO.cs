@@ -7,6 +7,8 @@
         public string Address { get; set; }
         public string Image { get; set; }
         public string Phone { get; set; }
+        public int CountRoom { get; set; }
+        public int CountSeat { get; set; }
         public bool Status { get; set; }
     }
 }

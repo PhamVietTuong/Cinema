@@ -1,0 +1,137 @@
+@media (min-width: 768px) {
+    .cinema-rental-custom {
+        display: block;
+        overflow: hidden;
+        padding-top: 79.93197%;
+        position: relative;
+    }
+}
+
+@media (min-width: 768px) {
+    .cinema-rental-remake-img {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .cinema-rental-remake-img img {
+        height: 100%;
+        left: 50%;
+        -o-object-fit: cover;
+        object-fit: cover;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+    }
+}
+
+.\!top-1\/2 {
+    top: 50% !important;
+}
+.\!left-1\/2 {
+    left: 50% !important;
+}
+
+.cinema-rental-list .content-main {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transition: all .3s ease-in-out;
+}
+
+/* @media screen and (min-width: 768px) {
+    .cinema-rental-list .content-main {
+        top: calc(100%);
+    }
+} */
+
+@media screen and (max-width: 767px) {
+    .cinema-rental-list .content-main {
+        position: relative;
+    }
+}
+
+.content-main .address-box {
+    pointer-events: visible;
+}
+
+.cinema-rental-list .address-box {
+    background: linear-gradient(106deg, rgba(102, 51, 153, .8), rgba(51, 102, 204, .8) 102.69%);
+    height: 100%;
+    width: 100%;
+}
+
+.cinema-rental-heading {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.sub-tittle {
+    color: #f8fafc;
+    font-family: "Anton",
+        sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.cinema-rental-footer {
+    overflow: hidden !important;
+}
+.cinema-rental-footer {
+    max-height: 70%;
+    overflow-y: auto;
+}
+
+.address-box .item {
+    margin-bottom: 8px;
+}
+
+.cinema-rental-footer .link {
+    align-items: flex-start !important;
+}
+
+.cinema-rental-footer .ic {
+    flex-shrink: 0;
+    position: relative;
+    top: 3px;
+}
+
+.address-box .link .ic img {
+    height: 16px;
+    width: 16px;
+}
+
+.content-main .cinema-rental-bodys .item:nth-child(2) .link {
+    text-decoration: unset;
+    text-underline-position: under;
+}
+
+.address-box .cinema-rental-bodys .btn {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 1200px) {
+    .address-box .cinema-rental-bodys .btn {
+        margin-top: 24px;
+    }
+}
+
+.address-box .cinema-rental-bodys .btn-booking {
+    min-width: 150px;
+    transition: all .2s;
+    width: -moz-fit-content;
+    width: fit-content;
+}
+
+.content-main .address-box {
+    pointer-events: visible;
+}

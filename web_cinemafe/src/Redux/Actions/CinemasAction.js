@@ -818,14 +818,13 @@ export const SearchByNameAction = (name) => {
     return async (dispatch) => {
         try {
             const result = await cinemasService.SearchByName(name);
-
+            
             dispatch({
                 type: INFO_SEARCH,
-                infoSearch: result.data,
+                resultInfoSearch: result.data,
             })
-
         } catch (error) {
-            console.log("SaveBookingInfoAction: ", error);
+            console.log("SearchByNameAction: ", error);
         }
     }
 }
