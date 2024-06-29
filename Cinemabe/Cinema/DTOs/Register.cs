@@ -4,7 +4,7 @@ namespace Cinema.DTOs
 {
 	public class Register
 	{
-		public Guid UserTypeId { get; set; }
+		public String UserTypeName { get; set; }
 		public string UserName { get; set; }
 		public string FullName { get; set; }
 		public string Email { get; set; }

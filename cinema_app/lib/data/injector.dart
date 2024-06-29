@@ -1,5 +1,6 @@
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/seat.dart';
+import 'package:cinema_app/data/models/user.dart';
 
 import 'models/showtime.dart';
 import 'models/theater.dart';
@@ -19,6 +20,8 @@ class Injector {
   static RoomRepository roomRepoIml = RoomRepositoryIml();
   static TicketRepository ticketRepoIml = TicketRepositoryIml();
   static SeatRepository seatRepoIml = SeatRepositoryIml();
+  static UserRepository userRepoIml = UserRepositoryIml();
+
 
 
   TheaterRepository getTheaterRepository() => theaterRepoIml;
@@ -27,4 +30,6 @@ class Injector {
   RoomRepository getRoomRepository() => roomRepoIml;
   TicketRepository getTicketRepository() => ticketRepoIml;
   SeatRepository getSeatRepository() => seatRepoIml;
+  UserRepository getUserRepository() => userRepoIml;
+
 }

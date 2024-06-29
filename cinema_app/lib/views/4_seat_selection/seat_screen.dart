@@ -477,7 +477,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               SizedBox(
-                height: hS - 200,
+                height: hS - 205,
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,

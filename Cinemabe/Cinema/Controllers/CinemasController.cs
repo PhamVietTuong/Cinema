@@ -16,11 +16,28 @@ namespace Cinema.Controllers
         private const string user = "user";
         private const string connectedRole = "user,admin";
 
-        private readonly IUnitOfWork _uow;
+        private readonly IAgeRestrictionRepository _ageRestrictionRepository;
+        private readonly IFoodAndDrinkRepository _foodAndDrinkRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
+        private readonly IMovieRepository _movieRepository;
+        private readonly ISeatRepository _seatRepository;
+        private readonly ITheaterRepository _theaterRepository;
+        private readonly ITicketTypeRepository _ticketTypeRepository;
+        private readonly IMovieTypeRepository _movieTypeRepository;
+        private readonly ISeatTypeRepository _seatTypeRepository;
 
-        public CinemasController(IUnitOfWork uow)
+        public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository, 
+            ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository)
         {
-            _uow = uow;
+            _ageRestrictionRepository = ageRestrictionRepository;
+            _foodAndDrinkRepository = foodAndDrinkRepository;
+            _invoiceRepository = invoiceRepository;
+            _movieRepository = movieRepository;
+            _seatRepository = seatRepository;
+            _theaterRepository = theaterRepository;
+            _ticketTypeRepository = ticketTypeRepository;
+            _movieTypeRepository = movieTypeRepository;
+            _seatTypeRepository = seatTypeRepository;
         }
 
         #region Search theater, movie
@@ -31,13 +48,13 @@ namespace Cinema.Controllers
 
             try
             {
-                var theaterResults = await _uow.TheaterRepository.GetTheatersByName(name);
+                var theaterResults = await _theaterRepository.GetTheatersByName(name);
                 if (theaterResults != null && theaterResults.Any())
                 {
                     return Ok(new { theaters =theaterResults});
                 }
 
-                var movieResults = await _uow.MovieRepository.GetMoviesByName(name);
+                var movieResults = await _movieRepository.GetMoviesByName(name);
                 if (movieResults != null && movieResults.Any())
                 {
                     return Ok(new { movies = movieResults });
@@ -62,7 +79,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.MovieRepository.GetMovieList();
+                var result = await _movieRepository.GetMovieList();
                 return Ok(result);
             }
             catch (Exception e)
@@ -77,7 +94,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.MovieRepository.GetMovieDetail(movieDetailDTO);
+                var result = await _movieRepository.GetMovieDetail(movieDetailDTO);
                 return Ok(result);
             }
             catch (Exception e)
@@ -92,7 +109,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.MovieRepository.GetMovieTheaterId(theaterId);
+                var result = await _movieRepository.GetMovieTheaterId(theaterId);
                 return Ok(result);
             }
             catch (Exception e)
@@ -111,7 +128,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.MovieTypeRepository.GetMovieTypeListAsync();
+                var result = await _movieTypeRepository.GetMovieTypeListAsync();
 
                 return Ok(result);
             }
@@ -127,12 +144,12 @@ namespace Cinema.Controllers
         {
             try
             {
-                if (!await _uow.MovieTypeRepository.ExistsAsync(entity.Id))
+                if (!await _movieTypeRepository.ExistsAsync(entity.Id))
                 {
                     return NotFound();
                 }
 
-                var result = await _uow.MovieTypeRepository.UpdateAsync(entity);
+                var result = await _movieTypeRepository.UpdateAsync(entity);
 
                 return Ok(result);
             }
@@ -148,7 +165,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.MovieTypeRepository.CreateAsync(entity);
+                var result = await _movieTypeRepository.CreateAsync(entity);
 
                 return Ok(result);
             }
@@ -168,7 +185,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.FoodAndDrinkRepository.ComboByTheaterIdAsync(id);
+                var result = await _foodAndDrinkRepository.ComboByTheaterIdAsync(id);
                 return Ok(result);
 
             }
@@ -188,7 +205,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.SeatRepository.GetSeatByShowTimeAndRoomIdAysn(vm);
+                var result = await _seatRepository.GetSeatByShowTimeAndRoomIdAysn(vm);
                 return Ok(result);
             }
             catch (Exception e)
@@ -207,7 +224,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.SeatTypeRepository.GetSeatTypeListAsync();
+                var result = await _seatTypeRepository.GetSeatTypeListAsync();
 
                 return Ok(result);
             }
@@ -223,12 +240,12 @@ namespace Cinema.Controllers
         {
             try
             {
-                if (!await _uow.SeatTypeRepository.ExistsAsync(entity.Id))
+                if (!await _seatTypeRepository.ExistsAsync(entity.Id))
                 {
                     return NotFound();
                 }
 
-                var result = await _uow.SeatTypeRepository.UpdateAsync(entity);
+                var result = await _seatTypeRepository.UpdateAsync(entity);
 
                 return Ok(result);
             }
@@ -244,7 +261,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.SeatTypeRepository.CreateAsync(entity);
+                var result = await _seatTypeRepository.CreateAsync(entity);
 
                 return Ok(result);
             }
@@ -264,7 +281,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.TheaterRepository.GetAllTheater();
+                var result = await _theaterRepository.GetAllTheater();
 
                 if (result.Count == 0)
                 {
@@ -285,7 +302,7 @@ namespace Cinema.Controllers
         {
 
 
-            var result = await _uow.TheaterRepository.GetShowTimeByTheaterId(theaterId);
+            var result = await _theaterRepository.GetShowTimeByTheaterId(theaterId);
 
             if (result.Count == 0)
             {
@@ -301,7 +318,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.TheaterRepository.GetTheaterAsync(id);
+                var result = await _theaterRepository.GetTheaterAsync(id);
 
                 if (result == null)
                 {
@@ -326,7 +343,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.TicketTypeRepository.TicketTypeByShowTimeAndRoomAsync(vm);
+                var result = await _ticketTypeRepository.TicketTypeByShowTimeAndRoomAsync(vm);
                 return Ok(result);
             }
             catch (Exception e)
@@ -341,7 +358,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.TicketTypeRepository.GetTicketTypeListAsync();
+                var result = await _ticketTypeRepository.GetTicketTypeListAsync();
 
                 return Ok(result);
             }
@@ -357,12 +374,12 @@ namespace Cinema.Controllers
         {
             try
             {
-                if (!await _uow.TicketTypeRepository.ExistsAsync(entity.Id))
+                if (!await _ticketTypeRepository.ExistsAsync(entity.Id))
                 {
                     return NotFound();
                 }
 
-                var result = await _uow.TicketTypeRepository.UpdateAsync(entity);
+                var result = await _ticketTypeRepository.UpdateAsync(entity);
 
                 return Ok(result);
             }
@@ -378,7 +395,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.TicketTypeRepository.CreateAsync(entity);
+                var result = await _ticketTypeRepository.CreateAsync(entity);
 
                 return Ok(result);
             }
@@ -398,7 +415,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var dateRows = await _uow.MovieRepository.GetDateByMovieID(movieId, ProjectionForm);
+                var dateRows = await _movieRepository.GetDateByMovieID(movieId, ProjectionForm);
 
                 if (dateRows == null)
                 {
@@ -423,7 +440,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var showtimeViewModels = await _uow.MovieRepository.GetShowTimeByMovieID(movieId, date, ProjectionForm);
+                var showtimeViewModels = await _movieRepository.GetShowTimeByMovieID(movieId, date, ProjectionForm);
 
                 return Ok(showtimeViewModels);
             }
@@ -443,7 +460,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.InvoiceRepository.GetInvoiceAsync(code);
+                var result = await _invoiceRepository.GetInvoiceAsync(code);
 
                 return Ok(result);
             }
@@ -463,7 +480,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.AgeRestrictionRepository.GetAgeRestrictionListAsync();
+                var result = await _ageRestrictionRepository.GetAgeRestrictionListAsync();
 
                 return Ok(result);
             }
@@ -479,12 +496,12 @@ namespace Cinema.Controllers
         {
             try
             {
-                if (!await _uow.AgeRestrictionRepository.ExistsAsync(entity.Id))
+                if (!await _ageRestrictionRepository.ExistsAsync(entity.Id))
                 {
                     return NotFound();
                 }
 
-                var result = await _uow.AgeRestrictionRepository.UpdateAsync(entity);
+                var result = await _ageRestrictionRepository.UpdateAsync(entity);
 
                 return Ok(result);
             }
@@ -500,7 +517,7 @@ namespace Cinema.Controllers
         {
             try
             {
-                var result = await _uow.AgeRestrictionRepository.CreateAsync(entity);
+                var result = await _ageRestrictionRepository.CreateAsync(entity);
 
                 return Ok(result);
             }

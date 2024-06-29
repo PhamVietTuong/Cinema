@@ -1,3 +1,4 @@
+import 'package:cinema_app/components/actor_list.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
@@ -9,6 +10,7 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MovieDetail extends StatefulWidget {
@@ -30,7 +32,7 @@ class _MovieDetailState extends State<MovieDetail>
   bool isLoadingData = true;
   late MoviePresenter moviePr;
   late Movie _movieDetail;
-  final ScrollController _scrollController =ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   List<DayItemBox> days = List.filled(
       0,
@@ -56,50 +58,22 @@ class _MovieDetailState extends State<MovieDetail>
     });
   }
 
-  void scroll(){
-
-   WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration:const Duration(milliseconds: 200),
-          curve: Curves.easeInOut
-        );
-      });
+  void scroll() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
+    });
   }
+
   @override
   void initState() {
     super.initState();
     selectedDate = today;
-    
+
     moviePr = MoviePresenter(this);
     moviePr.fetchMovieDetail(widget.movieID, widget.projectionForm);
-   
   }
 
-  @override
-  void onLoadMovieDetailComplete(Movie movie) {
-    setState(() {
-      _movieDetail = movie;
-      schedule = _movieDetail.schedules.firstWhere(
-        (element) =>
-            element.date.day == selectedDate.day &&
-            element.date.month == selectedDate.month,
-        orElse: () => Schedule(),
-      );
-
-      isLoadingData = false;
-    });
-  }
-
-  @override
-  void onLoadError() {
-    setState(() {
-      isLoadingData = false;
-    });
-  }
-
-  @override
-  void onLoadMoviesComplete(List<Movie> movies) {}
   @override
   Widget build(BuildContext context) {
     days.clear();
@@ -109,12 +83,12 @@ class _MovieDetailState extends State<MovieDetail>
           date: today.add(Duration(days: i)),
           selectDay: _selectDay));
     }
-    
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new),
-            color: Styles.boldTextColor["dark_purple"], // Màu bạn muốn
+            color: Styles.boldTextColor[Config.themeMode], // Màu bạn muốn
             onPressed: () {
               Navigator.pop(this.context);
             },
@@ -123,14 +97,14 @@ class _MovieDetailState extends State<MovieDetail>
             "Phim",
             style: TextStyle(
               fontSize: Styles.appbarFontSize,
-              color: Styles.boldTextColor["dark_purple"],
+              color: Styles.boldTextColor[Config.themeMode],
             ),
           ),
-          backgroundColor: Styles.backgroundContent["dark_purple"],
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
         ),
         body: Container(
           decoration:
-              BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+              BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
           child: Center(
             child: isLoadingData
                 ? Column(
@@ -138,7 +112,7 @@ class _MovieDetailState extends State<MovieDetail>
                     children: [
                       CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            Styles.boldTextColor["dark_purple"]!),
+                            Styles.boldTextColor[Config.themeMode]!),
                       ),
                       const SizedBox(
                         height: 20,
@@ -147,7 +121,7 @@ class _MovieDetailState extends State<MovieDetail>
                           style: TextStyle(
                             fontSize: Styles.titleFontSize,
                             fontWeight: FontWeight.bold,
-                            color: Styles.boldTextColor["dark_purple"],
+                            color: Styles.boldTextColor[Config.themeMode],
                           ))
                     ],
                   )
@@ -201,7 +175,7 @@ class _MovieDetailState extends State<MovieDetail>
                                             Icons.play_circle_fill,
                                             size: 64,
                                             color: Styles
-                                                .boldTextColor["dark_purple"],
+                                                .boldTextColor[Config.themeMode],
                                           )
                                         : const Text(""),
                                   ),
@@ -216,7 +190,7 @@ class _MovieDetailState extends State<MovieDetail>
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 color: Styles.backgroundContent[
-                                    "dark_purple"], // Màu nền của container
+                                    Config.themeMode], // Màu nền của container
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(
@@ -249,7 +223,7 @@ class _MovieDetailState extends State<MovieDetail>
                                         softWrap: true,
                                         style: TextStyle(
                                             color: Styles
-                                                .boldTextColor["dark_purple"],
+                                                .boldTextColor[Config.themeMode],
                                             fontSize: Styles.titleFontSize),
                                       ),
                                       TimeBox(time: _movieDetail.time),
@@ -304,17 +278,37 @@ class _MovieDetailState extends State<MovieDetail>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          _movieDetail.director.isNotEmpty
-                                              ? _movieDetail.director
-                                              : 'Đang cập nhật',
-                                          style: TextStyle(
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (_movieDetail
+                                                .director.isNotEmpty) {
+                                              String directorName = _movieDetail
+                                                  .director; // Tên đạo diễn
+                                              String searchQuery =
+                                                  Uri.encodeFull(directorName);
+                                              String url =
+                                                  'https://vi.wikipedia.org/wiki/$searchQuery'; // Đường dẫn đến Wikipedia thông qua Google
+
+                                              Uri uri = Uri.parse(
+                                                  url); // Chuyển đổi chuỗi URL thành đối tượng Uri
+
+                                              launchUrl(
+                                                  uri); // Sử dụng đối tượng Uri khi gọi phương thức launchUrl
+                                            }
+                                          },
+                                          child: Text(
+                                            _movieDetail.director.isNotEmpty
+                                                ? _movieDetail.director
+                                                : 'Đang cập nhật',
+                                            style: TextStyle(
                                               color: Styles
-                                                  .textColor["dark_purple"],
+
+                                                  .textColor[Config.themeMode],
                                               fontSize: Styles.textSize),
                                           maxLines:
                                               isDirectorExpanded ? null : 10,
                                           overflow: TextOverflow.ellipsis,
+
                                         ),
                                         if (_movieDetail.director.length > 20)
                                           GestureDetector(
@@ -330,7 +324,7 @@ class _MovieDetailState extends State<MovieDetail>
                                                   : 'Xem thêm',
                                               style: TextStyle(
                                                   color: Styles
-                                                      .textColor["dark_purple"],
+                                                      .textColor[Config.themeMode],
                                                   fontSize:
                                                       Styles.titleFontSize),
                                             ),
@@ -350,38 +344,12 @@ class _MovieDetailState extends State<MovieDetail>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          _movieDetail.actor.isNotEmpty
-                                              ? _movieDetail.actor
-                                              : 'Đang cập nhật',
-                                          style: TextStyle(
-                                              color: Styles
-                                                  .textColor["dark_purple"],
-                                              fontSize: Styles.textSize),
-                                          softWrap: true,
-                                          maxLines: isExpanded2 ? 10 : null,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        if (_movieDetail.actor.length > 30)
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                isExpanded2 = !isExpanded2;
-                                              });
-                                            },
-                                            child: Text(
-                                              isExpanded2
-                                                  ? 'Thu gọn'
-                                                  : 'Xem thêm',
-                                              style: TextStyle(
-                                                  color: Styles
-                                                      .textColor["dark_purple"],
-                                                  fontSize: Styles.textSize),
-                                            ),
-                                          ),
+
+                                        ActorList(actors: _movieDetail.actor),
+
                                       ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                               Row(
@@ -401,7 +369,7 @@ class _MovieDetailState extends State<MovieDetail>
                                               : 'Đang cập nhật',
                                           style: TextStyle(
                                               color: Styles
-                                                  .textColor["dark_purple"],
+                                                  .textColor[Config.themeMode],
                                               fontSize: Styles.textSize),
                                           softWrap: true,
                                         ),
@@ -417,7 +385,7 @@ class _MovieDetailState extends State<MovieDetail>
                                                   'Thu gọn',
                                                   style: TextStyle(
                                                       color: Styles.textColor[
-                                                          "dark_purple"],
+                                                          Config.themeMode],
                                                       fontSize:
                                                           Styles.textSize),
                                                 ),
@@ -432,7 +400,7 @@ class _MovieDetailState extends State<MovieDetail>
                                                   'Xem thêm',
                                                   style: TextStyle(
                                                       color: Styles.textColor[
-                                                          "dark_purple"],
+                                                          Config.themeMode],
                                                       fontSize:
                                                           Styles.textSize),
                                                 ),
@@ -447,7 +415,7 @@ class _MovieDetailState extends State<MovieDetail>
                           Container(
                             margin: const EdgeInsets.only(top: 5),
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            color: Styles.backgroundContent["dark_purple"],
+                            color: Styles.backgroundContent[Config.themeMode],
                             child: Container(
                               margin: const EdgeInsets.symmetric(
                                   horizontal: Styles.defaultHorizontal),
@@ -464,14 +432,15 @@ class _MovieDetailState extends State<MovieDetail>
                             height: 5,
                           ),
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
                             child:
                                 //danh sách showtime theo theater
                                 Column(
                                     children: schedule.theaters.isNotEmpty
                                         ? schedule.theaters
                                             .map((e) => ShowtimeFromTheater(
-                                              scroll: scroll,
+                                                scroll: scroll,
                                                 selectedDate: selectedDate,
                                                 item: e,
                                                 movie: _movieDetail))
@@ -482,7 +451,7 @@ class _MovieDetailState extends State<MovieDetail>
                                               "Dữ liệu đang được cập nhật",
                                               style: TextStyle(
                                                   color: Styles
-                                                      .textColor["dark_purple"],
+                                                      .textColor[Config.themeMode],
                                                   fontSize: Styles.textSize),
                                             ))
                                           ]),
@@ -498,4 +467,32 @@ class _MovieDetailState extends State<MovieDetail>
     _scrollController.dispose();
     super.dispose();
   }
+
+  @override
+  void onSearchComplete(Map<String, dynamic> results) {
+  }
+  @override
+  void onLoadMovieDetailComplete(Movie movie) {
+    setState(() {
+      _movieDetail = movie;
+      schedule = _movieDetail.schedules.firstWhere(
+        (element) =>
+            element.date.day == selectedDate.day &&
+            element.date.month == selectedDate.month,
+        orElse: () => Schedule(),
+      );
+
+      isLoadingData = false;
+    });
+  }
+
+  @override
+  void onLoadError() {
+    setState(() {
+      isLoadingData = false;
+    });
+  }
+
+  @override
+  void onLoadMoviesComplete(List<Movie> movies) {}
 }

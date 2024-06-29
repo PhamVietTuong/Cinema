@@ -1,9 +1,9 @@
 import 'package:cinema_app/components/info_movie.dart';
-import 'package:cinema_app/views/search_movie.dart';
 import 'package:cinema_app/components/slide_show.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
+import 'package:cinema_app/views/search_movie.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -25,15 +25,16 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Styles.gradientTop["dark_purple"]!,
-      Styles.gradientBot["dark_purple"]!
+      Styles.gradientTop[Config.themeMode]!,
+      Styles.gradientBot[Config.themeMode]!
     ],
   );
   List<Movie> lstMovie = List.filled(0, Movie(), growable: true);
   List<Movie> showingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
-  late List<String>trailers;
+  late List<String> trailers = [];
+
   @override
   void initState() {
     super.initState();
@@ -42,109 +43,43 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   }
 
   @override
-  void onLoadMoviesComplete(List<Movie> movies) {
-    setState(() {
-      lstMovie = movies;
-      showingMovies = movies
-          .where((e) =>
-              e.releaseDate.isBefore(today) ||
-              (e.releaseDate.day == today.day &&
-                  e.releaseDate.month == today.month))
-          .toList();
-
-      upcomingMovies = movies
-          .where((e) =>
-              e.releaseDate.isAfter(today) &&
-              e.releaseDate.month == today.month)
-          .toList();
-
-      earlyMovies = movies
-          .where((e) =>
-              e.releaseDate.isAfter(today) &&
-              e.releaseDate.difference(today).inDays < 7)
-          .toList();
-          
-      trailers = showingMovies
-          .where((movie) => movie.trailer.isNotEmpty)
-          .map((movie) => movie.trailer).toSet() // Lấy ra trailer của các phim
-          .toList();
-      isLoadingData = false;
-      //print("$moviesWithTrailer");
-    });
-  }
-
-  @override
-  void onLoadMovieDetailComplete(Movie movies) {}
-  @override
-  void onLoadError() {
-    setState(() {
-      isLoadingData = false;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         title: Text(
           "Xin Chào !",
           style: TextStyle(
-              fontSize: Styles.appbarFontSize,
-              color: Styles.boldTextColor["dark_purple"]),
+            fontSize: Styles.appbarFontSize,
+            color: Styles.boldTextColor[Config.themeMode],
+          ),
         ),
         actions: [
-          Container(
-            margin: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Styles.btnColor["dark_purple"],
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications,
+              size: Styles.iconInAppBar,
             ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications,
-                size: Styles.iconInAppBar,
-              ),
-              color: Styles.boldTextColor["dark_purple"],
-            ),
+            color: Styles.boldTextColor[Config.themeMode],
           ),
-          Container(
-            margin: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Styles.btnColor["dark_purple"],
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
+              );
+            },
+            icon: const Icon(
+              Icons.search,
+              size: Styles.iconInAppBar,
             ),
-            child: IconButton(
-              onPressed: () {
-                setState(() {});
-                showSearch(context: context, delegate: SearchMovie(lstMovie));
-              },
-              icon: Icon(Icons.search,
-                  size: Styles.iconInAppBar,
-                  color: Styles.boldTextColor["dark_purple"]),
-            ),
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(color: Styles.backgroundColor["dark_purple"]),
+        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: Center(
           child: isLoadingData
               ? Column(
@@ -152,7 +87,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   children: [
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          Styles.textColor["dark_purple"]!),
+                          Styles.textColor[Config.themeMode]!),
                     ),
                     const SizedBox(
                       height: 20,
@@ -162,14 +97,14 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                       style: TextStyle(
                           fontSize: Styles.titleFontSize,
                           fontWeight: FontWeight.bold,
-                          color: Styles.textColor["dark_purple"]),
+                          color: Styles.textColor[Config.themeMode]),
                     ),
                   ],
                 )
               : SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Container(
-                    color: Styles.backgroundColor["dark_purple"],
+                    color: Styles.backgroundColor[Config.themeMode],
                     child: Column(
                       children: [
                         Container(
@@ -184,7 +119,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               horizontal: Styles.defaultHorizontal),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Styles.backgroundContent["dark_purple"],
+                            color: Styles.backgroundContent[Config.themeMode],
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -199,7 +134,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                   child: ToggleButtons(
                                     borderRadius: BorderRadius.circular(10),
                                     selectedColor:
-                                        Styles.boldTextColor["dark_purple"],
+                                        Styles.boldTextColor[Config.themeMode],
                                     fillColor: Colors.transparent,
                                     borderWidth: 0,
                                     onPressed: (int index) {
@@ -230,7 +165,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                                 color: Styles
-                                                    .btnColor["dark_purple"],
+                                                    .btnColor[Config.themeMode],
                                               ),
                                         child: Text(
                                           "Đang chiếu",
@@ -238,7 +173,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           style: TextStyle(
                                             fontSize: Styles.textSize,
                                             color: Styles
-                                                .boldTextColor["dark_purple"],
+                                                .boldTextColor[Config.themeMode],
                                           ),
                                         ),
                                       ),
@@ -266,7 +201,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           style: TextStyle(
                                               fontSize: Styles.textSize,
                                               color: Styles.boldTextColor[
-                                                  "dark_purple"]),
+                                                  Config.themeMode]),
                                         ),
                                       ),
                                       Container(
@@ -293,7 +228,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           style: TextStyle(
                                               fontSize: Styles.textSize,
                                               color: Styles.boldTextColor[
-                                                  "dark_purple"]),
+                                                  Config.themeMode]),
                                         ),
                                       ),
                                     ],
@@ -320,7 +255,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 "Danh sách phim đang được cập nhật",
                                                 style: TextStyle(
                                                     color: Styles.textColor[
-                                                        "dark_purple"]),
+                                                        Config.themeMode]),
                                               ),
                                             ],
                                     )),
@@ -337,7 +272,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 "Danh sách phim đang được cập nhật",
                                                 style: TextStyle(
                                                     color: Styles.textColor[
-                                                        "dark_purple"]),
+                                                        Config.themeMode]),
                                               ),
                                             ],
                                     )),
@@ -354,7 +289,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 "Danh sách phim đang được cập nhật",
                                                 style: TextStyle(
                                                     color: Styles.textColor[
-                                                        "dark_purple"]),
+                                                        Config.themeMode]),
                                               ),
                                             ],
                                     )),
@@ -371,13 +306,13 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               Text(
                                 "Video",
                                 style: TextStyle(
-                                    color: Styles.boldTextColor["dark_purple"],
+                                    color: Styles.boldTextColor[Config.themeMode],
                                     fontSize: Styles.titleFontSize,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: MediaQuery.of(context).size.height / 3,
-                                child: PageView.builder(
+                                child: trailers.isNotEmpty? PageView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: trailers.length,
                                   itemBuilder: (context, index) {
@@ -395,7 +330,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                       ),
                                     );
                                   },
-                                ),
+                                ):SizedBox.shrink(),
                               ),
                             ],
                           ),
@@ -407,5 +342,51 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
         ),
       ),
     );
+  }
+
+  @override
+  void onSearchComplete(Map<String, dynamic> results) {
+  }
+  @override
+  void onLoadMoviesComplete(List<Movie> movies) {
+    setState(() {
+      lstMovie = movies;
+      showingMovies = movies
+          .where((e) =>
+              e.releaseDate.isBefore(today) ||
+              (e.releaseDate.day == today.day &&
+                  e.releaseDate.month == today.month))
+          .toList();
+
+      upcomingMovies = movies
+          .where((e) =>
+              e.releaseDate.isAfter(today) &&
+              e.releaseDate.month == today.month)
+          .toList();
+
+      earlyMovies = movies
+          .where((e) =>
+              e.releaseDate.isAfter(today) &&
+              e.releaseDate.difference(today).inDays < 7)
+          .toList();
+
+      trailers = showingMovies
+          .where((movie) => movie.trailer.isNotEmpty)
+          .map((movie) => movie.trailer)
+          .toSet() // Lấy ra trailer của các phim
+          .toList();
+      isLoadingData = false;
+      //print("$moviesWithTrailer");
+    });
+  }
+
+  @override
+  void onLoadMovieDetailComplete(Movie movies) {}
+
+  @override
+  void onLoadError() {
+    setState(() {
+      isLoadingData = false;
+    });
   }
 }

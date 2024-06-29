@@ -26,7 +26,7 @@ namespace Cinema.Repository
 		public async Task<User> CreateAsync(User entity)
 		{
 			PasswordHashSalt passwordHashSalt = PasswordUtils.EncryptPassword(entity.PasswordHash);
-			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "User");
+			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "user");
 
 			var userTypes = await _context.UserType.ToListAsync();
 
@@ -47,7 +47,7 @@ namespace Cinema.Repository
 			}
 			else
 			{
-				entity.UserTypeId = userTypes.First(x => x.Name == "User").Id;
+				entity.UserTypeId = userTypes.First(x => x.Name == "user").Id;
 				entity.PasswordHash = passwordHashSalt.Hash;
 				entity.PasswordSalt = passwordHashSalt.Salt;
 				await _context.AddAsync(entity);
@@ -227,6 +227,21 @@ namespace Cinema.Repository
 					throw new ArgumentException("Tên người dùng, họ và tên, mật khẩu không được để trống.");
 				}
 
+				if (!Validate.IsValidPassword(register.Password))
+				{
+					throw new ArgumentException("Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
+				}
+
+				if (!string.IsNullOrEmpty(register.Email) && !Validate.IsEmail(register.Email))
+				{
+					throw new ArgumentException("Địa chỉ email không hợp lệ.");
+				}
+
+				if (!string.IsNullOrEmpty(register.Phone) && !Validate.IsPhoneNumber(register.Phone))
+				{
+					throw new ArgumentException("Số điện thoại không hợp lệ.");
+				}
+
 				var existingUser = await _context.User.FirstOrDefaultAsync(u => u.UserName.ToLower() == register.UserName.ToLower());
 				if (existingUser != null)
 				{
@@ -235,7 +250,6 @@ namespace Cinema.Repository
 
 				if (!string.IsNullOrEmpty(register.Email))
 				{
-
 					var existingEmail = await _context.User.FirstOrDefaultAsync(u => u.Email.ToLower() == register.Email.ToLower());
 					if (existingEmail != null)
 					{
@@ -257,16 +271,18 @@ namespace Cinema.Repository
 					throw new ArgumentException("Mật khẩu và mật khẩu nhập lại không khớp.");
 				}
 
+				// Tìm UserTypeID từ UserTypeName
+				var userType = await _context.UserType.FirstOrDefaultAsync(ut => ut.Name == register.UserTypeName.ToLower());
+				if (userType == null)
+				{
+					throw new ArgumentException($"Loại người dùng '{register.UserTypeName}' không tồn tại.");
+				}
+
 				var passwordHashSalt = PasswordUtils.EncryptPassword(register.Password);
-				// var userType = _context.UserType.SingleOrDefault(ut => ut.Id == register.UserTypeId);
-				// if (userType == null)
-				// {
-				// 	throw new Exception("UserType not found");
-				// }
 				var newUser = new User
 				{
 					Id = Guid.NewGuid(),
-					UserTypeId = register.UserTypeId,
+					UserTypeId = userType.Id,
 					UserName = register.UserName,
 					FullName = register.FullName,
 					Email = register.Email,
@@ -292,7 +308,6 @@ namespace Cinema.Repository
 				throw new Exception("Đăng ký người dùng thất bại.", ex);
 			}
 		}
-
 
 
 		//create method send authentication code via email

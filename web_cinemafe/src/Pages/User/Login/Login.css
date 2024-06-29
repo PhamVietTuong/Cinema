@@ -80,3 +80,19 @@
 .MuiFormHelperText-root {
     color: #ef4444 !important;
 }
+
+.LoginFormControlLabel {
+    color: rgb(0 0 0/1) !important;
+}
+
+.LoginRadioGroup {
+    color: rgb(15, 23, 42);
+}
+
+.passwordResetLink {
+    display: flex;
+    justify-content: flex-end;
+    color: rgb(15, 23, 42);
+        text-decoration: underline;
+            text-underline-position: under;
+}

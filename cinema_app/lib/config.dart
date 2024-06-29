@@ -1,18 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-var serverUrl = 'https://10.0.2.2:7209';
+
+//var serverUrl = 'http://103.104.122.137:9000';
+var serverUrl ='https://10.0.2.2:7209';
+
+
 class Styles {
-  static const backgroundColor = {
+  static const Map<String, Color> backgroundColor = {
     "dark_purple": Color(0xFF272042),
   };
-  static const backgroundContent = {"dark_purple": Color(0xFF332E59)};
-  static const btnColor = {"dark_purple": Color(0xff802ef7)};
-  static const boldTextColor = {"dark_purple": Color(0xffffffff)};
-  static const textColor = {"dark_purple": Color(0xffcccbd5)};
-  static const gradientTop = {"dark_purple": Color(0xff802ef7)};
-  static const gradientBot = {"dark_purple": Color(0xffB654C3)};
-  static const titleColor = {"dark_purple": Color(0xff774ECB)};
-  static const textSelectionColor = {"dark_purple": Color(0xffF3F647)};
+  static const Map<String, Color> backgroundContent = {
+    "dark_purple": Color(0xFF332E59),
+    "light_purple": Colors.white
+  };
+  static const Map<String, Color> btnColor = {
+    "dark_purple": Color(0xff802ef7),
+    "light_purple": Colors.white
+  };
+  static const Map<String, Color> boldTextColor = {
+    "dark_purple": Color(0xffffffff),
+    "light_purple": Colors.black
+  };
+  static const Map<String, Color> textColor = {
+    "dark_purple": Color(0xffcccbd5),
+    "light_purple": Colors.blueGrey
+  };
+  static const Map<String, Color> gradientTop = {
+    "dark_purple": Color(0xff802ef7),
+    "light_purple": Colors.white
+  };
+  static const Map<String, Color> gradientBot = {
+    "dark_purple": Color(0xffB654C3),
+    "light_purple": Colors.white
+  };
+  static const Map<String, Color> titleColor = {
+    "dark_purple": Color(0xff774ECB),
+    "light_purple": Colors.white
+  };
+  static const Map<String, Color> textSelectionColor = {
+    "dark_purple": Color(0xffF3F647),
+    "light_purple": Colors.white
+  };
 
   static const titleFontSize = 18.0;
   static const textSize = 15.0;
@@ -30,7 +60,6 @@ class Styles {
   static const iconSizeInTitle = 30.0;
   static const iconInAppBar = 25.0;
 
-
   static NumberFormat formatter =
       NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
 }
@@ -46,30 +75,36 @@ class Config {
   }
 
   static Future<void> setThemeMode(String mode) async {
-    await _prefs.setString(Constants.themeKey, mode);
+    await _prefs.setString(Constants.themeModeKey, mode);
     themeMode = mode;
   }
 
   static Future<void> setLanguageMode(String mode) async {
-    await _prefs.setString(Constants.languageKey, mode);
+    await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
   }
 
   static Future<void> loadMode() async {
-    themeMode = _prefs.getString(Constants.themeKey);
-    if (themeMode==null) {
+    // _prefs.remove(Constants.themeModeKey);
+    themeMode = _prefs.getString(Constants.themeModeKey);
+    if (themeMode == null) {
       await setThemeMode(Constants.defaultTheme);
       themeMode = Constants.defaultTheme;
     }
 
-    languageMode = _prefs.getString(Constants.languageKey) ?? 'vi_VN';
+    languageMode = _prefs.getString(Constants.languageModeKey) ?? 'vi_VN';
   }
 }
 
 class Constants {
-  static const String themeKey = "themeMode";
-  static const String languageKey = "languageMode";
-  static const String defaultTheme = "dark_purple";
+  static const String themeModeKey = "themeMode";
+  static const String languageModeKey = "languageMode";
+  static const String defaultTheme = darkPurpleTheme;
 
-  //static const String serverUrl = 'https://10.0.2.2:7209';
+  static const String darkPurpleTheme = "dark_purple";
+  static const String lightPurpleTheme = "light_purple";
+  static final Map<String, String> themes = {
+    darkPurpleTheme: "Chủ đề tối - Tím",
+    lightPurpleTheme: "Chủ đề sáng - Tím",
+  };
 }
