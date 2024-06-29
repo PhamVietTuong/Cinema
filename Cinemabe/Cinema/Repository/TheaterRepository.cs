@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Printing;
 using System.Linq;
+using AutoMapper;
 using Cinema.Contracts;
 using Cinema.Data;
 using Cinema.Data.Enum;
@@ -12,10 +13,12 @@ namespace Cinema.Repository
     public class TheaterRepository : ITheaterRepository
     {
         private readonly CinemaContext _context;
+        private readonly IMapper _mapper;
 
-        public TheaterRepository(CinemaContext context)
+        public TheaterRepository(CinemaContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<TheaterDTO>> GetAllTheater()
@@ -163,6 +166,60 @@ namespace Cinema.Repository
             };
 
             return result;
+        }
+
+        public async Task<List<TheaterDTO>> GetTheaterListAsync()
+        {
+            var theaters = await _context.Theater.ToListAsync();
+
+            var result = new List<TheaterDTO>();
+            foreach (var theater in theaters)
+            {
+                result.Add(new TheaterDTO
+                {
+                    Id = theater.Id,
+                    Name = theater.Name,
+                    Address = theater.Address,
+                    Image = theater.Image,
+                    Phone = theater.Phone,
+                    Status = theater.Status,
+                });
+            }
+
+            return result;
+        }
+
+        public async Task<bool> ExistsAsync(Guid id)
+        {
+            return await _context.Theater.AnyAsync(x => x.Id == id);
+        }
+
+        public async Task<TheaterDTO> UpdateAsync(TheaterDTO entity)
+        {
+            var theater = await _context.Theater.FirstOrDefaultAsync(x => x.Id == entity.Id);
+
+            theater.Name = entity.Name;
+            theater.Address = entity.Address;
+            theater.Image = entity.Image;
+            theater.Phone = entity.Phone;
+            theater.Status = entity.Status;
+
+            await _context.SaveChangesAsync();
+
+            return entity;
+        }
+
+        public async Task<TheaterDTO> CreateAsync(TheaterDTO entity)
+        {
+            var entityDto = _mapper.Map<Theater>(entity);
+
+            _context.Theater.Add(entityDto);
+
+            await _context.SaveChangesAsync();
+
+            var resultDto = _mapper.Map<TheaterDTO>(entityDto);
+
+            return resultDto;
         }
     }
 }

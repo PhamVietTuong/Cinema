@@ -58,6 +58,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMomoRepository, MomoRepository>();
 builder.Services.AddScoped<IMovieTypeRepository, MovieTypeRepository>();
 builder.Services.AddScoped<ISeatTypeRepository, SeatTypeRepository>();
+builder.Services.AddScoped<IUserTypeRepository, UserTypeRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
