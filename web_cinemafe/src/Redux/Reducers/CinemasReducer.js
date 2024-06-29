@@ -31,6 +31,7 @@ const stateDefault = {
     ticketTypeList: [],
     movieTypeList: [],
     seatTypeList: [],
+    userTypeList: [],
     movieInfoBooking: {},
     invoiceDTO: {},
     code: '',
@@ -246,6 +247,9 @@ export const CinemasReducer = (state = stateDefault, action) => {
             return { ...state, seatTypeList: action.seatTypeList };
         }
 
+        case SET_LIST_USERTYPE: {
+            return { ...state, userTypeList: action.userTypeList };
+        }
         case SAVE_BOOKING_INFO:
             return {
                 ...state,

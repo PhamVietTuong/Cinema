@@ -14,6 +14,8 @@ import ForgetPassword from "./Pages/User/ForgetPassword/ForgetPassword";
 import TicketType from "./Pages/Admin/TicketType/TicketType";
 import MovieType from "./Pages/Admin/MovieType/MovieType";
 import SeatType from "./Pages/Admin/SeatType/SeatType";
+import UserType from "./Pages/Admin/UserType/UserType";
+import Theater from "./Pages/Admin/Theater/Theater";
 import ScrollToTop from "./ScrollToTop";
 import UserType from "./Pages/Admin/UserType/UserType";
 import Theater from "./Pages/Admin/Theater/Theater";
