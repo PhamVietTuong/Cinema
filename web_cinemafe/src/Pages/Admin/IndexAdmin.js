@@ -110,15 +110,6 @@ const IndexAdmin = () => {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        <Link to="Drafts">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Drafts />
-                                </ListItemIcon>
-                                <ListItemText primary="Drafts" />
-                            </ListItemButton>
-                        </Link>
-
                         <Link to="AgeRestriction">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -152,6 +143,15 @@ const IndexAdmin = () => {
                                     <Inbox />
                                 </ListItemIcon>
                                 <ListItemText primary="SeatType" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="UserType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="UserType" />
                             </ListItemButton>
                         </Link>
                     </List>

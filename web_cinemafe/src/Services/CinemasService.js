@@ -103,6 +103,16 @@ export class CinemasService extends baseService {
 
     SearchByName = (name) => {
         return this.get(`api/Cinemas/SearchByName${name}`)
+    GetUserTypeList = () => {
+        return this.get(`api/Cinemas/GetUserTypeList`)
+    }
+
+    UpdateUserType = (userTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateUserType`, userTypeDTO)
+    }
+
+    CreateUserType = (userTypeDTO) => {
+        return this.post(`api/Cinemas/CreateUserType`, userTypeDTO)
     }
 }
 

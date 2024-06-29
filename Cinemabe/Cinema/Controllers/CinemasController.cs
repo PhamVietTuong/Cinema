@@ -25,9 +25,11 @@ namespace Cinema.Controllers
         private readonly ITicketTypeRepository _ticketTypeRepository;
         private readonly IMovieTypeRepository _movieTypeRepository;
         private readonly ISeatTypeRepository _seatTypeRepository;
+        private readonly IUserTypeRepository _userTypeRepository;
 
         public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository, 
-            ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository)
+            ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository, 
+            IUserTypeRepository userTypeRepository)
         {
             _ageRestrictionRepository = ageRestrictionRepository;
             _foodAndDrinkRepository = foodAndDrinkRepository;
@@ -38,6 +40,7 @@ namespace Cinema.Controllers
             _ticketTypeRepository = ticketTypeRepository;
             _movieTypeRepository = movieTypeRepository;
             _seatTypeRepository = seatTypeRepository;
+            _userTypeRepository = userTypeRepository;
         }
 
         #region Search theater, movie
@@ -518,6 +521,63 @@ namespace Cinema.Controllers
             try
             {
                 var result = await _ageRestrictionRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region UserType
+
+        [HttpGet("GetUserTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<UserTypeDTO>>> GetUserTypeList()
+        {
+            try
+            {
+                var result = await _userTypeRepository.GetUserTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateUserType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserTypeDTO>> UpdateUserType(UserTypeDTO entity)
+        {
+            try
+            {
+                if (!await _userTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _userTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateUserType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserTypeDTO>> CreateUserType(UserTypeDTO entity)
+        {
+            try
+            {
+                var result = await _userTypeRepository.CreateAsync(entity);
 
                 return Ok(result);
             }
