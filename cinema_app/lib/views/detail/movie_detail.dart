@@ -1,3 +1,4 @@
+import 'package:cinema_app/components/actor_list.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
 import 'package:cinema_app/components/movie_type_box.dart';
 import 'package:cinema_app/components/showtime_type_box.dart';
@@ -9,6 +10,7 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MovieDetail extends StatefulWidget {
@@ -30,7 +32,7 @@ class _MovieDetailState extends State<MovieDetail>
   bool isLoadingData = true;
   late MoviePresenter moviePr;
   late Movie _movieDetail;
-  final ScrollController _scrollController =ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   List<DayItemBox> days = List.filled(
       0,
@@ -56,26 +58,22 @@ class _MovieDetailState extends State<MovieDetail>
     });
   }
 
-  void scroll(){
-   WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration:const Duration(milliseconds: 200),
-          curve: Curves.easeInOut
-        );
-      });
+  void scroll() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
+    });
   }
+
   @override
   void initState() {
     super.initState();
     selectedDate = today;
-    
+
     moviePr = MoviePresenter(this);
     moviePr.fetchMovieDetail(widget.movieID, widget.projectionForm);
-   
   }
 
- 
   @override
   Widget build(BuildContext context) {
     days.clear();
@@ -85,7 +83,7 @@ class _MovieDetailState extends State<MovieDetail>
           date: today.add(Duration(days: i)),
           selectDay: _selectDay));
     }
-    
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -280,17 +278,37 @@ class _MovieDetailState extends State<MovieDetail>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          _movieDetail.director.isNotEmpty
-                                              ? _movieDetail.director
-                                              : 'Đang cập nhật',
-                                          style: TextStyle(
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (_movieDetail
+                                                .director.isNotEmpty) {
+                                              String directorName = _movieDetail
+                                                  .director; // Tên đạo diễn
+                                              String searchQuery =
+                                                  Uri.encodeFull(directorName);
+                                              String url =
+                                                  'https://vi.wikipedia.org/wiki/$searchQuery'; // Đường dẫn đến Wikipedia thông qua Google
+
+                                              Uri uri = Uri.parse(
+                                                  url); // Chuyển đổi chuỗi URL thành đối tượng Uri
+
+                                              launchUrl(
+                                                  uri); // Sử dụng đối tượng Uri khi gọi phương thức launchUrl
+                                            }
+                                          },
+                                          child: Text(
+                                            _movieDetail.director.isNotEmpty
+                                                ? _movieDetail.director
+                                                : 'Đang cập nhật',
+                                            style: TextStyle(
                                               color: Styles
+
                                                   .textColor[Config.themeMode],
                                               fontSize: Styles.textSize),
                                           maxLines:
                                               isDirectorExpanded ? null : 10,
                                           overflow: TextOverflow.ellipsis,
+
                                         ),
                                         if (_movieDetail.director.length > 20)
                                           GestureDetector(
@@ -326,38 +344,12 @@ class _MovieDetailState extends State<MovieDetail>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          _movieDetail.actor.isNotEmpty
-                                              ? _movieDetail.actor
-                                              : 'Đang cập nhật',
-                                          style: TextStyle(
-                                              color: Styles
-                                                  .textColor[Config.themeMode],
-                                              fontSize: Styles.textSize),
-                                          softWrap: true,
-                                          maxLines: isExpanded2 ? 10 : null,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        if (_movieDetail.actor.length > 30)
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                isExpanded2 = !isExpanded2;
-                                              });
-                                            },
-                                            child: Text(
-                                              isExpanded2
-                                                  ? 'Thu gọn'
-                                                  : 'Xem thêm',
-                                              style: TextStyle(
-                                                  color: Styles
-                                                      .textColor[Config.themeMode],
-                                                  fontSize: Styles.textSize),
-                                            ),
-                                          ),
+
+                                        ActorList(actors: _movieDetail.actor),
+
                                       ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                               Row(
@@ -440,14 +432,15 @@ class _MovieDetailState extends State<MovieDetail>
                             height: 5,
                           ),
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
                             child:
                                 //danh sách showtime theo theater
                                 Column(
                                     children: schedule.theaters.isNotEmpty
                                         ? schedule.theaters
                                             .map((e) => ShowtimeFromTheater(
-                                              scroll: scroll,
+                                                scroll: scroll,
                                                 selectedDate: selectedDate,
                                                 item: e,
                                                 movie: _movieDetail))
@@ -474,11 +467,11 @@ class _MovieDetailState extends State<MovieDetail>
     _scrollController.dispose();
     super.dispose();
   }
-  
+
   @override
   void onSearchComplete(Map<String, dynamic> results) {
   }
-   @override
+  @override
   void onLoadMovieDetailComplete(Movie movie) {
     setState(() {
       _movieDetail = movie;
@@ -502,6 +495,4 @@ class _MovieDetailState extends State<MovieDetail>
 
   @override
   void onLoadMoviesComplete(List<Movie> movies) {}
-
-  
 }

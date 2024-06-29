@@ -56,6 +56,8 @@ builder.Services.AddScoped<ITheaterRepository, TheaterRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMomoRepository, MomoRepository>();
+builder.Services.AddScoped<IMovieTypeRepository, MovieTypeRepository>();
+builder.Services.AddScoped<ISeatTypeRepository, SeatTypeRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 

@@ -12,6 +12,9 @@ import Test from "./Pages/Admin/Test";
 import Checkout from "./Pages/User/Checkout/Checkout";
 import { ProtectedRoute, ProtectedRouteCheckout, ProtectedRouteLogin } from "./Pages/User/ProtectedRoute";
 import ForgetPassword from "./Pages/User/ForgetPassword/ForgetPassword";
+import TicketType from "./Pages/Admin/TicketType/TicketType";
+import MovieType from "./Pages/Admin/MovieType/MovieType";
+import SeatType from "./Pages/Admin/SeatType/SeatType";
 import ScrollToTop from "./ScrollToTop";
 
 const Routers = () => {
@@ -55,6 +58,9 @@ const Routers = () => {
                     <Route path="/admin" element={<IndexAdmin />}>
                         <Route index path="admin" element={<AgeRestriction />} />
                         <Route path="AgeRestriction" element={<AgeRestriction />} />
+                        <Route path="TicketType" element={<TicketType />} />
+                        <Route path="MovieType" element={<MovieType />} />
+                        <Route path="SeatType" element={<SeatType />} />
                         <Route path="Drafts" element={<Test />} />
                     </Route>
                 </Routes>
