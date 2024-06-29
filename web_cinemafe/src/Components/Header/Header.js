@@ -8,14 +8,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TOKEN, USER_LOGIN } from '../../Ustil/Settings/Config';
 import { LOGOUT } from '../../Redux/Actions/Type/UserType';
 import { useDebounce } from "use-debounce";
+import { MovieListAction, SearchByNameAction, TheaterListAction } from '../../Redux/Actions/CinemasAction';
 
 const Header = (props) => {
     const dispatch = useDispatch();
     const {
         loginInfo,
     } = useSelector((state) => state.UserReducer);
+
     const [infoSearch, setInfoSearch] = useState('');
     const [debouncedText] = useDebounce(infoSearch, 1000);
+
+    useEffect(() => {
+        if (debouncedText) {
+            dispatch(SearchByNameAction(debouncedText))
+        }
+    }, [debouncedText, dispatch]);
 
     return (
         <>
@@ -102,9 +110,9 @@ const Header = (props) => {
                                         </div>
                                         {
                                             loginInfo && Object.keys(loginInfo).length !== 0
-                                                ? 
+                                                ?
                                                 <>
-                                                    <span class="hd-regi-name">{loginInfo?.fullName}</span> 
+                                                    <span class="hd-regi-name">{loginInfo?.fullName}</span>
                                                     <div className="hd-regi-list --second">
                                                         <Link className="link" href="">
                                                             <FontAwesomeIcon icon={faUser} />
@@ -121,13 +129,13 @@ const Header = (props) => {
                                                         </span>
                                                     </div>
                                                 </>
-                                                :   <div className="hd-regi-list" >
-                                                        <Link to={`/login`} className="link dang-nhap">
-                                                            Đăng nhập
-                                                        </Link>
-                                                    </div>
+                                                : <div className="hd-regi-list" >
+                                                    <Link to={`/login`} className="link dang-nhap">
+                                                        Đăng nhập
+                                                    </Link>
+                                                </div>
                                         }
-                                        
+
                                     </div>
                                 </div>
                                 <div className="hd-lg" >

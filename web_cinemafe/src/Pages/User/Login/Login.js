@@ -107,6 +107,7 @@ const Login = () => {
 
     //register
     const [formRegisterData, setFormRegisterData] = useState({
+        userTypeName: 'user',
         userName: '',
         fullName: '',
         email: '',
