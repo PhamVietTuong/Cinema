@@ -43,10 +43,10 @@ namespace Cinema.Repository
 
         public async Task<SeatTypeDTO> UpdateAsync(SeatTypeDTO entity)
         {
-            var movieType = await _context.SeatType.FirstOrDefaultAsync(x => x.Id == entity.Id);
+            var seatType = await _context.SeatType.FirstOrDefaultAsync(x => x.Id == entity.Id);
 
-            movieType.Name = entity.Name;
-            movieType.Status = entity.Status;
+            seatType.Name = entity.Name;
+            seatType.Status = entity.Status;
 
             await _context.SaveChangesAsync();
 

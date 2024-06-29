@@ -8,13 +8,13 @@ import PageViews from "./PageViews";
 import IndexUser from "./Pages/User/IndexUser";
 import IndexAdmin from "./Pages/Admin/IndexAdmin";
 import AgeRestriction from "./Pages/Admin/AgeRestriction/AgeRestriction";
-import Test from "./Pages/Admin/Test";
 import Checkout from "./Pages/User/Checkout/Checkout";
 import { ProtectedRoute, ProtectedRouteLogin } from "./Pages/User/ProtectedRoute";
 import ForgetPassword from "./Pages/User/ForgetPassword/ForgetPassword";
 import TicketType from "./Pages/Admin/TicketType/TicketType";
 import MovieType from "./Pages/Admin/MovieType/MovieType";
 import SeatType from "./Pages/Admin/SeatType/SeatType";
+import UserType from "./Pages/Admin/UserType/UserType";
 
 const Routers = () => {
     return (
@@ -59,7 +59,7 @@ const Routers = () => {
                         <Route path="TicketType" element={<TicketType />} />
                         <Route path="MovieType" element={<MovieType />} />
                         <Route path="SeatType" element={<SeatType />} />
-                        <Route path="Drafts" element={<Test />} />
+                        <Route path="UserType" element={<UserType />} />
                     </Route>
                 </Routes>
             </Router>
