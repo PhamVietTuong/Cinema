@@ -204,6 +204,93 @@ export const TheaterListAction = () => {
     }
 }
 
+export const GetTheaterListAdminAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTheaterListAdmin(code);
+            dispatch({
+                type: SET_THEATER_LIST,
+                theaterList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetTheaterListAdminAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const UpdateTheaterAction = (theaterDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateTheater(theaterDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTheaterListAdminAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateTheaterAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateTheaterAction = (theaterDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateTheater(theaterDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTheaterListAdminAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateTheaterAction: ", error);
+                }
+            });
+        }
+    }
+}
+
 export const TheaterAction = (id) => {
     return async (dispatch) => {
         try {

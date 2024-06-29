@@ -16,6 +16,7 @@ import MovieType from "./Pages/Admin/MovieType/MovieType";
 import SeatType from "./Pages/Admin/SeatType/SeatType";
 import ScrollToTop from "./ScrollToTop";
 import UserType from "./Pages/Admin/UserType/UserType";
+import Theater from "./Pages/Admin/Theater/Theater";
 
 const Routers = () => {
     return (
@@ -62,6 +63,7 @@ const Routers = () => {
                         <Route path="MovieType" element={<MovieType />} />
                         <Route path="SeatType" element={<SeatType />} />
                         <Route path="UserType" element={<UserType />} />
+                        <Route path="Theater" element={<Theater />} />
                     </Route>
                 </Routes>
             </Router>

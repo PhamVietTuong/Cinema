@@ -33,6 +33,18 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/GetTheaterList`)
     }
 
+    GetTheaterListAdmin = () => {
+        return this.get(`api/Cinemas/GetTheaterListAdmin`)
+    }
+
+    UpdateTheater = (theaterDTO) => {
+        return this.post(`api/Cinemas/UpdateTheater`, theaterDTO)
+    }
+
+    CreateTheater = (theaterDTO) => {
+        return this.post(`api/Cinemas/CreateTheater`, theaterDTO)
+    }
+
     GetTheaterId = (id) => {
         return this.get(`api/Cinemas/GetTheater/${id}`)
     }
