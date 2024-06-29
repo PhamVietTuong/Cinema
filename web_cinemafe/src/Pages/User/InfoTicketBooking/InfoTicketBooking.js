@@ -1,12 +1,54 @@
+import { useEffect, useState } from 'react';
 import './InfoTicketBooking.css'
+import { useLocation } from 'react-router-dom';
+import moment from 'moment';
+import "moment/locale/vi";
+import { DOMAIN } from '../../../Ustil/Settings/Config';
+import { Box, CircularProgress } from '@mui/material';
+
+const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const formattedDate = moment(dateString).locale("vi").format("dddd DD/MM/yyyy");
+    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+};
+
 
 const InfoTicketBooking = () => {
+    const [movieInfo, setMovieInfo] = useState(null);
+
+    const location = useLocation();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const params = new URLSearchParams(location.search);
+            const result = params.get("result");
+
+            if (result) {
+                try {
+                    const decodedResult = decodeURIComponent(escape(atob(result)));
+                    const decodedJson = JSON.parse(decodedResult);
+                    setMovieInfo(decodedJson.movieInfo);
+                    console.log(decodedJson);
+                } catch (error) {
+                    console.error("Error decoding JSON:", error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [location.search]);
+
+    if (!movieInfo) {
+        return <Box sx={{ textAlign: 'center' }}>
+                    <CircularProgress />
+                </Box>;
+    }
     return ( 
         <>
             <section className="checkout checkout-success ht">
                 <div className="container">
                     <div className="checkout-success-wr">
-                        <div className="checkout-success sec-heading" data-aos="fade-up">
+                        <div className="checkout-success sec-heading">
                             <h2 className="heading">
                                 Chúc mừng bạn thanh toán thành công bằng thẻ quốc tế
                             </h2>
@@ -15,15 +57,11 @@ const InfoTicketBooking = () => {
                             <div
                                 className="checkout-success-main"
                                 id="ticketToPrint"
-                                data-aos="fade-up"
                             >
                                 <div className="checkout-success-heading">
                                     <div className="img-movie">
                                         <div className="image">
-                                            <img
-                                                src="https://api-website.cinestar.com.vn/media/wysiwyg/Posters/06-2024/gia-tai-cua-ngoai-sneakshow.jpg"
-                                                alt=""
-                                            />
+                                            <img src={`${DOMAIN}/Images/${movieInfo.MovieImage}`} alt={`${movieInfo.MovieImage}`}></img>
                                         </div>
                                     </div>
                                     <div id="myqrcode" className="img-qrcode">
@@ -43,59 +81,63 @@ const InfoTicketBooking = () => {
                                     <div className="form-main">
                                         <div className="inner-info">
                                             <div className="inner-info-row">
-                                                <p className="ct">GIA TÀI CỦA NGOẠI 2D PĐ (T13)</p>
+                                                <p className="ct">{movieInfo?.MovieName} ({movieInfo?.AgeRestrictionName})</p>
                                             </div>
                                         </div>
                                         <div className="inner-info">
                                             <div className="inner-info-row">
                                                 <p className="tt">
-                                                    Phim dành cho khán giả từ đủ 13 tuổi trở lên.
+                                                    {movieInfo?.AgeRestrictionDescription}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="inner-info">
                                             <div className="inner-info-row">
-                                                <p className="ct">Cinestar Hai Bà Trưng (TP.HCM)</p>
+                                                <p className="ct"> {movieInfo?.TheaterName}</p>
                                                 <p className="dt" />
                                             </div>
                                         </div>
                                         <div className="inner-info">
                                             <div className="inner-info-row code">
                                                 <p className="tt">Mã đặt vé</p>
-                                                <p className="ct">136978618</p>
+                                                <p className="ct"> {movieInfo?.Code}</p>
                                             </div>
                                             <div className="inner-info-row time-line">
                                                 <p className="tt">Thời gian</p>
                                                 <p className="ct">
-                                                    <span className="time">23:55</span>
-                                                    <span className="date"> Thứ Ba, 11/06/2024</span>
+                                                    <span className="time">{moment(movieInfo?.ShowTimeStartTime).format("HH:mm")}</span>
+                                                    <span className="date"> {formatDate(movieInfo?.ShowTimeStartTime)}</span>
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="inner-info">
                                             <div className="inner-info-row room">
                                                 <p className="tt">Phòng chiếu</p>
-                                                <p className="ct">03</p>
+                                                <p className="ct"> {movieInfo?.RoomName}</p>
                                             </div>
                                             <div className="inner-info-row num-ticket">
                                                 <p className="tt">Số vé</p>
-                                                <p className="ct">1</p>
+                                                <p className="ct">{movieInfo?.SeatName?.split(",").length}</p>
                                             </div>
                                         </div>
                                         <div className="inner-info">
                                             <div className="inner-info-row type-position">
                                                 <p className="tt">Loại ghế</p>
-                                                <p className="ct">Standard</p>
+                                                <p className="ct">{movieInfo?.ShowTimeType}</p>
                                             </div>
                                             <div className="inner-info-row num-position">
                                                 <p className="tt">Số ghế</p>
-                                                <p className="ct">H11</p>
+                                                <p className="ct">{movieInfo?.SeatName}</p>
                                             </div>
                                         </div>
                                         <div className="inner-info">
                                             <div className="inner-info-row corn-drink">
                                                 <p className="tt">Bắp nước</p>
-                                                <p className="ct">1 Combo Party</p>
+                                                {movieInfo?.FoodAndDrinks?.map((item) => (
+                                                    <p key={item.name} className="ct">
+                                                        {item.Quantity} {item.FoodAndDrinkName}
+                                                    </p>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>

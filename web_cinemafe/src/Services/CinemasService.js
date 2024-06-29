@@ -100,6 +100,10 @@ export class CinemasService extends baseService {
     CreateSeatType = (seatTypeDTO) => {
         return this.post(`api/Cinemas/CreateSeatType`, seatTypeDTO)
     }
+
+    SearchByName = (name) => {
+        return this.get(`api/Cinemas/SearchByName${name}`)
+    }
 }
 
 export const cinemasService = new CinemasService()

@@ -3,16 +3,19 @@ import './Header.css'
 import { faCalendar, faCircleUser } from '@fortawesome/free-regular-svg-icons';
 import { faCaretDown, faLocationDot, faMagnifyingGlass, faSignOutAlt, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TOKEN, USER_LOGIN } from '../../Ustil/Settings/Config';
 import { LOGOUT } from '../../Redux/Actions/Type/UserType';
+import { useDebounce } from "use-debounce";
 
 const Header = (props) => {
     const dispatch = useDispatch();
     const {
         loginInfo,
     } = useSelector((state) => state.UserReducer);
+    const [infoSearch, setInfoSearch] = useState('');
+    const [debouncedText] = useDebounce(infoSearch, 1000);
 
     return (
         <>
@@ -75,6 +78,7 @@ const Header = (props) => {
                                                         className="re-input !bg-white"
                                                         type="text"
                                                         placeholder="Tìm phim, rạp"
+                                                        onChange={(e) => setInfoSearch(e.target.value)}
                                                     />
                                                     <button
                                                         className="hd-search-form-btn"

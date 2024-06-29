@@ -1,9 +1,13 @@
 import { Box, Button, FormControl, FormHelperText, FormLabel, Grid, OutlinedInput, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import './Checkout.css'
-import { useDispatch } from "react-redux";
-import { Fragment, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { Fragment, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import InfoTicketBooking from '../InfoTicketBooking/InfoTicketBooking';
+import { useNavigate } from 'react-router-dom';
+import { TicketBooking } from '../../../Redux/Actions/CinemasAction';
+import moment from 'moment';
+import "moment/locale/vi";
 
 const steps = ['THANH TOÁN', 'THÔNG TIN VÉ PHIM'];
 
@@ -16,12 +20,34 @@ const CustomStepIcon = (props) => {
     );
 };
 
+const formatCurrency = (value) => {
+    if (!value) return 0; 
+    return new Intl.NumberFormat('vi-VN').format(value) + ' VNĐ';
+};
+
+const formatDate = (dateString) => {
+    if (!dateString) return ""; 
+    const formattedDate = moment(dateString).locale("vi").format("dddd DD/MM/yyyy");
+    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+};
+
 const Checkout = () => {
+    const {
+        invoiceDTO,
+        movieInfoBooking,
+        code
+    } = useSelector((state) => state.CinemasReducer);
+    const [activeCheckout, setActiveCheckout] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [activeStep, setActiveStep] = useState(0);
 
-    const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    const handleCheckout = () => {
+        dispatch(TicketBooking(invoiceDTO, navigate))
+    }
 
-    const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    const handleActiveCheckout = () => setActiveCheckout((show) => !show)
 
     return (
         <>
@@ -56,7 +82,11 @@ const Checkout = () => {
                                                             activeStep === 0 && (
                                                                 <>
                                                                     <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="CheckoutFormControl">
-                                                                        <FormLabel sx={{ mb: 1, mt: 2 }} className="CheckoutFormLabel CheckoutIcon CheckoutHover">
+                                                                        <FormLabel 
+                                                                            sx={{ mb: 1, mt: 2 }} 
+                                                                            className={`CheckoutFormLabel CheckoutIcon CheckoutHover ${activeCheckout ? 'active' : ''}`}
+                                                                            onClick={handleActiveCheckout}
+                                                                        >
                                                                             <span class="img"><img src="/Images/img-momo.png" alt="" /></span>
                                                                             <p class="text">Thanh toán qua Momo</p>
                                                                         </FormLabel>
@@ -65,7 +95,7 @@ const Checkout = () => {
                                                                         <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth>
                                                                             Quay lại
                                                                         </Button>
-                                                                        <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth>
+                                                                        <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth onClick={handleCheckout}>
                                                                             Thanh toán
                                                                         </Button>
                                                                     </div>
@@ -79,7 +109,7 @@ const Checkout = () => {
                                                         <div className="form-main">
                                                             <div className="inner-info">
                                                                 <div className="inner-info-row bill-coundown-custom">
-                                                                    <p className="ct">NHỮNG MẢNH GHÉP CẢM XÚC 2 2D LT (P)</p>
+                                                                    <p className="ct">{movieInfoBooking?.movieName}</p>
                                                                     <div className="bill-coundown-custom">
                                                                         <p className="txt">Thời gian giữ vé:</p>
                                                                         <div className="bill-coundown !w-[68px]">
@@ -92,38 +122,37 @@ const Checkout = () => {
                                                             </div>
                                                             <div className="inner-info">
                                                                 <div className="inner-info-row">
-                                                                    <p className="tt">Phim dành cho khán giả mọi lứa tuổi.</p>
+                                                                    <p className="tt">{movieInfoBooking?.ageRestrictionDescription}</p>
                                                                 </div>
                                                             </div>
                                                             <div className="inner-info">
                                                                 <div className="inner-info-row cinestar-br">
-                                                                    <p className="ct">Cinestar Quốc Thanh</p>
+                                                                    <p className="ct">{movieInfoBooking?.theaterName}</p>
                                                                     <p className="dt">
-                                                                        271 Nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh
-                                                                    </p>
+                                                                        {movieInfoBooking?.theaterAddress}                                                                    </p>
                                                                 </div>
                                                             </div>
                                                             <div className="inner-info">
                                                                 <div className="inner-info-row time-line">
                                                                     <p className="tt">Thời gian</p>
                                                                     <p className="ct">
-                                                                        <span className="time">22:05 </span>
-                                                                        <span className="date">Thứ Ba 18/06/2024</span>
+                                                                        <span className="time">{moment(movieInfoBooking?.startTime).format("HH:mm")} </span>
+                                                                        <span className="date">{formatDate(movieInfoBooking?.startTime)}</span>
                                                                     </p>
                                                                 </div>
                                                             </div>
                                                             <div className="inner-info">
                                                                 <div className="inner-info-row room">
                                                                     <p className="tt">Phòng chiếu</p>
-                                                                    <p className="ct">03</p>
+                                                                    <p className="ct">{movieInfoBooking?.roomName}</p>
                                                                 </div>
                                                                 <div className="inner-info-row num-ticket">
                                                                     <p className="tt">Số vé</p>
-                                                                    <p className="ct">1</p>
+                                                                    <p className="ct">{movieInfoBooking?.seatName?.split(",").length}</p>
                                                                 </div>
                                                                 <div className="inner-info-row type-ticket">
                                                                     <p className="tt">Loại vé</p>
-                                                                    <p className="ct">HSSV-Người Cao Tuổi</p>
+                                                                    <p className="ct">{movieInfoBooking?.ticketTypeName}</p>
                                                                 </div>
                                                             </div>
                                                             <div className="inner-info">
@@ -133,12 +162,17 @@ const Checkout = () => {
                                                                 </div>
                                                                 <div className="inner-info-row num-position">
                                                                     <p className="tt">Số ghế</p>
-                                                                    <p className="ct"> A13</p>
+                                                                    <p className="ct"> {movieInfoBooking?.seatName}</p>
                                                                 </div>
                                                             </div>
                                                             <div className="inner-info">
                                                                 <div className="inner-info-row corn-drink">
                                                                     <p className="tt">Bắp nước</p>
+                                                                    {movieInfoBooking?.combo?.map((item) => (
+                                                                        <p key={item.name} className="ct">
+                                                                            {item.count} {item.name}
+                                                                        </p>
+                                                                    ))}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -146,7 +180,7 @@ const Checkout = () => {
                                                             <div className="inner-info">
                                                                 <div className="inner-info-row total">
                                                                     <p className="tt">Số tiền cần thanh toán</p>
-                                                                    <p className="ct">45,000VND</p>
+                                                                    <p className="ct">{formatCurrency(movieInfoBooking?.totalPrice)}</p>
                                                                 </div>
                                                             </div>
                                                         </div>

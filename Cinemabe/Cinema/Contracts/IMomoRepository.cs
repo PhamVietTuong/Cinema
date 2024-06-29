@@ -4,6 +4,6 @@ namespace Cinema.Contracts
 {
     public interface IMomoRepository
     {
-        Task<string> CreatePaymentAsync(PaymentRequest paymentRequest);
+        public Task<(bool isSuccess, string message)> CreatePaymentAsync(PaymentRequest paymentRequest);
     }
 }
