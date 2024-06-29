@@ -10,6 +10,7 @@ namespace Cinema.DTOs
             FoodAndDrinks = new List<InvoiceFoodAndDrinkViewModel>();
         }
 
+        public string MovieImage { get; set; }
         public string MovieName { get; set; }
         public string ProjectionFormText { get; set; }
         public string AgeRestrictionName { get; set; }

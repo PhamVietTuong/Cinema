@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
 using Cinema.DTOs;
-using System.Collections.Generic;
 using Cinema.Helper;
 using Cinema.Contracts;
+using Newtonsoft.Json;
+using System.Text;
 namespace Cinema.Controllers
 {
     [ApiController]
@@ -13,11 +12,13 @@ namespace Cinema.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IMomoRepository _momoRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
 
-        public PaymentsController(IConfiguration configuration, IMomoRepository momoRepository)
+        public PaymentsController(IConfiguration configuration, IMomoRepository momoRepository, IInvoiceRepository invoiceRepository)
         {
             _configuration = configuration;
             _momoRepository = momoRepository;
+            _invoiceRepository = invoiceRepository;
         }
 
         [HttpPost("VNPayCreatePayment")]
@@ -55,12 +56,66 @@ namespace Cinema.Controllers
         {
             try
             {
-                var response = await _momoRepository.CreatePaymentAsync(paymentRequest);
-                return Ok(response);
+                (bool isSuccess, string message) = await _momoRepository.CreatePaymentAsync(paymentRequest);
+                if (isSuccess)
+                {
+                    return Ok(new { paymentUrl = message });
+                }
+                else
+                {
+                    return BadRequest(new { error = message });
+                }
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("MomoIpn")]
+        public async Task<IActionResult> MomoIpn([FromQuery] MomoOneTimePaymentResultRequest ipnRequest)
+        {
+            try
+            {
+                if (!ipnRequest.IsValidSignature(_configuration["MoMo:AccessKey"], _configuration["MoMo:SecretKey"]))
+                {
+                    return BadRequest(new { error = "Invalid signature" });
+                }
+
+                bool isUpdated = await _invoiceRepository.UpdateCodeStatusAsync(ipnRequest.OrderId, ipnRequest.ResultCode);
+
+                if (isUpdated)
+                {
+                    var movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
+
+                    if (movieInfo != null)
+                    {
+                        var resultData = new
+                        {
+                            barcode = ipnRequest.OrderId,
+                            payment = ipnRequest.PayType,
+                            movieInfo
+                        };
+                        var resultJson = JsonConvert.SerializeObject(resultData);
+                        var bytes = Encoding.UTF8.GetBytes(resultJson); 
+                        var base64Result = Convert.ToBase64String(bytes);
+
+                        var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
+                        return Redirect(customUrl);
+                    }
+                    else
+                    {
+                        return BadRequest(new { error = "Failed to retrieve movie information" });
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { error = "Failed to update order status" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
             }
         }
     }

@@ -9,7 +9,7 @@ import { Collapse } from 'react-collapse';
 import moment from 'moment';
 import 'moment/locale/vi';
 import { useDispatch, useSelector } from "react-redux";
-import { ComboAction, SeatAction, SeatBeingSelected, TicketBooking, TicketTypeAction, updateTotalSeatTypeAndProceed } from '../../../Redux/Actions/CinemasAction';
+import { ComboAction, SaveBookingInfoAction, SeatAction, SeatBeingSelected, TicketBooking, TicketTypeAction, updateTotalSeatTypeAndProceed } from '../../../Redux/Actions/CinemasAction';
 import { InfoTicketBooking } from '../../../Models/InfoTicketBooking';
 import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, UPDATE_SEAT } from '../../../Redux/Actions/Type/CinemasType';
 import { connection } from '../../../connectionSignalR';
@@ -103,7 +103,7 @@ const getTicketNames = (ticketTypes, selectedTicketTypes) => {
                 ticket.ticketTypeId === ticketTypeId && ticket.seatTypeId === seatTypeId
             );
             if (ticketType) {
-                const seatTypeName = ticketType.seatTypeName === "Đôi" ? " (đôi)" : " (đơn)";
+                const seatTypeName = ticketType.seatTypeName === "Ðôi" ? " (đôi)" : " (đơn)";
                 const ticketName = ticketType.ticketTypeName + seatTypeName;
 
                 if (quantity > 0) {
@@ -120,6 +120,15 @@ const getTicketNames = (ticketTypes, selectedTicketTypes) => {
     return Object.entries(ticketNames).map(([name, count]) => `${count} ${name}`).join(', ');
 };
 
+const getOrderSummary = (combos, orderData) => {
+    return combos
+        .filter(combo => orderData[combo.id])
+        .map(combo => ({
+            count: orderData[combo.id],
+            name: combo.name
+        }));
+};
+
 const Theater = (props) => {
     const dispatch = useDispatch();
     const {
@@ -132,10 +141,14 @@ const Theater = (props) => {
         updateSeat,
         checkBooking,
     } = useSelector((state) => state.CinemasReducer);
-
+    const {
+        userId,
+    } = useSelector((state) => state.UserReducer);
     const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
     const [selectedheaterName, setSelectedTheaterName] = useState(null);
+    const [setselectedTheaterAddress, setSetselectedTheaterAddress] = useState(null);
     const [selectedShowTime, setSelectedShowTime] = useState(null);
+    const [setselectedStartTime, setSetselectedStartTime] = useState(null);
     const [selectedShowTimeId, setSelectedShowTimeId] = useState(null);
     const [selectedTheaterId, setSelectedTheaterId] = useState(null);
     const [countdown, setCountdown] = useState(300);
@@ -549,9 +562,11 @@ const Theater = (props) => {
                                                                             if (!isPast) {
                                                                                 showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
                                                                                 setSelectedTheaterName(theaterItem.theaterName);
+                                                                                setSetselectedTheaterAddress(theaterItem.theaterAddress);
                                                                                 setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
                                                                                 setSelectedTheaterId(theaterItem.theaterId)
                                                                                 setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
+                                                                                setSetselectedStartTime(moment(timeItem.startTime))
                                                                             }
                                                                         }}>
                                                                         {moment(timeItem.startTime).format("HH:mm")}
@@ -581,9 +596,11 @@ const Theater = (props) => {
                                                                             if (!isPast) {
                                                                                 showTimeIdHandele(timeItem.showTimeId, timeItem.roomId, theaterItem.theaterId);
                                                                                 setSelectedTheaterName(theaterItem.theaterName);
+                                                                                setSetselectedTheaterAddress(theaterItem.theaterAddress);
                                                                                 setSelectedShowTimeColorActiveId({ showTimeId: timeItem.showTimeId, roomId: timeItem.roomId })
                                                                                 setSelectedTheaterId(theaterItem.theaterId)
                                                                                 setSelectedShowTime(moment(timeItem.startTime).format("HH:mm"))
+                                                                                setSetselectedStartTime(moment(timeItem.startTime))
                                                                             }
                                                                         }}>
                                                                         {moment(timeItem.startTime).format("HH:mm")}
@@ -603,6 +620,32 @@ const Theater = (props) => {
                 </ul>
             </div>
         );
+    };
+
+    const handleCheckout = () => {
+        const invoiceDTO = new InvoiceDTO();
+        invoiceDTO.userId = userId
+        invoiceDTO.showTimeId = selectedShowTimeId
+        invoiceDTO.roomId = selectedRoomId
+        invoiceDTO.theaterId = selectedTheaterId
+        invoiceDTO.invoiceTickets = invoiceTickets
+        invoiceDTO.foodAndDrinks = Object.entries(countCombos).map((e) => ({ foodAndDrinkId: e[0], quantity: e[1] }))
+
+        const movieInfoBooking =  {
+            movieName: `${props.MovieDetail?.name} (${props.MovieDetail?.ageRestrictionName})`,
+            ageRestrictionDescription: props.MovieDetail?.ageRestrictionDescription,
+            theaterName: selectedheaterName,
+            theaterAddress: setselectedTheaterAddress,
+            startTime: setselectedStartTime,
+            roomName: seat?.roomName,
+            seatName: seatYourName,
+            ticketTypeName: selectedTicketTypeName,
+            combo: getOrderSummary(combo, countCombos),
+            totalPrice: totalPrice
+        }
+        
+        dispatch(SaveBookingInfoAction(invoiceDTO, movieInfoBooking));
+        navigate("/checkout");
     };
 
     return (
@@ -877,11 +920,14 @@ const Theater = (props) => {
 
                                         <button className={`btn btn-warning opacity-100 ticketBooking ${!checkBooking ? 'enableButton' : ''}`}
                                             onClick={() => {
-                                                navigate("/checkout")
+                                                if (checkBooking) {
+                                                    handleCheckout()
+                                                }
                                             }}
                                             disabled={!checkBooking}
-
-                                        >ĐẶT VÉ</button>
+                                        >
+                                            ĐẶT VÉ
+                                        </button>
                                     </div>
                                 </div>
                             </div>

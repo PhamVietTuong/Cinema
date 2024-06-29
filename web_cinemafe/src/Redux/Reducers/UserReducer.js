@@ -9,12 +9,13 @@ if (localStorage.getItem(USER_LOGIN) || sessionStorage.getItem(USER_LOGIN)) {
 const stateDefault = {
     loginInfo: user,
     isLoggedIn: Object.keys(user).length !== 0,
+    userId: user.id
 }
 
 export const UserReducer = (state = stateDefault, action) => {
     switch (action.type) {
         case LOGIN_USER: {
-            const { loginInfo, rememberMe } = action;
+            const { loginInfo, rememberMe} = action;
 
             if (rememberMe) {
                 localStorage.setItem(USER_LOGIN, JSON.stringify(loginInfo));
@@ -27,7 +28,8 @@ export const UserReducer = (state = stateDefault, action) => {
             return {
                 ...state,
                 isLoggedIn: true,
-                loginInfo: loginInfo
+                loginInfo: loginInfo,
+                userId: loginInfo.id
             };
         }
 
@@ -41,6 +43,7 @@ export const UserReducer = (state = stateDefault, action) => {
                 ...state,
                 isLoggedIn: false,
                 user: null,
+                userId: ""
             };
         }
 
