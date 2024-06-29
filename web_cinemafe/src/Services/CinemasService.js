@@ -128,6 +128,7 @@ export class CinemasService extends baseService {
     SearchByName = (name) => {
         return this.get(`api/Cinemas/SearchByName${name}`)
     }
+    
     GetUserTypeList = () => {
         return this.get(`api/Cinemas/GetUserTypeList`)
     }

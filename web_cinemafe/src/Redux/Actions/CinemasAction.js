@@ -748,28 +748,7 @@ export const SaveBookingInfoAction = (invoiceDTO, movieInfoBooking) => {
         }
     }
 }
-export const GetUserTypeListAction = (code) => {
-    return async (dispatch) => {
-        try {
-            const result = await cinemasService.GetUserTypeList(code);
-            dispatch({
-                type: SET_LIST_USERTYPE,
-                userTypeList: result.data,
-            })
-        } catch (error) {
-            await Swal.fire({
-                padding: "24px",
-                width: "400px",
-                title: "Đã xảy ra lỗi!",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log("GetUserTypeListAction: ", error);
-                }
-            });
-        }
-    }
-}
+
 
 export const UpdateUserTypeAction = (userTypeDTO) => {
     return async (dispatch) => {
@@ -847,69 +826,6 @@ export const SearchByNameAction = (name) => {
 
         } catch (error) {
             console.log("SaveBookingInfoAction: ", error);
-        }
-    }
-}
-export const UpdateUserTypeAction = (userTypeDTO) => {
-    return async (dispatch) => {
-        try {
-            const result = await cinemasService.UpdateUserType(userTypeDTO);
-
-            if (result.status === 200) {
-                await Swal.fire({
-                    padding: "24px",
-                    width: "400px",
-                    title: "Cập nhật thành công!",
-                    confirmButtonText: "Ok",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        dispatch(GetUserTypeListAction());
-                    }
-                });
-            }
-        } catch (error) {
-            await Swal.fire({
-                padding: "24px",
-                width: "400px",
-                title: "Đã xảy ra lỗi!",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log("UpdateUserTypeAction: ", error);
-                }
-            });
-        }
-    }
-}
-
-export const CreateUserTypeAction = (userTypeDTO) => {
-    return async (dispatch) => {
-        try {
-            const result = await cinemasService.CreateUserType(userTypeDTO);
-
-            if (result.status === 200) {
-                await Swal.fire({
-                    padding: "24px",
-                    width: "400px",
-                    title: "Thêm thành công!",
-                    confirmButtonText: "Ok",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        dispatch(GetUserTypeListAction());
-                    }
-                });
-            }
-        } catch (error) {
-            await Swal.fire({
-                padding: "24px",
-                width: "400px",
-                title: "Đã xảy ra lỗi!",
-                confirmButtonText: "Ok",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log("CreateUserTypeAction: ", error);
-                }
-            });
         }
     }
 }
