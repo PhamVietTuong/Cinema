@@ -336,6 +336,59 @@ namespace Cinema.Controllers
             }
         }
 
+        [HttpGet("GetTheaterListAdmin")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<TheaterDTO>>> GetTheaterListAdmin()
+        {
+            try
+            {
+                var result = await _theaterRepository.GetTheaterListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateTheater")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TheaterDTO>> UpdateAgeRestriction(TheaterDTO entity)
+        {
+            try
+            {
+                if (!await _theaterRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _theaterRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateTheater")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TheaterDTO>> CreateTheater(TheaterDTO entity)
+        {
+            try
+            {
+                var result = await _theaterRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         #endregion
 
         #region TicketType

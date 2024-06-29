@@ -16,6 +16,7 @@ namespace Cinema.Mappings
             CreateMap<MovieType, MovieTypeDTO>().ReverseMap();
             CreateMap<SeatType, SeatTypeDTO>().ReverseMap();
             CreateMap<UserType, UserTypeDTO>().ReverseMap();
+            CreateMap<Theater, TheaterDTO>().ReverseMap();
         }
     }
 }
