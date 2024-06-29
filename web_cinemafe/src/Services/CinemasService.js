@@ -64,6 +64,10 @@ export class CinemasService extends baseService {
     CreateAgeRestriction = (ageRestrictionDTO) => {
         return this.post(`api/Cinemas/CreateAgeRestriction`, ageRestrictionDTO)
     }
+
+    SearchByName = (name) => {
+        return this.get(`api/Cinemas/SearchByName${name}`)
+    }
 }
 
 export const cinemasService = new CinemasService()

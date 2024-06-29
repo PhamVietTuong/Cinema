@@ -168,3 +168,6 @@ ALTER TABLE Seat
 DROP COLUMN Name
 
 --Please create again db and run data sample
+
+ALTER TABLE Invoice
+ALTER COLUMN Status int 

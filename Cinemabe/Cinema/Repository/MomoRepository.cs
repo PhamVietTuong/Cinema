@@ -1,6 +1,9 @@
 ﻿using Cinema.Contracts;
 using Cinema.DTOs;
 using Cinema.Helper;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace Cinema.Repository
 {
@@ -18,17 +21,17 @@ namespace Cinema.Repository
             partnerCode = configuration["MoMo:PartnerCode"];
             accessKey = configuration["MoMo:AccessKey"];
             secretKey = configuration["MoMo:SecretKey"];
-            redirectUrl = configuration["MoMo:redirectUrl"];
-            ipnUrl = configuration["MoMo:ipnUrl"];
+            redirectUrl = configuration["MoMo:ReturnUrl"];
+            ipnUrl = configuration["MoMo:IpnUrl"];
             endpoint = configuration["MoMo:Endpoint"];
         }
 
-        public async Task<string> CreatePaymentAsync(PaymentRequest paymentRequest)
+        public async Task<(bool isSuccess, string message)> CreatePaymentAsync(PaymentRequest paymentRequest)
         {
-            string orderId = Guid.NewGuid().ToString();
+            string orderId = paymentRequest.OrderId;
             string requestId = Guid.NewGuid().ToString();
             string amount = paymentRequest.Amount.ToString();
-            string orderInfo = paymentRequest.OrderInfo;
+            string orderInfo = "CKC";
             string extraData = string.Empty;
             string requestType = "captureWallet";
             string lang = "vi";
@@ -65,11 +68,11 @@ namespace Cinema.Repository
             (bool createMomoLinkResult, string? createMessage) = await MoMoSecurity.GetLinkAsync(endpoint, message);
             if (createMomoLinkResult)
             {
-                return createMessage;
+                return (true, createMessage);
             }
             else
             {
-                return createMessage;
+                return (false, createMessage);
             }
         }
     }

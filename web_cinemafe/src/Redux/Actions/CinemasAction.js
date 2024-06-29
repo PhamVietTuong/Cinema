@@ -3,7 +3,8 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { INFO_SEARCH, INVOICE_CODE, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { paymentsService } from "../../Services/PaymentsService";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -136,7 +137,7 @@ const findSeatByRowAndCol = (rowName, colIndex, seats) => {
     return null;
 };
 
-export const TicketBooking = (invoiceDTO, navigate) => {
+export const TicketBooking = (invoiceDTO) => {
     return async (dispatch, getState) => {
         try {
             const handleInforTicket = async (seatInfos, seatStatus) => {
@@ -170,25 +171,16 @@ export const TicketBooking = (invoiceDTO, navigate) => {
             };
 
             await connection.on("InforTicket", handleInforTicket);
-            await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO).then((result) => {
-                if (result) {
-                    Swal.fire({
-                        text: "Đặt vé thành công",
-                        padding: "24px",
-                        width: "400px",
-                        customClass: {
-                            confirmButton: 'custom-ok-button'
-                        },
-                        showCancelButton: false,
-                        confirmButtonText: "Oki",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            navigate("/")
-                            window.location.reload();
-                        }
-                    });
+            const result = await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO)
+                if(result) {
+                    const response = await paymentsService.CreateLinkCheckoutMomo(result);
+                    if (response.status === 200) {
+                        const data = response.data;
+                        window.location.href = data.paymentUrl;
+                    } else {
+                        console.error('Error creating payment:', response.data.error);
+                    }              
                 }
-            })
         } catch (error) {
             console.log("TicketBooking", error);
         }
@@ -369,6 +361,36 @@ export const CreateAgeRestrictionAction = (ageRestrictionDTO) => {
                     console.log("CreateAgeRestrictionAction: ", error);
                 }
             });
+        }
+    }
+}
+
+export const SaveBookingInfoAction = (invoiceDTO, movieInfoBooking) => {
+    return async (dispatch) => {
+        try {
+            dispatch({
+                type: SAVE_BOOKING_INFO,
+                movieInfoBooking, invoiceDTO
+            })
+
+        } catch (error) {
+            console.log("SaveBookingInfoAction: ", error);
+        }
+    }
+}
+
+export const SearchByNameAction = (name) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.SearchByName(name);
+
+            dispatch({
+                type: INFO_SEARCH,
+                infoSearch: result.data,
+            })
+
+        } catch (error) {
+            console.log("SaveBookingInfoAction: ", error);
         }
     }
 }

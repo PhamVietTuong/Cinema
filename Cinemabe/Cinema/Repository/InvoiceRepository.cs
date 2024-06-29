@@ -34,7 +34,7 @@ namespace Cinema.Repository
                 .Where(x => x.Code == invoice.Code).ToListAsync();
             var resultFoodAndDrinks = new List<InvoiceFoodAndDrinkViewModel>();
 
-            bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == invoiceTicketRoom.Id).Any(x => x.SeatType.Name == "Nằm");
+            bool isDulexe = invoiceTicketRoom != null ? _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == invoiceTicketRoom.Id).Any(x => x.SeatType.Name == "Nằm") : false;
 
             foreach (var item in invoiceFoodAndDrink)
             {
@@ -47,6 +47,7 @@ namespace Cinema.Repository
 
             var result = new InvoiceViewModel
             {
+                MovieImage = invoiceTicketShowTime.Movie.Image,
                 MovieName = invoiceTicketShowTime.Movie.Name,
                 ProjectionFormText = invoiceTicketShowTime.ProjectionForm == ProjectionForm.Time2D ? "2D" : "3D",
                 AgeRestrictionDescription = invoiceTicketShowTime.Movie.AgeRestriction.Description,
@@ -62,6 +63,30 @@ namespace Cinema.Repository
             };
 
             return result;
+        }
+
+        public async Task<bool> UpdateCodeStatusAsync(string code, int resultCode)
+        {
+            var order = await _context.Invoice.FirstOrDefaultAsync(o => o.Code == code);
+
+            if (order == null)
+            {
+                return false;
+            }
+
+            if (resultCode == 0)
+            {
+                order.Status = InvoiceStatus.Successful;
+            }
+            else
+            {
+                order.Status = InvoiceStatus.Failed;
+            }
+
+            _context.Invoice.Update(order);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

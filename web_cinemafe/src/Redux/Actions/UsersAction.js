@@ -1,8 +1,8 @@
 import Swal from "sweetalert2";
 import { userService } from "../../Services/UserService";
-import { LOGIN_USER, REGISTER_USER } from "./Type/UserType";
+import { LOGIN_USER } from "./Type/UserType";
 
-export const LoginUserAction = (loginInfo, rememberMe, navigate) => {
+export const LoginUserAction = (loginInfo, rememberMe, callBack) => {
     return async (dispatch) => {
         try {
             const result = await userService.LoginUser(loginInfo);
@@ -13,17 +13,7 @@ export const LoginUserAction = (loginInfo, rememberMe, navigate) => {
                     loginInfo: result.data,
                     rememberMe: rememberMe
                 })
-
-                Swal.fire({
-                    text: "Đăng nhập thành công!",
-                    padding: "15px",
-                    width: "350px",
-                    confirmButtonText: "Ok",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        navigate(-1);
-                    }
-                });
+                callBack();
             }
            
         } catch (error) {
