@@ -1,4 +1,5 @@
 ﻿using Cinema.Data;
+using Cinema.Data.Enum;
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Microsoft.AspNetCore.SignalR;
@@ -121,7 +122,7 @@ namespace Cinema
             await GetWaitingSeat(entity.ShowTimeId, entity.RoomId);
         }
 
-        public async Task<string> CheckTheSeatBeforeBooking(InvoiceDTO entity)
+        public async Task<PaymentInvoiceDTO> CheckTheSeatBeforeBooking(InvoiceDTO entity)
         {
             try
             {
@@ -140,7 +141,7 @@ namespace Cinema
                 if (bookedSeats.Any())
                 {
                     await Clients.Caller.SendAsync("InforTicket", bookedSeats, SeatStatus.Sold);
-                    return null;
+                    return new PaymentInvoiceDTO { OrderId = null, Amount = 0 };
                 }
                 else
                 {
@@ -148,14 +149,18 @@ namespace Cinema
                     {
                         UserId = entity.UserId,
                         Code = DateTime.Now.ToString("yyMMddhhmmss"),
-                        Status = true,
+                        Status = InvoiceStatus.Unpaid,
                         CreationTime = DateTime.Now,
                     };
+
+                    double totalPrice = 0;
 
                     await _context.Invoice.AddAsync(invoice);
 
                     foreach (var seat in entity.InvoiceTickets)
                     {
+                        var price = await CalculatePriceAsync(seat.TicketTypeId, seat.RowName, seat.ColIndex, entity.RoomId);
+                        totalPrice += price;
                         var invoiceTicket = new InvoiceTicket
                         {
                             Code = invoice.Code,
@@ -165,7 +170,7 @@ namespace Cinema
                             RowName = seat.RowName,
                             TicketTypeId = seat.TicketTypeId,
                             SeatName = seat.SeatName,
-                            Price = await CalculatePriceAsync(seat.TicketTypeId, seat.RowName, seat.ColIndex, entity.RoomId)
+                            Price = price
                         };
 
                         await _context.InvoiceTicket.AddAsync(invoiceTicket);
@@ -175,12 +180,15 @@ namespace Cinema
                     {
                         if (item.Quantity <= 0) break;
 
+                        var foodAndDrinkPrice = _context.FoodAndDrinkTheater.FirstOrDefault(x => x.FoodAndDrinkId == item.FoodAndDrinkId && x.TheaterId == entity.TheaterId)?.Price ?? 0;
+                        totalPrice += foodAndDrinkPrice * item.Quantity;
+
                         var invoiceFoodAndDrink = new InvoiceFoodAndDrink
                         {
                             Code = invoice.Code,
                             FoodAndDrinkId = item.FoodAndDrinkId,
                             Quantity = item.Quantity,
-                            Price = _context.FoodAndDrinkTheater.FirstOrDefault(x => x.FoodAndDrinkId == item.FoodAndDrinkId && x.TheaterId == entity.TheaterId).Price,
+                            Price = foodAndDrinkPrice,
                         };
 
                         await _context.InvoiceFoodAndDrink.AddAsync(invoiceFoodAndDrink);
@@ -190,7 +198,7 @@ namespace Cinema
 
                     await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.InvoiceTickets.Select(x => new { x.RowName, x.ColIndex }), SeatStatus.Sold);
 
-                    return invoice.Code;
+                    return new PaymentInvoiceDTO { OrderId = invoice.Code, Amount = totalPrice };
                 }
             }
             catch (Exception ex)

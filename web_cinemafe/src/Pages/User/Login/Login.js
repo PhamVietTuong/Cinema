@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import './Login.css';
 import { useDispatch } from "react-redux";
 import { LoginUserAction, RegisterUserAction } from "../../../Redux/Actions/UsersAction";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as yup from 'yup';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -43,6 +43,7 @@ dayjs.extend(timezone);
 const Login = () => {
     const [value, setValue] = useState('login');
     const dispatch = useDispatch();
+    const location = useLocation();
     const navigate = useNavigate();
     //login
     const [formLoginData, setFormLoginData] = useState({
@@ -66,6 +67,7 @@ const Login = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+    const from = location.state?.from?.pathname || '/';
 
     const handleInputChangeLogin = (event) => {
         const { name, value } = event.target;
@@ -78,7 +80,7 @@ const Login = () => {
     const handleLogin = async () => {
         try {
             await schemaLogin.validate(formLoginData, { abortEarly: false });
-            dispatch(LoginUserAction(formLoginData, rememberMe, navigate));
+            dispatch(LoginUserAction(formLoginData, rememberMe, () => {navigate(from, { replace: true })}));
         } catch (validationErrors) {
             const newErrors = {};
             validationErrors.inner.forEach((error) => {
@@ -105,6 +107,7 @@ const Login = () => {
 
     //register
     const [formRegisterData, setFormRegisterData] = useState({
+        userTypeName: 'user',
         userName: '',
         fullName: '',
         email: '',
@@ -158,7 +161,6 @@ const Login = () => {
             if (name === 'confirmPassword') {
                 const password = formRegisterData.password;
                 if (value !== password) {
-                    console.log("Vào");
                     setErrorsRegister({
                         ...errorsRegister,
                         confirmPassword: "Mật khẩu không khớp",
@@ -177,10 +179,6 @@ const Login = () => {
             });
         }
     };
-
-    useEffect(() => {
-        console.log(errorsRegister);
-    }, [errorsRegister]);
 
     useEffect(() => {
         if (formRegisterData.birthDay) {

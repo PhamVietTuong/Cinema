@@ -23,9 +23,13 @@ namespace Cinema.Controllers
         private readonly ISeatRepository _seatRepository;
         private readonly ITheaterRepository _theaterRepository;
         private readonly ITicketTypeRepository _ticketTypeRepository;
+        private readonly IMovieTypeRepository _movieTypeRepository;
+        private readonly ISeatTypeRepository _seatTypeRepository;
+        private readonly IUserTypeRepository _userTypeRepository;
 
         public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository, 
-            ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository)
+            ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository, 
+            IUserTypeRepository userTypeRepository)
         {
             _ageRestrictionRepository = ageRestrictionRepository;
             _foodAndDrinkRepository = foodAndDrinkRepository;
@@ -34,6 +38,9 @@ namespace Cinema.Controllers
             _seatRepository = seatRepository;
             _theaterRepository = theaterRepository;
             _ticketTypeRepository = ticketTypeRepository;
+            _movieTypeRepository = movieTypeRepository;
+            _seatTypeRepository = seatTypeRepository;
+            _userTypeRepository = userTypeRepository;
         }
 
         #region Search theater, movie
@@ -116,6 +123,63 @@ namespace Cinema.Controllers
 
         #endregion
 
+        #region MovieType
+
+        [HttpGet("GetMovieTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<MovieTypeDTO>>> GetMovieTypeList()
+        {
+            try
+            {
+                var result = await _movieTypeRepository.GetMovieTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateMovieType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<MovieTypeDTO>> UpdateMovieType(MovieTypeDTO entity)
+        {
+            try
+            {
+                if (!await _movieTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _movieTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateMovieType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<MovieTypeDTO>> CreateMovieType(MovieTypeDTO entity)
+        {
+            try
+            {
+                var result = await _movieTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
         #region FoodAndDrink
 
         [HttpGet("ComboByTheaterId/{id}")]
@@ -150,6 +214,63 @@ namespace Cinema.Controllers
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
+        #endregion
+
+        #region SeatType
+
+        [HttpGet("GetSeatTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<SeatTypeDTO>>> GetSeatTypeList()
+        {
+            try
+            {
+                var result = await _seatTypeRepository.GetSeatTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateSeatType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<SeatTypeDTO>> UpdateSeatType(SeatTypeDTO entity)
+        {
+            try
+            {
+                if (!await _seatTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _seatTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateSeatType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<SeatTypeDTO>> CreateSeatType(SeatTypeDTO entity)
+        {
+            try
+            {
+                var result = await _seatTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -215,6 +336,59 @@ namespace Cinema.Controllers
             }
         }
 
+        [HttpGet("GetTheaterListAdmin")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<TheaterDTO>>> GetTheaterListAdmin()
+        {
+            try
+            {
+                var result = await _theaterRepository.GetTheaterListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateTheater")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TheaterDTO>> UpdateAgeRestriction(TheaterDTO entity)
+        {
+            try
+            {
+                if (!await _theaterRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _theaterRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateTheater")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TheaterDTO>> CreateTheater(TheaterDTO entity)
+        {
+            try
+            {
+                var result = await _theaterRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         #endregion
 
         #region TicketType
@@ -231,6 +405,59 @@ namespace Cinema.Controllers
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
+        [HttpGet("GetTicketTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<TicketTypeDTO>>> GetTicketTypeList()
+        {
+            try
+            {
+                var result = await _ticketTypeRepository.GetTicketTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateTicketType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TicketTypeDTO>> UpdateTicketType(TicketTypeDTO entity)
+        {
+            try
+            {
+                if (!await _ticketTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _ticketTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateTicketType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TicketTypeDTO>> CreateTicketType(TicketTypeDTO entity)
+        {
+            try
+            {
+                var result = await _ticketTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -347,6 +574,63 @@ namespace Cinema.Controllers
             try
             {
                 var result = await _ageRestrictionRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region UserType
+
+        [HttpGet("GetUserTypeList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<UserTypeDTO>>> GetUserTypeList()
+        {
+            try
+            {
+                var result = await _userTypeRepository.GetUserTypeListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("UpdateUserType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserTypeDTO>> UpdateUserType(UserTypeDTO entity)
+        {
+            try
+            {
+                if (!await _userTypeRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _userTypeRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("CreateUserType")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserTypeDTO>> CreateUserType(UserTypeDTO entity)
+        {
+            try
+            {
+                var result = await _userTypeRepository.CreateAsync(entity);
 
                 return Ok(result);
             }

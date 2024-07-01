@@ -5,5 +5,6 @@ namespace Cinema.Contracts
     public interface IInvoiceRepository
     {
         Task<InvoiceViewModel> GetInvoiceAsync(string code);
+        Task<bool> UpdateCodeStatusAsync(string orderId, int resultCode);
     }
 }

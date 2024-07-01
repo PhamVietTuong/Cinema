@@ -203,7 +203,7 @@ CREATE TABLE [Invoice] (
 	[UserId] uniqueidentifier NOT NULL,
 	[Code] nvarchar(100)  NOT NULL,
 	[CreationTime] datetime NOT NULL,
-	[Status] bit NOT NULL,
+	[Status] int NOT NULL,
 	PRIMARY KEY ([Code]),
 	CONSTRAINT FK_Invoice_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
 )

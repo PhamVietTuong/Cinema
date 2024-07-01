@@ -205,7 +205,7 @@ VALUES (
     @GUID_movie5, 
     (SELECT Id FROM AgeRestriction WHERE Name='T13'), 
     N'SPIDER-MAN: NO WAY HOME', 
-    'spider-man-no-way-home.jpg', 
+    'Spider-Man_No_Way_Home_poster.jpg', 
     148, 
     152, 
     '2021-12-17', 
