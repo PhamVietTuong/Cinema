@@ -64,7 +64,7 @@ class _LoginContentState extends State<LoginContent>
           'Đăng nhập vào hệ thống',
           style: TextStyle(
             fontSize: Styles.titleFontSize,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
         const SizedBox(height: 15),
