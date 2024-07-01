@@ -6,7 +6,6 @@ import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_screen.dart';
 import 'package:cinema_app/views/detail/movie_detail.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -42,33 +41,21 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Future<void> _loadSearchHistory() async {
-    final prefs = await SharedPreferences.getInstance();
+    List<String> history = await Config.loadSearchHistory();
     setState(() {
-      _searchHistory = prefs.getStringList('searchHistory') ?? [];
+      _searchHistory = history;
     });
   }
 
-  Future<void> _saveSearchQuery([String? query]) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Kiểm tra xem query đã tồn tại trong danh sách _searchHistory hay chưa
-    if (query != null) {
-      if (!_searchHistory.contains(query)) {
-        _searchHistory.add(query);
-      }
-    }
-
-    setState(() {
-      final uniqueSearchHistory = _searchHistory.toSet().toList();
-      prefs.setStringList('searchHistory', uniqueSearchHistory);
-    });
+  Future<void> _saveSearchQuery(String query) async {
+    await Config.saveSearchQuery(query);
+    _loadSearchHistory();
   }
 
   Future<void> _clearSearchHistory() async {
-    final prefs = await SharedPreferences.getInstance();
+    await Config.clearSearchHistory();
     setState(() {
       _searchHistory.clear();
-      prefs.remove('searchHistory');
     });
   }
 
@@ -349,11 +336,10 @@ class _SearchScreenState extends State<SearchScreen>
           ),
           IconButton(
             icon: const Icon(Icons.clear),
-            onPressed: () {
-              setState(() {
-                _searchHistory.remove(query);
-                _saveSearchQuery();
-              });
+            onPressed: () async {
+              await Config.removeSearchQuery(
+                  query);
+              await _loadSearchHistory();
             },
           ),
         ],

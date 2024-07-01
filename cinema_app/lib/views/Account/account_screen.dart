@@ -1,4 +1,4 @@
-import 'package:cinema_app/views/Account/login_screen.dart';
+import 'package:cinema_app/views/Account/login.dart';
 import 'package:cinema_app/views/Account/register.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
