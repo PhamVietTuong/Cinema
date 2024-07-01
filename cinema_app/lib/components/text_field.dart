@@ -23,7 +23,10 @@ class _InfoTextFieldState extends State<InfoTextField> {
       style: TextStyle(color: Styles.boldTextColor["dark_purple"]),
       decoration: InputDecoration(
         labelText: widget.title,
-        prefixIcon:widget.icon,
+        prefixIcon: widget.icon,
+        labelStyle: TextStyle(color: Styles.boldTextColor["dark_purple"]),
+        prefixIconColor:Styles.boldTextColor["dark_purple"] ,
+        focusColor: Styles.boldTextColor["dark_purple"],
       ),
     );
   }

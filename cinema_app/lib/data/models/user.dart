@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
 import 'package:http/http.dart' as http;
-
 class User {
-  int id;
+  String id;
   String fullname;
   String phone;
   String email;
@@ -14,9 +13,11 @@ class User {
   bool gender;
   int status;
   String username;
+  String token;
+  DateTime expirationTime;
 
   User({
-    this.id = 0,
+    required this.id,
     this.fullname = "",
     this.phone = "",
     this.email = "",
@@ -26,12 +27,15 @@ class User {
     this.gender = false,
     this.status = 0,
     this.username = "",
-  }) : birthday = birthday ?? DateTime.now();
+    this.token = "",
+    DateTime? expirationTime,
+  })  : birthday = birthday ?? DateTime.now(),
+        expirationTime = expirationTime ?? DateTime.now();
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json["id"] ?? 0,
-      fullname: json["name"] ?? "",
+      id: json["id"] ?? "",
+      fullname: json["fullName"] ?? "",
       phone: json["phone"] ?? "",
       email: json["email"] ?? "",
       address: json["address"] ?? "",
@@ -41,14 +45,18 @@ class User {
       image: json["image"] ?? "",
       gender: json["gender"] ?? false,
       status: json["status"] ?? 0,
-      username: json["username"] ?? "",
+      username: json["userName"] ?? "",
+      token: json["token"] ?? "",
+      expirationTime: json["expirationTime"] != null
+          ? DateTime.parse(json["expirationTime"])
+          : DateTime.now(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       "id": id,
-      "fullname": fullname,
+      "fullName": fullname,
       "phone": phone,
       "email": email,
       "address": address,
@@ -56,13 +64,15 @@ class User {
       "image": image,
       "gender": gender,
       "status": status,
-      "username": username,
+      "userName": username,
+      "token": token,
+      "expirationTime": expirationTime.toIso8601String(),
     };
   }
 }
 
 class Register {
-  final String UserTypeName;
+  final String userTypeName;
   final String userName;
   final String fullName;
   final String email;
@@ -73,7 +83,7 @@ class Register {
   final bool gender;
 
   Register({
-    required this.UserTypeName,
+    required this.userTypeName,
     required this.userName,
     required this.fullName,
     required this.password,
@@ -86,12 +96,14 @@ class Register {
 
   factory Register.fromJson(Map<String, dynamic> json) {
     return Register(
-      UserTypeName: json['UserTypeName'] ?? '',
+      userTypeName: json['userTypeName'] ?? '',
       userName: json['userName'] ?? '',
       fullName: json['fullName'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
-      birthDay: json["birthDay"] != null ? DateTime.parse(json["birthDay"]) : DateTime.now(),
+      birthDay: json["birthDay"] != null
+          ? DateTime.parse(json["birthDay"])
+          : DateTime.now(),
       password: json['password'] ?? '',
       confirmPassword: json['confirmPassword'] ?? '',
       gender: json['gender'] ?? false,
@@ -100,7 +112,7 @@ class Register {
 
   Map<String, dynamic> toJson() {
     return {
-      'UserTypeName': UserTypeName,
+      'userTypeName': userTypeName,
       'userName': userName,
       'fullName': fullName,
       'email': email,
@@ -113,46 +125,64 @@ class Register {
   }
 }
 
-class RegistrationException implements Exception {
-  final String message;
-  RegistrationException(this.message);
+class Login {
+  final String username;
+  final String password;
 
-  @override
-  String toString() => 'RegistrationException: $message';
+  Login({
+    required this.username,
+    required this.password,
+  });
+
+  factory Login.fromJson(Map<String, dynamic> json) {
+    return Login(
+      username: json['username'] ?? "",
+      password: json['password'] ?? "",
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'password': password,
+    };
+  }
 }
 
 abstract class UserRepository {
   Future<void> register(Register register);
+  Future<User> login(Login login);
 }
 
 class UserRepositoryIml implements UserRepository {
+//Handle event registration
   @override
-Future<void> register(Register register) async {
+  Future<void> register(Register register) async {
     final url = Uri.parse('$serverUrl/api/Users/Register');
 
     if (register.userName.isEmpty ||
         register.fullName.isEmpty ||
         register.password.isEmpty ||
         register.confirmPassword.isEmpty) {
-      throw RegistrationException(
-          'Tên người dùng, họ và tên, mật khẩu không được để trống.');
+      throw ('Tên người dùng, họ và tên, mật khẩu không được để trống.');
     }
 
     if (register.password != register.confirmPassword) {
-      throw RegistrationException('Mật khẩu và mật khẩu nhập lại không khớp.');
+      throw ('Mật khẩu và mật khẩu nhập lại không khớp.');
     }
-
+    if(!isValidUsername(register.userName)){
+      throw('Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới và không có khoảng trắng');
+    }
     if (!isValidPassword(register.password)) {
-      throw RegistrationException(
-          'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.');
+      throw ('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.');
     }
 
     if (register.email.isNotEmpty && !isValidEmail(register.email)) {
-      throw RegistrationException('Địa chỉ email không hợp lệ.');
+      throw ('Địa chỉ email không hợp lệ.');
     }
 
     if (register.phone.isNotEmpty && !isValidPhone(register.phone)) {
-      throw RegistrationException('Số điện thoại không hợp lệ.');
+      throw ('Số điện thoại không hợp lệ.');
     }
 
     try {
@@ -165,10 +195,10 @@ Future<void> register(Register register) async {
       if (response.statusCode == 200) {
         print('Đăng ký thành công');
       } else {
-        throw RegistrationException('Đăng ký thất bại: ${response.body}');
+        throw (response.body);
       }
     } catch (e) {
-      throw RegistrationException('Đăng ký người dùng thất bại: $e');
+      throw ('Đăng ký người dùng thất bại: $e');
     }
   }
 
@@ -187,4 +217,35 @@ Future<void> register(Register register) async {
     final regex = RegExp(r'^\d{10}$'); // Kiểm tra số điện thoại 10 chữ số
     return regex.hasMatch(phone);
   }
+
+  bool isValidUsername(String username) {
+    final RegExp regex = RegExp(r'^[a-zA-Z0-9_]{8,20}$');
+    return regex.hasMatch(username);
+  }
+//end registration
+
+//Handle event login
+  @override
+  Future<User> login(Login login) async {
+    final url = Uri.parse('$serverUrl/api/Users/LoginUser');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(login.toJson()), // Chuyển đối tượng Login thành JSON
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return User.fromJson(jsonResponse); // Giải mã JSON thành đối tượng User
+      } else {
+        throw (response.body);
+      }
+    } catch (e) {
+      throw ('$e');
+    }
+  }
+
+//end login
 }
