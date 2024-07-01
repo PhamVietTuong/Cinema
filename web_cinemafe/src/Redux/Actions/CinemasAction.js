@@ -172,8 +172,21 @@ export const TicketBooking = (invoiceDTO, navigate) => {
             await connection.on("InforTicket", handleInforTicket);
             await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO).then((result) => {
                 if (result) {
-                    navigate("/")
-                    console.log(result);
+                    Swal.fire({
+                        text: "Đặt vé thành công",
+                        padding: "24px",
+                        width: "400px",
+                        customClass: {
+                            confirmButton: 'custom-ok-button'
+                        },
+                        showCancelButton: false,
+                        confirmButtonText: "Oki",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            navigate("/")
+                            window.location.reload();
+                        }
+                    });
                 }
             })
         } catch (error) {

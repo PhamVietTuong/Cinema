@@ -17,7 +17,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen>
     implements MovieViewContract {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   MoviePresenter? _presenter;
   Map<String, dynamic>? _searchResults;
   List<String> _searchHistory = [];
@@ -83,10 +83,10 @@ class _SearchScreenState extends State<SearchScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          color: Styles.boldTextColor["dark_purple"],
+          color: Styles.boldTextColor[Config.themeMode],
           onPressed: () {
             Navigator.pop(this.context);
           },
@@ -95,11 +95,11 @@ class _SearchScreenState extends State<SearchScreen>
           "Tìm kiếm",
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
       ),
-      backgroundColor: Styles.backgroundColor["dark_purple"],
+      backgroundColor: Styles.backgroundColor[Config.themeMode],
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(
@@ -114,18 +114,19 @@ class _SearchScreenState extends State<SearchScreen>
                 },
                 style: TextStyle(
                   color: _controller.text.isNotEmpty
-                      ? Styles.textColor["dark_purple"]
+                      ? Styles.textColor[Config.themeMode]
                       : Colors.white,
                   fontSize: Styles.textSize,
                 ),
                 decoration: InputDecoration(
                   labelText: 'Nhập từ khóa',
-                  labelStyle: TextStyle(color: Styles.textColor["dark_purple"]),
+                  labelStyle:
+                      TextStyle(color: Styles.textColor[Config.themeMode]),
                   suffixIcon: _controller.text.isNotEmpty
                       ? IconButton(
                           icon: Icon(
                             Icons.clear,
-                            color: Styles.textColor["dark_purple"],
+                            color: Styles.textColor[Config.themeMode],
                           ),
                           onPressed: () {
                             setState(() {
@@ -137,7 +138,7 @@ class _SearchScreenState extends State<SearchScreen>
                       : IconButton(
                           icon: Icon(
                             Icons.search,
-                            color: Styles.textColor["dark_purple"],
+                            color: Styles.textColor[Config.themeMode],
                           ),
                           onPressed: () {
                             setState(() {
@@ -147,13 +148,13 @@ class _SearchScreenState extends State<SearchScreen>
                         ),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Styles.textColor["dark_purple"]!),
+                        BorderSide(color: Styles.textColor[Config.themeMode]!),
                     borderRadius:
                         BorderRadius.circular(10.0), // Độ bo tròn các góc
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Styles.textColor["dark_purple"]!),
+                        BorderSide(color: Styles.textColor[Config.themeMode]!),
                     borderRadius:
                         BorderRadius.circular(10.0), // Độ bo tròn các góc
                   ),
@@ -170,7 +171,7 @@ class _SearchScreenState extends State<SearchScreen>
                         'Lịch sử tìm kiếm',
                         style: TextStyle(
                           fontSize: Styles.titleFontSize,
-                          color: Styles.titleColor["dark_purple"]!,
+                          color: Styles.titleColor[Config.themeMode]!,
                         ),
                       ),
                       IconButton(
@@ -181,13 +182,14 @@ class _SearchScreenState extends State<SearchScreen>
                       ),
                     ],
                   ),
-                  SizedBox(height: 5), // Khoảng cách giữa tiêu đề và nút xóa
+                  const SizedBox(
+                      height: 5), // Khoảng cách giữa tiêu đề và nút xóa
                   Column(
                     children: _buildSearchHistory(),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                   height:
                       5), // Khoảng cách giữa lịch sử tìm kiếm và kết quả tìm kiếm
               _searchResults != null
@@ -211,7 +213,7 @@ class _SearchScreenState extends State<SearchScreen>
           'Danh sách các rạp chiếu',
           style: TextStyle(
             fontSize: Styles.titleFontSize,
-            color: Styles.titleColor["dark_purple"]!,
+            color: Styles.titleColor[Config.themeMode]!,
           ),
         ),
       );
@@ -234,7 +236,7 @@ class _SearchScreenState extends State<SearchScreen>
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.symmetric(vertical: 5),
               decoration: BoxDecoration(
-                color: Styles.backgroundContent["dark_purple"],
+                color: Styles.backgroundContent[Config.themeMode],
                 borderRadius: BorderRadius.circular(5),
               ),
               width: MediaQuery.of(context).size.width,
@@ -245,7 +247,7 @@ class _SearchScreenState extends State<SearchScreen>
                     theater.name,
                     style: TextStyle(
                       fontSize: Styles.textSize,
-                      color: Styles.boldTextColor["dark_purple"]!,
+                      color: Styles.boldTextColor[Config.themeMode]!,
                     ),
                   ),
                 ],
@@ -263,7 +265,7 @@ class _SearchScreenState extends State<SearchScreen>
             'Danh sách phim',
             style: TextStyle(
               fontSize: Styles.titleFontSize,
-              color: Styles.titleColor["dark_purple"]!,
+              color: Styles.titleColor[Config.themeMode]!,
             ),
           ),
         ),
@@ -287,7 +289,7 @@ class _SearchScreenState extends State<SearchScreen>
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.symmetric(vertical: 5),
               decoration: BoxDecoration(
-                color: Styles.backgroundContent["dark_purple"],
+                color: Styles.backgroundContent[Config.themeMode],
                 borderRadius: BorderRadius.circular(5),
               ),
               width: MediaQuery.of(context).size.width,
@@ -298,7 +300,7 @@ class _SearchScreenState extends State<SearchScreen>
                     '${movie['name']}(${movie['showTimeTypeName']})',
                     style: TextStyle(
                       fontSize: Styles.textSize,
-                      color: Styles.boldTextColor["dark_purple"]!,
+                      color: Styles.boldTextColor[Config.themeMode]!,
                     ),
                   ),
                 ],
@@ -329,7 +331,7 @@ class _SearchScreenState extends State<SearchScreen>
                 query,
                 style: TextStyle(
                   fontSize: Styles.textSize,
-                  color: Styles.boldTextColor["dark_purple"]!,
+                  color: Styles.boldTextColor[Config.themeMode]!,
                 ),
               ),
             ),
