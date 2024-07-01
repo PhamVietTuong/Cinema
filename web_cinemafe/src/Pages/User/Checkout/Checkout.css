@@ -147,8 +147,18 @@
     color: #0f172a;
 }
 
-.CheckoutHover:hover {
+.CheckoutHover:hover, 
+.CheckoutHover.active
+ {
     background-color: #f8fafc;
+}
+
+.CheckoutHover.active {
+    background-color: #f8fafc;
+}
+
+.CheckoutHover.active .text {
+    color: #0f172a;
 }
 
 .checkoutStepper {
@@ -169,4 +179,10 @@
         margin-bottom: 24px;
         gap: 8px;
     }
+}
+
+.CheckoutButtonPayment {
+    display: flex;
+    gap: 30px;
+    margin-top: 24px !important;
 }

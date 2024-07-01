@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//var serverUrl = 'https://10.0.2.2:7209';
-var serverUrl = 'http://103.104.122.137:9000';
+
+//var serverUrl = 'http://103.104.122.137:9000';
+var serverUrl = 'https://10.0.2.2:7209';
+
 
 class Styles {
   static const Map<String, Color> backgroundColor = {
@@ -91,6 +93,37 @@ class Config {
     }
 
     languageMode = _prefs.getString(Constants.languageModeKey) ?? 'vi_VN';
+  }
+
+  static Future<void> saveToken(String token) async {
+    await _prefs.setString('token', token);
+  }
+
+  static String getToken() {
+    return _prefs.getString('token') ?? '';
+  }
+
+  static Future<List<String>> loadSearchHistory() async {
+    List<String> searchHistory = _prefs.getStringList('searchHistory') ?? [];
+    return searchHistory;
+  }
+
+  static Future<void> saveSearchQuery(String query) async {
+    List<String> searchHistory = _prefs.getStringList('searchHistory') ?? [];
+    if (!searchHistory.contains(query)) {
+      searchHistory.add(query);
+    }
+    await _prefs.setStringList('searchHistory', searchHistory.toSet().toList());
+  }
+
+  static Future<void> clearSearchHistory() async {
+    await _prefs.remove('searchHistory');
+  }
+
+  static Future<void> removeSearchQuery(String query) async {
+    List<String> searchHistory = _prefs.getStringList('searchHistory') ?? [];
+    searchHistory.remove(query);
+    await _prefs.setStringList('searchHistory', searchHistory);
   }
 }
 

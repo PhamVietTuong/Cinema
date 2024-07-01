@@ -3,7 +3,8 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { REMOVE_SEAT_BEING_SELECTED, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SHOWTIME_BY_MOVIEID, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { INFO_SEARCH, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { paymentsService } from "../../Services/PaymentsService";
 
 export const MovieListAction = () => {
     return async (dispatch) => {
@@ -136,7 +137,7 @@ const findSeatByRowAndCol = (rowName, colIndex, seats) => {
     return null;
 };
 
-export const TicketBooking = (invoiceDTO, navigate) => {
+export const TicketBooking = (invoiceDTO) => {
     return async (dispatch, getState) => {
         try {
             const handleInforTicket = async (seatInfos, seatStatus) => {
@@ -170,12 +171,16 @@ export const TicketBooking = (invoiceDTO, navigate) => {
             };
 
             await connection.on("InforTicket", handleInforTicket);
-            await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO).then((result) => {
-                if (result) {
-                    navigate("/")
-                    console.log(result);
+            const result = await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO)
+            if (result) {
+                const response = await paymentsService.CreateLinkCheckoutMomo(result);
+                if (response.status === 200) {
+                    const data = response.data;
+                    window.location.href = data.paymentUrl;
+                } else {
+                    console.error('Error creating payment:', response.data.error);
                 }
-            })
+            }
         } catch (error) {
             console.log("TicketBooking", error);
         }
@@ -194,6 +199,93 @@ export const TheaterListAction = () => {
 
         } catch (error) {
             console.log("TheaterListAction: ", error);
+        }
+    }
+}
+
+export const GetTheaterListAdminAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTheaterListAdmin(code);
+            dispatch({
+                type: SET_THEATER_LIST,
+                theaterList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetTheaterListAdminAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const UpdateTheaterAction = (theaterDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateTheater(theaterDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTheaterListAdminAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateTheaterAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateTheaterAction = (theaterDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateTheater(theaterDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTheaterListAdminAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateTheaterAction: ", error);
+                }
+            });
         }
     }
 }
@@ -356,6 +448,383 @@ export const CreateAgeRestrictionAction = (ageRestrictionDTO) => {
                     console.log("CreateAgeRestrictionAction: ", error);
                 }
             });
+        }
+    }
+}
+
+export const GetTicketTypeListAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTicketTypeList(code);
+            dispatch({
+                type: SET_LIST_TICKETTYPE,
+                ticketTypeList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetTicketTypeListAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const UpdateTicketTypeAction = (ticketTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateTicketType(ticketTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTicketTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateTicketTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateTicketTypeAction = (ticketTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateTicketType(ticketTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetTicketTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateTicketTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const GetMovieTypeListAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetMovieTypeList(code);
+            dispatch({
+                type: SET_LIST_MOVIETYPE,
+                movieTypeList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetMovieTypeListAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const UpdateMovieTypeAction = (movieTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateMovieType(movieTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetMovieTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateMovieTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateMovieTypeAction = (movieTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateMovieType(movieTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetMovieTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateMovieTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const GetSeatTypeListAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetSeatTypeList(code);
+            dispatch({
+                type: SET_LIST_SEATTYPE,
+                seatTypeList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetSeatTypeListAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const UpdateSeatTypeAction = (seatTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateSeatType(seatTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetSeatTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateSeatTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateSeatTypeAction = (seatTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateSeatType(seatTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetSeatTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateSeatTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const GetUserTypeListAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetUserTypeList(code);
+            dispatch({
+                type: SET_LIST_USERTYPE,
+                userTypeList: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetUserTypeListAction: ", error);
+                }
+            });
+        }
+    }
+}
+export const SaveBookingInfoAction = (invoiceDTO, movieInfoBooking) => {
+    return async (dispatch) => {
+        try {
+            dispatch({
+                type: SAVE_BOOKING_INFO,
+                movieInfoBooking, invoiceDTO
+            })
+
+        } catch (error) {
+            console.log("SaveBookingInfoAction: ", error);
+        }
+    }
+}
+
+
+export const UpdateUserTypeAction = (userTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateUserType(userTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetUserTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateUserTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateUserTypeAction = (userTypeDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.CreateUserType(userTypeDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Thêm thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(GetUserTypeListAction());
+                    }
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("CreateUserTypeAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const SearchByNameAction = (name) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.SearchByName(name);
+            
+            dispatch({
+                type: INFO_SEARCH,
+                resultInfoSearch: result.data,
+            })
+        } catch (error) {
+            console.log("SearchByNameAction: ", error);
         }
     }
 }

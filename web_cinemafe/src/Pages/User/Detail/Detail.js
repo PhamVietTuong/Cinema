@@ -17,6 +17,7 @@ import { CHECK_FOR_EMPTY_SEAT, CLEAN, GET_WAITING_SEAT, LIST_OF_SEATS_SOLD, UPDA
 import { TicketTypeByShowTimeAndRoomDTO } from '../../../Models/TicketTypeByShowTimeAndRoomDTO';
 import { connection } from '../../../connectionSignalR';
 import { CSSTransition } from 'react-transition-group';
+import { Box, CircularProgress } from '@mui/material';
 const Detail = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
@@ -112,93 +113,102 @@ const Detail = () => {
                     <div className="detail ht">
                         <div className="container">
                             <div className="detail-wr">
-                                <div className="detail-row row">
-                                    <div className='detail-left col col-5'>
-                                        <div class="web-movie-box">
-                                            <div className="web-movie-box">
-                                                <div className="image">
-                                                    <img src={`${DOMAIN}/Images/${movieDetail?.image}`} alt=""></img>
-                                                    <div className="attach">
-                                                        <div className="type-movie">
-                                                            <span className="txt">{movieDetail?.showTimeTypeName}</span>
+                                {
+                                    !movieDetail ? (
+                                        <Box sx={{ textAlign: 'center' }}>
+                                            <CircularProgress />
+                                        </Box>
+                                    ) :
+                                        (
+                                            <div className="detail-row row">
+                                                <div className='detail-left col col-5'>
+                                                    <div class="web-movie-box">
+                                                        <div className="web-movie-box">
+                                                            <div className="image">
+                                                                <img src={`${DOMAIN}/Images/${movieDetail?.image}`} alt=""></img>
+                                                                <div className="attach">
+                                                                    <div className="type-movie">
+                                                                        <span className="txt">{movieDetail?.showTimeTypeName}</span>
+                                                                    </div>
+                                                                    <div className="age">
+                                                                        <span className="number">
+                                                                            {movieDetail?.ageRestrictionName}
+                                                                        </span>
+                                                                        <span className="txt">
+                                                                            {movieDetail?.ageRestrictionAbbreviation ? movieDetail?.ageRestrictionAbbreviation.toUpperCase() : ''}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div className="age">
-                                                            <span className="number">
-                                                                {movieDetail?.ageRestrictionName}
-                                                            </span>
-                                                            <span className="txt">
-                                                                {movieDetail?.ageRestrictionAbbreviation ? movieDetail?.ageRestrictionAbbreviation.toUpperCase() : ''}
-                                                            </span>
+                                                    </div>
+                                                </div>
+                                                <div className='detail-right col col-7'>
+                                                    <div className='detail-ct'>
+                                                        <div className='detail-ct-h'>
+                                                            <h1 className='heading'>
+                                                                {movieDetail?.name} ({movieDetail?.ageRestrictionName})
+                                                            </h1>
+                                                            <ul className='info-detail'>
+                                                                <li className='info-item'>
+                                                                    <span class="ic">
+                                                                        <img src="/Images/movieType.svg" alt="Movie Type Icon" width="100" height="100" />
+                                                                    </span>
+                                                                    <span class="txt">{movieDetail?.movieType}</span>
+                                                                </li>
+                                                                <li className='info-item'>
+                                                                    <span class="ic">
+                                                                        <img src="/Images/icon-clock.svg" alt="Clock icon" />
+                                                                    </span>
+                                                                    <span class="txt">{movieDetail?.time}'</span>
+                                                                </li>
+                                                                <li className='info-item'>
+                                                                    <span class="ic">
+                                                                        <img src="/Images/earth-americas.svg" alt="Earth americas Icon" width="100" height="100" />
+                                                                    </span>
+                                                                    <span class="txt">Khác</span>
+                                                                </li>
+                                                                <li className='info-item'>
+                                                                    <span class="ic">
+                                                                        <img src="/Images/user-check.svg" alt="User check Icon" width="100" height="100" />
+                                                                    </span>
+                                                                    <span class="txt">{movieDetail?.ageRestrictionName}: {movieDetail?.ageRestrictionDescription}</span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className='detail-ct-bd'>
+                                                            <h3 className='tt sub-tittle'>
+                                                                Mô tả
+                                                            </h3>
+                                                            <ul className='font-family-actor'>
+                                                                <li>Đạo diễn: {movieDetail?.director}</li>
+                                                                <li>Diễn viên: {movieDetail?.actor}</li>
+                                                                <li>Khởi chiếu: {moment(movieDetail?.releaseDate).format("DD/MM/YYYY")}</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className='detail-ct-bd'>
+                                                            <h3 className='tt sub-tittle'>
+                                                                Nội dung phim
+                                                            </h3>
+                                                            <div className='ct'>
+                                                                <div className='dt'>
+                                                                    <p class="txt line-clamp-6 description">{movieDetail?.description}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className='detail-ct-ft' onClick={() => setShowTrailerPopup(true)}>
+                                                            <div class="video pointer">
+                                                                <span class="ic">
+                                                                    <img src="https://cinestar.com.vn/assets/images/icon-play-vid.svg" alt=''></img>
+                                                                </span>
+                                                                <span class="txt">Xem Trailer</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className='detail-right col col-7'>
-                                        <div className='detail-ct'>
-                                            <div className='detail-ct-h'>
-                                                <h1 className='heading'>
-                                                    {movieDetail?.name} ({movieDetail?.ageRestrictionName})
-                                                </h1>
-                                                <ul className='info-detail'>
-                                                    <li className='info-item'>
-                                                        <span class="ic">
-                                                            <img src="/Images/movieType.svg" alt="Movie Type Icon" width="100" height="100" />
-                                                        </span>
-                                                        <span class="txt">{movieDetail?.movieType}</span>
-                                                    </li>
-                                                    <li className='info-item'>
-                                                        <span class="ic">
-                                                            <img src="/Images/icon-clock.svg" alt="Clock icon" />
-                                                        </span>
-                                                        <span class="txt">{movieDetail?.time}'</span>
-                                                    </li>
-                                                    <li className='info-item'>
-                                                        <span class="ic">
-                                                            <img src="/Images/earth-americas.svg" alt="Earth americas Icon" width="100" height="100" />
-                                                        </span>
-                                                        <span class="txt">Khác</span>
-                                                    </li>
-                                                    <li className='info-item'>
-                                                        <span class="ic">
-                                                            <img src="/Images/user-check.svg" alt="User check Icon" width="100" height="100" />
-                                                        </span>
-                                                        <span class="txt">{movieDetail?.ageRestrictionName}: {movieDetail?.ageRestrictionDescription}</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className='detail-ct-bd'>
-                                                <h3 className='tt sub-tittle'>
-                                                    Mô tả
-                                                </h3>
-                                                <ul className='font-family-actor'>
-                                                    <li>Đạo diễn: {movieDetail?.director}</li>
-                                                    <li>Diễn viên: {movieDetail?.actor}</li>
-                                                    <li>Khởi chiếu: {moment(movieDetail?.releaseDate).format("DD/MM/YYYY")}</li>
-                                                </ul>
-                                            </div>
-                                            <div className='detail-ct-bd'>
-                                                <h3 className='tt sub-tittle'>
-                                                    Nội dung phim
-                                                </h3>
-                                                <div className='ct'>
-                                                    <div className='dt'>
-                                                        <p class="txt line-clamp-6 description">{movieDetail?.description}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className='detail-ct-ft' onClick={() => setShowTrailerPopup(true)}>
-                                                <div class="video pointer">
-                                                    <span class="ic">
-                                                        <img src="https://cinestar.com.vn/assets/images/icon-play-vid.svg" alt=''></img>
-                                                    </span>
-                                                    <span class="txt">Xem Trailer</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                        )
+                                }
                             </div>
                         </div>
                     </div>

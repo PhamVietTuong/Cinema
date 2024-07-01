@@ -33,6 +33,18 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/GetTheaterList`)
     }
 
+    GetTheaterListAdmin = () => {
+        return this.get(`api/Cinemas/GetTheaterListAdmin`)
+    }
+
+    UpdateTheater = (theaterDTO) => {
+        return this.post(`api/Cinemas/UpdateTheater`, theaterDTO)
+    }
+
+    CreateTheater = (theaterDTO) => {
+        return this.post(`api/Cinemas/CreateTheater`, theaterDTO)
+    }
+
     GetTheaterId = (id) => {
         return this.get(`api/Cinemas/GetTheater/${id}`)
     }
@@ -63,6 +75,70 @@ export class CinemasService extends baseService {
 
     CreateAgeRestriction = (ageRestrictionDTO) => {
         return this.post(`api/Cinemas/CreateAgeRestriction`, ageRestrictionDTO)
+    }
+
+    GetTicketTypeList = () => {
+        return this.get(`api/Cinemas/GetTicketTypeList`)
+    }
+
+    UpdateTicketType = (ticketTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateTicketType`, ticketTypeDTO)
+    }
+
+    CreateTicketType = (ticketTypeDTO) => {
+        return this.post(`api/Cinemas/CreateTicketType`, ticketTypeDTO)
+    }
+
+    GetMovieTypeList = () => {
+        return this.get(`api/Cinemas/GetMovieTypeList`)
+    }
+
+    UpdateMovieType = (movieTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateMovieType`, movieTypeDTO)
+    }
+
+    CreateMovieType = (movieTypeDTO) => {
+        return this.post(`api/Cinemas/CreateMovieType`, movieTypeDTO)
+    }
+
+    GetSeatTypeList = () => {
+        return this.get(`api/Cinemas/GetSeatTypeList`)
+    }
+
+    UpdateSeatType = (seatTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateSeatType`, seatTypeDTO)
+    }
+
+    CreateSeatType = (seatTypeDTO) => {
+        return this.post(`api/Cinemas/CreateSeatType`, seatTypeDTO)
+    }
+
+    GetUserTypeList = () => {
+        return this.get(`api/Cinemas/GetUserTypeList`)
+    }
+
+    UpdateUserType = (userTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateUserType`, userTypeDTO)
+    }
+
+    CreateUserType = (userTypeDTO) => {
+        return this.post(`api/Cinemas/CreateUserType`, userTypeDTO)
+    }
+
+    SearchByName = (name) => {
+        return this.get(`api/Cinemas/SearchByName${name}`)
+    }
+    
+    GetUserTypeList = () => {
+        return this.get(`api/Cinemas/GetUserTypeList`)
+    }
+
+    UpdateUserType = (userTypeDTO) => {
+        return this.post(`api/Cinemas/UpdateUserType`, userTypeDTO)
+    }
+
+    CreateUserType = (userTypeDTO) => {
+        return this.post(`api/Cinemas/CreateUserType`, userTypeDTO)
     }
 }
 

@@ -110,21 +110,57 @@ const IndexAdmin = () => {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        <Link to="Drafts">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Drafts />
-                                </ListItemIcon>
-                                <ListItemText primary="Drafts" />
-                            </ListItemButton>
-                        </Link>
-
                         <Link to="AgeRestriction">
                             <ListItemButton>
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
                                 <ListItemText primary="AgeRestriction" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="TicketType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="TicketType" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="MovieType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="MovieType" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="SeatType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="SeatType" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="UserType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="UserType" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="Theater">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Theater" />
                             </ListItemButton>
                         </Link>
                     </List>

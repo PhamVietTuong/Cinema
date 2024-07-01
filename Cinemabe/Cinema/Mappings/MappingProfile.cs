@@ -12,6 +12,11 @@ namespace Cinema.Mappings
             //	.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             //	.ForMember(dest => dest.SeatIds, opt => opt.MapFrom(src => new List<Guid> { src.SeatId }));
             CreateMap<AgeRestriction, AgeRestrictionDTO>().ReverseMap();
+            CreateMap<TicketType, TicketTypeDTO>().ReverseMap();
+            CreateMap<MovieType, MovieTypeDTO>().ReverseMap();
+            CreateMap<SeatType, SeatTypeDTO>().ReverseMap();
+            CreateMap<UserType, UserTypeDTO>().ReverseMap();
+            CreateMap<Theater, TheaterDTO>().ReverseMap();
         }
     }
 }
