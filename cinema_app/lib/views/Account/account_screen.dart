@@ -15,8 +15,8 @@ class _AccountScreenState extends State<AccountScreen> {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Styles.gradientTop["dark_purple"]!,
-      Styles.gradientBot["dark_purple"]!,
+     Styles.gradientTop[Config.themeMode]!,
+     Styles.gradientBot[Config.themeMode]!,
     ],
   );
 
@@ -32,7 +32,7 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          color: Styles.boldTextColor["dark_purple"],
+          color: Styles.boldTextColor[Config.themeMode],
           onPressed: () {
             Navigator.pop(context);
           },
@@ -41,12 +41,12 @@ class _AccountScreenState extends State<AccountScreen> {
           "Đăng kí",
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
-            color: Styles.boldTextColor["dark_purple"],
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
-        backgroundColor: Styles.backgroundContent["dark_purple"],
+        backgroundColor: Styles.backgroundContent[Config.themeMode],
       ),
-      backgroundColor: Styles.backgroundColor["dark_purple"],
+      backgroundColor: Styles.backgroundColor[Config.themeMode],
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -87,7 +87,7 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Text(
                 'Đăng ký',
                 style: TextStyle(
-                  color: Styles.boldTextColor["dark_purple"],
+                  color: Styles.boldTextColor[Config.themeMode],
                   fontSize: Styles.titleFontSize,
                 ),
                 textAlign: TextAlign.center,
@@ -112,7 +112,7 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Text(
                 'Đăng nhập',
                 style: TextStyle(
-                  color: Styles.boldTextColor["dark_purple"],
+                  color: Styles.boldTextColor[Config.themeMode],
                   fontSize: Styles.titleFontSize,
                 ),
                 textAlign: TextAlign.center,

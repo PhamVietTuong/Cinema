@@ -310,6 +310,7 @@ class _MovieDetailState extends State<MovieDetail>
                                           overflow: TextOverflow.ellipsis,
 
                                         ),
+                                        ),
                                         if (_movieDetail.director.length > 20)
                                           GestureDetector(
                                             onTap: () {

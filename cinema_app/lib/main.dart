@@ -5,7 +5,7 @@ import 'package:cinema_app/components/bottom_nav.dart';
 import 'config.dart';
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides();
+  //HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Config.initialize();
   runApp(const MyApp());

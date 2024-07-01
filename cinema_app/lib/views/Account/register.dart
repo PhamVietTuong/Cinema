@@ -115,7 +115,7 @@ class _RegisterContentState extends State<RegisterContent>
           Container(
             padding: const EdgeInsetsDirectional.only(bottom: 15),
             decoration: BoxDecoration(
-              color: Styles.backgroundContent["dark_purple"],
+              color: Styles.backgroundContent[Config.themeMode],
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -141,16 +141,16 @@ class _RegisterContentState extends State<RegisterContent>
                     title: 'Số điện thoại'),
                 const SizedBox(height: 15),
                 TextField(
-                  style: TextStyle(color: Styles.boldTextColor["dark_purple"]),
+                  style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     labelText: 'Mật khẩu',
                     prefixIcon: const Icon(Icons.lock),
                     labelStyle:
-                        TextStyle(color: Styles.boldTextColor["dark_purple"]),
-                    prefixIconColor: Styles.boldTextColor["dark_purple"],
-                    focusColor: Styles.boldTextColor["dark_purple"],
+                        TextStyle(color: Styles.boldTextColor[Config.themeMode]),
+                    prefixIconColor: Styles.boldTextColor[Config.themeMode],
+                    focusColor: Styles.boldTextColor[Config.themeMode],
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -167,16 +167,16 @@ class _RegisterContentState extends State<RegisterContent>
                 ),
                 const SizedBox(height: 15),
                 TextField(
-                  style: TextStyle(color: Styles.boldTextColor["dark_purple"]),
+                  style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirmPassword,
                   decoration: InputDecoration(
                     labelText: 'Nhập lại mật khẩu',
                     prefixIcon: const Icon(Icons.lock),
                     labelStyle:
-                        TextStyle(color: Styles.boldTextColor["dark_purple"]),
-                    prefixIconColor: Styles.boldTextColor["dark_purple"],
-                    focusColor: Styles.boldTextColor["dark_purple"],
+                        TextStyle(color: Styles.boldTextColor[Config.themeMode]),
+                    prefixIconColor: Styles.boldTextColor[Config.themeMode],
+                    focusColor: Styles.boldTextColor[Config.themeMode],
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -199,7 +199,7 @@ class _RegisterContentState extends State<RegisterContent>
                     Expanded(
                       child: TextField(
                         style: TextStyle(
-                            color: Styles.boldTextColor["dark_purple"]),
+                            color: Styles.boldTextColor[Config.themeMode]),
                         controller: _birthdayController,
                         onTap: () {
                           _selectDate(context);
@@ -209,9 +209,9 @@ class _RegisterContentState extends State<RegisterContent>
                           labelText: 'Ngày sinh',
                           prefixIcon: const Icon(Icons.calendar_today),
                           labelStyle: TextStyle(
-                              color: Styles.boldTextColor["dark_purple"]),
-                          prefixIconColor: Styles.boldTextColor["dark_purple"],
-                          focusColor: Styles.boldTextColor["dark_purple"],
+                              color: Styles.boldTextColor[Config.themeMode]),
+                          prefixIconColor: Styles.boldTextColor[Config.themeMode],
+                          focusColor: Styles.boldTextColor[Config.themeMode],
                         ),
                       ),
                     ),
@@ -221,9 +221,9 @@ class _RegisterContentState extends State<RegisterContent>
                       icon: const Icon(Icons.arrow_drop_down),
                       iconSize: Styles.titleFontSize,
                       elevation: 5,
-                      dropdownColor: Styles.backgroundContent["dark_purple"],
+                      dropdownColor: Styles.backgroundContent[Config.themeMode],
                       style:
-                          TextStyle(color: Styles.boldTextColor["dark_purple"]),
+                          TextStyle(color: Styles.boldTextColor[Config.themeMode]),
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedGender = newValue!;
@@ -270,11 +270,5 @@ class _RegisterContentState extends State<RegisterContent>
         ],
       ),
     );
-  }
-  
-  @override
-  Future<User> login(Login login) {
-    // TODO: implement login
-    throw UnimplementedError();
   }
 }
