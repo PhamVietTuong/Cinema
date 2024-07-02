@@ -23,7 +23,8 @@ class ShowtimeTypeBox extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: const TextStyle(
+        style:  TextStyle(
+            color: Styles.textBoldSelectionColor[Config.themeMode],
             fontSize: Styles.textSize, fontWeight: FontWeight.bold),
       ),
     );

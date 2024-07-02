@@ -135,17 +135,21 @@ class _MovieDetailState extends State<MovieDetail>
                           Stack(
                             children: [
                               _showImage
-                                  ? Container(
+                                  ? SizedBox(
                                       width: MediaQuery.of(context).size.width,
                                       height:
                                           MediaQuery.of(context).size.height /
                                               3,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              "$serverUrl/Images/${_movieDetail.img}"),
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: Image.network(
+                                        "$serverUrl/Images/${_movieDetail.img}",
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                            'assets/img/movie.png', // Đường dẫn đến ảnh mặc định từ assets
+                                            fit: BoxFit.contain,
+                                          );
+                                        },
                                       ),
                                     )
                                   : SizedBox(
@@ -237,6 +241,16 @@ class _MovieDetailState extends State<MovieDetail>
                                   fit: BoxFit.cover,
                                   width: MediaQuery.of(context).size.width / 4,
                                   height: 150,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // Xử lý khi có lỗi xảy ra trong quá trình tải ảnh từ NetworkImage hoặc khi _movieDetail.img rỗng
+                                    return Image.asset(
+                                      'assets/img/movie.png', // Đường dẫn đến ảnh mặc định từ assets
+                                      fit: BoxFit.cover,
+                                      width:
+                                          MediaQuery.of(context).size.width / 4,
+                                      height: 150,
+                                    );
+                                  },
                                 ),
                                 const SizedBox(width: 15),
                                 Expanded(

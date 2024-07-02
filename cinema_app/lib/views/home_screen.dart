@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
       appBar: AppBar(
         backgroundColor: Styles.backgroundContent[Config.themeMode],
         title: Text(
-          "Xin Chào !",
+          "Xin Chào",
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
             color: Styles.boldTextColor[Config.themeMode],
@@ -173,8 +173,13 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: Styles.textSize,
-                                            color: Styles.boldTextColor[
-                                                Config.themeMode],
+
+                                            color: _selectedTabIndex != 0
+                                                ? Styles.boldTextColor[
+                                                    Config.themeMode]
+                                                : Styles.textSelectionColor[
+                                                    Config.themeMode],
+
                                           ),
                                         ),
                                       ),
@@ -194,15 +199,20 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                             : BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                color: Styles.primaryColor,
+                                                color: Styles
+                                                    .btnColor[Config.themeMode],
                                               ),
                                         child: Text(
                                           "Chiếu sớm",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontSize: Styles.textSize,
-                                              color: Styles.boldTextColor[
-                                                  Config.themeMode]),
+                                            fontSize: Styles.textSize,
+                                            color: _selectedTabIndex != 1
+                                                ? Styles.boldTextColor[
+                                                    Config.themeMode]
+                                                : Styles.textSelectionColor[
+                                                    Config.themeMode],
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -221,15 +231,20 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                             : BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                color: Styles.primaryColor,
+                                                color: Styles
+                                                    .btnColor[Config.themeMode],
                                               ),
                                         child: Text(
                                           "Sắp chiếu",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontSize: Styles.textSize,
-                                              color: Styles.boldTextColor[
-                                                  Config.themeMode]),
+                                            fontSize: Styles.textSize,
+                                            color: _selectedTabIndex != 2
+                                                ? Styles.boldTextColor[
+                                                    Config.themeMode]
+                                                : Styles.textSelectionColor[
+                                                    Config.themeMode],
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -328,6 +343,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                     .size
                                                     .height /
                                                 3,
+
                                             child: WebViewWidget(
                                               controller: WebViewController()
                                                 ..setJavaScriptMode(
@@ -359,6 +375,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 )
                                                 ..loadRequest(Uri.parse(
                                                     'https://www.youtube.com/embed/${trailers[index]}')),
+
                                             ),
                                           );
                                         },

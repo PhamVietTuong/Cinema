@@ -17,13 +17,13 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   var index = 0;
   List<Widget> pages = [
-     const HomePage(),
+     HomePage(),
     const TheaterScreen(),
     const Center(
       child: Text("News"),
     ),
     const Center(
-      child: User(),
+      child: UserScreen(),
     )
   ];
   @override
