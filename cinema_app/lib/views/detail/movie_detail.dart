@@ -134,17 +134,21 @@ class _MovieDetailState extends State<MovieDetail>
                           Stack(
                             children: [
                               _showImage
-                                  ? Container(
+                                  ? SizedBox(
                                       width: MediaQuery.of(context).size.width,
                                       height:
                                           MediaQuery.of(context).size.height /
                                               3,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              "$serverUrl/Images/${_movieDetail.img}"),
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: Image.network(
+                                        "$serverUrl/Images/${_movieDetail.img}",
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                            'assets/img/movie.png', // Đường dẫn đến ảnh mặc định từ assets
+                                            fit: BoxFit.contain,
+                                          );
+                                        },
                                       ),
                                     )
                                   : SizedBox(
@@ -174,8 +178,8 @@ class _MovieDetailState extends State<MovieDetail>
                                         ? Icon(
                                             Icons.play_circle_fill,
                                             size: 64,
-                                            color: Styles
-                                                .boldTextColor[Config.themeMode],
+                                            color: Styles.boldTextColor[
+                                                Config.themeMode],
                                           )
                                         : const Text(""),
                                   ),
@@ -210,6 +214,16 @@ class _MovieDetailState extends State<MovieDetail>
                                   fit: BoxFit.cover,
                                   width: MediaQuery.of(context).size.width / 4,
                                   height: 150,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // Xử lý khi có lỗi xảy ra trong quá trình tải ảnh từ NetworkImage hoặc khi _movieDetail.img rỗng
+                                    return Image.asset(
+                                      'assets/img/movie.png', // Đường dẫn đến ảnh mặc định từ assets
+                                      fit: BoxFit.cover,
+                                      width:
+                                          MediaQuery.of(context).size.width / 4,
+                                      height: 150,
+                                    );
+                                  },
                                 ),
                                 const SizedBox(width: 15),
                                 Expanded(
@@ -222,8 +236,8 @@ class _MovieDetailState extends State<MovieDetail>
                                         _movieDetail.name,
                                         softWrap: true,
                                         style: TextStyle(
-                                            color: Styles
-                                                .boldTextColor[Config.themeMode],
+                                            color: Styles.boldTextColor[
+                                                Config.themeMode],
                                             fontSize: Styles.titleFontSize),
                                       ),
                                       TimeBox(time: _movieDetail.time),
@@ -301,15 +315,13 @@ class _MovieDetailState extends State<MovieDetail>
                                                 ? _movieDetail.director
                                                 : 'Đang cập nhật',
                                             style: TextStyle(
-                                              color: Styles
-
-                                                  .textColor[Config.themeMode],
-                                              fontSize: Styles.textSize),
-                                          maxLines:
-                                              isDirectorExpanded ? null : 10,
-                                          overflow: TextOverflow.ellipsis,
-
-                                        ),
+                                                color: Styles.textColor[
+                                                    Config.themeMode],
+                                                fontSize: Styles.textSize),
+                                            maxLines:
+                                                isDirectorExpanded ? null : 10,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                         if (_movieDetail.director.length > 20)
                                           GestureDetector(
@@ -324,8 +336,8 @@ class _MovieDetailState extends State<MovieDetail>
                                                   ? 'Thu gọn'
                                                   : 'Xem thêm',
                                               style: TextStyle(
-                                                  color: Styles
-                                                      .textColor[Config.themeMode],
+                                                  color: Styles.textColor[
+                                                      Config.themeMode],
                                                   fontSize:
                                                       Styles.titleFontSize),
                                             ),
@@ -345,9 +357,7 @@ class _MovieDetailState extends State<MovieDetail>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-
                                         ActorList(actors: _movieDetail.actor),
-
                                       ],
                                     ),
                                   ),
@@ -451,8 +461,8 @@ class _MovieDetailState extends State<MovieDetail>
                                                 child: Text(
                                               "Dữ liệu đang được cập nhật",
                                               style: TextStyle(
-                                                  color: Styles
-                                                      .textColor[Config.themeMode],
+                                                  color: Styles.textColor[
+                                                      Config.themeMode],
                                                   fontSize: Styles.textSize),
                                             ))
                                           ]),
@@ -470,8 +480,7 @@ class _MovieDetailState extends State<MovieDetail>
   }
 
   @override
-  void onSearchComplete(Map<String, dynamic> results) {
-  }
+  void onSearchComplete(Map<String, dynamic> results) {}
   @override
   void onLoadMovieDetailComplete(Movie movie) {
     setState(() {

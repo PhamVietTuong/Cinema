@@ -35,7 +35,7 @@ class _ActorListState extends State<ActorList> {
                   '${actorList[i]}, '
                   , // Hiển thị tên diễn viên
                   style: TextStyle(
-                    color: Styles.textColor["dark_purple"],
+                    color: Styles.textColor[Config.themeMode],
                     fontSize: Styles.textSize,
                   ),
                   softWrap: true,
@@ -54,7 +54,7 @@ class _ActorListState extends State<ActorList> {
             child: Text(
               isExpanded2 ? 'Thu gọn' : 'Xem thêm',
               style: TextStyle(
-                color: Styles.textColor["dark_purple"],
+                color: Styles.textColor[Config.themeMode],
                 fontSize: Styles.textSize,
               ),
             ),
