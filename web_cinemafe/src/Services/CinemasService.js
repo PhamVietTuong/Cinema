@@ -1,4 +1,6 @@
+import { Axios } from "axios";
 import { baseService } from "./BaseService";
+import { DOMAIN, TOKEN } from "../Ustil/Settings/Config";
 
 export class CinemasService extends baseService {
     GetMovieList = () => {
@@ -42,7 +44,7 @@ export class CinemasService extends baseService {
     }
 
     CreateTheater = (theaterDTO) => {
-        return this.post(`api/Cinemas/CreateTheater`, theaterDTO)
+        return cinemasService.postImage(`api/Cinemas/CreateTheater`, theaterDTO);
     }
 
     GetTheaterId = (id) => {
@@ -128,17 +130,9 @@ export class CinemasService extends baseService {
     SearchByName = (name) => {
         return this.get(`api/Cinemas/SearchByName${name}`)
     }
-    
-    GetUserTypeList = () => {
-        return this.get(`api/Cinemas/GetUserTypeList`)
-    }
 
-    UpdateUserType = (userTypeDTO) => {
-        return this.post(`api/Cinemas/UpdateUserType`, userTypeDTO)
-    }
-
-    CreateUserType = (userTypeDTO) => {
-        return this.post(`api/Cinemas/CreateUserType`, userTypeDTO)
+    GetInvoiceList = (userId) => {
+        return this.get(`api/Cinemas/GetInvoiceList/${userId}`)
     }
 }
 

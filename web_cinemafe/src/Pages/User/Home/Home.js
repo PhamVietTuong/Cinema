@@ -20,10 +20,6 @@ const Home = () => {
         resultInfoSearch,
     } = useSelector((state) => state.CinemasReducer);
 
-    useEffect(() => {
-        console.log(resultInfoSearch);
-    }, [resultInfoSearch]);
-
     const hasMovies = resultInfoSearch?.movies && resultInfoSearch.movies.length > 0;
     const hasTheaters = resultInfoSearch?.theaters && resultInfoSearch.theaters.length > 0;
 

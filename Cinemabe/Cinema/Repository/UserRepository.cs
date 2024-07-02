@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
+using AutoMapper;
 
 namespace Cinema.Repository
 {
@@ -16,14 +17,16 @@ namespace Cinema.Repository
 	{
 		private readonly CinemaContext _context;
 		private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-		public UserRepository(CinemaContext context, IConfiguration configuration)
+        public UserRepository(CinemaContext context, IConfiguration configuration, IMapper mapper)
 		{
 			_context = context;
 			_configuration = configuration;
-		}
+            _mapper = mapper;
+        }
 
-		public async Task<User> CreateAsync(User entity)
+        public async Task<User> CreateAsync(User entity)
 		{
 			PasswordHashSalt passwordHashSalt = PasswordUtils.EncryptPassword(entity.PasswordHash);
 			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "user");
@@ -344,5 +347,25 @@ namespace Cinema.Repository
 			await _context.SaveChangesAsync();
 			return true;
 		}
-	}
+
+        public async Task<bool> ExistsAsync(Guid id)
+        {
+            return await _context.User.AnyAsync(x => x.Id == id);
+        }
+
+        public async Task<UserDTO> UpdateAsync(UserDTO entity)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(x => x.Id == entity.Id);
+
+            user.FullName = entity.FullName;
+            user.Phone = entity.Phone;
+            user.Email = entity.Email;
+            user.Gender = entity.Gender;
+            user.BirthDay = entity.BirthDay;
+
+            await _context.SaveChangesAsync();
+
+            return entity;
+        }
+    }
 }

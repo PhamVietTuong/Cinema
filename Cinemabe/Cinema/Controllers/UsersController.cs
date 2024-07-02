@@ -2,15 +2,21 @@
 using Cinema.Data.Models;
 using Cinema.DTOs;
 using Cinema.Helper;
+using Cinema.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        private const string user = "user";
+        private const string connectedRole = "user,admin";
+
         private readonly IUserRepository _userRepository;
 
         public UsersController(IUserRepository userRepository)
@@ -102,7 +108,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("ChangePassword")]
-        [AllowAnonymous]
+        [Authorize(Roles = user)]
         public async Task<IActionResult> ChangePassword(string changePassword, string userName)
         {
             if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(changePassword.Trim())) return BadRequest(" UserName or Password is empty");
@@ -111,6 +117,27 @@ namespace Cinema.Controllers
 
             var result = await _userRepository.ChangePassword(changePassword, userName);
             return result ? Ok() : NotFound("Not found user");
+        }
+
+        [HttpPost("UpdateUser")]
+        [Authorize(Roles = user)]
+        public async Task<ActionResult<UserDTO>> UpdateUser(UserDTO entity)
+        {
+            try
+            {
+                if (!await _userRepository.ExistsAsync(entity.Id))
+                {
+                    return NotFound();
+                }
+
+                var result = await _userRepository.UpdateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

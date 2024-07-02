@@ -114,7 +114,7 @@ const Header = (props) => {
                                                 <>
                                                     <span class="hd-regi-name">{loginInfo?.fullName}</span>
                                                     <div className="hd-regi-list --second">
-                                                        <Link className="link" href="">
+                                                        <Link to="account/account-profile/" className="link" href="">
                                                             <FontAwesomeIcon icon={faUser} />
                                                             Thông tin cá nhân
                                                         </Link>

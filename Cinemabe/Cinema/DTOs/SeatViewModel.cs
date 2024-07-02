@@ -7,20 +7,4 @@ namespace Cinema.DTOs
         public string RoomName { get; set; }
         public List<RowNameViewModel> RowName { get; set; }
     }
-
-	public class RowNameViewModel
-	{
-		public string RowName { get; set; }
-		public List<RowSeatViewModel> RowSeats { get; set; }
-	}
-
-    public class RowSeatViewModel 
-    {
-        public int ColIndex { get; set; }
-        public bool IsSeat { get; set; }
-        public string Name { get; set; }
-		public Guid? SeatTypeId { get; set; }
-        public string SeatTypeName { get; set; }
-        public SeatStatus SeatStatus { get; set; }    
-    }
 }

@@ -23,9 +23,9 @@ DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 
 --user type
 set @NEW_GUID =NEWID();
-insert UserType(Id, Name) values (@NEW_GUID, N'Admin')
+insert UserType(Id, Name) values (@NEW_GUID, N'admin')
 set @NEW_GUID =NEWID();
-insert UserType(Id, Name) values (@NEW_GUID, N'User')
+insert UserType(Id, Name) values (@NEW_GUID, N'user')
 
 DECLARE @GUID_theater1 UNIQUEIDENTIFIER;
 DECLARE @GUID_theater2 UNIQUEIDENTIFIER;

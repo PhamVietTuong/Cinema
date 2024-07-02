@@ -18,7 +18,7 @@ namespace Cinema.Repository
 
         public async Task<List<MovieDetailViewModel>> GetMovieList()
         {
-            var movieList = await _context.Movie.Include(x => x.AgeRestriction).ToListAsync();
+            var movieList = await _context.Movie.Include(x => x.AgeRestriction).Where(x => x.Status).ToListAsync();
 
             var rows = new List<MovieDetailViewModel>();
             foreach (var movie in movieList)

@@ -17,6 +17,9 @@ import SeatType from "./Pages/Admin/SeatType/SeatType";
 import UserType from "./Pages/Admin/UserType/UserType";
 import Theater from "./Pages/Admin/Theater/Theater";
 import ScrollToTop from "./ScrollToTop";
+import TheaterDetail from "./Pages/Admin/Theater/TheaterDetail";
+import GenerateSeats from "./Pages/GenerateSeat";
+import Profile from "./Pages/User/Account/Profile";
 
 const Routers = () => {
     return (
@@ -55,6 +58,7 @@ const Routers = () => {
                             }
                         />
                         <Route path="checkout/info" element={<InfoTicketBooking />} />
+                        <Route path="account/account-profile" element={<Profile />} />
                     </Route>
                     <Route path="/admin" element={<IndexAdmin />}>
                         <Route index path="admin" element={<AgeRestriction />} />
@@ -63,7 +67,8 @@ const Routers = () => {
                         <Route path="MovieType" element={<MovieType />} />
                         <Route path="SeatType" element={<SeatType />} />
                         <Route path="UserType" element={<UserType />} />
-                        <Route path="Theater" element={<Theater />} />
+                        <Route path="theater" element={<Theater />} />
+                        <Route path="theater/:id" element={<TheaterDetail />} />
                     </Route>
                 </Routes>
             </Router>
