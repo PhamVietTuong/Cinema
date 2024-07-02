@@ -173,11 +173,13 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: Styles.textSize,
+
                                             color: _selectedTabIndex != 0
                                                 ? Styles.boldTextColor[
                                                     Config.themeMode]
                                                 : Styles.textSelectionColor[
                                                     Config.themeMode],
+
                                           ),
                                         ),
                                       ),
@@ -341,11 +343,39 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                     .size
                                                     .height /
                                                 3,
-                                            child: WebView(
-                                              initialUrl:
-                                                  'https://www.youtube.com/embed/${trailers[index]}',
-                                              javascriptMode:
-                                                  JavascriptMode.unrestricted,
+
+                                            child: WebViewWidget(
+                                              controller: WebViewController()
+                                                ..setJavaScriptMode(
+                                                    JavaScriptMode.unrestricted)
+                                                ..setBackgroundColor(
+                                                    const Color(0x00000000))
+                                                ..setNavigationDelegate(
+                                                  NavigationDelegate(
+                                                    onProgress: (int progress) {
+                                                      // Update loading bar.
+                                                    },
+                                                    onPageStarted:
+                                                        (String url) {},
+                                                    onPageFinished:
+                                                        (String url) {},
+                                                    onHttpError:
+                                                        (HttpResponseError
+                                                            error) {},
+                                                    onWebResourceError:
+                                                        (WebResourceError
+                                                            error) {},
+                                                    onNavigationRequest:
+                                                        (NavigationRequest
+                                                            request) {
+                                                      return NavigationDecision
+                                                          .navigate;
+                                                    },
+                                                  ),
+                                                )
+                                                ..loadRequest(Uri.parse(
+                                                    'https://www.youtube.com/embed/${trailers[index]}')),
+
                                             ),
                                           );
                                         },

@@ -9,6 +9,7 @@ import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
+import 'package:cinema_app/views/7_ticket_info/payment_web_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -156,12 +157,38 @@ class _MovieDetailState extends State<MovieDetail>
                                       height:
                                           MediaQuery.of(context).size.height /
                                               3,
-                                      child: WebView(
-                                        initialUrl:
-                                            'https://www.youtube.com/embed/${_movieDetail.trailer}',
-                                        javascriptMode:
-                                            JavascriptMode.unrestricted,
-                                      ),
+                                      child: WebViewWidget(
+                                              controller: WebViewController()
+                                                ..setJavaScriptMode(
+                                                    JavaScriptMode.unrestricted)
+                                                ..setBackgroundColor(
+                                                    const Color(0x00000000))
+                                                ..setNavigationDelegate(
+                                                  NavigationDelegate(
+                                                    onProgress: (int progress) {
+                                                      // Update loading bar.
+                                                    },
+                                                    onPageStarted:
+                                                        (String url) {},
+                                                    onPageFinished:
+                                                        (String url) {},
+                                                    onHttpError:
+                                                        (HttpResponseError
+                                                            error) {},
+                                                    onWebResourceError:
+                                                        (WebResourceError
+                                                            error) {},
+                                                    onNavigationRequest:
+                                                        (NavigationRequest
+                                                            request) {
+                                                      return NavigationDecision
+                                                          .navigate;
+                                                    },
+                                                  ),
+                                                )
+                                                ..loadRequest(Uri.parse(
+                                                    'https://www.youtube.com/embed/${_movieDetail.trailer}')),
+                                            ),
                                     ),
                               // Nút play
                               Positioned.fill(

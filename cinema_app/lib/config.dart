@@ -66,6 +66,17 @@ class Styles {
 
   static NumberFormat formatter =
       NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+  static String formatDay(DateTime day) {
+    return '${day.day.toString().padLeft(2, "0")}/${day.month.toString().padLeft(2, "0")}/${day.year}';
+  }
+
+  static String formatTime(DateTime time) {
+    return '${time.hour.toString().padLeft(2, "0")}:${time.minute.toString().padLeft(2, "0")}:${time.second.toString().padLeft(2, "0")}';
+  }
+
+  static String formatDateTime(DateTime time) {
+    return '${formatTime(time)} ${formatDay(time)}';
+  }
 }
 
 class Config {
