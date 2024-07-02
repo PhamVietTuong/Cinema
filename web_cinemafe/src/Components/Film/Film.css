@@ -13,6 +13,7 @@
     height: auto;
     overflow: hidden;
     width: 100%;
+    border: 1px solid gray;
 }
 
 .web-movie-box .image>a>img {
@@ -139,6 +140,19 @@ a {
     justify-content: center;
     gap: 8px;
     position: relative;
+}
+
+.book-ticket {
+    color: #000;
+    border-radius: 4px;
+    border: none;
+    width: 150px !important;
+    height: 40px;
+    background: #f3ea28;
+}
+
+.book-ticket:hover {
+    background: linear-gradient(106deg, #639, #36c 102.69%);
 }
 
 @media (max-width: 1200px) {
