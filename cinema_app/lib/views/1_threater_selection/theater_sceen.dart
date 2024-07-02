@@ -17,12 +17,22 @@ class _TheaterScreenState extends State<TheaterScreen>
   late TheaterPresenter _theaterPresenter;
   bool _isLoadingData = true;
   List<TheaterItem> _theaterItemList = [];
+  String titleAppbar = "MUA VÉ";
+  String stateDes = "Đang tải";
+  void translate() async {
+    List<String> res = await Future.wait(
+        [Styles.translate(titleAppbar), Styles.translate(stateDes)]);
+    titleAppbar = res[0];
+    stateDes = res[1];
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
     _theaterPresenter = TheaterPresenter(this);
     _theaterPresenter.fetchTheaters();
+    translate();
   }
 
   @override
@@ -30,8 +40,10 @@ class _TheaterScreenState extends State<TheaterScreen>
     return Scaffold(
       backgroundColor: Styles.backgroundColor[Config.themeMode],
       appBar: AppBar(
-        title:  Text("MUA VÉ", style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),),
-      
+        title: Text(
+          titleAppbar,
+          style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
+        ),
         centerTitle: true,
         backgroundColor: Styles.backgroundContent[Config.themeMode],
         elevation: 1,
@@ -55,7 +67,7 @@ class _TheaterScreenState extends State<TheaterScreen>
           ),
           const SizedBox(height: 20),
           Text(
-            "Đang tải...",
+            "$stateDes....",
             style: TextStyle(
                 fontSize: Styles.titleFontSize,
                 fontWeight: FontWeight.bold,
