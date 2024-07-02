@@ -17,13 +17,11 @@ namespace Cinema.Repository
 	{
 		private readonly CinemaContext _context;
 		private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
 
-        public UserRepository(CinemaContext context, IConfiguration configuration, IMapper mapper)
+        public UserRepository(CinemaContext context, IConfiguration configuration)
 		{
 			_context = context;
 			_configuration = configuration;
-            _mapper = mapper;
         }
 
         public async Task<User> CreateAsync(User entity)
