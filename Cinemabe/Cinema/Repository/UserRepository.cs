@@ -234,7 +234,10 @@ namespace Cinema.Repository
 				{
 					throw new ArgumentException("Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
 				}
-
+				if (!Validate.IsValidUsername(register.UserName))
+				{
+					throw new ArgumentException("Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới.");
+				}
 				if (!string.IsNullOrEmpty(register.Email) && !Validate.IsEmail(register.Email))
 				{
 					throw new ArgumentException("Địa chỉ email không hợp lệ.");
@@ -291,6 +294,7 @@ namespace Cinema.Repository
 					Email = register.Email,
 					Phone = register.Phone,
 					BirthDay = register.BirthDay,
+					//nam:true, nu:false
 					Gender = register.Gender,
 					Status = true,
 					PasswordSalt = passwordHashSalt.Salt,

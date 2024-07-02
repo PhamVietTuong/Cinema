@@ -38,6 +38,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   bool isLoading = true;
   late int countSignle;
   late int countCouple;
+  int maxCol = 0;
   final hubConnection =
       HubConnectionBuilder().withUrl("$serverUrl/cinema").build();
   List<SeatRowData> seatRows = List.filled(0, SeatRowData(), growable: true);
@@ -301,6 +302,12 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
   void onLoadSeatComplete(List<SeatRowData> seatLst) {
     setState(() {
       seatRows = seatLst;
+      for (var row in seatRows) {
+        if (row.seats.last.colIndex > maxCol) {
+          maxCol = row.seats.last.colIndex;
+          print(maxCol);
+        }
+      }
 
       bool shouldBreak = false;
 
@@ -477,12 +484,12 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               SizedBox(
-                height: hS - 205,
+                height: hS * 0.747,
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   child: SizedBox(
-                    height: seatRows.length > 10 ? hS : hS - 200,
+                    height: seatRows.length > 10 ? hS : hS * 0.8,
                     child: Column(children: [
                       //chọn vị trí ghế
                       Expanded(
@@ -492,16 +499,17 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                           child: Column(
                             children: [
                               Container(
-                                width: wS + 200,
+                                width: maxCol > 6 ? wS * 2 : wS,
                                 margin: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
                                 child: Stack(
                                   children: [
                                     const CurvedLineWidget(),
                                     Positioned(
-                                      top: 10,
+                                      top: hS * 0.02,
                                       child: Container(
-                                        width: wS + 180,
+                                        width:
+                                            maxCol > 6 ? wS * 2 - 20 : wS - 20,
                                         alignment: Alignment.center,
                                         child: Text(
                                           "MÀN HÌNH",
@@ -609,7 +617,7 @@ class CurvedLineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(double.infinity, 35),
+      size: Size(double.infinity, MediaQuery.of(context).size.height * 0.05),
       painter: CurvedLinePainter(),
     );
   }

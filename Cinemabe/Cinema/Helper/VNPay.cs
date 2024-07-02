@@ -18,7 +18,7 @@ namespace Cinema.Helper
             return $"{baseUrl}?{queryString}&vnp_SecureHash={secureHash}";
         }
 
-        private static string ComputeHmacSha512Hash(string key, string inputData)
+        public static string ComputeHmacSha512Hash(string key, string inputData)
         {
             var hash = new StringBuilder();
             byte[] keyBytes = Encoding.UTF8.GetBytes(key);
@@ -51,17 +51,9 @@ namespace Cinema.Helper
         {
             return addresses.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
         }
-    }
-    public class VnPayCompare : IComparer<string>
-    {
-        public int Compare(string x, string y)
-        {
-            if (x == y) return 0;
-            if (x == null) return -1;
-            if (y == null) return 1;
-            var vnpCompare = CompareInfo.GetCompareInfo("en-US");
-            return vnpCompare.Compare(x, y, CompareOptions.Ordinal);
-        }
+
+        
     }
 
+    
 }

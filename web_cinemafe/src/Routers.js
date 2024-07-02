@@ -9,7 +9,7 @@ import IndexUser from "./Pages/User/IndexUser";
 import IndexAdmin from "./Pages/Admin/IndexAdmin";
 import AgeRestriction from "./Pages/Admin/AgeRestriction/AgeRestriction";
 import Checkout from "./Pages/User/Checkout/Checkout";
-import { ProtectedRoute, ProtectedRouteCheckout, ProtectedRouteLogin } from "./Pages/User/ProtectedRoute";
+import { ProtectedRouteCheckout, ProtectedRouteLogin } from "./Pages/User/ProtectedRoute";
 import ForgetPassword from "./Pages/User/ForgetPassword/ForgetPassword";
 import TicketType from "./Pages/Admin/TicketType/TicketType";
 import MovieType from "./Pages/Admin/MovieType/MovieType";
@@ -18,8 +18,9 @@ import UserType from "./Pages/Admin/UserType/UserType";
 import Theater from "./Pages/Admin/Theater/Theater";
 import ScrollToTop from "./ScrollToTop";
 import TheaterDetail from "./Pages/Admin/Theater/TheaterDetail";
-import GenerateSeats from "./Pages/GenerateSeat";
 import Profile from "./Pages/User/Account/Profile";
+import Showing from "./Pages/User/Showing/Showing";
+import Cooming from "./Pages/User/Cooming/Cooming";
 
 const Routers = () => {
     return (
@@ -33,6 +34,8 @@ const Routers = () => {
                         <Route path="movie/:id" element={<Detail />} />
                         <Route path="book-tickets/:id" element={<BookTickets />} />
                         <Route path="movie/:movieId" element={<Detail />} />
+                        <Route path="Showing" element={<Showing />} />
+                        <Route path="Cooming" element={<Cooming />} />
                         <Route
                             path="login"
                             element={

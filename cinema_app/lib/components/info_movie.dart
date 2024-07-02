@@ -37,25 +37,28 @@ class InfoMovie extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fitHeight,
-                  image: NetworkImage("$serverUrl/Images/${movie.img}"),
+                  image: movie.img.isNotEmpty
+                      ? NetworkImage("$serverUrl/Images/${movie.img}")
+                      : const AssetImage("assets/img/movie.png") as ImageProvider,
                 ),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // Widget cho hộp giới hạn tuổi
                   movie.ageRestrictionName.isNotEmpty
                       ? AgeRestrictionBox(
                           title: movie.ageRestrictionName,
                         )
                       : const SizedBox.shrink(),
                   const SizedBox(
-                    width: 2,
-                  ),
+                      width: 2), // Khoảng cách giữa các widget trong Row
+                  // Widget cho loại suất chiếu
                   ShowtimeTypeBox(
-                      title: movie.showTimeTypeName.isNotEmpty
-                          ? movie.showTimeTypeName
-                          : "")
+                    title: movie.showTimeTypeName.isNotEmpty
+                        ? movie.showTimeTypeName
+                        : "",
+                  ),
                 ],
               ),
             ),
@@ -63,9 +66,7 @@ class InfoMovie extends StatelessWidget {
               height: 5,
             ),
             Container(
-              constraints: BoxConstraints(
-                maxWidth: wImage*0.9
-              ),
+              constraints: BoxConstraints(maxWidth: wImage * 0.9),
               child: Text(
                 movie.name,
                 overflow: TextOverflow.ellipsis,

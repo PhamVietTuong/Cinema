@@ -4,14 +4,37 @@ import 'package:cinema_app/data/models/theater.dart';
 import 'package:cinema_app/views/2_showtime_selection/showtime_screen.dart';
 import 'package:flutter/material.dart';
 
-class TheaterItem extends StatelessWidget {
+class TheaterItem extends StatefulWidget {
   const TheaterItem({super.key, required this.theater});
   final Theater theater;
 
-  String formatPhoneNumber(String phoneNumber) {
-    return phoneNumber.replaceAllMapped(
-        RegExp(r'^(\d{3})(\d{3})(\d{4,})$'),
-        (match) => '${match[1]} ${match[2]} ${match[3]}');
+  @override
+  State<TheaterItem> createState() => _TheaterItemState();
+}
+
+class _TheaterItemState extends State<TheaterItem> {
+  late String theaterName;
+  late String theaterAddres;
+  String stateDes = "Đang tải";
+  void translate() async {
+    List<String> res = await Future.wait([
+      Styles.translate(theaterName),
+      Styles.translate(theaterAddres),
+      Styles.translate(stateDes)
+    ]);
+    theaterName = res[0];
+    theaterAddres = res[1];
+    stateDes = res[2];
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    theaterName = widget.theater.name;
+    theaterAddres = widget.theater.address;
+
+    translate();
   }
 
   @override
@@ -25,7 +48,7 @@ class TheaterItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  ShowTimeSceen(booking: Booking(theater: theater)),
+                  ShowTimeSceen(booking: Booking(theater: widget.theater)),
             ));
       },
       child: Container(
@@ -55,15 +78,16 @@ class TheaterItem extends StatelessWidget {
     return Container(
       width: screenWidth * 0.3,
       height: 110,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius)),
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(borderRadius)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
         child: Image(
           fit: BoxFit.fitHeight,
-          image: theater.img.isEmpty
-              ? const AssetImage('assets/img/theater_white.png') as ImageProvider
-              : NetworkImage('$serverUrl/Images/${theater.img}'),
+          image: widget.theater.img.isEmpty
+              ? const AssetImage('assets/img/theater_white.png')
+                  as ImageProvider
+              : NetworkImage('$serverUrl/Images/${widget.theater.img}'),
         ),
       ),
     );
@@ -77,7 +101,7 @@ class TheaterItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              theater.name,
+              theaterName,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -103,7 +127,7 @@ class TheaterItem extends StatelessWidget {
         const SizedBox(width: 5),
         Expanded(
           child: Text(
-            theater.address,
+            theaterAddres,
             style: TextStyle(
                 fontSize: Styles.textSize,
                 color: Styles.textColor[Config.themeMode]),
@@ -125,8 +149,8 @@ class TheaterItem extends StatelessWidget {
         const SizedBox(width: 5),
         Expanded(
           child: Text(
-            theater.phone.isNotEmpty
-                ? formatPhoneNumber(theater.phone)
+            widget.theater.phone.isNotEmpty
+                ? Styles.formatPhoneNumber(widget.theater.phone)
                 : 'Đang cập nhật',
             style: TextStyle(
                 fontSize: Styles.textSize,
@@ -137,4 +161,3 @@ class TheaterItem extends StatelessWidget {
     );
   }
 }
-
