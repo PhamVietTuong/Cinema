@@ -3,14 +3,14 @@ import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:cinema_app/views/Account/setting_screen.dart';
 import 'package:flutter/material.dart';
 
-class User extends StatefulWidget {
-  const User({super.key});
+class UserScreen extends StatefulWidget {
+  const UserScreen({super.key});
 
   @override
-  State<User> createState() => _UserState();
+  State<UserScreen> createState() => _UserState();
 }
 
-class _UserState extends State<User> {
+class _UserState extends State<UserScreen> {
   var styles = Styles();
   @override
   Widget build(BuildContext context) {

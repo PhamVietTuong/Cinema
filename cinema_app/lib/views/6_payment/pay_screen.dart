@@ -440,11 +440,16 @@ class _PayScreenState extends State<PayScreen> {
                     }
                   ]).then((value) {
                     if (value != null) {
+                      print(value.runtimeType);
+                      final orderId =
+                          (value as Map<String, dynamic>)["orderId"];
+                      final amount = value["amount"];
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => TicketInfoScreen(
-                              result: value,
+                              orderId: orderId,
+                              amount: amount,
                               booking: widget.booking,
                             ),
                           ));

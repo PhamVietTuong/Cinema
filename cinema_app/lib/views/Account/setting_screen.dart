@@ -1,5 +1,6 @@
 import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
+import 'package:country_icons/country_icons.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -70,7 +71,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           style: TextStyle(
                               fontSize: Styles.titleFontSize,
                               color: Styles.boldTextColor[Config.themeMode]),
-                        )
+                        ),
+                        Image.asset('icons/flags/png100px/vn.png',
+                            package: 'country_icons')
                       ],
                     ),
                   ],

@@ -53,5 +53,19 @@ namespace Cinema.Helper
 
             return hasUpperCase && hasLowerCase && hasDigits && hasSpecialChars;
         }
+        public static bool IsValidUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return false;
+            }
+
+            if (username.Length < 8 || username.Length > 20)
+            {
+                return false;
+            }
+            var usernameRegex = new Regex(@"^[a-zA-Z0-9_]+$");
+            return usernameRegex.IsMatch(username);
+        }
     }
 }

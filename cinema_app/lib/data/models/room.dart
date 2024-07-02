@@ -33,6 +33,4 @@ class Room {
 
 }
 
-abstract class RoomRepository {}
 
-class RoomRepositoryIml implements RoomRepository {}

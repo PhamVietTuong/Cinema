@@ -11,7 +11,8 @@ class ShowtimeFromTheater extends StatefulWidget {
       {super.key,
       required this.selectedDate,
       required this.item,
-      required this.movie, required this.scroll});
+      required this.movie,
+      required this.scroll});
 
   final DateTime selectedDate;
   final TheaterShowtime item;
@@ -25,11 +26,13 @@ class ShowtimeFromTheater extends StatefulWidget {
 class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
   bool isShow = false;
 
-@override
+  @override
   void initState() {
     super.initState();
-    
+    widget.item.showtimes
+        .sort((a, b) => a.startTime.compareTo(b.startTime));
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -41,8 +44,7 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
               isShow = !isShow;
             });
             widget.scroll();
-              // Cuộn xuống dưới cùng khi isShow là true
-             
+            // Cuộn xuống dưới cùng khi isShow là true
           },
           child: Container(
             padding: const EdgeInsets.all(10),
@@ -96,7 +98,10 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
                         .map(
                           (e) => ShowtimeItem(
                             showtimeRoom: e,
-                            booking: Booking(theater: Theater(id: widget.item.theaterId, name: widget.item.theaterName)),
+                            booking: Booking(
+                                theater: Theater(
+                                    id: widget.item.theaterId,
+                                    name: widget.item.theaterName)),
                             movie: widget.movie,
                             selectedDate: widget.selectedDate,
                           ),
