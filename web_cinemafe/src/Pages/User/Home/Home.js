@@ -1,15 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import './Home.css'
 import Slide from "../../../Components/Slide/Slide";
 import { MovieListAction, TheaterListAction } from "../../../Redux/Actions/CinemasAction";
 import BookQuickTicket from "../BookQuickTicket/BookQuickTicket";
 import { Grid } from "@mui/material";
 import TheaterComponent from "../../../Components/Theater/TheaterComponent";
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import moment from "moment";
 
 const Home = () => {
     const dispatch = useDispatch();
     const { movieList, theaterList } = useSelector((state) => state.CinemasReducer)
+
+    const [movieShowing, setMovieShowing] = useState([]);
+    const [movieCooming, setMovieCooming] = useState([]);
 
     useEffect(() => {
         dispatch(MovieListAction());
@@ -23,6 +29,17 @@ const Home = () => {
     useEffect(() => {
         console.log(resultInfoSearch);
     }, [resultInfoSearch]);
+
+    useEffect(() => {
+        if (movieList && movieList.length > 0) {
+            const today = moment();
+            const showing = movieList.filter(movie => moment(movie.releaseDate).isBefore(today));
+            const cooming = movieList.filter(movie => moment(movie.releaseDate).isAfter(today));
+
+            setMovieShowing(showing);
+            setMovieCooming(cooming);
+        }
+    }, [movieList]);
 
     const hasMovies = resultInfoSearch?.movies && resultInfoSearch.movies.length > 0;
     const hasTheaters = resultInfoSearch?.theaters && resultInfoSearch.theaters.length > 0;
@@ -70,7 +87,20 @@ const Home = () => {
                         <section className="web-movie-slide">
                             <div className="movie-showing ht">
                                 <div className="container">
-                                    <Slide movieList={movieList} />
+                                    <h1 className="title">PHIM ĐANG CHIẾU</h1>
+                                    <Slide movieList={movieShowing} />
+                                    <Link to="/">
+                                        <Button className="see-more">XEM THÊM</Button>
+                                    </Link>
+                                </div>
+                            </div>
+                            <div className="movie-cooming ht">
+                                <div className="container">
+                                    <h1 className="title">PHIM SẮP CHIẾU</h1>
+                                    <Slide movieList={movieCooming} />
+                                    <Link to="/">
+                                        <Button className="see-more">XEM THÊM</Button>
+                                    </Link>
                                 </div>
                             </div>
                         </section>
