@@ -20,7 +20,7 @@ a {
     top: 0;
     transition: all .4s;
     width: 100%;
-    z-index: 55;
+    z-index: 1000;
 }
 
 .hd-top {
