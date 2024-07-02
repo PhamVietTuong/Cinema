@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-var serverUrl = 'http://103.104.122.137:9000';
-//var serverUrl = 'https://10.0.2.2:7209';
-
+//var serverUrl = 'http://103.104.122.137:9000';
+var serverUrl = 'https://10.0.2.2:7209';
 
 class Styles {
   static const Map<String, Color> backgroundColor = {
@@ -17,7 +15,7 @@ class Styles {
   };
   static const Map<String, Color> btnColor = {
     "dark_purple": Color(0xff802ef7),
-    "light_purple": Colors.white
+    "light_purple": Color.fromARGB(255, 233, 218, 255)
   };
   static const Map<String, Color> boldTextColor = {
     "dark_purple": Color(0xffffffff),
@@ -25,23 +23,29 @@ class Styles {
   };
   static const Map<String, Color> textColor = {
     "dark_purple": Color(0xffcccbd5),
-    "light_purple": Colors.blueGrey
+    "light_purple": Color(0xff635D80),
   };
   static const Map<String, Color> gradientTop = {
     "dark_purple": Color(0xff802ef7),
-    "light_purple": Colors.white
+    "light_purple": Color(0xffB654C3),
   };
+
   static const Map<String, Color> gradientBot = {
     "dark_purple": Color(0xffB654C3),
-    "light_purple": Colors.white
+    "light_purple": Color(0xff7F61C8),
   };
+
   static const Map<String, Color> titleColor = {
     "dark_purple": Color(0xff774ECB),
-    "light_purple": Colors.white
+    "light_purple": Color(0xff6E55A9),
   };
   static const Map<String, Color> textSelectionColor = {
     "dark_purple": Color(0xffF3F647),
-    "light_purple": Colors.white
+    "light_purple": Color(0xffF3F647)
+  };
+  static const Map<String, Color> textBoldSelectionColor = {
+    "dark_purple": Colors.black,
+    "light_purple": Colors.white,
   };
 
   static const titleFontSize = 18.0;
@@ -68,6 +72,8 @@ class Config {
   static late SharedPreferences _prefs;
   static late String? themeMode;
   static late String? languageMode;
+  static late String? _token;
+  static late DateTime? _tokenExpirationTime;
 
   static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
@@ -95,35 +101,55 @@ class Config {
     languageMode = _prefs.getString(Constants.languageModeKey) ?? 'vi_VN';
   }
 
-  static Future<void> saveToken(String token) async {
-    await _prefs.setString('token', token);
+  static Future<void> saveToken(String token, DateTime expirationTime) async {
+    _token = token;
+    _tokenExpirationTime = expirationTime;
+
+    if (expirationTime.isBefore(DateTime.now())) {
+      // Token is already expired, clear it
+      await clearToken();
+      return;
+    }
+
+    await _prefs.setString(Constants.tokenKey, token);
+    await _prefs.setString(
+        Constants.tokenExpirationKey, expirationTime.toIso8601String());
   }
 
-  static String getToken() {
-    return _prefs.getString('token') ?? '';
+  static Future<void> clearToken() async {
+    await _prefs.remove(Constants.tokenKey);
+    await _prefs.remove(Constants.tokenExpirationKey);
+  }
+
+  static String? getToken() {
+    return _token ?? _prefs.getString(Constants.tokenKey);
   }
 
   static Future<List<String>> loadSearchHistory() async {
-    List<String> searchHistory = _prefs.getStringList('searchHistory') ?? [];
+    List<String> searchHistory =
+        _prefs.getStringList(Constants.searchHistory) ?? [];
     return searchHistory;
   }
 
   static Future<void> saveSearchQuery(String query) async {
-    List<String> searchHistory = _prefs.getStringList('searchHistory') ?? [];
+    List<String> searchHistory =
+        _prefs.getStringList(Constants.searchHistory) ?? [];
     if (!searchHistory.contains(query)) {
       searchHistory.add(query);
     }
-    await _prefs.setStringList('searchHistory', searchHistory.toSet().toList());
+    await _prefs.setStringList(
+        Constants.searchHistory, searchHistory.toSet().toList());
   }
 
   static Future<void> clearSearchHistory() async {
-    await _prefs.remove('searchHistory');
+    await _prefs.remove(Constants.searchHistory);
   }
 
   static Future<void> removeSearchQuery(String query) async {
-    List<String> searchHistory = _prefs.getStringList('searchHistory') ?? [];
+    List<String> searchHistory =
+        _prefs.getStringList(Constants.searchHistory) ?? [];
     searchHistory.remove(query);
-    await _prefs.setStringList('searchHistory', searchHistory);
+    await _prefs.setStringList(Constants.searchHistory, searchHistory);
   }
 }
 
@@ -131,6 +157,9 @@ class Constants {
   static const String themeModeKey = "themeMode";
   static const String languageModeKey = "languageMode";
   static const String defaultTheme = darkPurpleTheme;
+  static const String tokenKey = "token";
+  static const String tokenExpirationKey = "tokenExpiration";
+  static const String searchHistory = "searchHistory";
 
   static const String darkPurpleTheme = "dark_purple";
   static const String lightPurpleTheme = "light_purple";
