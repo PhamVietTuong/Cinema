@@ -10,7 +10,7 @@ const Film = (props) => {
         <>
             <div className="web-movie-box">
                 <div className="image">
-                    <Link to={`movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
+                    <Link to={`/movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
                         <img src={`${DOMAIN}/Images/${props.movie.image}`} alt={`${props.movie.image}`} />
                         <div className="attach">
                             <div className="type-movie">
@@ -29,7 +29,7 @@ const Film = (props) => {
                 </div>
 
                 <div className="info">
-                    <Link className='name' to={`movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
+                    <Link className='name' to={`/movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
                         {props.movie.name}
                     </Link>
 
@@ -40,7 +40,7 @@ const Film = (props) => {
                             </span>
                             <span className="txt">Xem trailer</span>
                         </a>
-                        <Link to={`movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}><Button className="book-ticket">ĐẶT VÉ</Button></Link>
+                        <Link to={`/movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}><Button className="book-ticket">ĐẶT VÉ</Button></Link>
                     </div>
                 </div>
             </div>
