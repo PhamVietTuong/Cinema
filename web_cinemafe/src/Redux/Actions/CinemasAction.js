@@ -3,7 +3,7 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { INFO_SEARCH, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { INFO_SEARCH, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_INFO_THEATER, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 import { paymentsService } from "../../Services/PaymentsService";
 
 export const MovieListAction = () => {
@@ -226,7 +226,7 @@ export const GetTheaterListAdminAction = (code) => {
     }
 }
 
-export const UpdateTheaterAction = (theaterDTO) => {
+export const UpdateTheaterAction = (theaterDTO, navigate) => {
     return async (dispatch) => {
         try {
             const result = await cinemasService.UpdateTheater(theaterDTO);
@@ -240,6 +240,7 @@ export const UpdateTheaterAction = (theaterDTO) => {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         dispatch(GetTheaterListAdminAction());
+                        navigate('/admin/theater');
                     }
                 });
             }
@@ -251,6 +252,7 @@ export const UpdateTheaterAction = (theaterDTO) => {
                 confirmButtonText: "Ok",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    window.location.reload()
                     console.log("UpdateTheaterAction: ", error);
                 }
             });
@@ -825,6 +827,48 @@ export const SearchByNameAction = (name) => {
             })
         } catch (error) {
             console.log("SearchByNameAction: ", error);
+        }
+    }
+}
+
+export const GetInfoTheaterByIdAction = (id) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTheaterId(id);
+
+            dispatch({
+                type: SET_INFO_THEATER,
+                infoTheater: result.data,
+            })
+        } catch (error) {
+            console.log("GetInfoTheaterByIdAction: ", error);
+        }
+    }
+}
+
+export const UpdateTheaterDetailsAction = (id) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetTheaterId(id);
+
+            dispatch({
+                type: SET_INFO_THEATER,
+                infoTheater: result.data,
+            })
+        } catch (error) {
+            console.log("GetInfoTheaterByIdAction: ", error);
+        }
+    }
+}
+
+
+export const GetInvoiceListAction = (userId) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetInvoiceList(userId);
+            console.log(result);
+        } catch (error) {
+            console.log("GetInvoiceListAction: ", error);
         }
     }
 }

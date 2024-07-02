@@ -155,7 +155,7 @@ const IndexAdmin = () => {
                             </ListItemButton>
                         </Link>
 
-                        <Link to="Theater">
+                        <Link to="theater">
                             <ListItemButton>
                                 <ListItemIcon>
                                     <Inbox />

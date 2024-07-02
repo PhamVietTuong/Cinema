@@ -1,0 +1,16 @@
+.MuiBox-root {
+    color: #1e2226;
+}
+
+.theater-detail h2 {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}

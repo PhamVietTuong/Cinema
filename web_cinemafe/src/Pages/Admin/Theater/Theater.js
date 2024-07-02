@@ -4,32 +4,28 @@ import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from "react-redux";
 import { GetTheaterListAdminAction } from "../../../Redux/Actions/CinemasAction";
 import { Edit } from "@mui/icons-material";
-import TheaterDialog from "./TheaterDialog";
 import { DOMAIN } from "../../../Ustil/Settings/Config";
+import { useNavigate } from "react-router-dom";
+import TheaterDialog from "./TheaterDialog";
 
 const Theater = () => {
     const dispatch = useDispatch();
-    const { theaterList } = useSelector((state) => state.CinemasReducer)
+    const navigate = useNavigate();
 
+    const { theaterList } = useSelector((state) => state.CinemasReducer)
+    
     const [editDialogOpen, setEditDialogOpen] = useState(false);
-    const [currentRow, setCurrentRow] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
 
     const handleEditClick = (row) => {
-        setCurrentRow(row);
-        setIsEditing(true);
-        setEditDialogOpen(true);
+        navigate(`/admin/theater/${row.id}`);
     };
 
     const handleCreateClick = () => {
-        setCurrentRow(null);
-        setIsEditing(false);
         setEditDialogOpen(true);
     };
 
     const handleEditDialogClose = () => {
         setEditDialogOpen(false);
-        setCurrentRow(null);
     };
 
     const columns = useMemo(() => [
@@ -68,9 +64,7 @@ const Theater = () => {
                     icon={<Edit />} 
                     label="Edit" 
                     onClick={() => handleEditClick(params.row)} 
-
                 />
-                // <GridActionsCellItem icon={<Delete />} label="Delete" />,
             ],
         },
     ], []);
@@ -106,8 +100,6 @@ const Theater = () => {
                 <TheaterDialog
                     open={editDialogOpen}
                     onClose={handleEditDialogClose}
-                    row={currentRow}
-                    isEditing={isEditing}
                 />
             )}
         </>

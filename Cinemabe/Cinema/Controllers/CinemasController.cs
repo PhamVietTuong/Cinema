@@ -1,6 +1,7 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data.Enum;
 using Cinema.DTOs;
+using Cinema.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -354,7 +355,7 @@ namespace Cinema.Controllers
 
         [HttpPost("UpdateTheater")]
         [AllowAnonymous]
-        public async Task<ActionResult<TheaterDTO>> UpdateAgeRestriction(TheaterDTO entity)
+        public async Task<ActionResult<TheaterDTO>> UpdateTheater(TheaterDTO entity)
         {
             try
             {
@@ -375,7 +376,7 @@ namespace Cinema.Controllers
 
         [HttpPost("CreateTheater")]
         [AllowAnonymous]
-        public async Task<ActionResult<TheaterDTO>> CreateTheater(TheaterDTO entity)
+        public async Task<ActionResult<TheaterDTO>> CreateTheater([FromForm] TheaterDTO entity)
         {
             try
             {
@@ -517,6 +518,22 @@ namespace Cinema.Controllers
             try
             {
                 var result = await _invoiceRepository.GetInvoiceAsync(code);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("GetInvoiceList/{userId}")]
+        [Authorize(Roles = user)]
+        public async Task<ActionResult<InvoiceViewModel>> GetInvoiceList(Guid userId)
+        {
+            try
+            {
+                var result = await _invoiceRepository.InvoiceListOfUserAsync(userId);
 
                 return Ok(result);
             }

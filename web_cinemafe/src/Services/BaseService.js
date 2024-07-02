@@ -20,6 +20,20 @@ export class baseService {
         });
     };
 
+    postImage = (url, model) => {
+        const headers = {
+            Authorization: "Bearer " + sessionStorage.getItem(TOKEN),
+            'Content-Type': 'multipart/form-data',
+        };
+
+        return Axios({
+            url: `${DOMAIN}/${url}`,
+            method: "POST",
+            data: model,
+            headers: headers,
+        });
+    };
+
     get = (url) => {
         return Axios({
             url: `${DOMAIN}/${url}`,

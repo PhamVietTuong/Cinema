@@ -33,6 +33,7 @@ namespace Cinema.Repository
 
             var ticket = await _context.InvoiceTicket
                 .Include(x => x.Seat)
+                .Include(x => x.Invoice)
                 .Where(x => x.ShowTimeId == vm.ShowTimeId && x.Seat.RoomId == vm.RoomId).ToListAsync();
 
             var seatTypeTicketTypes = await _context.SeatTypeTicketType
@@ -69,7 +70,7 @@ namespace Cinema.Repository
                                                 Name = name,
                                                 SeatTypeId = rowSeatViewModel.SeatTypeId,
                                                 SeatTypeName = rowSeatViewModel.SeatType?.Name,
-                                                SeatStatus = ticket.Any(x => x.RoomId == rowSeatViewModel.RoomId && x.ColIndex == rowSeatViewModel.ColIndex && x.RowName == rowSeatViewModel.RowName) ? SeatStatus.Sold : SeatStatus.Empty,
+                                                SeatStatus = ticket.Any(x => x.RoomId == rowSeatViewModel.RoomId && x.ColIndex == rowSeatViewModel.ColIndex && x.RowName == rowSeatViewModel.RowName && x.Invoice.Status == InvoiceStatus.Successful) ? SeatStatus.Sold : SeatStatus.Empty,
                                             };
                                         }).OrderBy(x => x.ColIndex).ThenBy(x => x.Name)
                                         .ToList()

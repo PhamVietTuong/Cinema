@@ -11,12 +11,12 @@ const schema = yup.object().shape({
     phone: yup.string().required('Phone is required'),
 });
 
-const TheaterDialog = ({ open, onClose, row, isEditing }) => {
+const TheaterDialog = ({ open, onClose}) => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         name: '',
         address: '',
-        image: '',
+        image: null,
         phone: '',
         status: false,
     });
@@ -28,27 +28,18 @@ const TheaterDialog = ({ open, onClose, row, isEditing }) => {
         phone: '',
     });
 
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
     useEffect(() => {
-        if (row && open) {
-            setFormData({
-                id: row.id,
-                name: row.name,
-                address: row.address,
-                image: row.image,
-                phone: row.phone,
-                status: row.status,
-            });
-        } else {
             setFormData({
                 name: '',
                 address: '',
-                image: '',
+                image: null,
                 phone: '',
                 status: false,
             });
-        }
-    }, [row]);
+        setImagePreviewUrl(null);
+    }, []);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -56,6 +47,23 @@ const TheaterDialog = ({ open, onClose, row, isEditing }) => {
             ...formData,
             [name]: value,
         });
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setFormData({
+            ...formData,
+            file: file,
+            image: file.name,
+        });
+        validateField('image', file.name);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagePreviewUrl(reader.result);
+        };
+        if (file) {
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSwitchChange = (event) => {
@@ -79,27 +87,27 @@ const TheaterDialog = ({ open, onClose, row, isEditing }) => {
             });
         }
     };
-
     const handleSubmit = async () => {
         try {
             await schema.validate(formData, { abortEarly: false });
-            if (isEditing) {
-                dispatch(UpdateTheaterAction(formData));
-            } else {
-                dispatch(CreateTheaterAction(formData));
+            const formDataToSubmit = new FormData();
+            for (const key in formData) {
+                formDataToSubmit.append(key, formData[key]);
             }
+            console.log(formData);
+
+            dispatch(CreateTheaterAction(formDataToSubmit));
             onClose();
         } catch (error) {
             console.error('Validation Error:', error.errors);
             error.inner.forEach(err => {
-                setErrors({
-                    ...errors,
+                setErrors(prevErrors => ({
+                    ...prevErrors,
                     [err.path]: err.message,
-                });
+                }));
             });
         }
     };
-
     return (
         <>
             <Fragment>
@@ -110,7 +118,7 @@ const TheaterDialog = ({ open, onClose, row, isEditing }) => {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {isEditing ? "Edit Theater" : "Create Theater"}
+                        Create Theater
                     </DialogTitle>
                     <DialogContent>
                         <TextField
@@ -137,20 +145,16 @@ const TheaterDialog = ({ open, onClose, row, isEditing }) => {
                             error={!!errors.address}
                             helperText={errors.address}
                         />
-                        <TextField
-                            margin="dense"
+                        {imagePreviewUrl && <img src={imagePreviewUrl} alt="Image Preview" style={{ width: '100%', marginTop: '10px' }} />}
+                        <label htmlFor="image">Image:</label>
+                        <input
+                            type="file"
+                            id="image"
                             name="image"
-                            label="Image"
-                            type="text"
-                            fullWidth
-                            value={formData.image}
-                            onChange={handleInputChange}
-                            onBlur={(event) => validateField(event.target.name, event.target.value)}
-                            error={!!errors.image}
-                            helperText={errors.image}
+                            accept="image/png, image/jpeg"
+                            onChange={handleFileChange}
                         />
-                        <label for="image">Image:</label>
-                        <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
+                        {errors.image && <p style={{ color: 'red' }}>{errors.image}</p>}
                         <TextField
                             margin="dense"
                             name="phone"

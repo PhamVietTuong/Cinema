@@ -12,7 +12,7 @@ import moment from "moment";
 
 const Home = () => {
     const dispatch = useDispatch();
-    const { movieList, theaterList } = useSelector((state) => state.CinemasReducer)
+    const { movieList, theaterList, resultInfoSearch } = useSelector((state) => state.CinemasReducer)
 
     const [movieShowing, setMovieShowing] = useState([]);
     const [movieCooming, setMovieCooming] = useState([]);
@@ -21,14 +21,6 @@ const Home = () => {
         dispatch(MovieListAction());
         dispatch(TheaterListAction());
     }, [dispatch]);
-
-    const {
-        resultInfoSearch,
-    } = useSelector((state) => state.CinemasReducer);
-
-    useEffect(() => {
-        console.log(resultInfoSearch);
-    }, [resultInfoSearch]);
 
     useEffect(() => {
         if (movieList && movieList.length > 0) {

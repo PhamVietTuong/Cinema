@@ -6,7 +6,6 @@ import { GetAgeRestrictionListAction } from "../../../Redux/Actions/CinemasActio
 import { Edit } from "@mui/icons-material";
 import AgeRestrictionDialog from "./AgeRestrictionDialog";
 
-
 const AgeRestriction = () => {
     const dispatch = useDispatch();
     const { ageRestrictionList } = useSelector((state) => state.CinemasReducer)
