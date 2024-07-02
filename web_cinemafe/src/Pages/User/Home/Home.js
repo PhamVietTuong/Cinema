@@ -81,18 +81,22 @@ const Home = () => {
                                 <div className="container">
                                     <h1 className="title">PHIM ĐANG CHIẾU</h1>
                                     <Slide movieList={movieShowing} />
-                                    <Link to="/showing">
-                                        <Button className="see-more">XEM THÊM</Button>
-                                    </Link>
+                                    <div className="text-center">
+                                        <Link to="/showing">
+                                            <Button className="see-more">XEM THÊM</Button>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                             <div className="movie-cooming ht">
                                 <div className="container">
                                     <h1 className="title">PHIM SẮP CHIẾU</h1>
                                     <Slide movieList={movieCooming} />
-                                    <Link to="/cooming">
-                                        <Button className="see-more">XEM THÊM</Button>
-                                    </Link>
+                                    <div className="text-center">
+                                        <Link to="/cooming">
+                                            <Button className="see-more">XEM THÊM</Button>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </section>

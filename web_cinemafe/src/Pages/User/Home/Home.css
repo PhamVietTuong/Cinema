@@ -164,7 +164,7 @@ video {
     border: 1px #f3ea28 solid;
     height: 42px;
     width: 232px;
-    margin-left: 484px;
+    /* margin-left: 484px; */
     margin-top: 26px;
     margin-bottom: 40px;
 }
