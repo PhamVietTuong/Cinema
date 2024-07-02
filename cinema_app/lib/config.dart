@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 //var serverUrl = 'http://103.104.122.137:9000';
 var serverUrl = 'https://10.0.2.2:7209';
-
 
 class Styles {
   static const Map<String, Color> backgroundColor = {
@@ -62,6 +60,17 @@ class Styles {
 
   static NumberFormat formatter =
       NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+  static String formatDay(DateTime day) {
+    return '${day.day.toString().padLeft(2, "0")}/${day.month.toString().padLeft(2, "0")}/${day.year}';
+  }
+
+  static String formatTime(DateTime time) {
+    return '${time.hour.toString().padLeft(2, "0")}:${time.minute.toString().padLeft(2, "0")}:${time.second.toString().padLeft(2, "0")}';
+  }
+
+  static String formatDateTime(DateTime time) {
+    return '${formatTime(time)} ${formatDay(time)}';
+  }
 }
 
 class Config {

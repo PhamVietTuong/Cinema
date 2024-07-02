@@ -9,6 +9,7 @@ import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/2_showtime_selection/day_item_box.dart';
+import 'package:cinema_app/views/7_ticket_info/payment_web_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -152,12 +153,38 @@ class _MovieDetailState extends State<MovieDetail>
                                       height:
                                           MediaQuery.of(context).size.height /
                                               3,
-                                      child: WebView(
-                                        initialUrl:
-                                            'https://www.youtube.com/embed/${_movieDetail.trailer}',
-                                        javascriptMode:
-                                            JavascriptMode.unrestricted,
-                                      ),
+                                      child: WebViewWidget(
+                                              controller: WebViewController()
+                                                ..setJavaScriptMode(
+                                                    JavaScriptMode.unrestricted)
+                                                ..setBackgroundColor(
+                                                    const Color(0x00000000))
+                                                ..setNavigationDelegate(
+                                                  NavigationDelegate(
+                                                    onProgress: (int progress) {
+                                                      // Update loading bar.
+                                                    },
+                                                    onPageStarted:
+                                                        (String url) {},
+                                                    onPageFinished:
+                                                        (String url) {},
+                                                    onHttpError:
+                                                        (HttpResponseError
+                                                            error) {},
+                                                    onWebResourceError:
+                                                        (WebResourceError
+                                                            error) {},
+                                                    onNavigationRequest:
+                                                        (NavigationRequest
+                                                            request) {
+                                                      return NavigationDecision
+                                                          .navigate;
+                                                    },
+                                                  ),
+                                                )
+                                                ..loadRequest(Uri.parse(
+                                                    'https://www.youtube.com/embed/${_movieDetail.trailer}')),
+                                            ),
                                     ),
                               // Nút play
                               Positioned.fill(
@@ -174,8 +201,8 @@ class _MovieDetailState extends State<MovieDetail>
                                         ? Icon(
                                             Icons.play_circle_fill,
                                             size: 64,
-                                            color: Styles
-                                                .boldTextColor[Config.themeMode],
+                                            color: Styles.boldTextColor[
+                                                Config.themeMode],
                                           )
                                         : const Text(""),
                                   ),
@@ -222,8 +249,8 @@ class _MovieDetailState extends State<MovieDetail>
                                         _movieDetail.name,
                                         softWrap: true,
                                         style: TextStyle(
-                                            color: Styles
-                                                .boldTextColor[Config.themeMode],
+                                            color: Styles.boldTextColor[
+                                                Config.themeMode],
                                             fontSize: Styles.titleFontSize),
                                       ),
                                       TimeBox(time: _movieDetail.time),
@@ -301,14 +328,13 @@ class _MovieDetailState extends State<MovieDetail>
                                                 ? _movieDetail.director
                                                 : 'Đang cập nhật',
                                             style: TextStyle(
-                                              color: Styles
-
-                                                  .textColor[Config.themeMode],
-                                              fontSize: Styles.textSize),
-                                          maxLines:
-                                              isDirectorExpanded ? null : 10,
-                                          overflow: TextOverflow.ellipsis,
-
+                                                color: Styles.textColor[
+                                                    Config.themeMode],
+                                                fontSize: Styles.textSize),
+                                            maxLines:
+                                                isDirectorExpanded ? null : 10,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                         if (_movieDetail.director.length > 20)
                                           GestureDetector(
@@ -323,8 +349,8 @@ class _MovieDetailState extends State<MovieDetail>
                                                   ? 'Thu gọn'
                                                   : 'Xem thêm',
                                               style: TextStyle(
-                                                  color: Styles
-                                                      .textColor[Config.themeMode],
+                                                  color: Styles.textColor[
+                                                      Config.themeMode],
                                                   fontSize:
                                                       Styles.titleFontSize),
                                             ),
@@ -344,9 +370,7 @@ class _MovieDetailState extends State<MovieDetail>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-
                                         ActorList(actors: _movieDetail.actor),
-
                                       ],
                                     ),
                                   ),
@@ -450,8 +474,8 @@ class _MovieDetailState extends State<MovieDetail>
                                                 child: Text(
                                               "Dữ liệu đang được cập nhật",
                                               style: TextStyle(
-                                                  color: Styles
-                                                      .textColor[Config.themeMode],
+                                                  color: Styles.textColor[
+                                                      Config.themeMode],
                                                   fontSize: Styles.textSize),
                                             ))
                                           ]),
@@ -469,8 +493,7 @@ class _MovieDetailState extends State<MovieDetail>
   }
 
   @override
-  void onSearchComplete(Map<String, dynamic> results) {
-  }
+  void onSearchComplete(Map<String, dynamic> results) {}
   @override
   void onLoadMovieDetailComplete(Movie movie) {
     setState(() {

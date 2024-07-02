@@ -79,7 +79,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
+        decoration:
+            BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: Center(
           child: isLoadingData
               ? Column(
@@ -172,8 +173,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: Styles.textSize,
-                                            color: Styles
-                                                .boldTextColor[Config.themeMode],
+                                            color: Styles.boldTextColor[
+                                                Config.themeMode],
                                           ),
                                         ),
                                       ),
@@ -306,31 +307,63 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                               Text(
                                 "Video",
                                 style: TextStyle(
-                                    color: Styles.boldTextColor[Config.themeMode],
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
                                     fontSize: Styles.titleFontSize,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: MediaQuery.of(context).size.height / 3,
-                                child: trailers.isNotEmpty? PageView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: trailers.length,
-                                  itemBuilder: (context, index) {
-                                    return SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          30,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              3,
-                                      child: WebView(
-                                        initialUrl:
-                                            'https://www.youtube.com/embed/${trailers[index]}',
-                                        javascriptMode:
-                                            JavascriptMode.unrestricted,
-                                      ),
-                                    );
-                                  },
-                                ):SizedBox.shrink(),
+                                child: trailers.isNotEmpty
+                                    ? PageView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: trailers.length,
+                                        itemBuilder: (context, index) {
+                                          return SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                30,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                3,
+                                            child: WebViewWidget(
+                                              controller: WebViewController()
+                                                ..setJavaScriptMode(
+                                                    JavaScriptMode.unrestricted)
+                                                ..setBackgroundColor(
+                                                    const Color(0x00000000))
+                                                ..setNavigationDelegate(
+                                                  NavigationDelegate(
+                                                    onProgress: (int progress) {
+                                                      // Update loading bar.
+                                                    },
+                                                    onPageStarted:
+                                                        (String url) {},
+                                                    onPageFinished:
+                                                        (String url) {},
+                                                    onHttpError:
+                                                        (HttpResponseError
+                                                            error) {},
+                                                    onWebResourceError:
+                                                        (WebResourceError
+                                                            error) {},
+                                                    onNavigationRequest:
+                                                        (NavigationRequest
+                                                            request) {
+                                                      return NavigationDecision
+                                                          .navigate;
+                                                    },
+                                                  ),
+                                                )
+                                                ..loadRequest(Uri.parse(
+                                                    'https://www.youtube.com/embed/${trailers[index]}')),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : SizedBox.shrink(),
                               ),
                             ],
                           ),
@@ -345,8 +378,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   }
 
   @override
-  void onSearchComplete(Map<String, dynamic> results) {
-  }
+  void onSearchComplete(Map<String, dynamic> results) {}
   @override
   void onLoadMoviesComplete(List<Movie> movies) {
     setState(() {
