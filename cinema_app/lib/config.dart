@@ -173,10 +173,9 @@ class Styles {
   }
 
   static Future<String> translate(String text) async {
-    if (Config.languageMode!.compareTo(Constants.codeVNKey) == 0) return text;
     final translator = GoogleTranslator();
     return await translator
-        .translate(text, from: Constants.codeVNKey, to: Config.languageMode!)
+        .translate(text, to: Config.languageMode!)
         .then((value) => value.text);
   }
 }
@@ -190,10 +189,10 @@ class Config {
 
   static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-    await Future.wait([
-      _prefs.remove(Constants.themeModeKey),
-      _prefs.remove(Constants.languageModeKey)
-    ]);
+    // await Future.wait([
+    //   _prefs.remove(Constants.themeModeKey),
+    //   _prefs.remove(Constants.languageModeKey)
+    // ]);
 
     await loadMode();
   }
@@ -206,7 +205,6 @@ class Config {
   static Future<void> setLanguageMode(String mode) async {
     await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
-    print(languageMode);
   }
 
   static Future<void> loadMode() async {
