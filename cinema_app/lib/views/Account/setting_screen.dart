@@ -41,7 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Container(
                 margin: const EdgeInsets.symmetric(
                     horizontal: Styles.defaultHorizontal, vertical: 10),
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   color: Styles.backgroundContent[Config.themeMode],
                   borderRadius: BorderRadius.circular(5),
@@ -54,30 +54,59 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.language_outlined,
-                          color: Styles.boldTextColor[Config.themeMode],
+                child: DropdownButton(
+                    value: Config.languageMode,
+                    dropdownColor: Styles.backgroundContent[Config.themeMode],
+                    style: TextStyle(
+                        color: Styles.boldTextColor[Config.themeMode],
+                        fontSize: Styles.titleFontSize),
+                    isExpanded: true,
+                    isDense: true,
+                    icon: Icon(Icons.keyboard_arrow_down_outlined,
+                        color: Styles.boldTextColor[Config.themeMode]),
+                    underline: const SizedBox(),
+                    items: Constants.languages.entries.map((e) {
+                      return DropdownMenuItem(
+                        value: e.key,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.language_outlined,
+                              color: Styles.boldTextColor[Config.themeMode],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Ngôn ngữ",
+                              style: TextStyle(
+                                  fontSize: Styles.titleFontSize,
+                                  color:
+                                      Styles.boldTextColor[Config.themeMode]),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              'icons/flags/png100px/${Constants.flags[e.key]}.png',
+                              width: 50,
+                              height: 30,
+                              package: 'country_icons',
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Text(e.value),
+                            )
+                          ],
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Ngôn ngữ",
-                          style: TextStyle(
-                              fontSize: Styles.titleFontSize,
-                              color: Styles.boldTextColor[Config.themeMode]),
-                        ),
-                        Image.asset('icons/flags/png100px/vn.png',
-                            package: 'country_icons')
-                      ],
-                    ),
-                  ],
-                ),
+                      );
+                    }).toList(),
+                    onChanged: (e) async {
+                      await Config.setLanguageMode(e!);
+                      setState(() {});
+                    }),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(

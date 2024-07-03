@@ -173,10 +173,10 @@ class Styles {
   }
 
   static Future<String> translate(String text) async {
-   // if (Config.languageMode!.compareTo(Constants.codeVNKey) == 0) return text;
+    if (Config.languageMode!.compareTo(Constants.codeVNKey) == 0) return text;
     final translator = GoogleTranslator();
     return await translator
-        .translate(text, from: Constants.codeVNKey, to: Constants.codeENKey)
+        .translate(text, from: Constants.codeVNKey, to: Config.languageMode!)
         .then((value) => value.text);
   }
 }
@@ -190,6 +190,11 @@ class Config {
 
   static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
+    await Future.wait([
+      _prefs.remove(Constants.themeModeKey),
+      _prefs.remove(Constants.languageModeKey)
+    ]);
+
     await loadMode();
   }
 
@@ -201,6 +206,7 @@ class Config {
   static Future<void> setLanguageMode(String mode) async {
     await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
+    print(languageMode);
   }
 
   static Future<void> loadMode() async {
@@ -279,8 +285,12 @@ class Constants {
   static const String tokenExpirationKey = "tokenExpiration";
   static const String searchHistory = "searchHistory";
 
-  static const String codeVNKey = 'vi';
-  static const String codeENKey = 'en';
+  static const String codeVNKey = 'vi'; // Vietnamese
+  static const String codeENKey = 'en'; // English
+  static const String codeFrench = 'fr'; // French
+  static const String codeGerman = 'de'; // German
+  static const String codeJapanese = 'ja'; // Japanese
+  static const String codeRussian = 'ru'; // Russian
 
   static const String darkPurpleTheme = "dark_purple";
   static const String lightPurpleTheme = "light_purple";
@@ -309,5 +319,18 @@ class Constants {
   static final Map<String, String> languages = {
     codeVNKey: "Tiếng Việt",
     codeENKey: "Tiếng Anh",
+    //codeFrench: "Tiếng Pháp",
+   // codeGerman: "Tiếng Đức",
+    codeJapanese: "Tiếng Nhật",
+   // codeRussian: "Tiếng Nga",
+  };
+
+  static final Map<String, String> flags = {
+    codeVNKey: "vn",
+    codeENKey: "us",
+    //codeFrench: "fr",
+    //codeGerman: "de",
+    codeJapanese: "jp",
+   // codeRussian: "ru",
   };
 }
