@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Slide from "../../../Components/Slide/Slide";
 import { MovieListAction } from "../../../Redux/Actions/CinemasAction";
-import { Grid } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import TheaterComponent from "../../../Components/Theater/TheaterComponent";
 import moment from "moment";
 import Film from "../../../Components/Film/Film";
@@ -12,9 +12,10 @@ const Cooming = () => {
     const { movieList } = useSelector((state) => state.CinemasReducer);
 
     const [movieCooming, setMovieCooming] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(MovieListAction());
+        dispatch(MovieListAction()).then(() => setLoading(false));
     }, [dispatch]);
 
     const {
@@ -36,6 +37,14 @@ const Cooming = () => {
 
     const hasMovies = resultInfoSearch?.movies && resultInfoSearch.movies.length > 0;
     const hasTheaters = resultInfoSearch?.theaters && resultInfoSearch.theaters.length > 0;
+
+    if (loading) {
+        return (
+            <Box sx={{ textAlign: 'center' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <>

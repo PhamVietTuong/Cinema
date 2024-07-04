@@ -150,6 +150,7 @@ video {
 }
 
 .web-movie-slide .title {
+    user-select: none;
     text-align: center;
     margin-bottom: 50px;
     font-family: "Anton",

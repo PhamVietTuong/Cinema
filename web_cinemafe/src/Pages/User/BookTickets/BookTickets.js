@@ -1,5 +1,5 @@
 import './BookTickets.css'
-import { Box, Grid, Tab } from '@mui/material';
+import { Box, CircularProgress, Grid, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import BookTicket from '../../../Components/Film/BookTicket';
 import { useState } from 'react';
@@ -17,15 +17,24 @@ const BookTickets = () => {
     const dispatch = useDispatch();
     const [value, setValue] = useState('1');
     const { theaterDetail, listMovieByTheaterId } = useSelector((state) => state.CinemasReducer)
+    const [loading, setLoading] = useState(true);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     useEffect(() => {
-        dispatch(TheaterAction(id))
-        dispatch(ShowTimeByTheaterIdAction(id))
+        dispatch(TheaterAction(id)).then(() => setLoading(false));
+        dispatch(ShowTimeByTheaterIdAction(id)).then(() => setLoading(false));
     }, [dispatch, id]);
+
+    if (loading) {
+        return (
+            <Box sx={{ textAlign: 'center' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <>

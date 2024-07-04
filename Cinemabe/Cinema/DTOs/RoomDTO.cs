@@ -1,4 +1,5 @@
-﻿using Cinema.Data.Models;
+﻿using Cinema.Data.Enum;
+using Cinema.Data.Models;
 
 namespace Cinema.DTOs
 {
@@ -12,7 +13,7 @@ namespace Cinema.DTOs
         public Guid Id { get; set; }
         public Guid TheaterId { get; set; }
         public string Name { get; set; }
-        public bool Status { get; set; }
+        public RoomStatus Status { get; set; }
         public List<RowNameViewModel> RowName { get; set; }
         public List<RowNameViewModel> RowNameNew { get; set; }
     }

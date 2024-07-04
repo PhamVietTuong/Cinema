@@ -137,7 +137,7 @@ const findSeatByRowAndCol = (rowName, colIndex, seats) => {
     return null;
 };
 
-export const TicketBooking = (invoiceDTO) => {
+export const TicketBooking = (invoiceDTO, selectedPaymentMethod) => {
     return async (dispatch, getState) => {
         try {
             const handleInforTicket = async (seatInfos, seatStatus) => {
@@ -173,7 +173,14 @@ export const TicketBooking = (invoiceDTO) => {
             await connection.on("InforTicket", handleInforTicket);
             const result = await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO)
             if (result) {
-                const response = await paymentsService.CreateLinkCheckoutMomo(result);
+                let response;
+
+                if (selectedPaymentMethod === 'Momo') {
+                    response = await paymentsService.CreateLinkCheckoutMomo(result);
+                } else if (selectedPaymentMethod === 'VNPay') {
+                    response = await paymentsService.CreateLinkCheckoutVNPAY(result);
+                }
+
                 if (response.status === 200) {
                     const data = response.data;
                     window.location.href = data.paymentUrl;

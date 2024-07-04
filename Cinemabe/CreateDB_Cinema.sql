@@ -69,7 +69,7 @@ CREATE TABLE [User] (
 	[UserTypeId] uniqueidentifier NOT NULL,
     [UserName] varchar(255) NOT NULL,
     [FullName] varchar(255) NOT NULL,
-    [Email] varchar(255),
+    [Email] varchar(255) NOT NULL,
     [Phone] varchar(255),
 	[BirthDay] datetime,
 	[Gender] bit,
@@ -121,7 +121,7 @@ CREATE TABLE [Room] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
 	[TheaterId] uniqueidentifier NOT NULL,
     [Name] nvarchar(255) NOT NULL,
-	[Status] bit NOT NULL,
+	[Status] int NOT NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Room_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
 	CONSTRAINT UQ_Room_TheaterId_Name UNIQUE (TheaterId, Name)

@@ -143,6 +143,7 @@ const Theater = (props) => {
     } = useSelector((state) => state.CinemasReducer);
     const {
         userId,
+        isLoggedIn
     } = useSelector((state) => state.UserReducer);
     const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
     const [selectedheaterName, setSelectedTheaterName] = useState(null);
@@ -283,6 +284,10 @@ const Theater = (props) => {
     }
 
     const showTimeIdHandele = async (showTimeId, roomId, theaterId) => {
+        if (!isLoggedIn) {
+            return navigate("/login");
+        }
+
         if (connection) {
             await connection.stop();
 
@@ -453,7 +458,13 @@ const Theater = (props) => {
     const renderTabs = () => {
         return dates.map((date, index) => {
             return (
-                <Nav.Item onClick={() => { setShowTicketType_Seat_Combo(false); setActiveDateIndex(index); }}>
+                <Nav.Item onClick={() => 
+                    { 
+                        setShowTicketType_Seat_Combo(false);
+                        setActiveDateIndex(index); 
+                        setSelectedShowTimeColorActiveId({ showTimeId: null, roomId: null }) 
+                    }}
+                >
                     <Nav.Link 
                         eventKey={`tab-${index}`} 
                         className='swiper-slide'

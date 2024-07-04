@@ -4,7 +4,7 @@ import './Home.css'
 import Slide from "../../../Components/Slide/Slide";
 import { MovieListAction, TheaterListAction } from "../../../Redux/Actions/CinemasAction";
 import BookQuickTicket from "../BookQuickTicket/BookQuickTicket";
-import { Grid } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import TheaterComponent from "../../../Components/Theater/TheaterComponent";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
@@ -16,10 +16,11 @@ const Home = () => {
 
     const [movieShowing, setMovieShowing] = useState([]);
     const [movieCooming, setMovieCooming] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(MovieListAction());
-        dispatch(TheaterListAction());
+        dispatch(MovieListAction()).then(() => setLoading(false));
+        dispatch(TheaterListAction()).then(() => setLoading(false));
     }, [dispatch]);
 
     useEffect(() => {
@@ -36,6 +37,14 @@ const Home = () => {
     const hasMovies = resultInfoSearch?.movies && resultInfoSearch.movies.length > 0;
     const hasTheaters = resultInfoSearch?.theaters && resultInfoSearch.theaters.length > 0;
 
+    if (loading) {
+        return (
+            <Box sx={{ textAlign: 'center' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+    
     return (
         <>
             {

@@ -37,6 +37,7 @@ a {
 
 .swiper {
     position: Static;
+    user-select: none;
 }
 
 .swiper-button-next {
