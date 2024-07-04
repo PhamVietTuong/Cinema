@@ -34,7 +34,7 @@ const Header = (props) => {
                             <div className="container">
                                 <div className="hd-top-wr">
                                     <div className="popup-top-logo">
-                                        <img src="/Images/HeaderAndFooter/app-icon.webp" alt="" />
+                                        <img src="/Images/logo.png" alt="" />
                                         <div className="popup-top-content">
                                             <div className="text" >
                                                 <span className="txt">Tải ứng dụng CineStar Cinema.</span>
@@ -61,7 +61,7 @@ const Header = (props) => {
                                 aria-label="The logo of Cinestar"
                                 href="/"
                             >
-                                <img alt="CineStar Logo" src="/Images/HeaderAndFooter/header-logo.webp" />
+                                <img alt="CineStar Logo" src="/Images/logo.png" />
                             </a>
                             <div className="hd-action" >
                                 <a className="btn book-now" href="/movie/">
@@ -114,7 +114,7 @@ const Header = (props) => {
                                                 <>
                                                     <span class="hd-regi-name">{loginInfo?.fullName}</span>
                                                     <div className="hd-regi-list --second">
-                                                        <Link className="link" href="">
+                                                        <Link to="account/account-profile/" className="link" href="">
                                                             <FontAwesomeIcon icon={faUser} />
                                                             Thông tin cá nhân
                                                         </Link>

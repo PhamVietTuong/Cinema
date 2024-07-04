@@ -22,6 +22,7 @@ namespace Cinema.DTOs
         public int NumberTicket { get; set; }
         public string ShowTimeType { get; set; }
         public string SeatName { get; set; }
+        public double TotalPrice { get; set; }
         public List<InvoiceFoodAndDrinkViewModel> FoodAndDrinks { get; set; }
     }
 }

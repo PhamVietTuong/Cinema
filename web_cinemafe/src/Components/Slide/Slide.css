@@ -1,22 +1,15 @@
+
 .web-movie-list {
     position: relative;
 }
 
-/* .swiper {
-    width: 100%;
-    height: 100%;
-} */
-
 .swiper-slide {
     text-align: center;
     font-size: 18px;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-
     width: 100%;
     height: auto;
     overflow: hidden;
+    position: relative;
 }
 
 .pointer {
@@ -26,4 +19,47 @@
 a {
     color: rgb(2, 67, 132);
     text-decoration: none;
+}
+
+.swiper-button-next, .swiper-button-prev {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-weight: 800;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all .2s;
+    z-index: 999;
+    color: #fff;
+}
+
+.swiper {
+    position: Static;
+    user-select: none;
+}
+
+.swiper-button-next {
+    right: -40px;
+}
+
+.swiper-button-prev {
+    left: -40px;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    color: #f3ea28;
+}
+
+.swiper-pagination {
+    position: unset;
+    margin-top: 24px;
+}
+
+.swiper-pagination-bullet {
+    background-color: #fff;
+    width: 12px;
+    height: 12px;
 }

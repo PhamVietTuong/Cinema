@@ -18,7 +18,7 @@
     margin: 0 auto;
     max-width: 1230px !important;
     padding: 0 15px;
-    width: 100%;
+    width: 100%;    
 }
 
 @media (min-width: 768px) {
@@ -147,6 +147,32 @@ video {
     font-size: 40px;
     color: rgb(248, 250, 252);
     text-transform: uppercase;
+}
+
+.web-movie-slide .title {
+    user-select: none;
+    text-align: center;
+    margin-bottom: 50px;
+    font-family: "Anton",
+        sans-serif;
+    font-size: 40px;
+}
+
+.web-movie-slide .see-more {
+    background-color: #0f172a;
+    color: #f3ea28;
+    border-radius: 4px;
+    border: 1px #f3ea28 solid;
+    height: 42px;
+    width: 232px;
+    /* margin-left: 484px; */
+    margin-top: 26px;
+    margin-bottom: 40px;
+}
+
+.web-movie-slide .see-more:hover {
+    color: #fff;
+    background: linear-gradient(90deg, #ff6d00, #ffc107);
 }
 
 @media (max-width: 1200px) {

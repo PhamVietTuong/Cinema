@@ -80,36 +80,54 @@ namespace Cinema.Controllers
                     return BadRequest(new { error = "Invalid signature" });
                 }
 
+                if (ipnRequest.ResultCode != 0)
+                {
+                    return BadRequest(new { error = "Transaction failed" });
+                }
+
                 bool isUpdated = await _invoiceRepository.UpdateCodeStatusAsync(ipnRequest.OrderId, ipnRequest.ResultCode);
 
                 if (isUpdated)
                 {
-                    var movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
-
-                    if (movieInfo != null)
+                    if (ipnRequest.OrderInfo.Contains("web"))
                     {
-                        var resultData = new
+                        var movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
+
+                        if (movieInfo != null)
                         {
-                            barcode = ipnRequest.OrderId,
-                            payment = ipnRequest.PayType,
-                            movieInfo
-                        };
-                        var resultJson = JsonConvert.SerializeObject(resultData);
-                        var bytes = Encoding.UTF8.GetBytes(resultJson);
-                        var base64Result = Convert.ToBase64String(bytes);
+                            var resultData = new
+                            {
+                                barcode = ipnRequest.OrderId,
+                                movieInfo
+                            };
+                            var resultJson = JsonConvert.SerializeObject(resultData);
+                            var bytes = Encoding.UTF8.GetBytes(resultJson);
+                            var base64Result = Convert.ToBase64String(bytes);
 
-                        var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
-                        return Redirect(customUrl);
+                            var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
+                            return Redirect(customUrl);
+                        }
+                        else
+                        {
+                            return BadRequest(new { error = "Failed to retrieve movie information" });
+                        }
                     }
-                    else
+                    else if (ipnRequest.OrderInfo.Contains("app"))
                     {
-                        return BadRequest(new { error = "Failed to retrieve movie information" });
+                        var response = new Dictionary<string, string>
+                        {
+                            { "RspCode", ipnRequest.ResultCode.ToString() },
+                            { "Message", ipnRequest.Message }
+                        };
+                        return Ok(response);
                     }
                 }
                 else
                 {
                     return BadRequest(new { error = "Failed to update order status" });
                 }
+
+                return BadRequest(new { error = "Unhandled case" });
             }
             catch (Exception ex)
             {
@@ -162,6 +180,7 @@ namespace Cinema.Controllers
             var hashSecret = _configuration["VNPay:HashSecret"];
             var responseCode = vnpParams["vnp_ResponseCode"];
             var message = "Payment success";
+            var application = vnpParams["vnp_OrderInfo"];
 
             try
             {
@@ -202,6 +221,33 @@ namespace Cinema.Controllers
                 { "RspCode", responseCode },
                 { "Message", message }
             };
+
+            if (application.Contains("web"))
+            {
+                var movieInfo = await _invoiceRepository.GetInvoiceAsync(vnpParams["vnp_TxnRef"]);
+                if (movieInfo != null)
+                {
+                    var resultData = new
+                    {
+                        barcode = vnpParams["vnp_TxnRef"],
+                        movieInfo
+                    };
+                    var resultJson = JsonConvert.SerializeObject(resultData);
+                    var bytes = Encoding.UTF8.GetBytes(resultJson);
+                    var base64Result = Convert.ToBase64String(bytes);
+
+                    var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
+                    return Redirect(customUrl);
+                }
+                else
+                {
+                    return BadRequest(new { error = "Failed to retrieve movie information" });
+                }
+            }
+            else if (application.Contains("app"))
+            {
+                return Ok(response);
+            }
 
             return Ok(response);
         }

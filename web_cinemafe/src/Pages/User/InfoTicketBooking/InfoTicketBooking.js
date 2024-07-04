@@ -5,6 +5,8 @@ import moment from 'moment';
 import "moment/locale/vi";
 import { DOMAIN } from '../../../Ustil/Settings/Config';
 import { Box, CircularProgress } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetInvoiceListAction } from '../../../Redux/Actions/CinemasAction';
 
 const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -15,7 +17,7 @@ const formatDate = (dateString) => {
 
 const InfoTicketBooking = () => {
     const [movieInfo, setMovieInfo] = useState(null);
-
+    const dispatch = useDispatch();
     const location = useLocation();
 
     useEffect(() => {
@@ -28,7 +30,6 @@ const InfoTicketBooking = () => {
                     const decodedResult = decodeURIComponent(escape(atob(result)));
                     const decodedJson = JSON.parse(decodedResult);
                     setMovieInfo(decodedJson.movieInfo);
-                    console.log(decodedJson);
                 } catch (error) {
                     console.error("Error decoding JSON:", error);
                 }
@@ -36,7 +37,7 @@ const InfoTicketBooking = () => {
         };
 
         fetchData();
-    }, [location.search]);
+    }, [location.search, dispatch]);
 
     if (!movieInfo) {
         return <Box sx={{ textAlign: 'center' }}>

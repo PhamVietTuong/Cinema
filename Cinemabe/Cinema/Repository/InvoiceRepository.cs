@@ -88,5 +88,33 @@ namespace Cinema.Repository
 
             return true;
         }
+
+        public async Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(Guid? userId)
+        {
+            var invoices = await _context.Invoice.Where(x => x.UserId == userId).ToListAsync();
+
+            var result = new List<InvoiceViewModel>();  
+
+            foreach(var invoice in invoices)
+            {
+                var invoiceTicket = await _context.InvoiceTicket
+                    .Include(x => x.Room)
+                        .ThenInclude(x => x.Theater)
+                    .Include(x => x.ShowTime)
+                    .FirstOrDefaultAsync(x => x.Code == invoice.Code);
+                var invoiceTickets = await _context.InvoiceTicket.Where(x => x.Code == invoice.Code).ToListAsync();
+                var invoiceFoodAndDrinks = await _context.InvoiceFoodAndDrink.Where(x => x.Code == invoice.Code).ToListAsync();
+
+                result.Add(new InvoiceViewModel
+                {
+                    Code = invoice.Code,
+                    TheaterName = invoiceTicket.Room.Theater.Name,
+                    ShowTimeStartTime = invoiceTicket.ShowTime.StartTime,
+                    TotalPrice = invoiceTickets.Select(x => x.Price).Sum() + invoiceFoodAndDrinks.Select(x => x.Price * x.Quantity).Sum(),
+                });
+            }
+
+            return result;
+        }
     }
 }
