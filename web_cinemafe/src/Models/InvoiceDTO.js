@@ -3,6 +3,7 @@ export class InvoiceDTO {
     roomId = '';
     theaterId = '';
     userId = '';
+    orderInfo = 'CKC cinema web'
     invoiceTickets = [];
     foodAndDrinks = []
 }

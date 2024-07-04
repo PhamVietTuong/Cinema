@@ -124,7 +124,7 @@ const TheaterDialog = ({ open, onClose}) => {
                         <TextField
                             margin="dense"
                             name="name"
-                            label="Name"
+                            label="Tên"
                             type="text"
                             fullWidth
                             value={formData.name}
@@ -136,7 +136,7 @@ const TheaterDialog = ({ open, onClose}) => {
                         <TextField
                             margin="dense"
                             name="address"
-                            label="Address"
+                            label="Địa chỉ"
                             type="text"
                             fullWidth
                             value={formData.address}
@@ -168,7 +168,7 @@ const TheaterDialog = ({ open, onClose}) => {
                             helperText={errors.phone}
                         />
                         <FormControlLabel
-                            label="Status"
+                            label="Trạng thái"
                             labelPlacement="start"
                             control={
                                 <Switch
@@ -181,9 +181,9 @@ const TheaterDialog = ({ open, onClose}) => {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={onClose}>Cancel</Button>
+                        <Button onClick={onClose}>Hủy bỏ</Button>
                         <Button onClick={handleSubmit} autoFocus>
-                            Save
+                            Lưu
                         </Button>
                     </DialogActions>
                 </Dialog>

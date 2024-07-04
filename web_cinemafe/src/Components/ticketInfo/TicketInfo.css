@@ -96,6 +96,7 @@
 .form-footer .inner-info-row .ct {
     font-size: 26px;
     font-weight: 600;
+    color: rgb(255, 255, 255);
 }
 
 /* Assuming $mobile is a max-width breakpoint, e.g., 600px */

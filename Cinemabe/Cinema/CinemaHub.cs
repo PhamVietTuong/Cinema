@@ -60,7 +60,8 @@ namespace Cinema
                     .Where(x => x.ShowTimeId == entity.ShowTimeId &&
                                 x.Seat.RoomId == entity.RoomId &&
                                 x.Seat.RowName == infoSeat.RowName &&
-                                x.Seat.ColIndex == infoSeat.ColIndex)
+                                x.Seat.ColIndex == infoSeat.ColIndex &&
+                                x.Invoice.Status == InvoiceStatus.Successful)
                     .Select(x => new InfoSeat { RowName = x.Seat.RowName, ColIndex = x.Seat.ColIndex })
                     .ToListAsync();
 
@@ -198,7 +199,7 @@ namespace Cinema
 
                     await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.InvoiceTickets.Select(x => new { x.RowName, x.ColIndex }), SeatStatus.Sold);
 
-                    return new PaymentInvoiceDTO { OrderId = invoice.Code, Amount = totalPrice };
+                    return new PaymentInvoiceDTO { OrderId = invoice.Code, Amount = totalPrice, OrderInfo = entity.OrderInfo };
                 }
             }
             catch (Exception ex)

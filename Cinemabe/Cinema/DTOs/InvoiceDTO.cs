@@ -11,6 +11,7 @@
         public Guid RoomId { get; set; }
         public Guid ShowTimeId { get; set; }
         public Guid TheaterId { get; set; }
+        public string OrderInfo { get; set; }
         public List<InvoiceTicketDTO> InvoiceTickets { get; set; }
         public List<InvoiceFoodAndDrinkDTO> FoodAndDrinks { get; set; }
     }

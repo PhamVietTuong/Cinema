@@ -1,4 +1,6 @@
-﻿namespace Cinema.Data.Models
+﻿using Cinema.Data.Enum;
+
+namespace Cinema.Data.Models
 {
     public class Room
     {
@@ -6,6 +8,6 @@
         public Guid TheaterId { get; set; }
         public Theater Theater { get; set; }
         public string Name { get; set; }
-		public bool Status { get; set; }
+		public RoomStatus Status { get; set; }
     }
 }
