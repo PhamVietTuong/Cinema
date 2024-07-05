@@ -3,7 +3,6 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class LoginContent extends StatefulWidget {
