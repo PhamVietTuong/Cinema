@@ -171,3 +171,6 @@ DROP COLUMN Name
 
 ALTER TABLE Invoice
 ALTER COLUMN Status int 
+
+ALTER TABLE Room
+ALTER COLUMN Status int 

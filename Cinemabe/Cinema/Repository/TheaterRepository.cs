@@ -23,7 +23,7 @@ namespace Cinema.Repository
 
         public async Task<List<TheaterDTO>> GetAllTheater()
         {
-            var theaters = await _context.Theater.Where(x => x.Status).ToListAsync();
+            var theaters = await _context.Theater.Where(x => x.Status).OrderBy(x => x.Name).ToListAsync();
             var result = new List<TheaterDTO>();
 
             foreach (var theater in theaters)
@@ -71,6 +71,37 @@ namespace Cinema.Repository
             {
                 void addMovie(int time, ProjectionForm form)
                 {
+                    var schedules = item.showTimes
+                            .Where(sRoom => sRoom.ShowTime.ProjectionForm == form)
+                            .GroupBy(sRoom => sRoom.ShowTime.StartTime.Date)
+                            .Select(st => new ScheduleRowViewModel
+                            {
+                                Date = st.Key,
+                                Theaters = st.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address, x.Room.TheaterId })
+                                .Select(x => new TheaterRowViewModel
+                                {
+                                    TheaterId = x.Key.TheaterId,
+                                    TheaterAddress = x.Key.Address,
+                                    TheaterName = x.Key.Name,
+                                    ShowTimes = x.Select(showtime =>
+                                    {
+                                        bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == showtime.RoomId).Any(x => x.SeatType.Name == "Nằm");
+                                        return new ShowTimeRowViewModel
+                                        {
+                                            RoomId = showtime.Room.Id,
+                                            RoomName = showtime.Room.Name,
+                                            ShowTimeId = showtime.ShowTime.Id,
+                                            StartTime = showtime.ShowTime.StartTime,
+                                            EndTime = showtime.ShowTime.EndTime,
+                                            ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
+                                        };
+                                    }).ToList()
+
+                                }).ToList(),
+                            }).ToList();
+
+                    bool isSpecial = item.movie.ReleaseDate > DateTime.Now && schedules.Any();
+
                     rows.Add(new MovieDetailViewModel
                     {
                         Id = item.movie.Id,
@@ -89,34 +120,8 @@ namespace Cinema.Repository
                         MovieType = String.Join(", ", item.types.Select(type => type.MovieType.Name)),
                         ShowTimeTypeName = form == ProjectionForm.Time2D ? "2D" : "3D",
                         ProjectionForm = (int)form,
-                        Schedules = item.showTimes
-                            .Where(sRoom => sRoom.ShowTime.ProjectionForm == form)
-                            .GroupBy(sRoom => sRoom.ShowTime.StartTime.Date)
-                            .Select(st => new ScheduleRowViewModel
-                            {
-                                Date = st.Key,
-                                Theaters = st.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address, x.Room.TheaterId })
-                                .Select(x => new TheaterRowViewModel
-                                {
-                                    TheaterId = x.Key.TheaterId,
-                                    TheaterAddress = x.Key.Address,
-                                    TheaterName = x.Key.Name,
-                                    ShowTimes = x.Select(showtime =>
-                                     {
-                                         bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == showtime.RoomId).Any(x => x.SeatType.Name == "Nằm");
-                                         return new ShowTimeRowViewModel
-                                         {
-                                             RoomId = showtime.Room.Id,
-                                             RoomName = showtime.Room.Name,
-                                             ShowTimeId = showtime.ShowTime.Id,
-                                             StartTime = showtime.ShowTime.StartTime,
-                                             EndTime = showtime.ShowTime.EndTime,
-                                             ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
-                                         };
-                                     }).ToList()
-
-                                }).ToList(),
-                            }).ToList()
+                        IsSpecial = isSpecial,
+                        Schedules = schedules
 
                     });
                 }
@@ -144,7 +149,7 @@ namespace Cinema.Repository
                 Name = x.Name,
                 Phone = x.Phone,
                 Status = x.Status,
-                CountRoom = _context.Room.Count(r => r.TheaterId == x.Id && r.Status == true),
+                CountRoom = _context.Room.Count(r => r.TheaterId == x.Id && r.Status == RoomStatus.Active),
                 CountSeat = _context.Seat.Count(s => s.Room.TheaterId == x.Id && s.IsSeat == true)
             }).ToListAsync();
 
@@ -222,6 +227,14 @@ namespace Cinema.Repository
             return await _context.Theater.AnyAsync(x => x.Id == id);
         }
 
+        private async Task<RoomStatus> CheckShowTimeOfRoom( Guid roomId)
+        {
+            bool hasShowTime = await _context.ShowTimeRoom
+                .Include(x => x.ShowTime)
+                .AnyAsync(x => x.ShowTime.Status && x.RoomId == roomId);
+            return hasShowTime ? RoomStatus.WaitForCancellation : RoomStatus.Cancelled;
+        }
+
         public async Task<TheaterDTO> UpdateAsync(TheaterDTO entity)
         {
             var theater = await _context.Theater.FirstOrDefaultAsync(x => x.Id == entity.Id);
@@ -243,14 +256,14 @@ namespace Cinema.Repository
                         Id = roomDto.Id,
                         TheaterId = theater.Id,
                         Name = roomDto.Name,
-                        Status = roomDto.Status
+                        Status = roomDto.Status == RoomStatus.Active ? RoomStatus.Active : await  CheckShowTimeOfRoom(roomDto.Id),
                     };
                     _context.Room.Add(room);
                 }
                 else
                 {
                     room.Name = roomDto.Name;
-                    room.Status = roomDto.Status;
+                    room.Status = roomDto.Status == RoomStatus.Active ? RoomStatus.Active : await CheckShowTimeOfRoom(roomDto.Id);
                 }
 
                 if(roomDto.RowNameNew.Any())

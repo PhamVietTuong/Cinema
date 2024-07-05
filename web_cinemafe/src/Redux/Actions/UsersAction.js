@@ -41,7 +41,7 @@ export const RegisterUserAction = (register, navigate) => {
                     confirmButtonText: "Ok",
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate("/login");
+                        window.location.reload();
                     }
                 });
             }
