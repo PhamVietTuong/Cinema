@@ -21,6 +21,64 @@ DELETE FROM FoodAndDrink;
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
 
+DECLARE @Guid_MemberShip1 UNIQUEIDENTIFIER;
+DECLARE @Guid_MemberShip2 UNIQUEIDENTIFIER;
+DECLARE @Guid_MemberShip3 UNIQUEIDENTIFIER;
+
+--Insert member ship
+set @Guid_MemberShip1 = NEWID();
+set @Guid_MemberShip2 = NEWID();
+set @Guid_MemberShip3 = NEWID();
+Insert MemberShip(Id, Name, Description,Value, Status) values (@Guid_MemberShip1, N'Đồng', null,0, 1),
+(@Guid_MemberShip2, N'Bạc', null,5000, 1), (@Guid_MemberShip3, N'Vàng', null,10000, 1)
+--holiday
+-- Tết Nguyên Đán
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Tết Nguyên Đán', N'Tết Âm lịch, ngày lễ lớn nhất ở Việt Nam', '02-10', '02-10', 1);
+
+-- Ngày Quốc tế Lao động
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Ngày Quốc tế Lao động', N'Ngày lễ kỷ niệm công nhân và lao động quốc tế', '05-01', '05-01', 1);
+
+-- Ngày Giải phóng miền Nam
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Ngày Giải phóng miền Nam', N'Kỷ niệm ngày Giải phóng miền Nam, thống nhất đất nước', '04-30', '04-30', 1);
+
+-- Tết Trung Thu
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Tết Trung Thu', N'Ngày lễ dành cho thiếu nhi', '09-13', '09-13', 1);
+
+-- Giáng Sinh
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Giáng Sinh', N'Ngày lễ kỷ niệm Chúa Giêsu ra đời', '12-25', '12-25', 1);
+
+-- Ngày Quốc khánh
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Ngày Quốc khánh', N'Ngày kỷ niệm thành lập nước Việt Nam', '09-02', '09-02', 1);
+
+-- Ngày Phụ nữ Việt Nam
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Ngày Phụ nữ Việt Nam', N'Ngày tôn vinh phụ nữ Việt Nam', '10-20', '10-20', 1);
+
+-- ngày quốc tế phụ nữ
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Ngày quốc tế phụ nữ', N'Ngày quốc tế phụ nữ', '03-08', '03-08', 1);
+
+-- Ngày Nhà giáo Việt Nam
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+VALUES (NEWID(), N'Ngày Nhà giáo Việt Nam', N'Ngày tôn vinh các nhà giáo', '11-20', '11-20', 1);
+
+DECLARE @Guid_DiscountType1 UNIQUEIDENTIFIER;
+DECLARE @Guid_DiscountType2 UNIQUEIDENTIFIER;
+DECLARE @Guid_DiscountType3 UNIQUEIDENTIFIER;
+--discount type 
+SET @Guid_DiscountType1 = NEWID();
+INSERT DiscountType(Id, Name) VALUES (@Guid_DiscountType1, N'amout')
+SET @Guid_DiscountType2 = NEWID();
+INSERT DiscountType(Id, Name) VALUES (@Guid_DiscountType2, N'precent')
+SET @Guid_DiscountType3 = NEWID();
+INSERT DiscountType(Id, Name) VALUES (@Guid_DiscountType3, N'gift')
+
 --user type
 set @NEW_GUID =NEWID();
 insert UserType(Id, Name) values (@NEW_GUID, N'admin')
@@ -482,13 +540,13 @@ SET @GUID_seatType3 = NEWID();
 INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType3, N'Nằm', 1)
 
 --đơn - hssv, lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType1,45000)
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType2,70000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType1,45000,65000,45000,65000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType2,70000,90000,45000,65000)
 --đôi - lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType2,@GUID_TicketType2,145000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType2,@GUID_TicketType2,145000,165000,95000,115000)
 --nằm - hssv, lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000)
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType2,190000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000, 110000,null,null)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType2,190000,210000,null,null)
 
 --combo
 DECLARE @GUID_cb1 UNIQUEIDENTIFIER;
@@ -496,11 +554,11 @@ DECLARE @GUID_cb2 UNIQUEIDENTIFIER;
 DECLARE @GUID_cb3 UNIQUEIDENTIFIER;
 
 SET @GUID_cb1 = NEWID();
-INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb1, N'Combo Solo - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', N'1 Coke 32oz - V + 1 Bắp 64OZ PM + CARAMEN', 1)
+INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb1, N'Combo Solo - VOL', 'BAP-2-NGAN_COMBO-SOLO.png', N'1 Coke 32oz - V + 1 Bắp CARAMEN 64OZ PM', 1)
 SET @GUID_cb2 = NEWID();
-INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb2, N'Combo Party - VOL', 'BAP-2-NGAN_COMBO-PARTY.png', N'4 Coke 22oz - V + 2 Bắp 64OZ PM + CARAMEN', 1)
+INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb2, N'Combo Party - VOL', 'BAP-2-NGAN_COMBO-PARTY.png', N'4 Coke 22oz - V + 2 Bắp CARAMEN 64OZ PM', 1)
 SET @GUID_cb3 = NEWID();
-INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb3, N'Combo Couple - VOL', 'BAP-2-NGAN_COMBO-COUPLE.png', N'2 Coke 32oz - V + 1 Bắp 64OZ PM + CARAMEN', 1)
+INSERT FoodAndDrink(Id, Name, Image, Description, Status) VALUES (@GUID_cb3, N'Combo Couple - VOL', 'BAP-2-NGAN_COMBO-COUPLE.png', N'2 Coke 32oz - V + 1 Bắp CARAMEN 64OZ PM', 1)
 
 --theater 1
 Insert FoodAndDrinkTheater(FoodAndDrinkId,TheaterId,Price) values(@GUID_cb1,@GUID_theater1,109000);
