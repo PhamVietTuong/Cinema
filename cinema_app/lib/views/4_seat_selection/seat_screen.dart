@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
+
+import 'package:cinema_app/components/count_down.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/seat.dart';
@@ -33,11 +36,25 @@ class SeatScreen extends StatefulWidget {
 }
 
 class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
+  String textRoom = "Phòng";
+  String textShowTime = "Suất chiếu";
+  String textSingle = "Đơn";
+  String textCouple = "Đôi";
+  String textSold = "Đã bán";
+  String textSelect = "Chọn";
+  String textWait = "Đang chờ";
+  String textScreen = "Màn hình";
+  String textLoad = Constants.textLoad;
+  String textTitleError = Constants.textTitleError;
+  String textError = Constants.textError;
+  String textClose = Constants.textClose;
+  String textReload = Constants.textReload;
   late ShowtimeRoom selectedShowtime;
   late SeatPresenter seatPr;
   bool isLoading = true;
   late int countSignle;
   late int countCouple;
+
   int maxCol = 0;
   final hubConnection =
       HubConnectionBuilder().withUrl("$serverUrl/cinema").build();
@@ -149,6 +166,14 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     setState(() {
       state ? selectedSeats.remove(seat) : selectedSeats.add(seat);
     });
+    if (selectedSeats.length > 0) {
+      // cần reset
+      CountDown.start();
+    } else {
+      //cần dừng
+      CountDown.stop();
+      CountDown.resetTime();
+    }
     hubConnection.invoke("SeatBeingSelected", args: [
       {
         "showTimeId": selectedShowtime.showTimeId,
@@ -298,6 +323,39 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     return null;
   }
 
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(textRoom),
+      Styles.translate(textShowTime),
+      Styles.translate(textSingle),
+      Styles.translate(textCouple),
+      Styles.translate(textSold),
+      Styles.translate(textSelect),
+      Styles.translate(textWait),
+      Styles.translate(textScreen),
+      Styles.translate(textLoad),
+      Styles.translate(textTitleError),
+      Styles.translate(textError),
+      Styles.translate(textClose),
+      Styles.translate(textReload),
+    ]);
+    textRoom = textTranlate[0];
+    textShowTime = textTranlate[1];
+    textSingle = textTranlate[2];
+    textCouple = textTranlate[3];
+    textSold = textTranlate[4];
+    textSelect = textTranlate[5];
+    textWait = textTranlate[6];
+    textScreen = textTranlate[7];
+    textLoad = textTranlate[8];
+    textTitleError = textTranlate[9];
+    textError = textTranlate[10];
+    textClose = textTranlate[11];
+    textReload = textTranlate[12];
+
+    setState(() {});
+  }
+
   @override
   void onLoadSeatComplete(List<SeatRowData> seatLst) {
     setState(() {
@@ -308,9 +366,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
           print(maxCol);
         }
       }
-
       bool shouldBreak = false;
-
       for (var row in seatRows) {
         for (var seat in row.seats) {
           var seatToCheck = waitingSeatIds.firstWhere(
@@ -334,6 +390,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         }
       }
     });
+    tranlate();
   }
 
   void _showErrorDialog() {
@@ -341,22 +398,21 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Lỗi"),
-            content: const Text(
-                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            title: Text(textTitleError),
+            content: Text(textError),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   // Đóng hộp thoại
                   Navigator.of(context).pop();
                 },
-                child: const Text("Đóng"),
+                child: Text(textClose),
               ),
               TextButton(
                 onPressed: () {
                   // Gọi hàm để tải dữ liệu lại
                 },
-                child: const Text("Tải lại"),
+                child: Text(textReload),
               ),
             ],
           );
@@ -371,16 +427,44 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     _showErrorDialog();
   }
 
+  Stream<int> get countStream async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield CountDown.time;
+    }
+  }
+
+  late StreamSubscription<int> subscription;
+  int counter = 0;
   @override
   void initState() {
+    CountDown.index = 1;
+    print(CountDown.index);
     super.initState();
     countSignle = widget.booking.countingSignle();
     countCouple = widget.booking.countingCouple();
-
+    subscription = countStream.listen((_count) {
+      setState(() {});
+      if (CountDown.time == 0&&CountDown.index==1) {
+        Navigator.of(context).popUntil((route) {
+          return counter++ >= 1 || !Navigator.of(context).canPop();
+        });
+      }
+    });
     connectToHub();
 
     selectedShowtime = widget.showtime;
     seatPr = SeatPresenter(this);
+  }
+
+  @override
+  void dispose() {
+    hubConnection.stop();
+    super.dispose();
+    subscription.cancel();
+    CountDown.index--;
+    CountDown.resetTime();
+    CountDown.stop();
   }
 
   @override
@@ -391,6 +475,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     var marginLeft = 10.0;
 
     return Scaffold(
+        backgroundColor: Styles.backgroundColor[Config.themeMode],
         appBar: AppBar(
           backgroundColor: Styles.backgroundContent[Config.themeMode],
           toolbarHeight: 50,
@@ -398,6 +483,8 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
             alignment: Alignment.center,
             onPressed: () {
               // widget.booking.resetCount();
+              CountDown.stop();
+              CountDown.resetTime();
               Navigator.pop(this.context);
             },
             icon: Icon(
@@ -426,7 +513,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                         Container(
                           margin: const EdgeInsets.only(left: 5),
                           child: Text(
-                            "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
+                            "${widget.booking.theater.name} - $textRoom: ${selectedShowtime.roomName}",
                             style: TextStyle(
                                 color: Styles.boldTextColor[Config.themeMode],
                                 fontSize: Styles.titleFontSize,
@@ -446,7 +533,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                         Container(
                           margin: const EdgeInsets.only(left: 5),
                           child: Text(
-                            "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
+                            "$textShowTime: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
                             softWrap: true,
                             style: TextStyle(
                                 color: Styles.boldTextColor[Config.themeMode],
@@ -484,7 +571,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               SizedBox(
-                height: hS * 0.747,
+                height: hS * 0.73,
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -512,7 +599,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                                             maxCol > 6 ? wS * 2 - 20 : wS - 20,
                                         alignment: Alignment.center,
                                         child: Text(
-                                          "MÀN HÌNH",
+                                          "$textScreen",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: Styles.titleFontSize,
@@ -534,50 +621,58 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Styles.defaultHorizontal),
-                child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
                     children: [
-                      ChairTypeColorBox(
-                          title: "Đơn", color: Styles.singleSeatColor),
-                      ChairTypeColorBox(
-                          title: "Đôi", color: Styles.coupleSeatColor),
-                      ChairTypeColorBox(
-                          title: "Đã bán", color: Styles.soldColor),
-                      ChairTypeColorBox(
-                          title: "Đang chọn", color: Styles.selectedSeatColor),
-                      ChairTypeColorBox(
-                          title: "Đang chờ", color: Styles.waitingSeatColor),
-                    ]),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Styles.defaultHorizontal),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ChairTypeColorBox(
+                                  title: "$textSingle",
+                                  color: Styles.singleSeatColor),
+                              ChairTypeColorBox(
+                                  title: "$textCouple",
+                                  color: Styles.coupleSeatColor),
+                              ChairTypeColorBox(
+                                  title: "$textSold", color: Styles.soldColor),
+                              ChairTypeColorBox(
+                                  title: "$textSelect",
+                                  color: Styles.selectedSeatColor),
+                              ChairTypeColorBox(
+                                  title: "$textWait",
+                                  color: Styles.waitingSeatColor),
+                            ]),
+                      ),
+                      Container(
+                          margin: const EdgeInsets.only(
+                              bottom: 15, left: 8, right: 8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    blurRadius: 1,
+                                    spreadRadius: 1,
+                                    offset: const Offset(1, 1))
+                              ]),
+                          child: BookingSummaryBox(
+                            handle: handel,
+                            nextScreen: nextScreen(),
+                            booking: widget.booking,
+                          ))
+                    ],
+                  ),
+                ),
               ),
-              Container(
-                  margin: const EdgeInsets.only(bottom: 15, left: 8, right: 8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 1,
-                            spreadRadius: 1,
-                            offset: const Offset(1, 1))
-                      ]),
-                  child: BookingSummaryBox(
-                    handle: handel,
-                    nextScreen: nextScreen(),
-                    booking: widget.booking,
-                  ))
             ]),
           ),
         ));
-  }
-
-  @override
-  void dispose() {
-    hubConnection.stop();
-    super.dispose();
   }
 }
 

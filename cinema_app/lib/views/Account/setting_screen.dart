@@ -1,6 +1,5 @@
 import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
-import 'package:country_icons/country_icons.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

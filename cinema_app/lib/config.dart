@@ -171,12 +171,15 @@ class Styles {
     return phoneNumber.replaceAllMapped(RegExp(r'^(\d{3})(\d{3})(\d{4,})$'),
         (match) => '${match[1]} ${match[2]} ${match[3]}');
   }
-
+  static  formatSecond(int seconds) {
+  int minutes = seconds ~/ 60;
+  int remainingSeconds = seconds % 60;
+  return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+}
   static Future<String> translate(String text) async {
-    if (Config.languageMode!.compareTo(Constants.codeVNKey) == 0) return text;
     final translator = GoogleTranslator();
     return await translator
-        .translate(text, from: Constants.codeVNKey, to: Config.languageMode!)
+        .translate(text, to: Config.languageMode!)
         .then((value) => value.text);
   }
 }
@@ -190,10 +193,10 @@ class Config {
 
   static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-    await Future.wait([
-      _prefs.remove(Constants.themeModeKey),
-      _prefs.remove(Constants.languageModeKey)
-    ]);
+    // await Future.wait([
+    //   _prefs.remove(Constants.themeModeKey),
+    //   _prefs.remove(Constants.languageModeKey)
+    // ]);
 
     await loadMode();
   }
@@ -206,7 +209,7 @@ class Config {
   static Future<void> setLanguageMode(String mode) async {
     await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
-    print(languageMode);
+    //print(languageMode);
   }
 
   static Future<void> loadMode() async {
@@ -277,6 +280,14 @@ class Config {
 }
 
 class Constants {
+  static const String textLoad = "Đang tải";
+  static const String textTitleError = "Lỗi";
+  static const String textError = "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau.";
+  static const String textClose = "Đóng";
+  static const String textReload = "Tải lại";
+  static const String textEmpty = "Trống rỗng";
+
+
   static const String themeModeKey = "themeMode";
   static const String languageModeKey = "languageMode";
   static const String defaultTheme = darkPurpleTheme;
@@ -320,9 +331,9 @@ class Constants {
     codeVNKey: "Tiếng Việt",
     codeENKey: "Tiếng Anh",
     //codeFrench: "Tiếng Pháp",
-   // codeGerman: "Tiếng Đức",
+    // codeGerman: "Tiếng Đức",
     codeJapanese: "Tiếng Nhật",
-   // codeRussian: "Tiếng Nga",
+    // codeRussian: "Tiếng Nga",
   };
 
   static final Map<String, String> flags = {
@@ -331,6 +342,6 @@ class Constants {
     //codeFrench: "fr",
     //codeGerman: "de",
     codeJapanese: "jp",
-   // codeRussian: "ru",
+    // codeRussian: "ru",
   };
 }

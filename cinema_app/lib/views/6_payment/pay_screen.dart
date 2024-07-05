@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
+
 import 'package:cinema_app/components/time_box.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/age_restriction_box.dart';
@@ -16,6 +18,8 @@ import 'package:cinema_app/views/7_ticket_info/ticket_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
+import '../../components/count_down.dart';
+
 class PayScreen extends StatefulWidget {
   const PayScreen({super.key, required this.booking, required this.hub});
   final Booking booking;
@@ -26,6 +30,28 @@ class PayScreen extends StatefulWidget {
 }
 
 class _PayScreenState extends State<PayScreen> {
+  String textRoom = "Phòng";
+  String textChair = "Ghế";
+  String textVoucher = "Mã khuyến mãi";
+  String textApply = "ÁP DỤNG";
+  String textPay = "THANH TOÁN";
+
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(textRoom),
+      Styles.translate(textChair),
+      Styles.translate(textVoucher),
+      Styles.translate(textApply),
+      Styles.translate(textPay),
+    ]);
+    textRoom = textTranlate[0];
+    textChair = textTranlate[1];
+    textVoucher = textTranlate[2];
+    textApply = textTranlate[3];
+    textPay = textTranlate[4];
+    setState(() {});
+  }
+
   int discount = 0;
   List<TicketBox> tBoxs = List.filled(
       0,
@@ -43,7 +69,7 @@ class _PayScreenState extends State<PayScreen> {
       img: "assets/img_demo/visa_masterCard_logo.png",
     ),
     const PaymentOption(
-      title: 'Ví Momo',
+      title: 'Momo',
       img: "assets/img_demo/momo_logo.png",
     ),
     const PaymentOption(
@@ -117,9 +143,28 @@ class _PayScreenState extends State<PayScreen> {
         .toList();
   }
 
+  Stream<int> get countStream async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield CountDown.time;
+    }
+  }
+
+  late StreamSubscription<int> subscription;
+  int counter = 0;
   @override
   void initState() {
     super.initState();
+    tranlate();
+    CountDown.index = 3;
+    subscription = countStream.listen((_count) {
+      setState(() {});
+      if (CountDown.time == 0 && CountDown.index == 3) {
+        Navigator.of(context).popUntil((route) {
+          return counter++ >= 3 || !Navigator.of(context).canPop();
+        });
+      }
+    });
     setState(() {
       loadTicketBoxs();
     });
@@ -136,9 +181,16 @@ class _PayScreenState extends State<PayScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    subscription.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var wS = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Styles.backgroundColor[Config.themeMode],
       appBar: AppBar(
         toolbarHeight: 50,
         backgroundColor: Styles.backgroundContent[Config.themeMode],
@@ -161,7 +213,7 @@ class _PayScreenState extends State<PayScreen> {
                 Container(
                   margin: const EdgeInsets.only(left: 5),
                   child: Text(
-                    '${widget.booking.showtime.getFormatDate()} - ${widget.booking.showtime.getFormatTime()} | Phòng: ${widget.booking.showtime.roomName}',
+                    '${widget.booking.showtime.getFormatDate()} - ${widget.booking.showtime.getFormatTime()} | $textRoom: ${widget.booking.showtime.roomName}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Styles.boldTextColor[Config.themeMode],
@@ -171,15 +223,25 @@ class _PayScreenState extends State<PayScreen> {
               ],
             ),
             Container(
-                margin: const EdgeInsets.only(right: 15),
-                child: const Text(
-                  "04:55",
-                ))
+              margin: const EdgeInsets.only(right: 15),
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Styles.btnColor[Config.themeMode]),
+              child: Text(
+                '${Styles.formatSecond(CountDown.time)}',
+                style: TextStyle(
+                    fontSize: Styles.titleFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: Styles.boldTextColor[Config.themeMode]),
+              ),
+            )
           ],
         ),
         leading: IconButton(
           alignment: Alignment.center,
           onPressed: () {
+            CountDown.index--;
             Navigator.pop(this.context);
           },
           icon: Icon(
@@ -263,7 +325,7 @@ class _PayScreenState extends State<PayScreen> {
                           RichText(
                               text: TextSpan(
                                   children: [
-                                const TextSpan(text: "Ghế: "),
+                                 TextSpan(text: "$textChair: "),
                                 TextSpan(
                                     text: widget.booking.seats
                                         .map((e) => e.name)
@@ -348,7 +410,7 @@ class _PayScreenState extends State<PayScreen> {
                                 fontSize: Styles.titleFontSize,
                                 color: Styles.boldTextColor[Config.themeMode]),
                             decoration: InputDecoration(
-                                hintText: "Mã khuyến mãi",
+                                hintText: "$textVoucher",
                                 hintStyle: TextStyle(
                                     color:
                                         Styles.boldTextColor[Config.themeMode]),
@@ -368,8 +430,8 @@ class _PayScreenState extends State<PayScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
                             color: Styles.btnColor[Config.themeMode]),
-                        child: const Text(
-                          "ÁP DỤNG",
+                        child:  Text(
+                          textApply,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -466,7 +528,7 @@ class _PayScreenState extends State<PayScreen> {
                       color: Styles.btnColor[Config.themeMode],
                       borderRadius: BorderRadius.circular(8)),
                   child: Text(
-                    "THANH TOÁN",
+                    "$textPay",
                     style: TextStyle(
                         color: Styles.boldTextColor[Config.themeMode],
                         fontWeight: FontWeight.bold,

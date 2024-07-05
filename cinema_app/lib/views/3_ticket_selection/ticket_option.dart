@@ -13,6 +13,32 @@ class TicketOptionItem extends StatefulWidget {
 }
 
 class _TicketOptionItemState extends State<TicketOptionItem> {
+  late String textSeatTypeName;
+  late String textticketTypeName;
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(
+        textSeatTypeName.contains("Ðôi") &&
+                Config.languageMode != Constants.codeVNKey
+            ? "Cặp đôi"
+            : textSeatTypeName,
+      ),
+      Styles.translate(textticketTypeName),
+    ]);
+    textSeatTypeName = textTranlate[0];
+    textticketTypeName = textTranlate[1];
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    textSeatTypeName = widget.option.seatTypeName;
+    textticketTypeName = widget.option.ticketTypeName;
+    tranlate();
+  }
+
   void updown(bool isUp) {
     setState(() {
       widget.upDownQuantity(isUp, widget);
@@ -45,7 +71,7 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
               children: [
                 Expanded(
                   child: Text(
-                    widget.option.getName(),
+                    '${textSeatTypeName}-${textticketTypeName}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: Styles.textSize,
@@ -57,7 +83,6 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
                 ),
                 Row(
                   children: [
-
                     Container(
                         margin: const EdgeInsets.only(right: 15),
                         child: Text(

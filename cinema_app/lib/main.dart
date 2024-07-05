@@ -5,7 +5,7 @@ import 'package:cinema_app/components/bottom_nav.dart';
 import 'config.dart';
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides();
+ HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Config.initialize();
   runApp(const MyApp());
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
+    return  MaterialApp(
       title: 'Cinema App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

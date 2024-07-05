@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 
 import '../../components/age_restriction_box.dart';
 
-class ShowTimeOfMovieItem extends StatelessWidget {
-  const ShowTimeOfMovieItem({
+class ShowTimeOfMovieItem extends StatefulWidget {
+   ShowTimeOfMovieItem({
     super.key,
     required this.movie,
     required this.booking,
@@ -21,6 +21,31 @@ class ShowTimeOfMovieItem extends StatelessWidget {
   final Booking booking;
   final DateTime selectedDate;
 
+  @override
+  State<ShowTimeOfMovieItem> createState() => _ShowTimeOfMovieItemState();
+}
+
+class _ShowTimeOfMovieItemState extends State<ShowTimeOfMovieItem> {
+  String textStandard="Tiêu chuẩn";
+  String textDeluxe="Sang trọng";
+
+   void translate() async {
+    List<String> translatedTexts = await Future.wait([
+      Styles.translate(widget.movie.name),
+      Styles.translate(textStandard),
+      Styles.translate(textDeluxe),
+    ]);
+    widget.movie.name=translatedTexts[0];
+   textStandard=translatedTexts[1];
+   textDeluxe=translatedTexts[2];
+
+    setState(() {});
+  }
+  @override
+  void initState() {
+    super.initState();
+    translate();
+  }
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -73,9 +98,9 @@ class ShowTimeOfMovieItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(6.0),
         child: Image(
           fit: BoxFit.fitHeight,
-          image: movie.img.isEmpty
+          image: widget.movie.img.isEmpty
               ? const AssetImage("assets/img/movie_white.png") as ImageProvider
-              : NetworkImage("$serverUrl/Images/${movie.img}"),
+              : NetworkImage("$serverUrl/Images/${widget.movie.img}"),
         ),
       ),
     );
@@ -88,7 +113,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            movie.getFullName(),
+            widget.movie.getFullName(),
             style: TextStyle(
               color: Styles.boldTextColor[Config.themeMode],
               fontSize: Styles.titleFontSize,
@@ -96,7 +121,7 @@ class ShowTimeOfMovieItem extends StatelessWidget {
             ),
           ),
           MovieTypeBox(
-            title: movie.movieType,
+            title: widget.movie.movieType,
             marginTop: 5,
             marginBottom: 10,
             padding: 5,
@@ -104,17 +129,17 @@ class ShowTimeOfMovieItem extends StatelessWidget {
           Row(
             children: [
               ShowtimeTypeBox(
-                title: movie.showTimeTypeName,
+                title: widget.movie.showTimeTypeName,
               ),
               AgeRestrictionBox(
-                title: movie.ageRestrictionName,
+                title: widget.movie.ageRestrictionName,
                 marginLeft: 5,
               ),
             ],
           ),
           Container(
             margin: const EdgeInsets.only(top: 10),
-            child: TimeBox(time: movie.time),
+            child: TimeBox(time: widget.movie.time),
           ),
         ],
       ),
@@ -127,14 +152,14 @@ class ShowTimeOfMovieItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildShowtimeTypeTitle('Standard'),
+          _buildShowtimeTypeTitle(textStandard),
           _buildShowtimeItems(
             showtimeType: 0,
           ),
           const SizedBox(
             height: 10,
           ),
-          _buildShowtimeTypeTitle('Deluxe'),
+          _buildShowtimeTypeTitle(textDeluxe),
           _buildShowtimeItems(
             showtimeType: 1,
           ),
@@ -155,13 +180,13 @@ class ShowTimeOfMovieItem extends StatelessWidget {
   }
 
   Widget _buildShowtimeItems({required int showtimeType}) {
-    final movieSchedule = movie.schedules.firstWhere(
+    final movieSchedule = widget.movie.schedules.firstWhere(
       (element) =>
-          element.date.day == selectedDate.day &&
-          element.date.month == selectedDate.month,
+          element.date.day == widget.selectedDate.day &&
+          element.date.month == widget.selectedDate.month,
     );
     final theaterShowtime = movieSchedule.theaters.firstWhere(
-      (element) => element.theaterId == booking.theater.id,
+      (element) => element.theaterId == widget.booking.theater.id,
       orElse: () => TheaterShowtime(),
     );
     theaterShowtime.showtimes.sort((a, b) => a.startTime.compareTo(b.startTime));
@@ -176,10 +201,10 @@ class ShowTimeOfMovieItem extends StatelessWidget {
           )
           .map(
             (showtime) => ShowtimeItem(
-              selectedDate: selectedDate,
+              selectedDate: widget.selectedDate,
               showtimeRoom: showtime,
-              booking: booking,
-              movie: movie,
+              booking: widget.booking,
+              movie: widget.movie,
             ),
           )
           .toList(),

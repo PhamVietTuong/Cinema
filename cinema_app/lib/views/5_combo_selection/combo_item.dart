@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ComboItem extends StatefulWidget {
   const ComboItem({super.key, required this.item, required this.function});
-
+  
   final FoodAndDrink item;
   final Function(bool isUp, FoodAndDrink combo) function;
   @override
@@ -13,7 +13,27 @@ class ComboItem extends StatefulWidget {
 }
 
 class _ComboItemState extends State<ComboItem> {
+  late String textNameCombo ;
+  late String textDes;
+  void tranlate () async{
+    List<String> textTranlate= await Future.wait([
+      Styles.translate(textNameCombo),
+      Styles.translate(textDes),
+    ]);
+    textNameCombo=textTranlate[0];
+    textDes=textTranlate[1];
+    setState(() {
+      
+    });
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    textNameCombo= widget.item.name;
+    textDes=widget.item.description;
+    tranlate();
+  }
    void updown(bool isUp) {
     setState(() {
       widget.function(isUp, widget.item);
@@ -46,13 +66,13 @@ class _ComboItemState extends State<ComboItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.item.name,
+                   textNameCombo,
                     style: TextStyle(
                         fontSize: Styles.titleFontSize,
                         fontWeight: FontWeight.bold,
                         color: Styles.boldTextColor[Config.themeMode]),
                   ),
-                  Text(widget.item.description,
+                  Text(textDes,
                       style: TextStyle(
                           fontSize: Styles.textSize,
 
