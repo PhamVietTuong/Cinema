@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/food_and_drink.dart';
@@ -10,6 +12,8 @@ import 'package:cinema_app/components/booking_summary_box.dart';
 import 'package:cinema_app/views/6_payment/pay_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
+
+import '../../components/count_down.dart';
 
 class ComboScreen extends StatefulWidget {
   const ComboScreen(
@@ -31,6 +35,7 @@ class _ComboScreenState extends State<ComboScreen>
     implements TheaterViewContract {
   late TheaterPresenter theaterPre;
   bool isLoading = true;
+  String textTitleAppBar = "Combo";
 
   void upDownOptionQuantity(bool isUp, FoodAndDrink item) {
     setState(() {
@@ -45,15 +50,48 @@ class _ComboScreenState extends State<ComboScreen>
     });
   }
 
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(textTitleAppBar),
+    ]);
+    textTitleAppBar = textTranlate[0];
+    setState(() {});
+  }
+
+  Stream<int> get countStream async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield CountDown.time;
+    }
+  }
+
+  int counter = 0;
+  late StreamSubscription<int> subscription;
   @override
   void initState() {
     super.initState();
+    CountDown.index = 2;
+    subscription = countStream.listen((_count) {
+      setState(() {});
+      if (CountDown.time == 0&&CountDown.index==2) {
+        Navigator.of(context).popUntil((route) {
+          return counter++ >= 2 || !Navigator.of(context).canPop();
+        });
+      }
+    });
     theaterPre = TheaterPresenter(this);
     theaterPre.fetchCombos(widget.booking.theater.id);
     widget.booking.tickets.removeWhere((element) => element.quantity == 0);
-
     widget.booking.seats = widget.selectedSeats;
     widget.booking.showtime = widget.showtime;
+    tranlate();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscription.cancel();
+    CountDown.index--;
   }
 
   @override
@@ -76,7 +114,7 @@ class _ComboScreenState extends State<ComboScreen>
         titleSpacing: 0,
         leadingWidth: 45,
         title: Text(
-          "Combo",
+          textTitleAppBar,
           style: TextStyle(
               fontSize: Styles.appbarFontSize,
               fontWeight: FontWeight.bold,
@@ -86,7 +124,8 @@ class _ComboScreenState extends State<ComboScreen>
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
+        decoration:
+            BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: Column(
           children: [
             Expanded(

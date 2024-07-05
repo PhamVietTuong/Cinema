@@ -42,6 +42,39 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
 
   int totalPrice = 0;
   int totalTicket = 0;
+  String textShowTime = "Suất chiếu";
+  String textRoom = "Phòng";
+  String textTitleAppBar = "Chọn vé";
+  String textLoad = Constants.textReload;
+  String textTitleError = Constants.textTitleError;
+  String textError = Constants.textError;
+  String textClose = Constants.textClose;
+  String textReload = Constants.textReload;
+  String textNote = "Học sinh sinh viên";
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(textShowTime),
+      Styles.translate(textRoom),
+      Styles.translate(textLoad),
+      Styles.translate(textTitleError),
+      Styles.translate(textError),
+      Styles.translate(textClose),
+      Styles.translate(textReload),
+      Styles.translate(textTitleAppBar),
+      Styles.translate(textNote),
+    ]);
+    textShowTime = textTranlate[0];
+    textRoom = textTranlate[1];
+    textLoad = textTranlate[2];
+    textTitleError = textTranlate[3];
+    textError = textTranlate[4];
+    textClose = textTranlate[5];
+    textReload = textTranlate[6];
+    textTitleAppBar = textTranlate[7];
+    textNote = textTranlate[8];
+
+    setState(() {});
+  }
 
   List<TicketOptionItem> options = List.filled(0,
       TicketOptionItem(option: TicketOption(), upDownQuantity: (bool i, ti) {}),
@@ -112,6 +145,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
     var marginHorizontalScreen = 15.0;
 
     return Scaffold(
+        backgroundColor: Styles.backgroundColor[Config.themeMode],
         appBar: AppBar(
           backgroundColor: Styles.backgroundContent[Config.themeMode],
           leading: IconButton(
@@ -128,7 +162,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
           titleSpacing: 0,
           leadingWidth: 45,
           title: Text(
-            'CHỌN VÉ',
+            textTitleAppBar,
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Styles.appbarFontSize,
@@ -213,8 +247,8 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                 child: Text(
                                     '${widget.movie.name} ${widget.movie.showTimeTypeName} (${widget.movie.ageRestrictionName})',
                                     style: TextStyle(
-                                        color:
-                                            Styles.boldTextColor[Config.themeMode],
+                                        color: Styles
+                                            .boldTextColor[Config.themeMode],
                                         fontSize: Styles.titleFontSize,
                                         fontWeight: FontWeight.bold)),
                               ),
@@ -226,15 +260,15 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                     Icon(
                                       Icons.location_on,
                                       size: Styles.iconSizeInLineText,
-                                      color:
-                                          Styles.boldTextColor[Config.themeMode],
+                                      color: Styles
+                                          .boldTextColor[Config.themeMode],
                                     ),
                                     Expanded(
                                       flex: 1,
                                       child: Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                            "${widget.booking.theater.name} - Phòng: ${selectedShowtime.roomName}",
+                                            "${widget.booking.theater.name} - $textRoom: ${selectedShowtime.roomName}",
                                             style: TextStyle(
                                               color: Styles
                                                   .textColor[Config.themeMode],
@@ -251,18 +285,19 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                                   Icon(
                                     Icons.av_timer_rounded,
                                     size: Styles.iconSizeInLineText,
-                                    color: Styles.boldTextColor[Config.themeMode],
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
                                   ),
                                   Expanded(
                                     flex: 1,
                                     child: Container(
                                       margin: const EdgeInsets.only(left: 5),
                                       child: Text(
-                                          "Suất chiếu: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
+                                          " $textShowTime: ${selectedShowtime.getFormatTime()} - ${selectedShowtime.getFormatDate()}",
                                           softWrap: true,
                                           style: TextStyle(
-                                            color:
-                                                Styles.textColor[Config.themeMode],
+                                            color: Styles
+                                                .textColor[Config.themeMode],
                                             fontSize: Styles.textSize,
                                           )),
                                     ),
@@ -289,7 +324,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                             height: 20,
                           ),
                           Text(
-                            "Đang tải...",
+                            textLoad,
                             style: TextStyle(
                                 color: Styles.boldTextColor[Config.themeMode],
                                 fontSize: Styles.titleFontSize),
@@ -308,24 +343,39 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                         ),
                       ),
                     ),
-              Container(
-                  margin: const EdgeInsets.only(bottom: 25, left: 8, right: 8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 1,
-                            spreadRadius: 1,
-                            offset: const Offset(1, 1))
-                      ]),
-                  child: BookingSummaryBox(
-                    handle: handle,
-                    nextScreen: nextScreen(),
-                    booking: widget.booking,
-                    totalPrice: totalPrice,
-                    totalTicket: totalTicket,
-                  ))
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "*HSSV: ${textNote} ",
+                    style: TextStyle(
+                        fontSize: Styles.textSize,
+                        color: Styles.textSelectionColor[Config.themeMode]),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                      margin:
+                          const EdgeInsets.only(bottom: 25, left: 8, right: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 1,
+                                spreadRadius: 1,
+                                offset: const Offset(1, 1))
+                          ]),
+                      child: BookingSummaryBox(
+                        handle: handle,
+                        nextScreen: nextScreen(),
+                        booking: widget.booking,
+                        totalPrice: totalPrice,
+                        totalTicket: totalTicket,
+                      )),
+                ],
+              )
             ]),
           ),
         ));
@@ -350,6 +400,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
 
       isLoadingData = false;
     });
+    tranlate();
   }
 
   void _showErrorDialog() {
@@ -357,16 +408,15 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Lỗi"),
-            content: const Text(
-                "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau."),
+            title: Text(textTitleError),
+            content: Text(textError),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   // Đóng hộp thoại
                   Navigator.of(context).pop();
                 },
-                child: const Text("Đóng"),
+                child: Text(textClose),
               ),
               TextButton(
                 onPressed: () {
@@ -378,7 +428,7 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                       selectedShowtime.showTimeId, selectedShowtime.roomId);
                   Navigator.pop(context);
                 },
-                child: const Text("Tải lại"),
+                child: Text(textReload),
               ),
             ],
           );

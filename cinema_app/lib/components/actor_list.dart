@@ -16,63 +16,56 @@ class _ActorListState extends State<ActorList> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> actorList = widget.actors.split(', '); // Tách danh sách các diễn viên bằng dấu phẩy
-    int displayCount = isExpanded2 ? actorList.length : (actorList.length > 3 ? 3 : actorList.length); // Hiển thị 3 diễn viên nếu không mở rộng
-
+    List<String> actorList =
+        widget.actors.split(', '); // Tách danh sách các diễn viên bằng dấu phẩy
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Wrap(
-          spacing: 5.0, // Khoảng cách giữa các diễn viên
-          runSpacing: 4.0, // Khoảng cách giữa các dòng
+          spacing: 10.0,
+          runSpacing: 4.0,
           children: [
-            for (int i = 0; i < displayCount; i++)
+            for (int i = 0; i < actorList.length; i++)
               GestureDetector(
                 onTap: () {
-                  _launchActorWikipedia(actorList[i].trim()); // Mở Wikipedia cho diễn viên được nhấn vào
+                  _launchActorWikipedia(actorList[i].trim());
                 },
-                child: Text(
-                  '${actorList[i]}, '
-                  , // Hiển thị tên diễn viên
-                  style: TextStyle(
-                    color: Styles.textColor[Config.themeMode],
-                    fontSize: Styles.textSize,
-                  ),
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
+                child: Column(
+                  mainAxisSize: MainAxisSize
+                      .min,
+                  children: [
+                    Icon(
+                      Icons.account_circle,
+                      color: Styles.textColor[Config.themeMode],
+                      size: 50,
+                    ),
+                    Text(
+                      '${actorList[i]}',
+                      style: TextStyle(
+                        color: Styles.textColor[Config.themeMode],
+                        fontSize: Styles.textSize,
+                      ),
+                      softWrap: true,
+                    ),
+                  ],
                 ),
               ),
           ],
         ),
-        if (actorList.length > 3)
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isExpanded2 = !isExpanded2;
-              });
-            },
-            child: Text(
-              isExpanded2 ? 'Thu gọn' : 'Xem thêm',
-              style: TextStyle(
-                color: Styles.textColor[Config.themeMode],
-                fontSize: Styles.textSize,
-              ),
-            ),
-          ),
       ],
     );
   }
-
-  void _launchActorWikipedia(String actorName)  {
+  void _launchActorWikipedia(String actorName) {
     try {
       String searchQuery = Uri.encodeFull(actorName);
-      String url = 'https://vi.wikipedia.org/wiki/$searchQuery'; // Đường dẫn đến Wikipedia
+      String url =
+          'https://vi.wikipedia.org/wiki/$searchQuery'; // Đường dẫn đến Wikipedia
 
       Uri uri = Uri.parse(url); // Chuyển đổi chuỗi URL thành đối tượng Uri
       launchUrl(uri); // Sử dụng đối tượng Uri khi gọi phương thức launchUrl
     } catch (e) {
       // In ra lỗi nếu không mở được URL
-      print('Error launching URL: $e');
+      // print('Error launching URL: $e');
     }
   }
 }

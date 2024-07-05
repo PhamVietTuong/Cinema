@@ -4,7 +4,6 @@ import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
 
-// ignore: must_be_immutable
 class LoginContent extends StatefulWidget {
   const LoginContent({Key? key}) : super(key: key);
 
@@ -46,7 +45,7 @@ class _LoginContentState extends State<LoginContent>
       _token = token;
       _tokenExpirationTime=expirationTime;
     });
-    print('Token : $token , $expirationTime');
+    print('Token : $_token , $_tokenExpirationTime');
   }
 
   @override

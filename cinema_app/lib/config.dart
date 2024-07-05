@@ -171,7 +171,11 @@ class Styles {
     return phoneNumber.replaceAllMapped(RegExp(r'^(\d{3})(\d{3})(\d{4,})$'),
         (match) => '${match[1]} ${match[2]} ${match[3]}');
   }
-
+  static  formatSecond(int seconds) {
+  int minutes = seconds ~/ 60;
+  int remainingSeconds = seconds % 60;
+  return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+}
   static Future<String> translate(String text) async {
     final translator = GoogleTranslator();
     return await translator
@@ -205,6 +209,7 @@ class Config {
   static Future<void> setLanguageMode(String mode) async {
     await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
+
   }
 
   static Future<void> loadMode() async {
@@ -275,6 +280,14 @@ class Config {
 }
 
 class Constants {
+  static const String textLoad = "Đang tải";
+  static const String textTitleError = "Lỗi";
+  static const String textError = "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau.";
+  static const String textClose = "Đóng";
+  static const String textReload = "Tải lại";
+  static const String textEmpty = "Trống rỗng";
+
+
   static const String themeModeKey = "themeMode";
   static const String languageModeKey = "languageMode";
   static const String defaultTheme = darkPurpleTheme;
@@ -318,9 +331,9 @@ class Constants {
     codeVNKey: "Tiếng Việt",
     codeENKey: "Tiếng Anh",
     //codeFrench: "Tiếng Pháp",
-   // codeGerman: "Tiếng Đức",
+    // codeGerman: "Tiếng Đức",
     codeJapanese: "Tiếng Nhật",
-   // codeRussian: "Tiếng Nga",
+    // codeRussian: "Tiếng Nga",
   };
 
   static final Map<String, String> flags = {
@@ -329,6 +342,6 @@ class Constants {
     //codeFrench: "fr",
     //codeGerman: "de",
     codeJapanese: "jp",
-   // codeRussian: "ru",
+    // codeRussian: "ru",
   };
 }

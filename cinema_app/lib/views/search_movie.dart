@@ -109,6 +109,13 @@ class _SearchScreenState extends State<SearchScreen>
             children: [
               TextField(
                 controller: _controller,
+                onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                    if(_controller.text.isNotEmpty)
+                    {
+                      _saveSearchQuery(_controller.text);
+                    }
+                },
                 onChanged: (value) {
                   _search();
                 },
@@ -204,7 +211,6 @@ class _SearchScreenState extends State<SearchScreen>
       ),
     );
   }
-
   List<Widget> _buildSearchResults() {
     List<Widget> results = [];
     if (_searchResults!.containsKey('theaters')) {
@@ -310,10 +316,8 @@ class _SearchScreenState extends State<SearchScreen>
         );
       }
     }
-
     return results;
   }
-
   List<Widget> _buildSearchHistory() {
     return _searchHistory.map((query) {
       return Row(
