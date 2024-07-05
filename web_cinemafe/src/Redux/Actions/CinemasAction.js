@@ -108,19 +108,23 @@ export const SeatBeingSelected = (infoSeat, showTimeId, roomId) => {
 
 export const updateTotalSeatTypeAndProceed = (totalSeatType, showTimeId, roomId) => {
     return async (dispatch, getState) => {
-        dispatch({
-            type: TOTAL_CHOOSES_SEAT_TYPE,
-            totalSeatType
-        });
+        try {
+            dispatch({
+                type: TOTAL_CHOOSES_SEAT_TYPE,
+                totalSeatType
+            });
 
-        const { seatYour } = getState().CinemasReducer;
+            const { seatYour } = getState().CinemasReducer;
 
-        let infoTicketBooking = new InfoTicketBooking();
-        infoTicketBooking.infoSeats = seatYour;
-        infoTicketBooking.showTimeId = showTimeId;
-        infoTicketBooking.roomId = roomId;
-        if (connection.state === 'Connected') {
-            await connection.invoke("SeatBeingSelected", infoTicketBooking);
+            let infoTicketBooking = new InfoTicketBooking();
+            infoTicketBooking.infoSeats = seatYour;
+            infoTicketBooking.showTimeId = showTimeId;
+            infoTicketBooking.roomId = roomId;
+            if (connection.state === 'Connected') {
+                await connection.invoke("SeatBeingSelected", infoTicketBooking);
+            }
+        } catch (error) {
+            console.log("SeatBeingSelected", error);
         }
     }
 }
@@ -137,7 +141,7 @@ const findSeatByRowAndCol = (rowName, colIndex, seats) => {
     return null;
 };
 
-export const TicketBooking = (invoiceDTO) => {
+export const TicketBooking = (invoiceDTO, selectedPaymentMethod) => {
     return async (dispatch, getState) => {
         try {
             const handleInforTicket = async (seatInfos, seatStatus) => {
@@ -173,7 +177,14 @@ export const TicketBooking = (invoiceDTO) => {
             await connection.on("InforTicket", handleInforTicket);
             const result = await connection.invoke("CheckTheSeatBeforeBooking", invoiceDTO)
             if (result) {
-                const response = await paymentsService.CreateLinkCheckoutMomo(result);
+                let response;
+
+                if (selectedPaymentMethod === 'Momo') {
+                    response = await paymentsService.CreateLinkCheckoutMomo(result);
+                } else if (selectedPaymentMethod === 'VNPay') {
+                    response = await paymentsService.CreateLinkCheckoutVNPAY(result);
+                }
+
                 if (response.status === 200) {
                     const data = response.data;
                     window.location.href = data.paymentUrl;

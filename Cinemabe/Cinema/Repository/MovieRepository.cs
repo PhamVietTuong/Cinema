@@ -18,7 +18,7 @@ namespace Cinema.Repository
 
         public async Task<List<MovieDetailViewModel>> GetMovieList()
         {
-            var movieList = await _context.Movie.Include(x => x.AgeRestriction).Where(x => x.Status).ToListAsync();
+            var movieList = await _context.Movie.Include(x => x.AgeRestriction).OrderBy(x => x.ReleaseDate).Where(x => x.Status).ToListAsync();
 
             var rows = new List<MovieDetailViewModel>();
             foreach (var movie in movieList)
@@ -142,7 +142,7 @@ namespace Cinema.Repository
                                                                     EndTime = showTime.ShowTime.EndTime,
                                                                     ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
                                                                 };
-                                                            }).ToList()
+                                                            }).OrderBy(x => x.StartTime).ToList()
                                                         }).ToList()
                                         }).ToList();
 

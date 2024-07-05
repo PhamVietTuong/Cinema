@@ -165,7 +165,7 @@ const IndexAdmin = () => {
                         </Link>
                     </List>
                 </Drawer>
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }} style={{ backgroundColor: '#ebeef2'}}>
                     <DrawerHeader />
                     <Outlet />
                 </Box>

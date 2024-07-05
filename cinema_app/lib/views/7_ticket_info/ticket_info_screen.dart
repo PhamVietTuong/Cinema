@@ -16,12 +16,16 @@ import '../../components/count_down.dart';
 class TicketInfoScreen extends StatefulWidget {
   const TicketInfoScreen(
       {super.key,
+      required this.opt,
       required this.orderId,
       required this.amount,
-      required this.booking});
+      required this.booking,
+      required this.info});
   final String orderId;
   final int amount;
   final Booking booking;
+  final String opt;
+  final String info;
   @override
   State<TicketInfoScreen> createState() => _TicketInfoScreenState();
 }
@@ -62,8 +66,8 @@ class _TicketInfoScreenState extends State<TicketInfoScreen>
     orderState = 0;
     today = DateTime.now();
     payPre = PaymentPresenter(this);
-    payPre.createPayment(PaymentRequest(widget.orderId, widget.amount,
-        "Thanh toán cho đơn: ${widget.orderId}", "vnpay"));
+    payPre.createPayment(
+        PaymentRequest(widget.orderId, widget.amount, widget.info, widget.opt));
   }
  @override
   void dispose() {

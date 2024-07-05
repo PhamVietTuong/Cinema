@@ -35,20 +35,20 @@ const Checkout = () => {
     const {
         invoiceDTO,
         movieInfoBooking,
-        code
     } = useSelector((state) => state.CinemasReducer);
-    const [activeCheckout, setActiveCheckout] = useState(false);
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [activeStep, setActiveStep] = useState(0);
 
     const handleCheckout = () => {
-        dispatch(TicketBooking(invoiceDTO, navigate))
+        dispatch(TicketBooking(invoiceDTO, selectedPaymentMethod))
     }
 
-    const handleActiveCheckout = () => setActiveCheckout((show) => !show)
-
+    const handleActiveCheckout = (method) => {
+        setSelectedPaymentMethod(method);
+    }
     return (
         <>
             <section className='checkout checkout-customer'>
@@ -84,11 +84,22 @@ const Checkout = () => {
                                                                     <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="CheckoutFormControl">
                                                                         <FormLabel 
                                                                             sx={{ mb: 1, mt: 2 }} 
-                                                                            className={`CheckoutFormLabel CheckoutIcon CheckoutHover ${activeCheckout ? 'active' : ''}`}
-                                                                            onClick={handleActiveCheckout}
+                                                                            className={`CheckoutFormLabel CheckoutIcon CheckoutHover ${selectedPaymentMethod === 'Momo' ? 'active' : ''}`}
+                                                                            onClick={() => handleActiveCheckout('Momo')}
                                                                         >
-                                                                            <span class="img"><img src="/Images/img-momo.png" alt="" /></span>
+                                                                            <span class="img"><img src="/Images/img-momo.png" alt="Momo" /></span>
                                                                             <p class="text">Thanh toán qua Momo</p>
+                                                                        </FormLabel>
+                                                                    </FormControl>
+
+                                                                    <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="CheckoutFormControl">
+                                                                        <FormLabel
+                                                                            sx={{ mb: 1, mt: 2 }}
+                                                                            className={`CheckoutFormLabel CheckoutIcon CheckoutHover ${selectedPaymentMethod === 'VNPay' ? 'active' : ''}`}
+                                                                            onClick={() => handleActiveCheckout('VNPay')}
+                                                                        >
+                                                                            <span class="img"><img src="/Images/img-vnpay.png" alt="VNPay" /></span>
+                                                                            <p class="text">Thanh toán qua VNPay</p>
                                                                         </FormLabel>
                                                                     </FormControl>
                                                                     <div className='CheckoutButtonPayment'>

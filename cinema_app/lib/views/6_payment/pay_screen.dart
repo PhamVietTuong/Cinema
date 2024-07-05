@@ -173,8 +173,8 @@ class _PayScreenState extends State<PayScreen> {
       int state = data[1] as int;
       if (state == 0) {
         print("it out: ${seats.map((e) => {
-              e["ColIndex"],
-              e["RowName"]
+              e["colIndex"],
+              e["rowName"]
             }).toList().join(", ")}");
       }
     });
@@ -470,6 +470,7 @@ class _PayScreenState extends State<PayScreen> {
                           onChanged: (value) {
                             setState(() {
                               selectedOption = value!;
+                              print(selectedOption!.title);
                             });
                           },
                         ))
@@ -479,12 +480,16 @@ class _PayScreenState extends State<PayScreen> {
               GestureDetector(
                 onTap: () async {
                   print("Thanh Toán");
+                  if (selectedOption == null) {
+                    return;
+                  }
                   await widget.hub.invoke("CheckTheSeatBeforeBooking", args: [
                     {
                       "ShowTimeId": widget.booking.showtime.showTimeId,
                       "RoomId": widget.booking.showtime.roomId,
                       "TheaterId": widget.booking.theater.id,
                       "UserId": '5f24b03d-1cbd-4141-017d-08dc73cfa571',
+                      "OrderInfo": "CKC cinema app",
                       "InvoiceTickets": tBoxs
                           .map((e) => {
                                 // "SeatId": e.seatId,
@@ -502,18 +507,22 @@ class _PayScreenState extends State<PayScreen> {
                     }
                   ]).then((value) {
                     if (value != null) {
-                      print(value.runtimeType);
-                      final orderId =
-                          (value as Map<String, dynamic>)["orderId"];
+                      if ((value as Map<String, dynamic>)["orderId"] == null) {
+                        return;
+                      }
+                      final orderId = value["orderId"];
                       final amount = value["amount"];
+                      final info = value["orderInfo"];
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => TicketInfoScreen(
-                              orderId: orderId,
-                              amount: amount,
-                              booking: widget.booking,
-                            ),
+                                opt: selectedOption!.title ?? "",
+                                orderId: orderId,
+                                amount: amount,
+                                booking: widget.booking,
+                                info: info),
                           ));
                     }
                   }).catchError((error) {

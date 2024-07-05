@@ -31,7 +31,7 @@ namespace Cinema.Repository
             string orderId = paymentRequest.OrderId;
             string requestId = Guid.NewGuid().ToString();
             string amount = paymentRequest.Amount.ToString();
-            string orderInfo = "CKC";
+            string orderInfo = paymentRequest.OrderInfo;
             string extraData = string.Empty;
             string requestType = "captureWallet";
             string lang = "vi";

@@ -18,9 +18,6 @@ const formatDate = (dateString) => {
 const InfoTicketBooking = () => {
     const [movieInfo, setMovieInfo] = useState(null);
     const dispatch = useDispatch();
-    const {
-        userId,
-    } = useSelector((state) => state.UserReducer);
     const location = useLocation();
 
     useEffect(() => {
@@ -40,10 +37,6 @@ const InfoTicketBooking = () => {
         };
 
         fetchData();
-
-        
-        dispatch(GetInvoiceListAction(userId))
-
     }, [location.search, dispatch]);
 
     if (!movieInfo) {

@@ -1,5 +1,5 @@
 import './BookTickets.css'
-import { Box, Grid, Tab } from '@mui/material';
+import { Box, CircularProgress, Grid, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import BookTicket from '../../../Components/Film/BookTicket';
 import { useState } from 'react';
@@ -17,15 +17,75 @@ const BookTickets = () => {
     const dispatch = useDispatch();
     const [value, setValue] = useState('1');
     const { theaterDetail, listMovieByTheaterId } = useSelector((state) => state.CinemasReducer)
+    const [loading, setLoading] = useState(true);
+    const [setShowing, setSetShowing] = useState(false);
+    const [setComming, setSetComming] = useState(false);
+    const [setSpecial, setSetSpecial] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     useEffect(() => {
-        dispatch(TheaterAction(id))
-        dispatch(ShowTimeByTheaterIdAction(id))
+        setLoading(true);
+        const fetchData = async () => {
+            await dispatch(TheaterAction(id));
+            await dispatch(ShowTimeByTheaterIdAction(id));
+            setLoading(false);
+        };
+        fetchData();
     }, [dispatch, id]);
+
+    const isCurrentMovie = (item) => {
+        return (
+            moment(item.releaseDate).isSameOrBefore(currentTime)
+            &&
+            item.schedules.length > 0 &&
+            item.schedules.some(schedule =>
+                schedule.theaters.some(theater =>
+                    theater.showTimes.some(timeItem => {
+                        const currentDate = moment();
+                        const threeDaysLater = moment(currentDate).add(2, 'days');
+
+                        const scheduleDate = moment(schedule.date);
+                        return (
+                            scheduleDate.isBetween(currentDate, threeDaysLater, null, '[]') &&
+                            moment(timeItem.startTime).isSameOrAfter(currentDate)
+                        );
+                    })
+                )
+            )
+        );
+    };
+
+    const isUpcomingMovie = (item) => {
+        return (
+            moment(item.releaseDate).isAfter(currentTime)
+            &&
+            item.schedules.length > 0 &&
+            item.schedules.some(schedule =>
+                schedule.theaters.some(theater =>
+                    theater.showTimes.some(timeItem => {
+                        const currentDate = moment();
+                        const threeDaysLater = moment(currentDate).add(2, 'days');
+
+                        const scheduleDate = moment(schedule.date);
+                        return (
+                            scheduleDate.isBetween(currentDate, threeDaysLater, null, '[]') &&
+                            moment(timeItem.startTime).isSameOrAfter(currentDate)
+                        );
+                    })
+                )
+            ))
+    };
+
+    if (loading) {
+        return (
+            <Box sx={{ textAlign: 'center' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <>
@@ -72,33 +132,24 @@ const BookTickets = () => {
                                             <h2 className="heading --t-center">PHIM ĐANG CHIẾU</h2>
                                         </div>
                                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                            {
-                                                Array.isArray(listMovieByTheaterId) && listMovieByTheaterId?.map((item) => {
-                                                    if (
-                                                        new Date(item.releaseDate) < currentTime
-                                                        && item.schedules.length > 0 && item.schedules.some(schedule =>
-                                                            schedule.theaters.some(theater =>
-                                                                theater.showTimes.some(timeItem => {
-                                                                    const currentDate = moment();
-                                                                    const threeDaysLater = moment(currentDate).add(2, 'days');
-
-                                                                    const scheduleDate = moment(schedule.date);
-                                                                    return (
-                                                                        scheduleDate.isBetween(currentDate, threeDaysLater, null, '[]') &&
-                                                                        moment(timeItem.startTime).isSameOrAfter(currentDate)
-                                                                    );
-                                                                }
-                                                                )
-                                                            )
-                                                        )) {
-                                                        return (
-                                                            <Grid item xs={6}>
-                                                                <BookTicket bookTicket={item}></BookTicket>
-                                                            </Grid>
-                                                        )
-                                                    }
-                                                })
-                                            }
+                                            {Array.isArray(listMovieByTheaterId) && listMovieByTheaterId.filter(isCurrentMovie).length > 0 ? (
+                                                listMovieByTheaterId.map((item) => (
+                                                    isCurrentMovie(item) && (
+                                                        <Grid item xs={6} key={item.id}>
+                                                            <BookTicket bookTicket={item}></BookTicket>
+                                                        </Grid>
+                                                    )
+                                                ))
+                                            ) : (
+                                                <div style={{ opacity: 1, transform: 'none' }}>
+                                                    <div className="movies-noti">
+                                                        <div className="movies-noti-img">
+                                                            <img src="/Images/movie-updating.png" alt="movie-updating" />
+                                                        </div>
+                                                        <p className="txt">Đang cập nhật</p>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </Grid>
                                     </TabPanel>
                                     <TabPanel value="2">
@@ -106,19 +157,55 @@ const BookTickets = () => {
                                             <h2 className="heading --t-center">PHIM SẮP CHIẾU</h2>
                                         </div>
                                         {
-                                            Array.isArray(listMovieByTheaterId) && listMovieByTheaterId?.map((item) => {
-                                                if (new Date(item.releaseDate) >= currentTime) {
-                                                    return (
-                                                        <Grid item xs={6}>
-                                                            <BookTicket bookTicket={item}></BookTicket>
-                                                        </Grid>
-                                                    )
-                                                }
-                                            })
+                                            Array.isArray(listMovieByTheaterId) && listMovieByTheaterId.filter(isUpcomingMovie).length > 0 ?
+                                                (
+                                                    listMovieByTheaterId.map((item) => (
+                                                        isUpcomingMovie(item) && (
+                                                            <Grid item xs={6} key={item.id}>
+                                                                <BookTicket bookTicket={item}></BookTicket>
+                                                            </Grid>
+                                                        )
+                                                    )))
+                                                :
+                                                (
+                                                    <div style={{ opacity: 1, transform: 'none' }}>
+                                                        <div className="movies-noti">
+                                                            <div className="movies-noti-img">
+                                                                <img src="/Images/movie-updating.png" alt="" />
+                                                            </div>
+                                                            <p className="txt">Đang cập nhật</p>
+                                                        </div>
+                                                    </div>
+                                                )
                                         }
                                     </TabPanel>
                                     <TabPanel value="3">
-                                        Item Three
+                                        <div style={{ opacity: 1, transform: 'none' }}>
+                                            <div className="re-head">
+                                                <h2 className="heading --t-center">Suất chiếu đặc biệt</h2>
+                                            </div>
+                                            {
+                                                Array.isArray(listMovieByTheaterId) && listMovieByTheaterId.filter(x => x.isSpecial).length > 0 ?
+                                                    (
+                                                        listMovieByTheaterId.map((item) => (
+                                                            item.isSpecial && (
+                                                                <Grid item xs={6} key={item.id}>
+                                                                    <BookTicket bookTicket={item}></BookTicket>
+                                                                </Grid>
+                                                            )
+                                                        )))
+                                                    :
+                                                    (
+                                                        <div className="movies-noti">
+                                                            <div className="movies-noti-img">
+                                                                <img src="/Images/movie-updating.png" alt="" />
+                                                            </div>
+                                                            <p className="txt">Đang cập nhật</p>
+                                                        </div>
+                                                    )
+                                            }
+                                            
+                                        </div>
                                     </TabPanel>
                                 </TabContext>
                             </Box>

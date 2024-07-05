@@ -2,8 +2,8 @@ import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class SendAuthCode extends StatefulWidget {
-  SendAuthCode({super.key, required this.code});
-  String code;
+ const SendAuthCode({super.key, required this.code});
+ final String code;
 
   @override
   // ignore: library_private_types_in_public_api
