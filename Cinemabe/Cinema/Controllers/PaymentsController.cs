@@ -104,7 +104,7 @@ namespace Cinema.Controllers
                             var bytes = Encoding.UTF8.GetBytes(resultJson);
                             var base64Result = Convert.ToBase64String(bytes);
 
-                            var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
+                            var customUrl = $"http://103.104.122.137:9002/checkout/info?result={base64Result}";
                             return Redirect(customUrl);
                         }
                         else
@@ -236,7 +236,7 @@ namespace Cinema.Controllers
                     var bytes = Encoding.UTF8.GetBytes(resultJson);
                     var base64Result = Convert.ToBase64String(bytes);
 
-                    var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
+                    var customUrl = $"http://103.104.122.137:9002/checkout/info?result={base64Result}";
                     return Redirect(customUrl);
                 }
                 else

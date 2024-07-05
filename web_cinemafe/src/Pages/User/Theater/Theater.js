@@ -143,15 +143,16 @@ const Theater = (props) => {
     } = useSelector((state) => state.CinemasReducer);
     const {
         userId,
-        isLoggedIn
+        isLoggedIn,
+        loginInfo
     } = useSelector((state) => state.UserReducer);
-    const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(false);
-    const [selectedheaterName, setSelectedTheaterName] = useState(null);
+    const [showTicketType_Seat_Combo, setShowTicketType_Seat_Combo] = useState(props.showTicketType_Seat_Combo || false);
+    const [selectedheaterName, setSelectedTheaterName] = useState(props.selectedheaterName);
     const [setselectedTheaterAddress, setSetselectedTheaterAddress] = useState(null);
-    const [selectedShowTime, setSelectedShowTime] = useState(null);
+    const [selectedShowTime, setSelectedShowTime] = useState(props.selectedShowTime);
     const [setselectedStartTime, setSetselectedStartTime] = useState(null);
-    const [selectedShowTimeId, setSelectedShowTimeId] = useState(null);
-    const [selectedTheaterId, setSelectedTheaterId] = useState(null);
+    const [selectedShowTimeId, setSelectedShowTimeId] = useState(props.showTimeId);
+    const [selectedTheaterId, setSelectedTheaterId] = useState(props.theaterId);
     const [countdown, setCountdown] = useState(300);
     const [timerRunning, setTimerRunning] = useState(false);
     const [selectedRoomId, setselectedRoomId] = useState(props.roomId);
@@ -168,7 +169,7 @@ const Theater = (props) => {
             acc[combo.id] = 0;
             return acc;
         }, {}));
-    const [selectedShowTimeColorActiveId, setSelectedShowTimeColorActiveId] = useState({ showTimeId: null, roomId: null });
+    const [selectedShowTimeColorActiveId, setSelectedShowTimeColorActiveId] = useState({ showTimeId: props.showTimeId || null, roomId: props.roomId || null });
     const [totalPrice, setTotalPrice] = useState(0);
     const [show, setShow] = useState(false);
     const [hasShownHSSVWarning, setHasShownHSSVWarning] = useState(false);
@@ -180,6 +181,7 @@ const Theater = (props) => {
     const [activeDateIndex, setActiveDateIndex] = useState(props.activeDateIndex || 0);
     const [activeTheaterIndex, setActiveTheaterIndex] = useState([]);
     const navigate = useNavigate();
+    const currentTime = moment();
 
     useEffect(() => {
         if (props.theaterId && props.showTimeId && props.roomId && props.selectedShowTime && props.selectedheaterName) {
@@ -257,7 +259,6 @@ const Theater = (props) => {
     useEffect(() => {
         let totalSeatType = Object.entries(countTicketTypes).map(([key, value]) => [key, Object.values(value).reduce((acc, curr) => acc + curr, 0)])
             .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {})
-
         dispatch(updateTotalSeatTypeAndProceed(totalSeatType, selectedShowTimeId, selectedRoomId));
 
     }, [countTicketTypes]);
@@ -521,7 +522,6 @@ const Theater = (props) => {
     }
 
     const renderSchedule = () => {
-        const currentTime = moment();
         const selectedDate = dates[activeDateIndex].format("YYYY-MM-DD");
         const schedule = props.MovieDetail?.schedules?.find(sch => moment(sch.date).format("YYYY-MM-DD") === selectedDate);
 
@@ -655,10 +655,44 @@ const Theater = (props) => {
             totalPrice: totalPrice
         }
         
-        dispatch(SaveBookingInfoAction(invoiceDTO, movieInfoBooking));
-        navigate("/checkout");
+        var ageRestriction = props.MovieDetail.ageRestrictionName.substring(1)
+        if (!isNaN(ageRestriction)) {
+            if (currentTime.diff(moment(loginInfo.birthDay), 'years') < ageRestriction) {
+                Swal.fire({
+                    title: "Bạn chưa đủ tuổi để xem phim này",
+                    text: "Vui lòng quay lại sau khi đủ tuổi!",
+                    padding: "15px",
+                    width: "430px",
+                    customClass: {
+                        confirmButton: 'custom-ok-button'
+                    },
+                    showCancelButton: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate("/")
+                    }
+                })
+            }
+            else {
+                dispatch(SaveBookingInfoAction(invoiceDTO, movieInfoBooking));
+                navigate("/checkout");
+            }
+        }
+        else {
+            dispatch(SaveBookingInfoAction(invoiceDTO, movieInfoBooking));
+            navigate("/checkout");
+        }
     };
 
+    useEffect(() => {
+        var ageRestriction = props.MovieDetail.ageRestrictionName.substring(1)
+        console.log(!isNaN(ageRestriction));
+        if (!isNaN(ageRestriction)) {
+            console.log("Vào");
+            console.log(ageRestriction);
+            console.log(currentTime.diff(moment(loginInfo.birthDay), 'years') >= ageRestriction);
+        }
+    }, [loginInfo, currentTime, props]);
     return (
         <>
             <section className="sec-shtime">
@@ -946,7 +980,6 @@ const Theater = (props) => {
                     </div>
                 </>
             )}
-            <TicketInfo show={show} handleClose={handleClose} />
         </>
     )
 }

@@ -194,3 +194,40 @@
 .--t-center {
     text-align: center;
 }
+
+.BTSTabContentBox {
+    margin-bottom: 40px;
+}
+
+.movies-noti {
+    padding: 40px 0;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.movies-noti-img {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.movies-noti-img img {
+    filter: brightness(0) invert(1);
+}
+
+.movies-noti .txt {
+    font-size: 32px;
+    font-family: "Anton",
+        sans-serif;
+    text-transform: uppercase;
+    color: #f3ea28;
+}
+
+.movies-noti.center {
+    flex: 1;
+}
+
+@media (max-width: 1200px) {
+    .movies-noti .txt {
+        font-size: 27px;
+    }
+}
