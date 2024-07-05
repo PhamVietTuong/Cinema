@@ -7,7 +7,7 @@ export class baseService {
             url: `${DOMAIN}/${url}`,
             method: "PUT",
             data: model,
-            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) }, 
+            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) || localStorage.getItem(TOKEN) }, 
         });
     };
 
@@ -16,13 +16,13 @@ export class baseService {
             url: `${DOMAIN}/${url}`,
             method: "POST",
             data: model,
-            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) }, 
+            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) || localStorage.getItem(TOKEN) }, 
         });
     };
 
     postImage = (url, model) => {
         const headers = {
-            Authorization: "Bearer " + sessionStorage.getItem(TOKEN),
+            Authorization: "Bearer " + sessionStorage.getItem(TOKEN) || localStorage.getItem(TOKEN),
             'Content-Type': 'multipart/form-data',
         };
 
@@ -38,7 +38,7 @@ export class baseService {
         return Axios({
             url: `${DOMAIN}/${url}`,
             method: "GET",
-            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) },
+            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) || localStorage.getItem(TOKEN) },
         });
     };
 
@@ -46,7 +46,7 @@ export class baseService {
         return Axios({
             url: `${DOMAIN}/${url}`,
             method: "DELETE",
-            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) },
+            headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) || localStorage.getItem(TOKEN) },
         });
     };
 }

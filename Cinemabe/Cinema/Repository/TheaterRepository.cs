@@ -71,6 +71,37 @@ namespace Cinema.Repository
             {
                 void addMovie(int time, ProjectionForm form)
                 {
+                    var schedules = item.showTimes
+                            .Where(sRoom => sRoom.ShowTime.ProjectionForm == form)
+                            .GroupBy(sRoom => sRoom.ShowTime.StartTime.Date)
+                            .Select(st => new ScheduleRowViewModel
+                            {
+                                Date = st.Key,
+                                Theaters = st.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address, x.Room.TheaterId })
+                                .Select(x => new TheaterRowViewModel
+                                {
+                                    TheaterId = x.Key.TheaterId,
+                                    TheaterAddress = x.Key.Address,
+                                    TheaterName = x.Key.Name,
+                                    ShowTimes = x.Select(showtime =>
+                                    {
+                                        bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == showtime.RoomId).Any(x => x.SeatType.Name == "Nằm");
+                                        return new ShowTimeRowViewModel
+                                        {
+                                            RoomId = showtime.Room.Id,
+                                            RoomName = showtime.Room.Name,
+                                            ShowTimeId = showtime.ShowTime.Id,
+                                            StartTime = showtime.ShowTime.StartTime,
+                                            EndTime = showtime.ShowTime.EndTime,
+                                            ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
+                                        };
+                                    }).ToList()
+
+                                }).ToList(),
+                            }).ToList();
+
+                    bool isSpecial = item.movie.ReleaseDate > DateTime.Now && schedules.Any();
+
                     rows.Add(new MovieDetailViewModel
                     {
                         Id = item.movie.Id,
@@ -89,34 +120,8 @@ namespace Cinema.Repository
                         MovieType = String.Join(", ", item.types.Select(type => type.MovieType.Name)),
                         ShowTimeTypeName = form == ProjectionForm.Time2D ? "2D" : "3D",
                         ProjectionForm = (int)form,
-                        Schedules = item.showTimes
-                            .Where(sRoom => sRoom.ShowTime.ProjectionForm == form)
-                            .GroupBy(sRoom => sRoom.ShowTime.StartTime.Date)
-                            .Select(st => new ScheduleRowViewModel
-                            {
-                                Date = st.Key,
-                                Theaters = st.GroupBy(x => new { x.Room.Theater.Name, x.Room.Theater.Address, x.Room.TheaterId })
-                                .Select(x => new TheaterRowViewModel
-                                {
-                                    TheaterId = x.Key.TheaterId,
-                                    TheaterAddress = x.Key.Address,
-                                    TheaterName = x.Key.Name,
-                                    ShowTimes = x.Select(showtime =>
-                                     {
-                                         bool isDulexe = _context.Seat.Include(x => x.SeatType).Where(x => x.RoomId == showtime.RoomId).Any(x => x.SeatType.Name == "Nằm");
-                                         return new ShowTimeRowViewModel
-                                         {
-                                             RoomId = showtime.Room.Id,
-                                             RoomName = showtime.Room.Name,
-                                             ShowTimeId = showtime.ShowTime.Id,
-                                             StartTime = showtime.ShowTime.StartTime,
-                                             EndTime = showtime.ShowTime.EndTime,
-                                             ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
-                                         };
-                                     }).ToList()
-
-                                }).ToList(),
-                            }).ToList()
+                        IsSpecial = isSpecial,
+                        Schedules = schedules
 
                     });
                 }

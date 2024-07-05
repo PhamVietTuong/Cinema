@@ -26,7 +26,7 @@ const Home = () => {
     useEffect(() => {
         if (movieList && movieList.length > 0) {
             const today = moment();
-            const showing = movieList.filter(movie => moment(movie.releaseDate).isBefore(today));
+            const showing = movieList.filter(movie => moment(movie.releaseDate).isSameOrBefore(today));
             const cooming = movieList.filter(movie => moment(movie.releaseDate).isAfter(today));
 
             setMovieShowing(showing);

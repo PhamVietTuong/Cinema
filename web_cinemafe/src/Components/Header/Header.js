@@ -64,11 +64,7 @@ const Header = (props) => {
                                 <img alt="CineStar Logo" src="/Images/logo.png" />
                             </a>
                             <div className="hd-action" >
-                                <a className="btn book-now" href="/movie/">
-                                    <FontAwesomeIcon className="icon" icon={faTicket} />
-                                    <span className="txt">Đặt Vé Ngay</span>
-                                </a>
-                                <a className="btn book-food" href="/popcorn-drink/">
+                                <a className="btn book-food btn--second" href="/popcorn-drink/">
                                     <img className="icon" src="/Images/HeaderAndFooter/ic-cor.svg" alt="" />
                                     <span className="txt">Đặt Bắp Nước</span>
                                 </a>

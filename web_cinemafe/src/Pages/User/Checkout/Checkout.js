@@ -98,8 +98,8 @@ const Checkout = () => {
                                                                             className={`CheckoutFormLabel CheckoutIcon CheckoutHover ${selectedPaymentMethod === 'VNPay' ? 'active' : ''}`}
                                                                             onClick={() => handleActiveCheckout('VNPay')}
                                                                         >
-                                                                            <span class="img"><img src="/Images/img-momo.png" alt="VNPay" /></span>
-                                                                            <p class="text">Thanh toán qua VNPAY</p>
+                                                                            <span class="img"><img src="/Images/img-vnpay.png" alt="VNPay" /></span>
+                                                                            <p class="text">Thanh toán qua VNPay</p>
                                                                         </FormLabel>
                                                                     </FormControl>
                                                                     <div className='CheckoutButtonPayment'>

@@ -108,19 +108,23 @@ export const SeatBeingSelected = (infoSeat, showTimeId, roomId) => {
 
 export const updateTotalSeatTypeAndProceed = (totalSeatType, showTimeId, roomId) => {
     return async (dispatch, getState) => {
-        dispatch({
-            type: TOTAL_CHOOSES_SEAT_TYPE,
-            totalSeatType
-        });
+        try {
+            dispatch({
+                type: TOTAL_CHOOSES_SEAT_TYPE,
+                totalSeatType
+            });
 
-        const { seatYour } = getState().CinemasReducer;
+            const { seatYour } = getState().CinemasReducer;
 
-        let infoTicketBooking = new InfoTicketBooking();
-        infoTicketBooking.infoSeats = seatYour;
-        infoTicketBooking.showTimeId = showTimeId;
-        infoTicketBooking.roomId = roomId;
-        if (connection.state === 'Connected') {
-            await connection.invoke("SeatBeingSelected", infoTicketBooking);
+            let infoTicketBooking = new InfoTicketBooking();
+            infoTicketBooking.infoSeats = seatYour;
+            infoTicketBooking.showTimeId = showTimeId;
+            infoTicketBooking.roomId = roomId;
+            if (connection.state === 'Connected') {
+                await connection.invoke("SeatBeingSelected", infoTicketBooking);
+            }
+        } catch (error) {
+            console.log("SeatBeingSelected", error);
         }
     }
 }

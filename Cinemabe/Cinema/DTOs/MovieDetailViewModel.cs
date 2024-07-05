@@ -21,6 +21,7 @@ namespace Cinema.DTOs
         public string MovieType { get; set; }
         public string ShowTimeTypeName { get; set; }
         public int ProjectionForm { get; set; }
+        public bool IsSpecial { get; set; }
         public List<ScheduleRowViewModel> Schedules { get; set; }
     }
 
