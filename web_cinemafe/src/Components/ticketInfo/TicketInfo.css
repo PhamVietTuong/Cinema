@@ -76,11 +76,10 @@
 .modal-content {
     background-color: #36c !important;
     text-align: left;
+    margin-top: 200px;
 }
 
-.prof-main .block-check {
-
-}
+.prof-main .block-check {}
 
 .form-checkout-cus {
     border-radius: 4px;

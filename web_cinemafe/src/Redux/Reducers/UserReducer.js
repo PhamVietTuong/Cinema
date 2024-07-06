@@ -38,7 +38,7 @@ export const UserReducer = (state = stateDefault, action) => {
             sessionStorage.removeItem(TOKEN);
             localStorage.removeItem(USER_LOGIN);
             localStorage.removeItem(TOKEN);
-            window.location.reload();
+            window.location.href = '/';
             return {
                 ...state,
                 isLoggedIn: false,
