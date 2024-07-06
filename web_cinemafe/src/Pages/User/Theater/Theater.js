@@ -205,7 +205,6 @@ const Theater = (props) => {
 
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
-            // setShow(true)
             Swal.fire({
                 title: "ĐÃ HẾT THỜI GIAN GIỮ VÉ",
                 padding: "15px",
