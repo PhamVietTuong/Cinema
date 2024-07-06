@@ -7,6 +7,7 @@ import { DOMAIN } from '../../../Ustil/Settings/Config';
 import { Box, CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetInvoiceListAction } from '../../../Redux/Actions/CinemasAction';
+import QRCode from 'qrcode.react';
 
 const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -19,7 +20,7 @@ const InfoTicketBooking = () => {
     const [movieInfo, setMovieInfo] = useState(null);
     const dispatch = useDispatch();
     const location = useLocation();
-
+    const [QR, setQR] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
             const params = new URLSearchParams(location.search);
@@ -29,7 +30,9 @@ const InfoTicketBooking = () => {
                 try {
                     const decodedResult = decodeURIComponent(escape(atob(result)));
                     const decodedJson = JSON.parse(decodedResult);
+                    console.log(decodedJson);
                     setMovieInfo(decodedJson.movieInfo);
+                    setQR(decodedJson.barcode)
                 } catch (error) {
                     console.error("Error decoding JSON:", error);
                 }
@@ -51,7 +54,7 @@ const InfoTicketBooking = () => {
                     <div className="checkout-success-wr">
                         <div className="checkout-success sec-heading">
                             <h2 className="heading">
-                                Chúc mừng bạn thanh toán thành công bằng thẻ quốc tế
+                                Chúc mừng bạn thanh toán thành công
                             </h2>
                         </div>
                         <div className="checkout-success-content">
@@ -71,10 +74,15 @@ const InfoTicketBooking = () => {
                                             style={{
                                                 width: 160,
                                                 height: 160,
-                                                backgroundColor: "transparent"
+                                                backgroundColor: "transparent",
                                             }}
                                         >
-                                            <canvas height={200} width={200} />
+                                            <QRCode
+                                                value={`Mã đặt vé: ${QR}`}
+                                                size={200}
+                                                bgColor="transparent"
+                                                fgColor="#000000"
+                                            />     
                                         </div>
                                     </div>
                                 </div>

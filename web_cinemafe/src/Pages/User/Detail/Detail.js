@@ -247,7 +247,7 @@ const Detail = () => {
                 unmountOnExit
                 timeout={{ enter: 0, exit: 300 }}
             >
-                <div className="modal" onClick={() => setShowTrailerPopup(false)}>
+                <div className="modalDetail" onClick={() => setShowTrailerPopup(false)}>
                     <iframe
                         style={{ position: "relative" }}
                         title="title4"
