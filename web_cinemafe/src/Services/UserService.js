@@ -12,6 +12,14 @@ export class UserService extends baseService {
     ForgetPassword = (sendAuthCode) => {
         return this.post(`api/Users/SendAuthCode`, sendAuthCode )
     }
+
+    UpdateUser = (userDTO) => {
+        return this.post(`api/Users/UpdateUser`, userDTO )
+    }
+
+    ChangePassword = (changePassword, userName) => {
+        return this.post(`api/Users/ChangePassword?changePassword=${changePassword}&userName=${userName}`);
+    }    
 }
 
 export const userService = new UserService();

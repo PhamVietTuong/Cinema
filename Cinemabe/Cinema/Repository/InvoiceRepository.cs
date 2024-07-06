@@ -60,6 +60,7 @@ namespace Cinema.Repository
                 ShowTimeType = isDulexe ? "Deluxe" : "Standard",
                 SeatName = String.Join(", ", invoiceTicket.Select(x => x.SeatName)),
                 FoodAndDrinks = resultFoodAndDrinks,
+                TheaterAddress = invoiceTicketRoom.Theater.Address,
             };
 
             return result;
