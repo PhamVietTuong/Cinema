@@ -166,6 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }).toList(),
                     onChanged: (e) async {
                       await Config.setLanguageMode(e!);
+                      await translate();
                       setState(() {
                         widget.refresh();
                       });
