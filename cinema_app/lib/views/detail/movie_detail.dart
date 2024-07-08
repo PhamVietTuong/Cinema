@@ -100,7 +100,6 @@ class _MovieDetailState extends State<MovieDetail>
     textSummary = translatedTexts[13];
     textUpdateMovie = translatedTexts[14];
 
-
     setState(() {});
   }
 
@@ -542,7 +541,7 @@ class _MovieDetailState extends State<MovieDetail>
                                                         });
                                                       },
                                                       child: Text(
-                                                       textSummary,
+                                                        textSummary,
                                                         style: TextStyle(
                                                             color: Styles
                                                                     .textColor[
@@ -608,6 +607,7 @@ class _MovieDetailState extends State<MovieDetail>
                                     Column(
                                         children: schedule.theaters.isNotEmpty
                                             ? schedule.theaters
+                                               
                                                 .map((e) => ShowtimeFromTheater(
                                                     scroll: scroll,
                                                     selectedDate: selectedDate,
@@ -617,7 +617,7 @@ class _MovieDetailState extends State<MovieDetail>
                                             : [
                                                 Center(
                                                     child: Text(
-                                                textUpdateMovie,
+                                                  textUpdateMovie,
                                                   style: TextStyle(
                                                       color: Styles.textColor[
                                                           Config.themeMode],

@@ -2,8 +2,8 @@ import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
-
+  const SettingsScreen({super.key, required this.refresh});
+ final Function() refresh;
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
@@ -104,7 +104,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }).toList(),
                     onChanged: (e) async {
                       await Config.setLanguageMode(e!);
-                      setState(() {});
+                      setState(() {
+                        widget.refresh();
+                      });
                     }),
               ),
               Container(
@@ -155,7 +157,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         .toList(),
                     onChanged: (e) async {
                       await Config.setThemeMode(e!);
-                      setState(() {});
+                      setState(() {
+                        widget.refresh();
+                      });
                     }),
               ),
             ]),

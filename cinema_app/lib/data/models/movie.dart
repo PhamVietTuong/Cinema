@@ -3,6 +3,7 @@
 //import 'dart:convert';
 import 'dart:convert';
 
+
 import 'package:cinema_app/config.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,6 +26,7 @@ class Movie {
   String movieType;
   String showTimeTypeName;
   int projectionForm;
+  bool isSpecial;
 
   DateTime releaseDate = DateTime.now();
 
@@ -46,6 +48,7 @@ class Movie {
     this.time = 0,
     this.trailer = "",
     this.projectionForm = 0,
+    this.isSpecial=true,
   });
 
   Movie.fromJson(Map<String, dynamic> json)
@@ -65,11 +68,13 @@ class Movie {
         time = json["time"] ?? -1,
         trailer = json["trailer"] ?? "",
         projectionForm = json["projectionForm"] ?? 0,
+        isSpecial=json["isSpecial"]??true,
         schedules = json["schedules"] != null
             ? (json["schedules"] as List)
                 .map((e) => Schedule.fromJson(e as Map<String, dynamic>))
                 .toList()
             : [];
+
 
   String getFullName() {
     return '$name $showTimeTypeName ($ageRestrictionName)';

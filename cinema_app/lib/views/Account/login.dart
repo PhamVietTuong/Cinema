@@ -1,3 +1,6 @@
+import 'package:cinema_app/components/bottom_nav.dart';
+import 'package:cinema_app/views/Account/user_info_page.dart';
+import 'package:cinema_app/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';
@@ -16,34 +19,89 @@ class _LoginContentState extends State<LoginContent>
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late UserPresenter _presenter;
-   bool _obscurePassword = true;
+  String textPass = "Mật khẩu";
+  String textLogin = "Đăng nhập";
+  bool _obscurePassword = true;
   String? _token;
   DateTime? _tokenExpirationTime;
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(textPass),
+      Styles.translate(textLogin),
+    ]);
+    textPass = textTranlate[0];
+    textLogin = textTranlate[1];
+
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
-    _presenter = UserPresenter(this); // Khởi tạo _presenter trong initState
-  }
-
-  Future<User> login(Login login) {
-    return _presenter.login(login); // Gọi phương thức login từ _presenter
+    _presenter = UserPresenter(this);
+    tranlate();
   }
 
   @override
   void onLoadError(String error) {
     // Xử lý khi có lỗi
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thông báo'),
+          content: Text('$error'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
-  void onLoadSuccess(String message) {
+  void LoadLoginSuccess(User user) {
+    Config.saveInfoUser(user);
+    showDialogOnLoadSuccess(user);
   }
 
-  void _saveTokenToLocal(String token,  DateTime expirationTime) async {
-    await Config.saveToken(token, expirationTime);
+  @override
+  void onLoadSuccess(String message) {}
+  void showDialogOnLoadSuccess(User user) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thông báo'),
+          content: const Text('Đăng nhập thành công'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => BottomNav()),
+                );
+              },  
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _saveTokenToLocal(String token, DateTime expirationTime) async {
+   // await Config.saveToken(token, expirationTime);
     setState(() {
       _token = token;
-      _tokenExpirationTime=expirationTime;
+      _tokenExpirationTime = expirationTime;
     });
     print('Token : $_token , $_tokenExpirationTime');
   }
@@ -51,8 +109,8 @@ class _LoginContentState extends State<LoginContent>
   @override
   Widget build(BuildContext context) {
     return Container(
-       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
-      padding: const EdgeInsetsDirectional.only(bottom: 15,top: 10),
+      margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
+      padding: const EdgeInsetsDirectional.only(bottom: 15, top: 10),
       decoration: BoxDecoration(
         color: Styles.backgroundContent[Config.themeMode],
         borderRadius: BorderRadius.circular(10),
@@ -66,12 +124,12 @@ class _LoginContentState extends State<LoginContent>
             icon: const Icon(Icons.person),
           ),
           const SizedBox(height: 15),
-        TextField(
+          TextField(
             style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
             controller: _passwordController,
             obscureText: _obscurePassword,
             decoration: InputDecoration(
-              labelText: 'Mật khẩu',
+              labelText: textPass,
               prefixIcon: const Icon(Icons.lock),
               labelStyle:
                   TextStyle(color: Styles.boldTextColor[Config.themeMode]),
@@ -84,9 +142,7 @@ class _LoginContentState extends State<LoginContent>
                   });
                 },
                 child: Icon(
-                  _obscurePassword
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
                 ),
               ),
             ),
@@ -119,46 +175,10 @@ class _LoginContentState extends State<LoginContent>
                 return;
               }
               Login loginInfo = Login(username: username, password: password);
-              login(loginInfo).then((user) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Thông báo'),
-                      content: const Text('Đăng nhập thành công'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }).catchError((e) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Thông báo'),
-                      content: Text('$e'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              });
+              _presenter.login(loginInfo);
             },
-            child: const Text(
-              'Đăng nhập',
+            child: Text(
+              textLogin,
               style: TextStyle(fontSize: Styles.titleFontSize),
             ),
           )
@@ -166,8 +186,9 @@ class _LoginContentState extends State<LoginContent>
       ),
     );
   }
+
   @override
-  void onLoadToken(String token , DateTime expirationTime) {
-    _saveTokenToLocal(token,expirationTime);
+  void onLoadToken(String token, DateTime expirationTime) {
+    _saveTokenToLocal(token, expirationTime);
   }
 }

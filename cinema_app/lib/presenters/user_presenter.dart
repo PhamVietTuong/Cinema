@@ -4,6 +4,7 @@ import 'package:cinema_app/data/models/user.dart';
 abstract class UserViewContract {
   void onLoadError(String error);
   void onLoadSuccess(String message);
+  void LoadLoginSuccess(User user);
  void onLoadToken(String token, DateTime expirationTime);
 }
 
@@ -24,13 +25,12 @@ class UserPresenter {
     }
   }
 
-  Future<User> login(Login login) async {
+  Future<void> login(Login login) async {
     try {
       User user = await repository.login(login);
-      _view.onLoadSuccess('Đăng nhập thành công');
+      _view.LoadLoginSuccess(user);
       _view.onLoadToken(user.token, user.expirationTime);
      // print(user.expirationTime);
-      return user;
     } catch (e) {
       _view.onLoadError('$e');
       throw ('$e');

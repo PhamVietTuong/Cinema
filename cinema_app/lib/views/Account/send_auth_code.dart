@@ -1,6 +1,7 @@
 import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SendAuthCode extends StatefulWidget {
   SendAuthCode({super.key, required this.code});
   String code;
