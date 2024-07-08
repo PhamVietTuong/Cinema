@@ -315,11 +315,13 @@ CREATE TABLE [InvoiceTicket] (
 CREATE TABLE [InvoiceFoodAndDrink] (
 	[Code] nvarchar(100) NOT NULL,
 	[FoodAndDrinkId] uniqueidentifier NOT NULL,
+	[TheaterId] uniqueidentifier NOT NULL,
 	[Quantity] int NOT NULL,
 	[Price] float NOT NULL,
 	PRIMARY KEY ([Code], [FoodAndDrinkId]),
 	CONSTRAINT FK_InvoiceFoodAndDrink_Invoice FOREIGN KEY ([Code]) REFERENCES [Invoice] ([Code]),
 	CONSTRAINT FK_InvoiceFoodAndDrink_FoodAndDrink FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
+	CONSTRAINT FK_InvoiceFoodAndDrink_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
 )
 
 CREATE TABLE [MovieType] (
