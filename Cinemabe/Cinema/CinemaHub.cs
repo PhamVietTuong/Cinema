@@ -189,6 +189,7 @@ namespace Cinema
                         {
                             Code = invoice.Code,
                             FoodAndDrinkId = item.FoodAndDrinkId,
+                            TheaterId = entity.TheaterId,
                             Quantity = item.Quantity,
                             Price = foodAndDrinkPrice,
                         };

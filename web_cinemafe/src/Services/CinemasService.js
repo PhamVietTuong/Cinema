@@ -134,6 +134,10 @@ export class CinemasService extends baseService {
     GetInvoiceList = (userId) => {
         return this.get(`api/Cinemas/GetInvoiceList/${userId}`)
     }
+
+    GetRevenue = (filterRevenue) => {
+        return this.post(`api/Cinemas/GetRevenue`, filterRevenue)
+    }
 }
 
 export const cinemasService = new CinemasService()
