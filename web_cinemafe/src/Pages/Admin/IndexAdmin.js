@@ -115,7 +115,7 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="AgeRestriction" />
+                                <ListItemText primary="Giới hạng độ tuổi" />
                             </ListItemButton>
                         </Link>
 
@@ -124,7 +124,7 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="TicketType" />
+                                <ListItemText primary="Loại vé" />
                             </ListItemButton>
                         </Link>
 
@@ -133,7 +133,7 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="MovieType" />
+                                <ListItemText primary="Thể loại phim" />
                             </ListItemButton>
                         </Link>
 
@@ -142,7 +142,7 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="SeatType" />
+                                <ListItemText primary="Loại ghế" />
                             </ListItemButton>
                         </Link>
 
@@ -151,7 +151,7 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="UserType" />
+                                <ListItemText primary="Loại người dùng" />
                             </ListItemButton>
                         </Link>
 
@@ -160,7 +160,16 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="Theater" />
+                                <ListItemText primary="Rạp" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="revenue">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Thống kê" />
                             </ListItemButton>
                         </Link>
                     </List>

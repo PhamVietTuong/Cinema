@@ -197,3 +197,12 @@
     position: relative;
     overflow: hidden;
 }
+
+.my-\[4rem\] {
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+.grid {
+    display: grid;
+}

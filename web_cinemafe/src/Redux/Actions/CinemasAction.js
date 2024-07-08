@@ -3,7 +3,7 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { INFO_SEARCH, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_INFO_THEATER, SET_INVOICE_BY_CODE, SET_LIST_AGERESTRICTION, SET_LIST_INVOICE_BY_USER, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
+import { INFO_SEARCH, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_DATA_STATICTICAL, SET_INFO_THEATER, SET_INVOICE_BY_CODE, SET_LIST_AGERESTRICTION, SET_LIST_INVOICE_BY_USER, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE } from "./Type/CinemasType";
 import { paymentsService } from "../../Services/PaymentsService";
 
 export const MovieListAction = () => {
@@ -98,8 +98,9 @@ export const SeatBeingSelected = (infoSeat, showTimeId, roomId) => {
             infoTicketBooking.infoSeats = seatYour
             infoTicketBooking.showTimeId = showTimeId
             infoTicketBooking.roomId = roomId
-            await connection.invoke("SeatBeingSelected", infoTicketBooking)
-
+            if (connection.state === 'Connected') {
+                await connection.invoke("SeatBeingSelected", infoTicketBooking)
+            }
         } catch (error) {
             console.log("SeatBeingSelected", error);
         }
@@ -886,6 +887,20 @@ export const GetInvoiceListAction = (userId) => {
             })
         } catch (error) {
             console.log("GetInvoiceListAction: ", error);
+        }
+    }
+}
+
+export const GetRevenueAction = (filterRevenue) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetRevenue(filterRevenue);
+            dispatch({
+                type: SET_DATA_STATICTICAL,
+                dataRevenue: result.data,
+            })
+        } catch (error) {
+            console.log("GetRevenueAction: ", error);
         }
     }
 }

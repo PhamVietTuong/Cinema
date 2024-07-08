@@ -80,44 +80,40 @@ namespace Cinema.Controllers
                     return BadRequest(new { error = "Invalid signature" });
                 }
 
-                if (ipnRequest.ResultCode != 0)
-                {
-                    return BadRequest(new { error = "Transaction failed" });
-                }
-
                 bool isUpdated = await _invoiceRepository.UpdateCodeStatusAsync(ipnRequest.OrderId, ipnRequest.ResultCode);
 
                 if (isUpdated)
                 {
+                    var resultCode = ipnRequest.ResultCode;
+                    var message = ipnRequest.Message;
                     if (ipnRequest.OrderInfo.Contains("web"))
                     {
-                        var movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
+                        var movieInfo = default(InvoiceViewModel);
 
-                        if (movieInfo != null)
+                        if (resultCode == 0)
                         {
-                            var resultData = new
-                            {
-                                barcode = ipnRequest.OrderId,
-                                movieInfo
-                            };
-                            var resultJson = JsonConvert.SerializeObject(resultData);
-                            var bytes = Encoding.UTF8.GetBytes(resultJson);
-                            var base64Result = Convert.ToBase64String(bytes);
+                            movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
+                        }
 
-                            var customUrl = $"http://103.104.122.137:9002/checkout/info?result={base64Result}";
-                            return Redirect(customUrl);
-                        }
-                        else
+                        var resultData = new
                         {
-                            return BadRequest(new { error = "Failed to retrieve movie information" });
-                        }
+                            barcode = ipnRequest.OrderId,
+                            resultCode,
+                            movieInfo
+                        };
+                        var resultJson = JsonConvert.SerializeObject(resultData);
+                        var bytes = Encoding.UTF8.GetBytes(resultJson);
+                        var base64Result = Convert.ToBase64String(bytes);
+
+                        var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
+                        return Redirect(customUrl);
                     }
                     else if (ipnRequest.OrderInfo.Contains("app"))
                     {
                         var response = new Dictionary<string, string>
                         {
-                            { "RspCode", ipnRequest.ResultCode.ToString() },
-                            { "Message", ipnRequest.Message }
+                            { "RspCode", resultCode.ToString() },
+                            { "Message", message }
                         };
                         return Ok(response);
                     }
@@ -224,19 +220,26 @@ namespace Cinema.Controllers
 
             if (application.Contains("web"))
             {
-                var movieInfo = await _invoiceRepository.GetInvoiceAsync(vnpParams["vnp_TxnRef"]);
+                var movieInfo = default(InvoiceViewModel);
+
+                if (responseCode == "00")
+                {
+                    movieInfo = await _invoiceRepository.GetInvoiceAsync(vnpParams["vnp_TxnRef"]);
+                }
+
                 if (movieInfo != null)
                 {
                     var resultData = new
                     {
                         barcode = vnpParams["vnp_TxnRef"],
+                        resultCode = responseCode,
                         movieInfo
                     };
                     var resultJson = JsonConvert.SerializeObject(resultData);
                     var bytes = Encoding.UTF8.GetBytes(resultJson);
                     var base64Result = Convert.ToBase64String(bytes);
 
-                    var customUrl = $"http://103.104.122.137:9002/checkout/info?result={base64Result}";
+                    var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
                     return Redirect(customUrl);
                 }
                 else

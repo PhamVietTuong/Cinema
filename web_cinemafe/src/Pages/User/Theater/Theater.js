@@ -683,15 +683,6 @@ const Theater = (props) => {
         }
     };
 
-    useEffect(() => {
-        var ageRestriction = props.MovieDetail.ageRestrictionName.substring(1)
-        console.log(!isNaN(ageRestriction));
-        if (!isNaN(ageRestriction)) {
-            console.log("Vào");
-            console.log(ageRestriction);
-            console.log(currentTime.diff(moment(loginInfo.birthDay), 'years') >= ageRestriction);
-        }
-    }, [loginInfo, currentTime, props]);
     return (
         <>
             <section className="sec-shtime">
