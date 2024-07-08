@@ -1,6 +1,5 @@
 import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
-import 'package:country_icons/country_icons.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,6 +10,56 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool switchValue = false;
+  String titleAppbar = "Cài đặt";
+  String section1 = "Ngôn ngữ";
+  Map<String, String> themes = {};
+  Map<String, String> languages = {};
+
+  void loadData() async {
+    await translate();
+  }
+
+  Future<void> translate() async {
+    await Future.wait(
+        [translateText(), translateLanguages(), translateThemes()]);
+    setState(() {});
+  }
+
+  Future<void> translateLanguages() async {
+    List<String> ls = await Future.wait(
+        Constants.languages.values.map((e) => Styles.translate(e)).toList());
+    int index = 0;
+    Constants.languages.forEach((key, value) {
+      languages[key] = ls[index];
+      index++;
+    });
+  }
+
+  Future<void> translateThemes() async {
+    List<String> ts = await Future.wait(
+        Constants.themes.values.map((e) => Styles.translate(e)).toList());
+    int index = 0;
+    Constants.themes.forEach((key, value) {
+      themes[key] = ts[index];
+      index++;
+    });
+  }
+
+  Future<void> translateText() async {
+    List<String> res = await Future.wait([
+      Styles.translate(titleAppbar),
+      Styles.translate(section1),
+    ]);
+    titleAppbar = res[0];
+    section1 = res[1];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           title: Text(
-            "Cài đặt",
+            titleAppbar,
             style: TextStyle(
               fontSize: Styles.appbarFontSize,
               color: Styles.boldTextColor[Config.themeMode],
@@ -41,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Container(
                 margin: const EdgeInsets.symmetric(
                     horizontal: Styles.defaultHorizontal, vertical: 10),
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   color: Styles.backgroundContent[Config.themeMode],
                   borderRadius: BorderRadius.circular(5),
@@ -54,30 +103,71 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.language_outlined,
-                          color: Styles.boldTextColor[Config.themeMode],
+                child: DropdownButton(
+                    value: Config.languageMode,
+                    dropdownColor: Styles.backgroundContent[Config.themeMode],
+                    style: TextStyle(
+                        color: Styles.boldTextColor[Config.themeMode],
+                        fontSize: Styles.titleFontSize),
+                    isExpanded: true,
+                    isDense: true,
+                    icon: Icon(Icons.keyboard_arrow_down_outlined,
+                        color: Styles.boldTextColor[Config.themeMode]),
+                    underline: const SizedBox(),
+                    items: languages.entries.map((e) {
+                      return DropdownMenuItem(
+                        value: e.key,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.language_outlined,
+                              color: Styles.boldTextColor[Config.themeMode],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              section1,
+                              style: TextStyle(
+                                  fontSize: Styles.titleFontSize,
+                                  color:
+                                      Styles.boldTextColor[Config.themeMode]),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              'icons/flags/png100px/${Constants.flags[e.key]}.png',
+                              width: 50,
+                              height: 30,
+                              package: 'country_icons',
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                                child: Row(
+                              children: [
+                                Text(e.value),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                if (e.key == Config.languageMode)
+                                  Icon(
+                                    Icons.check,
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
+                                  )
+                              ],
+                            )),
+                          ],
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Ngôn ngữ",
-                          style: TextStyle(
-                              fontSize: Styles.titleFontSize,
-                              color: Styles.boldTextColor[Config.themeMode]),
-                        ),
-                        Image.asset('icons/flags/png100px/vn.png',
-                            package: 'country_icons')
-                      ],
-                    ),
-                  ],
-                ),
+                      );
+                    }).toList(),
+                    onChanged: (e) async {
+                      await Config.setLanguageMode(e!);
+                      await translate();
+                    }),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(
@@ -106,25 +196,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     icon: Icon(Icons.keyboard_arrow_down_outlined,
                         color: Styles.boldTextColor[Config.themeMode]),
                     underline: const SizedBox(),
-                    items: Constants.themes.entries
-                        .map((e) => DropdownMenuItem(
-                              value: e.key,
-                              child: Row(
-                                children: [
+                    items: themes.entries.map((e) {
+                      return DropdownMenuItem(
+                        value: e.key,
+                        child: Row(
+                          children: [
+                            Icon(
+                                e.key.contains("light")
+                                    ? Icons.light_mode_outlined
+                                    : Icons.dark_mode_sharp,
+                                color: Styles.boldTextColor[Config.themeMode]),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                                child: Row(
+                              children: [
+                                Text(e.value),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                if (e.key == Config.themeMode)
                                   Icon(
-                                      e.key.contains("light")
-                                          ? Icons.light_mode_outlined
-                                          : Icons.dark_mode_sharp,
-                                      color: Styles
-                                          .boldTextColor[Config.themeMode]),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(e.value),
-                                ],
-                              ),
+                                    Icons.check,
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
+                                  )
+                              ],
                             ))
-                        .toList(),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                     onChanged: (e) async {
                       await Config.setThemeMode(e!);
                       setState(() {});

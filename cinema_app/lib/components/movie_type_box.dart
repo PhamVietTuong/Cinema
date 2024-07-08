@@ -2,8 +2,8 @@ import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MovieTypeBox extends StatelessWidget {
-  const MovieTypeBox({
+class MovieTypeBox extends StatefulWidget {
+   MovieTypeBox({
     super.key,
     this.maxBoxWith = 0.0,
     this.marginBottom = 0.0,
@@ -18,13 +18,35 @@ class MovieTypeBox extends StatelessWidget {
   final double padding;
 
   @override
+  State<MovieTypeBox> createState() => _MovieTypeBoxState();
+}
+
+class _MovieTypeBoxState extends State<MovieTypeBox> {
+  late String title;
+  void translate() async {
+    List<String> translatedTexts = await Future.wait([
+      Styles.translate(title),
+    ]);
+    title = translatedTexts[0];
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    title=widget.title;
+    translate();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<String> genres = title.split(', ');
+    List<String> genres =title.split(', ');
 
     return Container(
-      margin: EdgeInsets.only(top: marginTop, bottom: marginBottom),
-      constraints: maxBoxWith != 0.0
-          ? BoxConstraints(maxWidth: maxBoxWith)
+      margin:
+          EdgeInsets.only(top: widget.marginTop, bottom: widget.marginBottom),
+      constraints: widget.maxBoxWith != 0.0
+          ? BoxConstraints(maxWidth: widget.maxBoxWith)
           : const BoxConstraints(),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3.0),
@@ -39,11 +61,11 @@ class MovieTypeBox extends StatelessWidget {
       ),
       child: Container(
         margin: const EdgeInsets.all(2),
-                padding: EdgeInsets.all(padding),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3.0),
-                  color: Styles.backgroundContent[Config.themeMode],
-                ),
+        padding: EdgeInsets.all(widget.padding),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3.0),
+          color: Styles.backgroundContent[Config.themeMode],
+        ),
         child: Wrap(
           spacing: 8.0,
           children: genres.map((genre) {

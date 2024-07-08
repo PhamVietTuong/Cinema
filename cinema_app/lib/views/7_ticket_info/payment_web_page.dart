@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
+
+import '../../components/count_down.dart';
 
 
 class WebPageView extends StatefulWidget {
@@ -15,14 +18,37 @@ class WebPageView extends StatefulWidget {
 
 class _WebPageViewState extends State<WebPageView> {
   late String url;
+  Stream<int> get countStream async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield CountDown.time;
+    }
+  }
+
+  late StreamSubscription<int> subscription;
+  int counter = 0;
   @override
   void initState() {
     super.initState();
+    CountDown.index=5;
+    subscription = countStream.listen((_count) {
+    
+          if (CountDown.time == 0&&CountDown.index==5) {
+        Navigator.of(context).popUntil((route) {
+          return counter++ >= 5 || !Navigator.of(context).canPop();
+        });
+      }
+    });
     url = widget.url;
     // Thiết lập để WebView hoạt động trên Android
     // Thiết lập để WebView hoạt động trên ios
   }
-
+@override
+  void dispose() {
+    super.dispose();
+    subscription.cancel();
+    CountDown.index--;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +71,7 @@ class _WebPageViewState extends State<WebPageView> {
               onHttpError: (HttpResponseError error) {},
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) async {
-                if (request.url.contains("VNPayReturn")) {
+                if (request.url.contains("VNPayReturn")||request.url.contains("MomoIpn")) {
                   final response = await http.get(Uri.parse(request.url));
                   dynamic json = jsonDecode(response.body);
                   int state = 1;

@@ -10,11 +10,10 @@ class TitleInfoMovie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width / 4 - 5,
         child: Text(
           title,
           style:  TextStyle(
-            fontSize: Styles.textSize,
+            fontSize: Styles.titleFontSize,
             fontWeight: FontWeight.w500,
             color: Styles.titleColor[Config.themeMode],
           ),

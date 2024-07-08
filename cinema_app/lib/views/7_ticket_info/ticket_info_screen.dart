@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:cinema_app/components/info_bar.dart';
 import 'package:cinema_app/components/qr_box.dart';
@@ -7,17 +9,23 @@ import 'package:cinema_app/data/models/payment_request.dart';
 import 'package:cinema_app/presenters/payment_presenter.dart';
 import 'package:cinema_app/views/7_ticket_info/payment_web_page.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/count_down.dart';
 //import 'package:url_launcher/url_launcher.dart';
 
 class TicketInfoScreen extends StatefulWidget {
   const TicketInfoScreen(
       {super.key,
+      required this.opt,
       required this.orderId,
       required this.amount,
-      required this.booking});
+      required this.booking,
+      required this.info});
   final String orderId;
   final int amount;
   final Booking booking;
+  final String opt;
+  final String info;
   @override
   State<TicketInfoScreen> createState() => _TicketInfoScreenState();
 }
@@ -33,17 +41,40 @@ class _TicketInfoScreenState extends State<TicketInfoScreen>
       orderState = state;
     });
   }
+ Stream<int> get countStream async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield CountDown.time;
+    }
+  }
 
+  int counter = 0;
+  late StreamSubscription<int> subscription;
   @override
   void initState() {
     super.initState();
+    CountDown.index=4;
+    subscription = countStream.listen((_count) {
+       setState(() {
+        });
+          if (CountDown.time == 0&&CountDown.index==4) {
+        Navigator.of(context).popUntil((route) {
+          return counter++ >= 4 || !Navigator.of(context).canPop();
+        });
+      }
+    });
     orderState = 0;
     today = DateTime.now();
     payPre = PaymentPresenter(this);
-    payPre.createPayment(PaymentRequest(widget.orderId, widget.amount,
-        "Thanh toán cho đơn: ${widget.orderId}", "vnpay"));
+    payPre.createPayment(
+        PaymentRequest(widget.orderId, widget.amount, widget.info, widget.opt));
   }
-
+ @override
+  void dispose() {
+    super.dispose();
+    subscription.cancel();
+    CountDown.index--;
+  }
   String loadState() {
     if (orderState == 0) {
       return "Đang thanh toán";

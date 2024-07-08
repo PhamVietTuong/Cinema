@@ -20,7 +20,7 @@ abstract class PaymentRepository {
 class PaymentRepositoryIml implements PaymentRepository {
   @override
   Future<String> createPayment(PaymentRequest paymentRequest) async {
-    String option = paymentRequest.opt.compareTo("momo") == 0
+    String option = paymentRequest.opt.contains("Momo")
         ? "CreateLinkCheckoutMomo"
         : "VNPayCreatePayment";
     String api = '$serverUrl/api/Payments/$option';

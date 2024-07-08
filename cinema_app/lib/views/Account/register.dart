@@ -1,4 +1,3 @@
-import 'package:cinema_app/views/Account/send_auth_code.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
@@ -275,7 +274,6 @@ class _RegisterContentState extends State<RegisterContent>
   
   @override
   void onLoadToken(String token, DateTime expirationTime) {
-    // TODO: implement onLoadToken
   }
   
  

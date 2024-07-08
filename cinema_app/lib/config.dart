@@ -171,12 +171,15 @@ class Styles {
     return phoneNumber.replaceAllMapped(RegExp(r'^(\d{3})(\d{3})(\d{4,})$'),
         (match) => '${match[1]} ${match[2]} ${match[3]}');
   }
-
+  static  formatSecond(int seconds) {
+  int minutes = seconds ~/ 60;
+  int remainingSeconds = seconds % 60;
+  return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+}
   static Future<String> translate(String text) async {
-   // if (Config.languageMode!.compareTo(Constants.codeVNKey) == 0) return text;
     final translator = GoogleTranslator();
     return await translator
-        .translate(text, from: Constants.codeVNKey, to: Constants.codeENKey)
+        .translate(text, to: Config.languageMode!)
         .then((value) => value.text);
   }
 }
@@ -190,6 +193,11 @@ class Config {
 
   static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
+    // await Future.wait([
+    //   _prefs.remove(Constants.themeModeKey),
+    //   _prefs.remove(Constants.languageModeKey)
+    // ]);
+
     await loadMode();
   }
 
@@ -201,6 +209,7 @@ class Config {
   static Future<void> setLanguageMode(String mode) async {
     await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
+
   }
 
   static Future<void> loadMode() async {
@@ -271,6 +280,14 @@ class Config {
 }
 
 class Constants {
+  static const String textLoad = "Đang tải";
+  static const String textTitleError = "Lỗi";
+  static const String textError = "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau.";
+  static const String textClose = "Đóng";
+  static const String textReload = "Tải lại";
+  static const String textEmpty = "Trống rỗng";
+
+
   static const String themeModeKey = "themeMode";
   static const String languageModeKey = "languageMode";
   static const String defaultTheme = darkPurpleTheme;
@@ -279,8 +296,12 @@ class Constants {
   static const String tokenExpirationKey = "tokenExpiration";
   static const String searchHistory = "searchHistory";
 
-  static const String codeVNKey = 'vi';
-  static const String codeENKey = 'en';
+  static const String codeVNKey = 'vi'; // Vietnamese
+  static const String codeENKey = 'en'; // English
+  static const String codeFrench = 'fr'; // French
+  static const String codeGerman = 'de'; // German
+  static const String codeJapanese = 'ja'; // Japanese
+  static const String codeRussian = 'ru'; // Russian
 
   static const String darkPurpleTheme = "dark_purple";
   static const String lightPurpleTheme = "light_purple";
@@ -309,5 +330,18 @@ class Constants {
   static final Map<String, String> languages = {
     codeVNKey: "Tiếng Việt",
     codeENKey: "Tiếng Anh",
+    //codeFrench: "Tiếng Pháp",
+    // codeGerman: "Tiếng Đức",
+    codeJapanese: "Tiếng Nhật",
+    // codeRussian: "Tiếng Nga",
+  };
+
+  static final Map<String, String> flags = {
+    codeVNKey: "vn",
+    codeENKey: "us",
+    //codeFrench: "fr",
+    //codeGerman: "de",
+    codeJapanese: "jp",
+    // codeRussian: "ru",
   };
 }

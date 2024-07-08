@@ -24,5 +24,6 @@ namespace Cinema.DTOs
         public string SeatName { get; set; }
         public double TotalPrice { get; set; }
         public List<InvoiceFoodAndDrinkViewModel> FoodAndDrinks { get; set; }
+        public string TheaterAddress { get; set; }
     }
 }

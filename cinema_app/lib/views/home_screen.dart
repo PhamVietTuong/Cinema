@@ -34,21 +34,51 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
   List<Movie> upcomingMovies = List.filled(0, Movie(), growable: true);
   List<Movie> earlyMovies = List.filled(0, Movie(), growable: true);
   late List<String> trailers = [];
+  String titleAppbar = "Xin chào!";
+  String showing = "Đang chiếu";
+  String trailer = "Đoạn phim giới thiệu";
+  String early = "Chiếu sớm";
+  String comming = "Sắp chiếu";
+  String update = "Danh sách phim đang được cập nhật";
+  String load = " Đang tải...";
+
+  void translate() async {
+    List<String> translatedTexts = await Future.wait([
+      Styles.translate(titleAppbar),
+      Styles.translate(showing),
+      Styles.translate(trailer),
+      Styles.translate(early),
+      Styles.translate(comming),
+      Styles.translate(update),
+      Styles.translate(load),
+    ]);
+    titleAppbar = translatedTexts[0];
+    showing = translatedTexts[1];
+    trailer = translatedTexts[2];
+    early = translatedTexts[3];
+    comming = translatedTexts[4];
+    update = translatedTexts[5];
+    load = translatedTexts[6];
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
     moviePr = MoviePresenter(this);
     moviePr.fetchMovies();
+    translate();
   }
 
   @override
   Widget build(BuildContext context) {
+    var wS = MediaQuery.of(context).size.width;
+    var hS = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Styles.backgroundContent[Config.themeMode],
         title: Text(
-          "Xin Chào",
+          titleAppbar,
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
             color: Styles.boldTextColor[Config.themeMode],
@@ -94,7 +124,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                       height: 20,
                     ),
                     Text(
-                      "Đang tải...",
+                      load,
                       style: TextStyle(
                           fontSize: Styles.titleFontSize,
                           fontWeight: FontWeight.bold,
@@ -111,147 +141,120 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                         Container(
                           margin: const EdgeInsets.symmetric(
                               horizontal: Styles.defaultHorizontal),
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height / 3,
+                          width: wS,
+                          height: hS / 3,
                           child: const SlideShow(),
                         ),
                         Container(
+                          width: wS - 30,
                           margin: const EdgeInsets.symmetric(
                               horizontal: Styles.defaultHorizontal),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Styles.backgroundContent[Config.themeMode],
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 5, 5, 5),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: ToggleButtons(
-                                    borderRadius: BorderRadius.circular(10),
-                                    selectedColor:
-                                        Styles.boldTextColor[Config.themeMode],
-                                    fillColor: Colors.transparent,
-                                    borderWidth: 0,
-                                    onPressed: (int index) {
-                                      setState(() {
-                                        _selectedTabIndex = index;
-                                      });
-                                    },
-                                    isSelected: [
-                                      _selectedTabIndex == 0,
-                                      _selectedTabIndex == 1,
-                                      _selectedTabIndex == 2,
-                                    ],
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    3 -
-                                                20,
-                                        margin: const EdgeInsets.only(right: 5),
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: _selectedTabIndex == 0
-                                            ? BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                gradient: gradient,
-                                              )
-                                            : BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Styles
-                                                    .btnColor[Config.themeMode],
-                                              ),
-                                        child: Text(
-                                          "Đang chiếu",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: Styles.textSize,
-
-                                            color: _selectedTabIndex != 0
-                                                ? Styles.boldTextColor[
-                                                    Config.themeMode]
-                                                : Styles.textSelectionColor[
-                                                    Config.themeMode],
-
-                                          ),
+                          child: Expanded(
+                            child: ToggleButtons(
+                              borderRadius: BorderRadius.circular(10),
+                              renderBorder: false,
+                              fillColor: Colors.transparent,
+                              onPressed: (int index) {
+                                setState(() {
+                                  _selectedTabIndex = index;
+                                });
+                              },
+                              isSelected: [
+                                _selectedTabIndex == 0,
+                                _selectedTabIndex == 1,
+                                _selectedTabIndex == 2,
+                              ],
+                              children: [
+                                Container(
+                                  width: (wS - 30) * 0.33,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: _selectedTabIndex == 0
+                                      ? BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: gradient,
+                                        )
+                                      : BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color:
+                                              Styles.btnColor[Config.themeMode],
                                         ),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    3 -
-                                                20,
-                                        margin: const EdgeInsets.only(right: 5),
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: _selectedTabIndex == 1
-                                            ? BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                gradient: gradient,
-                                              )
-                                            : BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Styles
-                                                    .btnColor[Config.themeMode],
-                                              ),
-                                        child: Text(
-                                          "Chiếu sớm",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: Styles.textSize,
-                                            color: _selectedTabIndex != 1
-                                                ? Styles.boldTextColor[
-                                                    Config.themeMode]
-                                                : Styles.textSelectionColor[
-                                                    Config.themeMode],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    3 -
-                                                20,
-                                        margin: const EdgeInsets.only(right: 5),
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: _selectedTabIndex == 2
-                                            ? BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                gradient: gradient,
-                                              )
-                                            : BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Styles
-                                                    .btnColor[Config.themeMode],
-                                              ),
-                                        child: Text(
-                                          "Sắp chiếu",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: Styles.textSize,
-                                            color: _selectedTabIndex != 2
-                                                ? Styles.boldTextColor[
-                                                    Config.themeMode]
-                                                : Styles.textSelectionColor[
-                                                    Config.themeMode],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  child: Text(
+                                    showing,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: Styles.textSize,
+                                      color: _selectedTabIndex != 0
+                                          ? Styles
+                                              .boldTextColor[Config.themeMode]
+                                          : Styles.textSelectionColor[
+                                              Config.themeMode],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  width: (wS - 30) * 0.33,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: _selectedTabIndex == 1
+                                      ? BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: gradient,
+                                        )
+                                      : BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color:
+                                              Styles.btnColor[Config.themeMode],
+                                        ),
+                                  child: Text(
+                                    early,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: Styles.textSize,
+                                      color: _selectedTabIndex != 1
+                                          ? Styles
+                                              .boldTextColor[Config.themeMode]
+                                          : Styles.textSelectionColor[
+                                              Config.themeMode],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: (wS - 30) * 0.33,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: _selectedTabIndex == 2
+                                      ? BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: gradient,
+                                        )
+                                      : BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color:
+                                              Styles.btnColor[Config.themeMode],
+                                        ),
+                                  child: Text(
+                                    comming,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: Styles.textSize,
+                                      color: _selectedTabIndex != 2
+                                          ? Styles
+                                              .boldTextColor[Config.themeMode]
+                                          : Styles.textSelectionColor[
+                                              Config.themeMode],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Container(
@@ -268,7 +271,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                               .toList()
                                           : [
                                               Text(
-                                                "Danh sách phim đang được cập nhật",
+                                                update,
                                                 style: TextStyle(
                                                     color: Styles.textColor[
                                                         Config.themeMode]),
@@ -285,7 +288,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                               .toList()
                                           : [
                                               Text(
-                                                "Danh sách phim đang được cập nhật",
+                                                update,
                                                 style: TextStyle(
                                                     color: Styles.textColor[
                                                         Config.themeMode]),
@@ -302,7 +305,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                               .toList()
                                           : [
                                               Text(
-                                                "Danh sách phim đang được cập nhật",
+                                                update,
                                                 style: TextStyle(
                                                     color: Styles.textColor[
                                                         Config.themeMode]),
@@ -320,7 +323,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Video",
+                                trailer,
                                 style: TextStyle(
                                     color:
                                         Styles.boldTextColor[Config.themeMode],
@@ -328,7 +331,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height / 3,
+                                height: hS / 3,
                                 child: trailers.isNotEmpty
                                     ? PageView.builder(
                                         scrollDirection: Axis.horizontal,
@@ -343,7 +346,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                     .size
                                                     .height /
                                                 3,
-
                                             child: WebViewWidget(
                                               controller: WebViewController()
                                                 ..setJavaScriptMode(
@@ -375,7 +377,6 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                                 )
                                                 ..loadRequest(Uri.parse(
                                                     'https://www.youtube.com/embed/${trailers[index]}')),
-
                                             ),
                                           );
                                         },
@@ -406,23 +407,20 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               (e.releaseDate.day == today.day &&
                   e.releaseDate.month == today.month))
           .toList();
-
       upcomingMovies = movies
           .where((e) =>
               e.releaseDate.isAfter(today) &&
               e.releaseDate.month == today.month)
           .toList();
-
       earlyMovies = movies
           .where((e) =>
               e.releaseDate.isAfter(today) &&
               e.releaseDate.difference(today).inDays < 7)
           .toList();
-
-      trailers = showingMovies
+      trailers = lstMovie
           .where((movie) => movie.trailer.isNotEmpty)
           .map((movie) => movie.trailer)
-          .toSet() // Lấy ra trailer của các phim
+          .toSet()
           .toList();
       isLoadingData = false;
       //print("$moviesWithTrailer");

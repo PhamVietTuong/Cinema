@@ -46,7 +46,7 @@ class _BottomNavState extends State<BottomNav> {
                 child: Icon(Icons.newspaper_outlined),
               ),
               CurvedNavigationBarItem(
-                child: Icon(Icons.perm_identity),
+                child: Icon(Icons.manage_accounts_outlined),
               ),
             ],
             onTap: (newIndex) {

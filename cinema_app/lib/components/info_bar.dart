@@ -1,7 +1,7 @@
 import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 
-class InfoBar extends StatelessWidget {
+class InfoBar extends StatefulWidget {
   const InfoBar(
       {super.key,
       required this.title,
@@ -16,10 +16,31 @@ class InfoBar extends StatelessWidget {
   final double botBorderW;
 
   @override
+  State<InfoBar> createState() => _InfoBarState();
+}
+
+class _InfoBarState extends State<InfoBar> {
+  late String textTitle;
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(textTitle),
+    ]);
+    textTitle = textTranlate[0];
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    textTitle = widget.title;
+    tranlate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
-      padding: EdgeInsets.only(bottom: botBorderW),
+      padding: EdgeInsets.only(bottom: widget.botBorderW),
       margin: const EdgeInsets.only(bottom: 5),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -32,25 +53,27 @@ class InfoBar extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
+        decoration:
+            BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
         child: Row(
-          mainAxisAlignment: (titleMinWith != 0.0)
+          mainAxisAlignment: (widget.titleMinWith != 0.0)
               ? MainAxisAlignment.start
               : MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                img != ""
+                widget.img != ""
                     ? Container(
                         margin: const EdgeInsets.only(right: 5),
                         width: 30,
                         child: Image(
-                            image: NetworkImage('$serverUrl/Images/$img')))
+                            image: NetworkImage(
+                                '$serverUrl/Images/${widget.img}')))
                     : const SizedBox(),
                 Container(
-                  constraints: BoxConstraints(minWidth: titleMinWith),
+                  constraints: BoxConstraints(minWidth: widget.titleMinWith),
                   child: Text(
-                    title,
+                    textTitle,
                     style: TextStyle(
                         fontSize: Styles.titleFontSize,
                         fontWeight: FontWeight.bold,
@@ -63,12 +86,12 @@ class InfoBar extends StatelessWidget {
               width: 5,
             ),
             Expanded(
-              flex: (titleMinWith != 0.0) ? 1 : 0,
+              flex: (widget.titleMinWith != 0.0) ? 1 : 0,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    value,
+                    widget.value,
                     style: TextStyle(
                         fontSize: Styles.titleFontSize,
                         fontWeight: FontWeight.bold,
