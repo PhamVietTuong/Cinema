@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class SendAuthCode extends StatefulWidget {
-  SendAuthCode({super.key, required this.code});
-  String code;
+ const SendAuthCode({super.key, required this.code});
+ final String code;
 
   @override
   // ignore: library_private_types_in_public_api

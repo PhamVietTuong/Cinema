@@ -1,5 +1,17 @@
 ﻿Use [Cinema];
 
+IF OBJECT_ID('dbo.Comment', 'U') IS NOT NULL
+DROP TABLE dbo.Comment;
+
+If OBJECT_ID('dbo.Holiday', 'U') IS NOT NULL
+DROP TABLE dbo.Holiday;
+
+IF OBJECT_ID('dbo.Discount', 'U') IS NOT NULL
+DROP TABLE dbo.Discount;
+
+IF OBJECT_ID('dbo.DiscountType', 'U') IS NOT NULL
+DROP TABLE dbo.DiscountType;
+
 IF OBJECT_ID('dbo.MovieTypeDetail', 'U') IS NOT NULL
 DROP TABLE dbo.MovieTypeDetail;
 
@@ -23,6 +35,9 @@ DROP TABLE dbo.Seat;
 
 IF OBJECT_ID('dbo.Movie', 'U') IS NOT NULL
 DROP TABLE dbo.Movie;
+
+IF OBJECT_ID('dbo.[MemberShip]', 'U') IS NOT NULL
+DROP TABLE dbo.[MemberShip];
 
 IF OBJECT_ID('dbo.User', 'U') IS NOT NULL
 DROP TABLE dbo.[User];
@@ -58,6 +73,48 @@ IF OBJECT_ID('dbo.MovieType', 'U') IS NOT NULL
 DROP TABLE dbo.MovieType;
 
 
+
+
+CREATE TABLE [Holiday] (
+	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Name] nvarchar(255) NOT NULL,
+	[Description] nvarchar(255)  NULL,
+	[StartTime] char(10) NOT NULL,
+	[EndTime] char(10) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+)
+
+CREATE TABLE [DiscountType] (
+	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Name] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+)
+
+CREATE table [Discount] (
+	[Code] nvarchar(255) NULL,
+	[DiscountTypeId] UNIQUEIDENTIFIER NOT NULL,
+	[Name] nvarchar(255) NOT NULL,
+	[Image] nvarchar(255)  NULL,
+	[Description] nvarchar(255)  NULL,
+	[ForMember] bit  NULL,
+	[DiscountValue] float NULL,
+	[StartTime] datetime  NULL,
+	[EndTime] datetime  NULL,
+	PRIMARY KEY (Code),
+	CONSTRAINT FK_Discount_DiscountType FOREIGN KEY ([DiscountTypeId]) REFERENCES [DiscountType] (Id)
+)
+
+CREATE TABLE [MemberShip] (
+	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Name] nvarchar(255) NOT NULL,
+	[Description] nvarchar(255)  NULL,
+	[Value] float NOT NULL,
+	[Status] bit NOT NULL,
+	PRIMARY KEY (Id)
+)
+
 CREATE TABLE [UserType] (
     [Id] uniqueidentifier NOT NULL,
     [Name] varchar(255) NOT NULL,
@@ -75,9 +132,12 @@ CREATE TABLE [User] (
 	[Gender] bit,
     [PasswordHash] varchar(512) NOT NULL,
     [PasswordSalt] varchar(128) NOT NULL,
+	--05/07/2024
+	[MemberShipId] uniqueidentifier NOT NULL,
     [Status] bit NOT NULL,
     PRIMARY KEY (Id),
 	FOREIGN KEY (UserTypeId) REFERENCES UserType(Id)
+	FOREIGN KEY (MemberShipId) REFERENCES MemberShip(Id)
 );
 
 CREATE TABLE [AgeRestriction] (
@@ -106,6 +166,31 @@ CREATE TABLE [Movie] (
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Movie_AgeRestriction FOREIGN KEY ([AgeRestrictionId]) REFERENCES [AgeRestriction] (Id),
 )
+
+Create table [Comment] (
+	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[MovieId] UNIQUEIDENTIFIER NOT NULL,
+	[UserId] UNIQUEIDENTIFIER NOT NULL,
+	[Content] nvarchar(255) NOT NULL,
+	[Status] bit NOT NULL,
+	[CreatedDate] datetime NOT NULL default getdate(),
+	[ParentId] UNIQUEIDENTIFIER NULL,
+	PRIMARY KEY (Id),
+	CONSTRAINT FK_Comment_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
+	CONSTRAINT FK_Comment_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+	CONSTRAINT FK_Comment_Parent FOREIGN KEY ([ParentId]) REFERENCES [Comment] (Id),
+)
+
+Create table [Evaluation] (
+	[UserId] UNIQUEIDENTIFIER NOT NULL,
+	[MovieId] UNIQUEIDENTIFIER NOT NULL,
+	[Star] int NOT NULL,
+	[CreatedDate] datetime NOT NULL default getdate(),
+	PRIMARY KEY (UserId, MovieId),
+	CONSTRAINT FK_Evaluation_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
+	CONSTRAINT FK_Evaluation_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+)
+
 
 CREATE TABLE [Theater] (
     [Id] UNIQUEIDENTIFIER NOT NULL,
@@ -144,7 +229,10 @@ CREATE TABLE [TicketType] (
 CREATE TABLE [SeatTypeTicketType] (
 	[SeatTypeId] uniqueidentifier NOT NULL,
 	[TicketTypeId] uniqueidentifier NOT NULL,
-	[Price] float NOT NULL,
+	[Price2D] float NOT NULL,
+	[Price3D] float NOT NULL,
+	[PriceDiscount2D] float NULL,
+	[PriceDiscount3D] float NULL,
 	CONSTRAINT PK_SeatTypeTicketType PRIMARY KEY ([SeatTypeId], [TicketTypeId]),
 	CONSTRAINT FK_SeatTypeTicketType_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES [SeatType] (Id),
 	CONSTRAINT FK_SeatTypeTicketType_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
@@ -227,11 +315,13 @@ CREATE TABLE [InvoiceTicket] (
 CREATE TABLE [InvoiceFoodAndDrink] (
 	[Code] nvarchar(100) NOT NULL,
 	[FoodAndDrinkId] uniqueidentifier NOT NULL,
+	[TheaterId] uniqueidentifier NOT NULL,
 	[Quantity] int NOT NULL,
 	[Price] float NOT NULL,
 	PRIMARY KEY ([Code], [FoodAndDrinkId]),
 	CONSTRAINT FK_InvoiceFoodAndDrink_Invoice FOREIGN KEY ([Code]) REFERENCES [Invoice] ([Code]),
 	CONSTRAINT FK_InvoiceFoodAndDrink_FoodAndDrink FOREIGN KEY ([FoodAndDrinkId]) REFERENCES [FoodAndDrink] (Id),
+	CONSTRAINT FK_InvoiceFoodAndDrink_Theater FOREIGN KEY ([TheaterId]) REFERENCES [Theater] (Id),
 )
 
 CREATE TABLE [MovieType] (

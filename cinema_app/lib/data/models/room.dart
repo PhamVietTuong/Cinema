@@ -10,7 +10,7 @@ class Room {
   String theaterId;
   int maxRow;
   int maxCol;
-  bool status;
+  int status;
 
 
 
@@ -20,7 +20,7 @@ class Room {
       this.theaterId = "",
       this.maxRow = 0,
       this.maxCol = 0,
-      this.status = false});
+      this.status = -1});
 
   Room.fromJson(Map<String, dynamic> json)
       : id = json['id'] ?? "",
@@ -28,7 +28,7 @@ class Room {
         name = json['name'] ?? "",
         maxRow = json['width'] ?? 0,
         maxCol = json['length'] ?? 0,
-        status = json['status'] ?? false;
+        status = json['status'] ?? -1;
 
 
 }

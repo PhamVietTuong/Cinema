@@ -21,6 +21,7 @@ import TheaterDetail from "./Pages/Admin/Theater/TheaterDetail";
 import Profile from "./Pages/User/Account/Profile";
 import Showing from "./Pages/User/Showing/Showing";
 import Cooming from "./Pages/User/Cooming/Cooming";
+import Revenue from "./Pages/Admin/Revenue/Revenue";
 
 const Routers = () => {
     return (
@@ -72,6 +73,7 @@ const Routers = () => {
                         <Route path="UserType" element={<UserType />} />
                         <Route path="theater" element={<Theater />} />
                         <Route path="theater/:id" element={<TheaterDetail />} />
+                        <Route path="revenue" element={<Revenue />} />
                     </Route>
                 </Routes>
             </Router>

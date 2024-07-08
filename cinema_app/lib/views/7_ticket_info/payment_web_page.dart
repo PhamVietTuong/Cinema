@@ -71,7 +71,7 @@ class _WebPageViewState extends State<WebPageView> {
               onHttpError: (HttpResponseError error) {},
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) async {
-                if (request.url.contains("VNPayReturn")) {
+                if (request.url.contains("VNPayReturn")||request.url.contains("MomoIpn")) {
                   final response = await http.get(Uri.parse(request.url));
                   dynamic json = jsonDecode(response.body);
                   int state = 1;

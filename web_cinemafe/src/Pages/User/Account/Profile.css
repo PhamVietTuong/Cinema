@@ -1,3 +1,48 @@
+.icon-name {
+    display: flex;
+    align-items: center;
+}
+
+.icon-name .icon {
+    width: 42px;
+    height: 42px;
+}
+
+.icon-name h6 {
+    margin-left: 8px;
+}
+
+.tag .info-customer, .tag .history, .log-out {
+    font-family: "Josefin Sans",
+        sans-serif;
+    font-size: 16px;
+}
+
+.log-out {
+    color: #9c9c9c;
+}
+
+.log-out:hover {
+    cursor: pointer;
+    color: #F3EA28;
+}
+
+.log-out span {
+    margin-left: 8px;
+}
+
+.save-info, .change-password {
+    font-family: "Anton",
+        sans-serif !important;
+    font-size: 16px !important;
+    color: #000 !important;
+    width: 120px !important;
+    height: 40px !important;
+    background-color: #e2e8f0 !important;
+    border: none !important;
+    border-radius: 4px !important;
+}
+
 .profileTabList {
     background: linear-gradient(106deg, #639, #36c 102.69%);
     border-radius: 8px;
@@ -32,7 +77,7 @@
 }
 
 .heading.info {
-    font-size: 20px;
+    font-size: 24px;
     color: #000;
 }
 
@@ -43,4 +88,33 @@
 
 .profileTypography .heading.customer {
     font-size: 30px;
+}
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
+    font-family: "Josefin Sans",
+        sans-serif !important;
+}
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+    font-family: "Josefin Sans",
+        sans-serif !important;
+}
+
+.table-history th {
+    background-color: #36c;
+    color: #fff;
+}
+
+.table-history th {
+    font-weight: 800;
+    text-align: center;
+}
+
+.table-history td {
+    text-align: center;
+}
+
+.no-data {
+    color: #fff;
+    text-align: center;
 }

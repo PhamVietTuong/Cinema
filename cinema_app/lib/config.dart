@@ -212,7 +212,7 @@ class Config {
   static Future<void> setLanguageMode(String mode) async {
     await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
-    //print(languageMode);
+
   }
 
   static Future<void> loadMode() async {
