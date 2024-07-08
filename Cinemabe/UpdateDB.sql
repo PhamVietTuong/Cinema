@@ -174,3 +174,8 @@ ALTER COLUMN Status int
 
 ALTER TABLE Room
 ALTER COLUMN Status int 
+
+ALTER TABLE InvoiceFoodAndDrink
+ADD TheaterId [uniqueidentifier] NULL
+CONSTRAINT FK_InvoiceFoodAndDrink_Theater
+FOREIGN KEY (TheaterId) REFERENCES Theater(Id);
