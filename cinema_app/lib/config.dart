@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cinema_app/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -167,15 +170,21 @@ class Styles {
     return '${formatTime(time)} ${formatDay(time)}';
   }
 
+  static String formatDate(DateTime date) {
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+
   static String formatPhoneNumber(String phoneNumber) {
     return phoneNumber.replaceAllMapped(RegExp(r'^(\d{3})(\d{3})(\d{4,})$'),
         (match) => '${match[1]} ${match[2]} ${match[3]}');
   }
-  static  formatSecond(int seconds) {
-  int minutes = seconds ~/ 60;
-  int remainingSeconds = seconds % 60;
-  return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
-}
+
+  static formatSecond(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
   static Future<String> translate(String text) async {
     final translator = GoogleTranslator();
     return await translator
@@ -188,16 +197,10 @@ class Config {
   static late SharedPreferences _prefs;
   static late String? themeMode;
   static late String? languageMode;
-  static late String? _token;
-  static late DateTime? _tokenExpirationTime;
+  static User? userInfo;
 
   static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-    // await Future.wait([
-    //   _prefs.remove(Constants.themeModeKey),
-    //   _prefs.remove(Constants.languageModeKey)
-    // ]);
-
     await loadMode();
   }
 
@@ -225,30 +228,14 @@ class Config {
       await setLanguageMode(Constants.defaultLanguage);
       languageMode = Constants.defaultLanguage;
     }
-  }
-
-  static Future<void> saveToken(String token, DateTime expirationTime) async {
-    _token = token;
-    _tokenExpirationTime = expirationTime;
-
-    if (expirationTime.isBefore(DateTime.now())) {
-      // Token is already expired, clear it
-      await clearToken();
-      return;
+    String? userJson = _prefs.getString(Constants.userkey);
+    if (userJson != null && userJson.isNotEmpty) {
+      userInfo = User.fromJson(jsonDecode(userJson));
+      if (userInfo!.expirationTime.isBefore(DateTime.now())) {
+        await logOut();
+        return;
+      }
     }
-
-    await _prefs.setString(Constants.tokenKey, token);
-    await _prefs.setString(
-        Constants.tokenExpirationKey, expirationTime.toIso8601String());
-  }
-
-  static Future<void> clearToken() async {
-    await _prefs.remove(Constants.tokenKey);
-    await _prefs.remove(Constants.tokenExpirationKey);
-  }
-
-  static String? getToken() {
-    return _token ?? _prefs.getString(Constants.tokenKey);
   }
 
   static Future<List<String>> loadSearchHistory() async {
@@ -277,16 +264,29 @@ class Config {
     searchHistory.remove(query);
     await _prefs.setStringList(Constants.searchHistory, searchHistory);
   }
+
+  static Future<void> saveInfoUser(User? user) async {
+    if (user != null) {
+      String jsonString = json.encode(user.toJson());
+      await _prefs.setString(Constants.userkey, jsonString);
+      userInfo = user;
+    }
+  }
+
+  static Future<void> logOut() async {
+    await _prefs.remove(Constants.userkey);
+    userInfo = null;
+  }
 }
 
 class Constants {
   static const String textLoad = "Đang tải";
   static const String textTitleError = "Lỗi";
-  static const String textError = "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau.";
+  static const String textError =
+      "Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau.";
   static const String textClose = "Đóng";
   static const String textReload = "Tải lại";
   static const String textEmpty = "Trống rỗng";
-
 
   static const String themeModeKey = "themeMode";
   static const String languageModeKey = "languageMode";
@@ -295,6 +295,7 @@ class Constants {
   static const String tokenKey = "token";
   static const String tokenExpirationKey = "tokenExpiration";
   static const String searchHistory = "searchHistory";
+  static const String userkey = "user";
 
   static const String codeVNKey = 'vi'; // Vietnamese
   static const String codeENKey = 'en'; // English

@@ -25,22 +25,20 @@ class ShowtimeFromTheater extends StatefulWidget {
 
 class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
   bool isShow = false;
- void translate() async {
+  void translate() async {
     List<String> translatedTexts = await Future.wait([
       Styles.translate(widget.item.theaterName),
       Styles.translate(widget.item.theaterAddress),
-
     ]);
     widget.item.theaterName = translatedTexts[0];
-    widget.item.theaterAddress=translatedTexts[1];
+    widget.item.theaterAddress = translatedTexts[1];
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    widget.item.showtimes
-        .sort((a, b) => a.startTime.compareTo(b.startTime));
+    widget.item.showtimes.sort((a, b) => a.startTime.compareTo(b.startTime));
     translate();
   }
 
@@ -106,6 +104,10 @@ class _ShowtimeFromTheaterState extends State<ShowtimeFromTheater> {
                     runSpacing: 5,
                     spacing: 10,
                     children: widget.item.showtimes
+                        .where(
+                          (showtime) =>
+                              showtime.startTime.isAfter(DateTime.now()),
+                        )
                         .map(
                           (e) => ShowtimeItem(
                             showtimeRoom: e,

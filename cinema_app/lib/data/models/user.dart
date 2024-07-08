@@ -7,7 +7,6 @@ class User {
   String fullname;
   String phone;
   String email;
-  String address;
   DateTime birthday;
   String image;
   bool gender;
@@ -21,7 +20,6 @@ class User {
     this.fullname = "",
     this.phone = "",
     this.email = "",
-    this.address = "",
     DateTime? birthday,
     this.image = "",
     this.gender = false,
@@ -38,7 +36,6 @@ class User {
       fullname: json["fullName"] ?? "",
       phone: json["phone"] ?? "",
       email: json["email"] ?? "",
-      address: json["address"] ?? "",
       birthday: json["birthday"] != null
           ? DateTime.parse(json["birthday"])
           : DateTime.now(),
@@ -59,7 +56,6 @@ class User {
       "fullName": fullname,
       "phone": phone,
       "email": email,
-      "address": address,
       "birthday": birthday.toIso8601String(),
       "image": image,
       "gender": gender,
@@ -241,6 +237,7 @@ class UserRepositoryIml implements UserRepository {
         final jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse); // Giải mã JSON thành đối tượng User
       } else {
+       // print(response.body);
         throw (response.body);
       }
     } catch (e) {
