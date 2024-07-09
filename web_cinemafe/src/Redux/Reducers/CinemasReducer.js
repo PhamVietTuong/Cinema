@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { SeatStatus } from "../../Enum/SeatStatus";
-import { CHECK_FOR_EMPTY_SEAT, SET_MOVIE, CLEAN, GET_WAITING_SEAT, INFO_SEARCH, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_INFO_THEATER, SET_LIST_AGERESTRICTION, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
+import { CHECK_FOR_EMPTY_SEAT, SET_MOVIE, CLEAN, GET_WAITING_SEAT, INFO_SEARCH, LIST_OF_SEATS_SOLD, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SEAT_HAS_BEEN_CHOSEN, SET_COMBO, SET_DATA_STATICTICAL, SET_INFO_THEATER, SET_INVOICE_BY_CODE, SET_LIST_AGERESTRICTION, SET_LIST_INVOICE_BY_USER, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, UPDATE_SEAT } from "../Actions/Type/CinemasType";
 
 const stateDefault = {
     movieList: [],
@@ -37,7 +37,10 @@ const stateDefault = {
     invoiceDTO: {},
     code: '',
     resultInfoSearch: [],
-    infoTheater: {}
+    infoTheater: {},
+    listInvoiceByUser: [],
+    invoiceByCode: {},
+    dataRevenue: []
 }
 
 const createSeatTypeMapping = (seatData) => {
@@ -274,6 +277,18 @@ export const CinemasReducer = (state = stateDefault, action) => {
                 ...state,
                 infoTheater: action.infoTheater,
             };
+
+        case SET_LIST_INVOICE_BY_USER: {
+                return { ...state, listInvoiceByUser: action.listInvoiceByUser };
+        }
+
+        case SET_INVOICE_BY_CODE: {
+            return { ...state, invoiceByCode: action.invoiceByCode };
+        }
+
+        case SET_DATA_STATICTICAL: {
+            return { ...state, dataRevenue: action.dataRevenue };
+        }
 
         default: return { ...state };
     }

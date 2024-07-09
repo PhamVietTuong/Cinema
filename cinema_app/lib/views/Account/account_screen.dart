@@ -2,6 +2,7 @@ import 'package:cinema_app/views/Account/login.dart';
 import 'package:cinema_app/views/Account/register.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
+
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
 
@@ -10,13 +11,29 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  String textLogin = "Đăng kí";
+  String textRegister = "Đăng nhập";
+  String textAccount = "Tài Khoản";
+
+  void tranlate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(textLogin),
+      Styles.translate(textRegister),
+      Styles.translate(textAccount),
+    ]);
+    textLogin = textTranlate[0];
+    textRegister = textTranlate[1];
+    textAccount = textTranlate[2];
+    setState(() {});
+  }
+
   bool _isLoginPage = true;
   final gradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-     Styles.gradientTop[Config.themeMode]!,
-     Styles.gradientBot[Config.themeMode]!,
+      Styles.gradientTop[Config.themeMode]!,
+      Styles.gradientBot[Config.themeMode]!,
     ],
   );
 
@@ -24,6 +41,12 @@ class _AccountScreenState extends State<AccountScreen> {
     setState(() {
       _isLoginPage = !_isLoginPage;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    tranlate();
   }
 
   @override
@@ -38,7 +61,7 @@ class _AccountScreenState extends State<AccountScreen> {
           },
         ),
         title: Text(
-          "Đăng kí",
+          textAccount,
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
             color: Styles.boldTextColor[Config.themeMode],
@@ -60,7 +83,8 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _buildTabButtons() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal, vertical: 15),
+      margin: const EdgeInsets.symmetric(
+          horizontal: Styles.defaultHorizontal, vertical: 15),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Colors.grey.withOpacity(0.1),
@@ -85,7 +109,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: Colors.transparent,
                     ),
               child: Text(
-                'Đăng ký',
+                textRegister,
                 style: TextStyle(
                   color: Styles.boldTextColor[Config.themeMode],
                   fontSize: Styles.titleFontSize,
@@ -110,7 +134,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: Colors.transparent,
                     ),
               child: Text(
-                'Đăng nhập',
+                textLogin,
                 style: TextStyle(
                   color: Styles.boldTextColor[Config.themeMode],
                   fontSize: Styles.titleFontSize,

@@ -128,8 +128,9 @@ namespace Cinema
             try
             {
                 var tickets = await _context.InvoiceTicket
+                     .Include(x => x.Invoice)
                      .Include(x => x.Seat)
-                     .Where(x => x.ShowTimeId == entity.ShowTimeId && x.RoomId == entity.RoomId)
+                     .Where(x => x.ShowTimeId == entity.ShowTimeId && x.RoomId == entity.RoomId && x.Invoice.Status == InvoiceStatus.Successful)
                      .ToListAsync();
 
                 var bookedSeats = tickets
@@ -188,6 +189,7 @@ namespace Cinema
                         {
                             Code = invoice.Code,
                             FoodAndDrinkId = item.FoodAndDrinkId,
+                            TheaterId = entity.TheaterId,
                             Quantity = item.Quantity,
                             Price = foodAndDrinkPrice,
                         };

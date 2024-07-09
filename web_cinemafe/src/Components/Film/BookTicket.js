@@ -9,8 +9,6 @@ import { ShowTimeType } from '../../Enum/ShowTimeType';
 
 const BookTicket = (props) => {
     const [expanded, setExpanded] = useState("panel0");
-    const [filteredSchedules, setFilteredSchedules] = useState([]);
-    const currentTime = moment();
     const [dates, setDates] = useState([]);
     const [activeDateIndex, setActiveDateIndex] = useState(0);
 
@@ -20,16 +18,6 @@ const BookTicket = (props) => {
 
     useEffect(() => {
         const currentDate = new Date();
-        const threeDaysLater = new Date();
-        threeDaysLater.setDate(currentDate.getDate() + 2);
-
-        const filtered = props.bookTicket.schedules.filter(schedule => {
-            const scheduleDate = new Date(schedule.date);
-            return scheduleDate >= currentDate && scheduleDate <= threeDaysLater;
-        });
-        
-        setFilteredSchedules(filtered);
-
         const generatedDates = [];
         for (let i = 0; i < 3; i++) {
             const date = new Date();
@@ -89,7 +77,7 @@ const BookTicket = (props) => {
                         </ul>
                     </div>
                     {
-                        filteredSchedules.length === 0 ?
+                        props.bookTicket.schedules.length === 0 ?
                             (
                                 <div className="movies-rp-noti">
                                     <img src="/Images/movie-updating.png" alt="" />
@@ -98,7 +86,7 @@ const BookTicket = (props) => {
                             )
                             :
                             (
-                                filteredSchedules.map((schedule, index) => (
+                                props.bookTicket.schedules.map((schedule, index) => (
                                     <Accordion key={index} expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)} className='BKAccordion'>
                                         <AccordionSummary
                                             expandIcon={<ExpandMore className='BKExpandMore' />}

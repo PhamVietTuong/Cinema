@@ -6,21 +6,17 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { GetInvoiceAction, ShowTimeByTheaterIdAction, TheaterAction } from '../../../Redux/Actions/CinemasAction';
+import { ShowTimeByTheaterIdAction, TheaterAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
 import moment from 'moment';
 
 const BookTickets = () => {
     let { id } = useParams();
 
-    const currentTime = moment();
     const dispatch = useDispatch();
     const [value, setValue] = useState('1');
     const { theaterDetail, listMovieByTheaterId } = useSelector((state) => state.CinemasReducer)
     const [loading, setLoading] = useState(true);
-    const [setShowing, setSetShowing] = useState(false);
-    const [setComming, setSetComming] = useState(false);
-    const [setSpecial, setSetSpecial] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -36,48 +32,53 @@ const BookTickets = () => {
         fetchData();
     }, [dispatch, id]);
 
-    const isCurrentMovie = (item) => {
-        return (
-            moment(item.releaseDate).isSameOrBefore(currentTime)
-            &&
-            item.schedules.length > 0 &&
-            item.schedules.some(schedule =>
-                schedule.theaters.some(theater =>
-                    theater.showTimes.some(timeItem => {
-                        const currentDate = moment();
-                        const threeDaysLater = moment(currentDate).add(2, 'days');
+    const isCurrentMovie = (movies) => {
+        const currentTime = moment();
+        const today = moment().startOf('day');
+        const endDate = moment().add(2, 'days').endOf('day');
 
-                        const scheduleDate = moment(schedule.date);
-                        return (
-                            scheduleDate.isBetween(currentDate, threeDaysLater, null, '[]') &&
-                            moment(timeItem.startTime).isSameOrAfter(currentDate)
+        return movies
+            .filter(movie => moment(movie.releaseDate).isSameOrBefore(today))
+            .map(movie => {
+                const filteredSchedules = movie.schedules.filter(schedule =>
+                    moment(schedule.date).isBetween(today, endDate, null, '[]')
+                ).map(schedule => {
+                    const filteredTheaters = schedule.theaters.map(theater => {
+                        const filteredShowTimes = theater.showTimes.filter(showTime =>
+                            moment(showTime.startTime).isSameOrAfter(currentTime)
                         );
-                    })
-                )
-            )
-        );
+                        return {
+                            ...theater,
+                            showTimes: filteredShowTimes
+                        };
+                    }).filter(theater => theater.showTimes.length > 0);
+
+                    return {
+                        ...schedule,
+                        theaters: filteredTheaters
+                    };
+                }).filter(schedule => schedule.theaters.length > 0);
+
+                return {
+                    ...movie,
+                    schedules: filteredSchedules
+                };
+            })
+            .filter(movie => movie.schedules.length > 0);
     };
 
-    const isUpcomingMovie = (item) => {
-        return (
-            moment(item.releaseDate).isAfter(currentTime)
-            &&
-            item.schedules.length > 0 &&
-            item.schedules.some(schedule =>
-                schedule.theaters.some(theater =>
-                    theater.showTimes.some(timeItem => {
-                        const currentDate = moment();
-                        const threeDaysLater = moment(currentDate).add(2, 'days');
+    const isUpcomingMovie = (movies) => {
+        const today = moment().startOf('day');
 
-                        const scheduleDate = moment(schedule.date);
-                        return (
-                            scheduleDate.isBetween(currentDate, threeDaysLater, null, '[]') &&
-                            moment(timeItem.startTime).isSameOrAfter(currentDate)
-                        );
-                    })
-                )
-            ))
+        return movies
+            .filter(movie => moment(movie.releaseDate).isAfter(today))
     };
+
+    const isSpecialMovie = (movies) => {
+        const today = moment().startOf('day');
+
+        return movies.filter(movie => moment(movie.releaseDate).isAfter(today) && movie.isSpecial)
+    }
 
     if (loading) {
         return (
@@ -131,43 +132,47 @@ const BookTickets = () => {
                                         <div className="re-head">
                                             <h2 className="heading --t-center">PHIM ĐANG CHIẾU</h2>
                                         </div>
-                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                            {Array.isArray(listMovieByTheaterId) && listMovieByTheaterId.filter(isCurrentMovie).length > 0 ? (
-                                                listMovieByTheaterId.map((item) => (
-                                                    isCurrentMovie(item) && (
-                                                        <Grid item xs={6} key={item.id}>
-                                                            <BookTicket bookTicket={item}></BookTicket>
-                                                        </Grid>
-                                                    )
-                                                ))
-                                            ) : (
-                                                <div style={{ opacity: 1, transform: 'none' }}>
-                                                    <div className="movies-noti">
-                                                        <div className="movies-noti-img">
-                                                            <img src="/Images/movie-updating.png" alt="movie-updating" />
+                                        {
+                                            Array.isArray(listMovieByTheaterId) && isCurrentMovie(listMovieByTheaterId).length > 0 ?
+                                                (
+                                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                        {
+                                                            isCurrentMovie(listMovieByTheaterId).map((item) => (
+                                                                    <Grid item xs={6} key={item.id}>
+                                                                        <BookTicket bookTicket={item}></BookTicket>
+                                                                    </Grid>
+                                                            ))
+                                                        }
+                                                    </Grid>
+                                                ) : (
+                                                    <div style={{ opacity: 1, transform: 'none' }}>
+                                                        <div className="movies-noti">
+                                                            <div className="movies-noti-img">
+                                                                <img src="/Images/movie-updating.png" alt="" />
+                                                            </div>
+                                                            <p className="txt">Đang cập nhật</p>
                                                         </div>
-                                                        <p className="txt">Đang cập nhật</p>
                                                     </div>
-                                                </div>
-                                            )}
-                                        </Grid>
+                                                )
+                                        }
                                     </TabPanel>
                                     <TabPanel value="2">
                                         <div className="re-head">
                                             <h2 className="heading --t-center">PHIM SẮP CHIẾU</h2>
                                         </div>
                                         {
-                                            Array.isArray(listMovieByTheaterId) && listMovieByTheaterId.filter(isUpcomingMovie).length > 0 ?
+                                            Array.isArray(listMovieByTheaterId) && isUpcomingMovie(listMovieByTheaterId).length > 0 ?
                                                 (
-                                                    listMovieByTheaterId.map((item) => (
-                                                        isUpcomingMovie(item) && (
-                                                            <Grid item xs={6} key={item.id}>
-                                                                <BookTicket bookTicket={item}></BookTicket>
-                                                            </Grid>
-                                                        )
-                                                    )))
-                                                :
-                                                (
+                                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                        {
+                                                            isUpcomingMovie(listMovieByTheaterId).map((item) => (
+                                                                <Grid item xs={6} key={item.id}>
+                                                                    <BookTicket bookTicket={item}></BookTicket>
+                                                                </Grid>
+                                                            ))
+                                                        }
+                                                    </Grid>
+                                                ) : (
                                                     <div style={{ opacity: 1, transform: 'none' }}>
                                                         <div className="movies-noti">
                                                             <div className="movies-noti-img">
@@ -185,26 +190,28 @@ const BookTickets = () => {
                                                 <h2 className="heading --t-center">Suất chiếu đặc biệt</h2>
                                             </div>
                                             {
-                                                Array.isArray(listMovieByTheaterId) && listMovieByTheaterId.filter(x => x.isSpecial).length > 0 ?
+                                                Array.isArray(listMovieByTheaterId) && isSpecialMovie(listMovieByTheaterId).length > 0 ?
                                                     (
-                                                        listMovieByTheaterId.map((item) => (
-                                                            item.isSpecial && (
-                                                                <Grid item xs={6} key={item.id}>
-                                                                    <BookTicket bookTicket={item}></BookTicket>
-                                                                </Grid>
-                                                            )
-                                                        )))
-                                                    :
-                                                    (
-                                                        <div className="movies-noti">
-                                                            <div className="movies-noti-img">
-                                                                <img src="/Images/movie-updating.png" alt="" />
+                                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                            {
+                                                                isSpecialMovie(listMovieByTheaterId).map((item) => (
+                                                                    <Grid item xs={6} key={item.id}>
+                                                                        <BookTicket bookTicket={item}></BookTicket>
+                                                                    </Grid>
+                                                                ))
+                                                            }
+                                                        </Grid>
+                                                    ) : (
+                                                        <div style={{ opacity: 1, transform: 'none' }}>
+                                                            <div className="movies-noti">
+                                                                <div className="movies-noti-img">
+                                                                    <img src="/Images/movie-updating.png" alt="" />
+                                                                </div>
+                                                                <p className="txt">Đang cập nhật</p>
                                                             </div>
-                                                            <p className="txt">Đang cập nhật</p>
                                                         </div>
                                                     )
                                             }
-                                            
                                         </div>
                                     </TabPanel>
                                 </TabContext>

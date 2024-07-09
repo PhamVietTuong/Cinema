@@ -110,15 +110,14 @@ class _SearchScreenState extends State<SearchScreen>
               TextField(
                 controller: _controller,
                 onTapOutside: (event) {
-                    FocusScope.of(context).unfocus();
-                    if(_controller.text.isNotEmpty)
-                    {
-                      _saveSearchQuery(_controller.text);
-                    }
+                  FocusScope.of(context).unfocus();
+                  if (_controller.text.isNotEmpty) {
+                    _saveSearchQuery(_controller.text);
+                  }
                 },
-                onChanged: (value) {
-                  _search();
-                },
+                // onChanged: (value) {
+                //   _search();
+                // },
                 style: TextStyle(
                   color: _controller.text.isNotEmpty
                       ? Styles.textColor[Config.themeMode]
@@ -211,6 +210,7 @@ class _SearchScreenState extends State<SearchScreen>
       ),
     );
   }
+
   List<Widget> _buildSearchResults() {
     List<Widget> results = [];
     if (_searchResults!.containsKey('theaters')) {
@@ -318,6 +318,7 @@ class _SearchScreenState extends State<SearchScreen>
     }
     return results;
   }
+
   List<Widget> _buildSearchHistory() {
     return _searchHistory.map((query) {
       return Row(
@@ -343,8 +344,7 @@ class _SearchScreenState extends State<SearchScreen>
           IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () async {
-              await Config.removeSearchQuery(
-                  query);
+              await Config.removeSearchQuery(query);
               await _loadSearchHistory();
             },
           ),

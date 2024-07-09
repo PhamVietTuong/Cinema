@@ -24,6 +24,7 @@ import Cooming from "./Pages/User/Cooming/Cooming";
 import MoviePage from "./Pages/Admin/Movie/MoviePage"; 
 import EditMoviePage from "./Pages/Admin/Movie/EditMoviePage";
 
+import Revenue from "./Pages/Admin/Revenue/Revenue";
 
 const Routers = () => {
     return (
@@ -77,6 +78,7 @@ const Routers = () => {
                         <Route path="UserType" element={<UserType />} />
                         <Route path="theater" element={<Theater />} />
                         <Route path="theater/:id" element={<TheaterDetail />} />
+                        <Route path="revenue" element={<Revenue />} />
                     </Route>
                 </Routes>
             </Router>

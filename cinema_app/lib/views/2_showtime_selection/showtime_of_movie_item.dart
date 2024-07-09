@@ -99,7 +99,7 @@ class _ShowTimeOfMovieItemState extends State<ShowTimeOfMovieItem> {
         child: Image(
           fit: BoxFit.fitHeight,
           image: widget.movie.img.isEmpty
-              ? const AssetImage("assets/img/movie_white.png") as ImageProvider
+              ?  AssetImage("assets/img/${Config.themeMode!.contains("light")?'movie_white':'movie_black'}.png") as ImageProvider
               : NetworkImage("$serverUrl/Images/${widget.movie.img}"),
         ),
       ),

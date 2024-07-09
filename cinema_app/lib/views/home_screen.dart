@@ -2,7 +2,10 @@ import 'package:cinema_app/components/info_movie.dart';
 import 'package:cinema_app/components/slide_show.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/movie.dart';
+import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
+import 'package:cinema_app/views/Account/account_screen.dart';
+import 'package:cinema_app/views/Account/user_info_page.dart';
 import 'package:cinema_app/views/search_movie.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -76,23 +79,55 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
     var hS = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        title: Config.userInfo != null
+            ? Text(
+                '$titleAppbar ${Config.userInfo!.fullname}',
+                style: TextStyle(
+                    color: Styles.boldTextColor[Config.themeMode],
+                    fontSize: Styles.appbarFontSize),
+              )
+            : Text(
+                titleAppbar,
+                style: TextStyle(
+                    color: Styles.boldTextColor[Config.themeMode],
+                    fontSize: Styles.appbarFontSize),
+              ),
+        leading: Config.userInfo == null
+            ? IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AccountScreen()),
+                  );
+                },
+                icon: Icon(Icons.person_outlined),
+                color: Styles.boldTextColor[Config.themeMode],
+                iconSize: Styles.iconInAppBar,
+              )
+            : IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserInfoPage(
+                              InfoUser: Config.userInfo!,
+                            )),
+                  );
+                },
+                icon: Icon(Icons.person_outlined),
+                color: Styles.boldTextColor[Config.themeMode],
+                iconSize: Styles.iconInAppBar,
+              ),
         backgroundColor: Styles.backgroundContent[Config.themeMode],
-        title: Text(
-          titleAppbar,
-          style: TextStyle(
-            fontSize: Styles.appbarFontSize,
-            color: Styles.boldTextColor[Config.themeMode],
-          ),
-        ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.notifications,
-              size: Styles.iconInAppBar,
-            ),
-            color: Styles.boldTextColor[Config.themeMode],
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(
+          //     Icons.notifications,
+          //     size: Styles.iconInAppBar,
+          //   ),
+          //   color: Styles.boldTextColor[Config.themeMode],
+          // ),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -397,15 +432,9 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   e.releaseDate.month == today.month))
           .toList();
       upcomingMovies = movies
-          .where((e) =>
-              e.releaseDate.isAfter(today) &&
-              e.releaseDate.month == today.month)
+          .where((e) => e.releaseDate.isAfter(today) && !e.isSpecial)
           .toList();
-      earlyMovies = movies
-          .where((e) =>
-              e.releaseDate.isAfter(today) &&
-              e.releaseDate.difference(today).inDays < 7)
-          .toList();
+      earlyMovies = movies.where((e) => e.isSpecial).toList();
       trailers = lstMovie
           .where((movie) => movie.trailer.isNotEmpty)
           .map((movie) => movie.trailer)

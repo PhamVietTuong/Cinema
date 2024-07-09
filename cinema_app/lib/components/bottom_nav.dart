@@ -16,16 +16,26 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   var index = 0;
-  List<Widget> pages = [
-     const HomePage(),
-    const TheaterScreen(),
-    const Center(
-      child: Text("News"),
-    ),
-    const Center(
-      child: UserScreen(),
-    )
-  ];
+  late List<Widget> pages;
+  void refresh() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pages = [
+      HomePage(),
+      const TheaterScreen(),
+      const Center(
+        child: Text("News"),
+      ),
+      UserScreen(
+        refresh: refresh,
+      )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

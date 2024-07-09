@@ -16,7 +16,7 @@ namespace Cinema.Controllers
     public class CinemasController : ControllerBase
     {
         private const string user = "user";
-        private const string connectedRole = "user,admin";
+        private const string admin = "admin";
 
         private readonly IAgeRestrictionRepository _ageRestrictionRepository;
         private readonly IFoodAndDrinkRepository _foodAndDrinkRepository;
@@ -582,6 +582,23 @@ namespace Cinema.Controllers
             try
             {
                 var result = await _invoiceRepository.InvoiceListOfUserAsync(userId);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("GetRevenue")]
+        //[Authorize(Roles = admin)]
+        [AllowAnonymous]
+        public async Task<ActionResult<RevenueTheaterViewModel>> GetRevenue([FromBody] FilterRevenue filterRevenue)
+        {
+            try
+            {
+                var result = await _invoiceRepository.GetRevenueAsync(filterRevenue);
 
                 return Ok(result);
             }

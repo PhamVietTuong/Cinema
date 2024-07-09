@@ -60,6 +60,7 @@ namespace Cinema.Repository
                 ShowTimeType = isDulexe ? "Deluxe" : "Standard",
                 SeatName = String.Join(", ", invoiceTicket.Select(x => x.SeatName)),
                 FoodAndDrinks = resultFoodAndDrinks,
+                TheaterAddress = invoiceTicketRoom.Theater.Address,
             };
 
             return result;
@@ -114,7 +115,40 @@ namespace Cinema.Repository
                 });
             }
 
+            return result.OrderBy(x => x.ShowTimeStartTime).ToList();
+        }
+        public async Task<List<RevenueTheaterViewModel>> GetRevenueAsync(FilterRevenue filterRevenue)
+        {
+            var startDate = filterRevenue.StartDate ?? DateTime.MinValue;
+            var endDate = filterRevenue.EndDate ?? DateTime.MaxValue;
+
+            var theaters = await _context.Theater.Where(x => x.Status).ToListAsync();
+            var result = new List<RevenueTheaterViewModel>();
+
+            foreach (var theater in theaters)
+            {
+                var totalSeat = await _context.InvoiceTicket
+                    .Where(x => x.Invoice.CreationTime >= startDate
+                                && x.Invoice.CreationTime <= endDate
+                                && x.Room.TheaterId == theater.Id)
+                    .SumAsync(x => x.Price);
+
+                var totalFoodAndDrink = await _context.InvoiceFoodAndDrink
+                    .Where(x => x.Invoice.CreationTime >= startDate
+                                && x.Invoice.CreationTime <= endDate
+                                && x.TheaterId == theater.Id)
+                    .SumAsync(x => x.Price * x.Quantity);
+                result.Add(new RevenueTheaterViewModel
+                {
+                    TheaterName = theater.Name,
+                    TotalSeat = totalSeat,
+                    TotalFoodAndDrink = totalFoodAndDrink,
+                    TotalPrice = totalSeat + totalFoodAndDrink
+                });
+            }
+
             return result;
         }
+
     }
 }
