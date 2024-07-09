@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'package:cinema_app/services/base_url.dart';
 
 import '../../config.dart';
 import 'package:http/http.dart' as http;
