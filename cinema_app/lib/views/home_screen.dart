@@ -188,108 +188,97 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                             borderRadius: BorderRadius.circular(10),
                             color: Styles.backgroundContent[Config.themeMode],
                           ),
-                          child: Expanded(
-                            child: ToggleButtons(
-                              borderRadius: BorderRadius.circular(10),
-                              renderBorder: false,
-                              fillColor: Colors.transparent,
-                              onPressed: (int index) {
-                                setState(() {
-                                  _selectedTabIndex = index;
-                                });
-                              },
-                              isSelected: [
-                                _selectedTabIndex == 0,
-                                _selectedTabIndex == 1,
-                                _selectedTabIndex == 2,
-                              ],
-                              children: [
-                                Container(
-                                  width: (wS - 30) * 0.33,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: _selectedTabIndex == 0
-                                      ? BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          gradient: gradient,
-                                        )
-                                      : BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color:
-                                              Styles.btnColor[Config.themeMode],
-                                        ),
-                                  child: Text(
-                                    showing,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: Styles.textSize,
-                                      color: _selectedTabIndex != 0
-                                          ? Styles
-                                              .boldTextColor[Config.themeMode]
-                                          : Styles.textSelectionColor[
-                                              Config.themeMode],
-                                    ),
+                          child: ToggleButtons(
+                            borderRadius: BorderRadius.circular(10),
+                            renderBorder: false,
+                            fillColor: Colors.transparent,
+                            onPressed: (int index) {
+                              setState(() {
+                                _selectedTabIndex = index;
+                              });
+                            },
+                            isSelected: [
+                              _selectedTabIndex == 0,
+                              _selectedTabIndex == 1,
+                              _selectedTabIndex == 2,
+                            ],
+                            children: [
+                              Container(
+                                width: (wS - 30) * 0.33,
+                                padding: const EdgeInsets.all(5),
+                                decoration: _selectedTabIndex == 0
+                                    ? BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        gradient: gradient,
+                                      )
+                                    : BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color:
+                                            Styles.btnColor[Config.themeMode],
+                                      ),
+                                child: Text(
+                                  showing,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: Styles.textSize,
+                                    color: _selectedTabIndex != 0
+                                        ? Styles.boldTextColor[Config.themeMode]
+                                        : Styles.textSelectionColor[
+                                            Config.themeMode],
                                   ),
                                 ),
-                                Container(
-                                  width: (wS - 30) * 0.33,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: _selectedTabIndex == 1
-                                      ? BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          gradient: gradient,
-                                        )
-                                      : BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color:
-                                              Styles.btnColor[Config.themeMode],
-                                        ),
-                                  child: Text(
-                                    early,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: Styles.textSize,
-                                      color: _selectedTabIndex != 1
-                                          ? Styles
-                                              .boldTextColor[Config.themeMode]
-                                          : Styles.textSelectionColor[
-                                              Config.themeMode],
-                                    ),
+                              ),
+                              Container(
+                                width: (wS - 30) * 0.33,
+                                padding: const EdgeInsets.all(5),
+                                decoration: _selectedTabIndex == 1
+                                    ? BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        gradient: gradient,
+                                      )
+                                    : BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color:
+                                            Styles.btnColor[Config.themeMode],
+                                      ),
+                                child: Text(
+                                  early,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: Styles.textSize,
+                                    color: _selectedTabIndex != 1
+                                        ? Styles.boldTextColor[Config.themeMode]
+                                        : Styles.textSelectionColor[
+                                            Config.themeMode],
                                   ),
                                 ),
-                                Container(
-                                  width: (wS - 30) * 0.33,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: _selectedTabIndex == 2
-                                      ? BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          gradient: gradient,
-                                        )
-                                      : BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color:
-                                              Styles.btnColor[Config.themeMode],
-                                        ),
-                                  child: Text(
-                                    comming,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: Styles.textSize,
-                                      color: _selectedTabIndex != 2
-                                          ? Styles
-                                              .boldTextColor[Config.themeMode]
-                                          : Styles.textSelectionColor[
-                                              Config.themeMode],
-                                    ),
+                              ),
+                              Container(
+                                width: (wS - 30) * 0.33,
+                                padding: const EdgeInsets.all(5),
+                                decoration: _selectedTabIndex == 2
+                                    ? BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        gradient: gradient,
+                                      )
+                                    : BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color:
+                                            Styles.btnColor[Config.themeMode],
+                                      ),
+                                child: Text(
+                                  comming,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: Styles.textSize,
+                                    color: _selectedTabIndex != 2
+                                        ? Styles.boldTextColor[Config.themeMode]
+                                        : Styles.textSelectionColor[
+                                            Config.themeMode],
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         Container(
@@ -416,7 +405,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                           );
                                         },
                                       )
-                                    : SizedBox.shrink(),
+                                    : const SizedBox.shrink(),
                               ),
                             ],
                           ),

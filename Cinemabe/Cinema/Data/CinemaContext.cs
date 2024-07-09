@@ -76,5 +76,7 @@ namespace Cinema.Data
         public DbSet<Invoice> Invoice { get; set; }
 
         public DbSet<FoodAndDrinkTheater> FoodAndDrinkTheater { get; set; }
+
+        public DbSet<News> News { get; set; }
     }
 }

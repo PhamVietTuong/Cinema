@@ -1,5 +1,6 @@
 export const SET_MOVIE_LIST = "SET_MOVIE_LIST"
 export const SET_MOVIE_DETAIL = "SET_MOVIE_DETAIL"
+export const SET_MOVIE = "SET_MOVIE"
 export const SET_SHOWTIME_DETAIL = "SET_SHOWTIME_DETAIL"
 export const SET_TICKET_TYPE = "SET_TICKET_TYPE"
 export const SET_SEAT = "SET_SEAT"

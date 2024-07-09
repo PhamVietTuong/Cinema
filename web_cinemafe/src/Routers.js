@@ -21,6 +21,9 @@ import TheaterDetail from "./Pages/Admin/Theater/TheaterDetail";
 import Profile from "./Pages/User/Account/Profile";
 import Showing from "./Pages/User/Showing/Showing";
 import Cooming from "./Pages/User/Cooming/Cooming";
+import MoviePage from "./Pages/Admin/Movie/MoviePage"; 
+import EditMoviePage from "./Pages/Admin/Movie/EditMoviePage";
+
 import Revenue from "./Pages/Admin/Revenue/Revenue";
 
 const Routers = () => {
@@ -66,6 +69,8 @@ const Routers = () => {
                     </Route>
                     <Route path="/admin" element={<IndexAdmin />}>
                         <Route index path="admin" element={<AgeRestriction />} />
+                        <Route path="Movie" element={<MoviePage />} />
+                        <Route path="Movie/:id" element={<EditMoviePage />} />
                         <Route path="AgeRestriction" element={<AgeRestriction />} />
                         <Route path="TicketType" element={<TicketType />} />
                         <Route path="MovieType" element={<MovieType />} />

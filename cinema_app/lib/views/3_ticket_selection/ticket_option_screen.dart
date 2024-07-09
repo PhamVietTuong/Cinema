@@ -347,12 +347,12 @@ class _TicketOptionScreenState extends State<TicketOptionScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "*HSSV: ${textNote} ",
+                    "*HSSV: $textNote ",
                     style: TextStyle(
                         fontSize: Styles.textSize,
                         color: Styles.textSelectionColor[Config.themeMode]),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Container(

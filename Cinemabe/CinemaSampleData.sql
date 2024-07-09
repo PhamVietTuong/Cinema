@@ -20,6 +20,13 @@ DELETE FROM FoodAndDrink;
 
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
+INSERT INTO [News] ([Id], [Title], [Content], [CreateAt], [UpdatedAt], [Image], [Status])
+VALUES
+(NEWID(), 'Khuyến Mãi Đặc Biệt Hè 2024', 'Nhận ngay vé xem phim miễn phí khi mua 3 vé bất kỳ.', '2024-07-09T10:00:00', null, null, 1),
+(NEWID(), 'Phim Mới: Avengers: Secret Wars', 'Ra mắt vào ngày 20/07/2024, bộ phim hứa hẹn nhiều cảnh hành động mãn nhãn.', '2024-07-09T10:30:00', null, null, 1),
+(NEWID(), 'Sự Kiện Đặc Biệt: Đêm Hội Phim Kinh Dị', 'Tham gia đêm hội phim kinh dị vào ngày 31/10/2024, nhiều phần quà hấp dẫn đang chờ đón bạn.', '2024-07-09T11:00:00', null, null, 1),
+(NEWID(), 'Cập Nhật Rạp Chiếu Phim Mới', 'Chúng tôi đã mở thêm 3 rạp chiếu phim mới tại các thành phố lớn.', '2024-07-09T11:30:00', null, null, 1),
+(NEWID(), 'Chương Trình Ưu Đãi Thẻ Thành Viên', 'Nhận ưu đãi lên đến 50% khi sử dụng thẻ thành viên của chúng tôi.', '2024-07-09T12:00:00', null, null, 1);
 
 DECLARE @Guid_MemberShip1 UNIQUEIDENTIFIER;
 DECLARE @Guid_MemberShip2 UNIQUEIDENTIFIER;
@@ -95,22 +102,22 @@ DECLARE @GUID_theater5 UNIQUEIDENTIFIER;
 
 --theater
 SET @GUID_theater1 = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater1, N'CKC Quận 1', N'65 Huỳnh Thúc Kháng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh','ckc_quan1.jpg','02437654321',
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater1, N'CKC Quận 1', N'65 Huỳnh Thúc Kháng, Phường Bến Nghé ,Quận 1, Thành Phố Hồ Chí Minh','ckc_quan1.jpg','02437654321',
 1)
 SET @GUID_theater2 = NEWID();
 INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater2, N'CKC Quận 3', N'Lầu 6 - 7,
-19 Cao Thắng, P.2, Q.3, Tp. Hồ Chí Minh','ckc_quan3.jpg','02838456789',
+19 Cao Thắng, P.2, Q.3, Thành Phố Hồ Chí Minh','ckc_quan3.jpg','02838456789',
 1)
 SET @GUID_theater3 = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater3, N'CKC Quận 10', N'116 Nguyễn Tri Phương, Q.10, Tp. Hồ Chí Minh','ckc_quan10.jpg','02363839999',
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater3, N'CKC Quận 10', N'116 Nguyễn Tri Phương, Q.10, Thành Phố Hồ Chí Minh','ckc_quan10.jpg','02363839999',
 1)
 SET @GUID_theater4 = NEWID();
 INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater4, N'CKC Quận 5', N'Tầng 7, Hùng Vương Plaza,
-126 Hùng Vương, Q.5, Tp. Hồ Chí Minh','ckc_quan5.jpg','02253851234',
+126 Hùng Vương, Q.5, Thành Phố Hồ Chí Minh','ckc_quan5.jpg','02253851234',
 1)
 SET @GUID_theater5 = NEWID();
 INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater5, N'CKC Quận 7', N'Lầu 4, Siêu Thị Vincom 3/2,
-3C Đường 3/2, Q.7, Tp. Hồ Chí Minh','ckc_quan7.jpg','02923734567',
+3C Đường 3/2, Q.7, Thành Phố Hồ Chí Minh','ckc_quan7.jpg','02923734567',
 1)
 
 --room
@@ -539,14 +546,23 @@ INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType2, N'Ðôi', 1)
 SET @GUID_seatType3 = NEWID();
 INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType3, N'Nằm', 1)
 
+-- --đơn - hssv, lớn
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType1,45000,65000,45000,65000)
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType2,70000,90000,45000,65000)
+-- --đôi - lớn
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType2,@GUID_TicketType2,145000,165000,95000,115000)
+-- --nằm - hssv, lớn
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000, 110000,null,null)
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType2,190000,210000,null,null)
+
 --đơn - hssv, lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType1,45000,65000,45000,65000)
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType2,70000,90000,45000,65000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType1,45000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType2,70000)
 --đôi - lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType2,@GUID_TicketType2,145000,165000,95000,115000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType2,@GUID_TicketType2,145000)
 --nằm - hssv, lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000, 110000,null,null)
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType2,190000,210000,null,null)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000,)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType2,190000)
 
 --combo
 DECLARE @GUID_cb1 UNIQUEIDENTIFIER;

@@ -60,7 +60,7 @@ class _ComboScreenState extends State<ComboScreen>
 
   Stream<int> get countStream async* {
     while (true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       yield CountDown.time;
     }
   }
@@ -71,7 +71,7 @@ class _ComboScreenState extends State<ComboScreen>
   void initState() {
     super.initState();
     CountDown.index = 2;
-    subscription = countStream.listen((_count) {
+    subscription = countStream.listen((count) {
       setState(() {});
       if (CountDown.time == 0&&CountDown.index==2) {
         Navigator.of(context).popUntil((route) {

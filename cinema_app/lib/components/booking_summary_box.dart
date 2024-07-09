@@ -73,7 +73,7 @@ class _BookingSummaryBoxState extends State<BookingSummaryBox> {
           children: [
             Container(
               margin: const EdgeInsets.only(left: 5),
-              padding: EdgeInsets.all(4),
+              padding: const EdgeInsets.all(4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,7 +130,7 @@ class _BookingSummaryBoxState extends State<BookingSummaryBox> {
                                   color: Styles.boldTextColor[Config.themeMode],
                                   fontSize: Styles.titleFontSize),
                               children: [
-                                TextSpan(text: '${textTotal}: '),
+                                TextSpan(text: '$textTotal: '),
                                 TextSpan(
                                     text: Styles.formatter.format(
                                         widget.totalPrice ??
@@ -141,8 +141,8 @@ class _BookingSummaryBoxState extends State<BookingSummaryBox> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(2),
-                        margin: EdgeInsets.only(left: 20, bottom: 5),
+                        padding: const EdgeInsets.all(2),
+                        margin: const EdgeInsets.only(left: 20, bottom: 5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             color: Styles.btnColor[Config.themeMode]),

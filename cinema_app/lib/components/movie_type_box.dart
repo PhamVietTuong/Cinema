@@ -1,9 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'package:cinema_app/config.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MovieTypeBox extends StatefulWidget {
-   MovieTypeBox({
+   const MovieTypeBox({
     super.key,
     this.maxBoxWith = 0.0,
     this.marginBottom = 0.0,
@@ -74,7 +76,7 @@ class _MovieTypeBoxState extends State<MovieTypeBox> {
                 _launchGenreWikipedia(genre.trim());
               },
               child: Text(
-                '${genre},',
+                '$genre,',
                 style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
               ),
             );
