@@ -150,5 +150,41 @@ namespace Cinema.Repository
             return result;
         }
 
+        public async Task<List<InvoiceRowViewModel>> GetListInvoiceAsync()
+        {
+            var result = new List<InvoiceRowViewModel>();
+
+            var invoices = await _context.Invoice.ToListAsync();
+
+
+            foreach ( var invoice in invoices)
+            {
+                var invoiceTickets = await _context.InvoiceTicket
+                            .Include(x => x.ShowTime)
+                                .ThenInclude(st => st.Movie)
+                            .Include(x => x.Room)
+                                .ThenInclude(r => r.Theater)
+                            .Where(x => x.Code == invoice.Code)
+                            .ToListAsync();
+                var invoiceFoodAndDrink = await _context.InvoiceFoodAndDrink
+                            .Where(x => x.Code == invoice.Code)
+                            .ToListAsync();
+
+                result.Add(new InvoiceRowViewModel
+                {
+                    Code = invoice.Code,
+                    MovieName = invoiceTickets.FirstOrDefault()?.ShowTime?.Movie?.Name ?? "Unknown",
+                    ShowTimeStartTime = invoiceTickets.FirstOrDefault()?.ShowTime?.StartTime ?? DateTime.MinValue,
+                    ShowTimeEndTime = invoiceTickets.FirstOrDefault()?.ShowTime?.EndTime ?? DateTime.MinValue,
+                    RoomName = invoiceTickets.FirstOrDefault()?.Room?.Name ?? "Unknown",
+                    TheaterName = invoiceTickets.FirstOrDefault()?.Room?.Theater?.Name ?? "Unknown",
+                    Status = invoice.Status,
+                    TotalPrice = invoiceTickets.Sum(t => t.Price) + invoiceFoodAndDrink.Sum(f => f.Price * f.Quantity),
+                    CreationTime = invoice.CreationTime
+                });
+            }
+
+            return result;
+        }
     }
 }
