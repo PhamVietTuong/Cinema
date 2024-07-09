@@ -5,7 +5,6 @@ abstract class UserViewContract {
   void onLoadError(String error);
   void onLoadSuccess(String message);
   void LoadLoginSuccess(User user);
- void onLoadToken(String token, DateTime expirationTime);
 }
 
 class UserPresenter {
@@ -29,7 +28,6 @@ class UserPresenter {
     try {
       User user = await repository.login(login);
       _view.LoadLoginSuccess(user);
-      _view.onLoadToken(user.token, user.expirationTime);
      // print(user.expirationTime);
     } catch (e) {
       _view.onLoadError('$e');

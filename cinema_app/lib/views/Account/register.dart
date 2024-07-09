@@ -25,7 +25,7 @@ class _RegisterContentState extends State<RegisterContent>
   bool _obscureConfirmPassword = true;
   late UserPresenter _presenter;
   bool isMale = true;
-  String selectedGender = 'Nam';
+  String selectedGender = "Nam";
   String textPass = "Mật khẩu";
   String textConfirmPass = "Nhập lại mật khẩu";
   String textbirthday = "Ngày sinh";
@@ -40,7 +40,7 @@ class _RegisterContentState extends State<RegisterContent>
       Styles.translate(textRegister),
       Styles.translate(textMale),
       Styles.translate(textWoman),
-      Styles.translate(selectedGender),
+     // Styles.translate(selectedGender),
     ]);
     textPass = textTranlate[0];
     textConfirmPass = textTranlate[1];
@@ -48,7 +48,7 @@ class _RegisterContentState extends State<RegisterContent>
     textRegister = textTranlate[3];
     textMale = textTranlate[4];
     textWoman = textTranlate[5];
-    selectedGender = textTranlate[6];
+  //  selectedGender = textTranlate[6];
 
     setState(() {});
   }
@@ -69,7 +69,7 @@ class _RegisterContentState extends State<RegisterContent>
     );
     if (picked != null) {
       setState(() {
-        _birthdayController.text = picked.toIso8601String();
+        _birthdayController.text =Styles.formatDate( picked);
       });
     }
   }
@@ -136,6 +136,8 @@ class _RegisterContentState extends State<RegisterContent>
 
   @override
   Widget build(BuildContext context) {
+    print(selectedGender);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
       child: Column(
@@ -231,7 +233,7 @@ class _RegisterContentState extends State<RegisterContent>
                       child: TextField(
                         style: TextStyle(
                             color: Styles.boldTextColor[Config.themeMode]),
-                        controller: _birthdayController,
+                        controller:_birthdayController,
                         onTap: () {
                           _selectDate(context);
                         },
@@ -306,8 +308,6 @@ class _RegisterContentState extends State<RegisterContent>
     );
   }
 
-  @override
-  void onLoadToken(String token, DateTime expirationTime) {}
   @override
   void LoadLoginSuccess(User user) {}
 }

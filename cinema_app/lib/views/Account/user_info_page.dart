@@ -61,7 +61,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             child: Text(textSignOut),
             onPressed: () async {
               await Config.logOut(); 
-              Navigator.of(context).pop(); // Đóng dialog
+              Navigator.of(context).popUntil((route) => route.isFirst,); // Đóng dialog
               Navigator.pushReplacement( 
                 context,
                 MaterialPageRoute(builder: (context) => BottomNav()),

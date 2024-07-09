@@ -1,6 +1,4 @@
 import 'package:cinema_app/components/bottom_nav.dart';
-import 'package:cinema_app/views/Account/user_info_page.dart';
-import 'package:cinema_app/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';
@@ -21,16 +19,28 @@ class _LoginContentState extends State<LoginContent>
   late UserPresenter _presenter;
   String textPass = "Mật khẩu";
   String textLogin = "Đăng nhập";
+  String textNotification="Thông báo";
+  String textContent="Vui lòng điền đủ thông tin đăng nhập";
+String textLoginSuccessful="Đăng nhập thành công";
+String textOK="Đồng ý";
   bool _obscurePassword = true;
-  String? _token;
-  DateTime? _tokenExpirationTime;
+
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
       Styles.translate(textPass),
       Styles.translate(textLogin),
+      Styles.translate(textNotification),
+      Styles.translate(textContent),
+      Styles.translate(textLoginSuccessful),
+      Styles.translate(textOK),
+
     ]);
     textPass = textTranlate[0];
     textLogin = textTranlate[1];
+    textNotification=textTranlate[2];
+    textContent=textTranlate[3];
+    textLoginSuccessful=textTranlate[4];
+    textOK=textTranlate[5];
 
     setState(() {});
   }
@@ -49,11 +59,11 @@ class _LoginContentState extends State<LoginContent>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Thông báo'),
+          title:  Text(textNotification),
           content: Text('$error'),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child:  Text(textOK),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -77,18 +87,18 @@ class _LoginContentState extends State<LoginContent>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Thông báo'),
-          content: const Text('Đăng nhập thành công'),
+          title:  Text(textNotification),
+          content:  Text(textLoginSuccessful),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child:  Text(textOK),
               onPressed: () {
-                Navigator.of(context).pop();
+                  Navigator.of(context).popUntil((route) => route.isFirst,);
 
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => BottomNav()),
-                );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => BottomNav()),
+                  );
               },  
             ),
           ],
@@ -96,16 +106,6 @@ class _LoginContentState extends State<LoginContent>
       },
     );
   }
-
-  void _saveTokenToLocal(String token, DateTime expirationTime) async {
-   // await Config.saveToken(token, expirationTime);
-    setState(() {
-      _token = token;
-      _tokenExpirationTime = expirationTime;
-    });
-    print('Token : $_token , $_tokenExpirationTime');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -158,12 +158,12 @@ class _LoginContentState extends State<LoginContent>
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text('Thông báo'),
-                      content: const Text(
-                          'Vui lòng điền đầy đủ thông tin đăng nhập'),
+                      title:  Text(textNotification),
+                      content:  Text(
+                          textContent),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text('OK'),
+                          child:  Text(textOK),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -185,10 +185,5 @@ class _LoginContentState extends State<LoginContent>
         ],
       ),
     );
-  }
-
-  @override
-  void onLoadToken(String token, DateTime expirationTime) {
-    _saveTokenToLocal(token, expirationTime);
   }
 }

@@ -246,29 +246,4 @@ class UserRepositoryIml implements UserRepository {
   }
 
 //end login
-
-// //SendAuthCode
-// Future<String> sendAuthCode(String email) async {
-//   final url = Uri.parse('$serverUrl/api/Users/SendAuthCoder');
-//   final response = await http.post(
-//     url,
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'accept': '*/*',
-//     },
-//     body: jsonEncode(email),
-//   );
-//   if (response.statusCode == 200) {
-
-//     print('Đã gửi mã xác thực thành công.');
-//     print(jsonDecode(response.body));
-//     return jsonDecode(response.body);
-//   } else {
-//     print('Gửi mã xác thực thất bại. Mã lỗi: ${response.statusCode}');
-//     print('Nội dung lỗi: ${response.body}');
-//     return "";
-//   }
-// }
-
-// //end SendAuthCode
 }
