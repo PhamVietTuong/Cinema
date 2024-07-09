@@ -10,7 +10,7 @@ class SendAuthCode extends StatefulWidget {
   _SendAuthCodeState createState() => _SendAuthCodeState();
 }
 class _SendAuthCodeState extends State<SendAuthCode> {
-  TextEditingController _codeController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

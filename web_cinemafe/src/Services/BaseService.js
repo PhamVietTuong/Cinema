@@ -19,6 +19,7 @@ export class baseService {
             headers: { Authorization: "Bearer " + sessionStorage.getItem(TOKEN) || localStorage.getItem(TOKEN) }, 
         });
     };
+    
 
     postImage = (url, model) => {
         const headers = {

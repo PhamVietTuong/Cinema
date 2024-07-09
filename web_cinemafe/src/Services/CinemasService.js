@@ -7,6 +7,17 @@ export class CinemasService extends baseService {
         return this.get(`api/Cinemas/GetMovieList`)
     }
 
+    GetMovieListAdmin = () => {
+        return this.get(`api/Cinemas/GetMovieListAdmin`)
+    }
+    GetMovieByIdAdmin = (id) => {
+        return this.get(`api/Cinemas/GetMovieById/${id}`)
+    }
+
+    CreateMovie = (movieDTO) => {
+        return this.postImage(`api/Cinemas/CreateMovie`, movieDTO);
+    }
+
     PostMovieDetail = (movieDetailDTO) => {
         return this.post(`api/Cinemas/MovieDetail`, movieDetailDTO)
     }

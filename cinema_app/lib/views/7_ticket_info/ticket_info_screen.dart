@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:cinema_app/components/bottom_nav.dart';
@@ -41,9 +43,10 @@ class _TicketInfoScreenState extends State<TicketInfoScreen>
       orderState = state;
     });
   }
- Stream<int> get countStream async* {
+
+  Stream<int> get countStream async* {
     while (true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       yield CountDown.time;
     }
   }
@@ -53,11 +56,10 @@ class _TicketInfoScreenState extends State<TicketInfoScreen>
   @override
   void initState() {
     super.initState();
-    CountDown.index=4;
-    subscription = countStream.listen((_count) {
-       setState(() {
-        });
-          if (CountDown.time == 0&&CountDown.index==4) {
+    CountDown.index = 4;
+    subscription = countStream.listen((count) {
+      setState(() {});
+      if (CountDown.time == 0 && CountDown.index == 4) {
         Navigator.of(context).popUntil((route) {
           return counter++ >= 4 || !Navigator.of(context).canPop();
         });
@@ -69,12 +71,14 @@ class _TicketInfoScreenState extends State<TicketInfoScreen>
     payPre.createPayment(
         PaymentRequest(widget.orderId, widget.amount, widget.info, widget.opt));
   }
- @override
+
+  @override
   void dispose() {
     super.dispose();
     subscription.cancel();
     CountDown.index--;
   }
+
   String loadState() {
     if (orderState == 0) {
       return "Đang thanh toán";
@@ -103,125 +107,139 @@ class _TicketInfoScreenState extends State<TicketInfoScreen>
         leading: const SizedBox(),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Center(
-          child: Container(
-            decoration:
-                BoxDecoration(color: Styles.backgroundColor[Config.themeMode]),
-            child: Column(children: [
-              InfoBar(
-                title: "Người đặt",
-                value: "Nguyễn Ngọc Như Ý",
-                titleMinWith: sW * 0.21,
-                botBorderW: bW,
-              ),
-              InfoBar(
-                title: "Thời gian",
-                value: Styles.formatDateTime(today),
-                botBorderW: bW,
-                titleMinWith: sW * 0.21,
-              ),
-              InfoBar(
-                title: "Phim",
-                value: widget.booking.movie.getFullName(),
-                botBorderW: bW,
-                titleMinWith: sW * 0.21,
-              ),
-              InfoBar(
-                title: "Ghế",
-                value: widget.booking.seats.map((e) => e.name).join(", "),
-                botBorderW: bW,
-                titleMinWith: sW * 0.21,
-              ),
-              InfoBar(
-                title: "Suất chiếu",
-                value:
-                    "${widget.booking.showtime.getFormatTime()} - ${widget.booking.showtime.getFormatDate()}",
-                botBorderW: bW,
-                titleMinWith: sW * 0.21,
-              ),
-              InfoBar(
-                title: "Rạp",
-                value:
-                    "${widget.booking.theater.name} - ${widget.booking.theater.address}",
-                botBorderW: bW,
-                titleMinWith: sW * 0.21,
-              ),
-              InfoBar(
-                title: "Tổng cộng",
-                value: Styles.formatter.format(widget.amount),
-                botBorderW: 0.5,
-                titleMinWith: sW * 0.21,
-              ),
-              InfoBar(
-                title: "Trạng thái",
-                value: loadState(),
-                botBorderW: bW,
-                titleMinWith: sW * 0.21,
-              ),
-              //Qr code mã vé
-              if (orderState == 1)
-                Container(
-                  margin: const EdgeInsets.only(
-                    top: 20,
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Mã vé",
-                        style: TextStyle(
-                            color: Styles.titleColor[Config.themeMode],
-                            fontWeight: FontWeight.bold,
-                            fontSize: Styles.titleFontSize),
-                      ),
-                      Text(widget.orderId.toString(),
-                          style: TextStyle(
-                              color: Styles.boldTextColor[Config.themeMode],
-                              fontWeight: FontWeight.bold,
-                              fontSize: Styles.titleFontSize)),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(25),
-                        decoration: const BoxDecoration(color: Colors.white),
-                        child: QrBox(
-                          value: widget.orderId.toString(),
-                          size: 200.0,
-                        ),
-                      )
-                    ],
-                  ),
+      // ignore: deprecated_member_use
+      body: WillPopScope(
+        onWillPop: () async {
+          // Return false to disable back button
+          print("no back");
+          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const BottomNav(),
+              ));
+          return false;
+        },
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Center(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Styles.backgroundColor[Config.themeMode]),
+              child: Column(children: [
+                InfoBar(
+                  title: "Người đặt",
+                  value: "Nguyễn Ngọc Như Ý",
+                  titleMinWith: sW * 0.21,
+                  botBorderW: bW,
                 ),
-              Row(
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        // ignore: avoid_print
-                        print("Xác nhận");
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const BottomNav(),
-                            ));
-                      },
-                      child: Container(
-                          margin: const EdgeInsets.only(top: 40, bottom: 20),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          decoration: BoxDecoration(
-                              color: Styles.primaryColor,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Text("XÁC NHẬN",
-                              style: TextStyle(
-                                  color: Styles.boldTextColor[Config.themeMode],
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Styles.titleFontSize)))),
-                ],
-              )
-            ]),
+                InfoBar(
+                  title: "Thời gian",
+                  value: Styles.formatDateTime(today),
+                  botBorderW: bW,
+                  titleMinWith: sW * 0.21,
+                ),
+                InfoBar(
+                  title: "Phim",
+                  value: widget.booking.movie.getFullName(),
+                  botBorderW: bW,
+                  titleMinWith: sW * 0.21,
+                ),
+                InfoBar(
+                  title: "Ghế",
+                  value: widget.booking.seats.map((e) => e.name).join(", "),
+                  botBorderW: bW,
+                  titleMinWith: sW * 0.21,
+                ),
+                InfoBar(
+                  title: "Suất chiếu",
+                  value:
+                      "${widget.booking.showtime.getFormatTime()} - ${widget.booking.showtime.getFormatDate()}",
+                  botBorderW: bW,
+                  titleMinWith: sW * 0.21,
+                ),
+                InfoBar(
+                  title: "Rạp",
+                  value:
+                      "${widget.booking.theater.name} - ${widget.booking.theater.address}",
+                  botBorderW: bW,
+                  titleMinWith: sW * 0.21,
+                ),
+                InfoBar(
+                  title: "Tổng cộng",
+                  value: Styles.formatter.format(widget.amount),
+                  botBorderW: 0.5,
+                  titleMinWith: sW * 0.21,
+                ),
+                InfoBar(
+                  title: "Trạng thái",
+                  value: loadState(),
+                  botBorderW: bW,
+                  titleMinWith: sW * 0.21,
+                ),
+                //Qr code mã vé
+                if (orderState == 1)
+                  Container(
+                    margin: const EdgeInsets.only(
+                      top: 20,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Mã vé",
+                          style: TextStyle(
+                              color: Styles.titleColor[Config.themeMode],
+                              fontWeight: FontWeight.bold,
+                              fontSize: Styles.titleFontSize),
+                        ),
+                        Text(widget.orderId.toString(),
+                            style: TextStyle(
+                                color: Styles.boldTextColor[Config.themeMode],
+                                fontWeight: FontWeight.bold,
+                                fontSize: Styles.titleFontSize)),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(25),
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: QrBox(
+                            value: widget.orderId.toString(),
+                            size: 200.0,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                Row(
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          print("Xác nhận");
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BottomNav(),
+                              ));
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.only(top: 40, bottom: 20),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            decoration: BoxDecoration(
+                                color: Styles.primaryColor,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Text("XÁC NHẬN",
+                                style: TextStyle(
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Styles.titleFontSize)))),
+                  ],
+                )
+              ]),
+            ),
           ),
         ),
       ),
@@ -230,7 +248,6 @@ class _TicketInfoScreenState extends State<TicketInfoScreen>
 
   @override
   void onCreateURLCompelete(String url) async {
-    //await launch(url);
     Navigator.push(
         context,
         MaterialPageRoute(

@@ -51,7 +51,7 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Column(
           children: [
             _buildTabButtons(),
-            _isLoginPage ? RegisterContent() : LoginContent(),
+            _isLoginPage ? const RegisterContent() : const LoginContent(),
           ],
         ),
       ),

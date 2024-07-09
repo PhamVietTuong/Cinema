@@ -8,7 +8,7 @@ abstract class PaymentViewContract {
 }
 
 class PaymentPresenter {
-  PaymentViewContract _view;
+  final PaymentViewContract _view;
   late PaymentRepository _repository;
   PaymentPresenter(this._view) {
     _repository = Injector().getPaymentRepository();

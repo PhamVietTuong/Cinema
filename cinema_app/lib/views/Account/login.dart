@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';

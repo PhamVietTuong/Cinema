@@ -175,7 +175,7 @@ class _MovieDetailState extends State<MovieDetail>
                       const SizedBox(
                         height: 20,
                       ),
-                      Text("${textLoad}...",
+                      Text("$textLoad...",
                           style: TextStyle(
                             fontSize: Styles.titleFontSize,
                             fontWeight: FontWeight.bold,
@@ -264,7 +264,7 @@ class _MovieDetailState extends State<MovieDetail>
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(
@@ -278,79 +278,77 @@ class _MovieDetailState extends State<MovieDetail>
                           width: wS - 30,
                           margin: const EdgeInsets.symmetric(
                               horizontal: Styles.defaultHorizontal),
-                          child: Expanded(
-                            child: ToggleButtons(
-                              renderBorder: false,
-                              fillColor: Colors.transparent,
-                              onPressed: (int index) {
-                                setState(() {
-                                  _selectedTabIndex = index;
-                                });
-                              },
-                              isSelected: [
-                                _selectedTabIndex == 0,
-                                _selectedTabIndex == 1,
-                              ],
-                              children: [
-                                Container(
-                                  width: (wS - 30) * 0.5,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: _selectedTabIndex == 0
-                                      ? BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          gradient: gradient,
-                                        )
-                                      : BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color:
-                                              Styles.btnColor[Config.themeMode],
-                                        ),
-                                  child: Text(
-                                    textShowTime,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: Styles.textSize,
-                                      color: _selectedTabIndex != 0
-                                          ? Styles
-                                              .boldTextColor[Config.themeMode]
-                                          : Styles.textSelectionColor[
-                                              Config.themeMode],
-                                    ),
+                          child: ToggleButtons(
+                            renderBorder: false,
+                            fillColor: Colors.transparent,
+                            onPressed: (int index) {
+                              setState(() {
+                                _selectedTabIndex = index;
+                              });
+                            },
+                            isSelected: [
+                              _selectedTabIndex == 0,
+                              _selectedTabIndex == 1,
+                            ],
+                            children: [
+                              Container(
+                                width: (wS - 30) * 0.5,
+                                padding: const EdgeInsets.all(5),
+                                decoration: _selectedTabIndex == 0
+                                    ? BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10),
+                                        gradient: gradient,
+                                      )
+                                    : BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10),
+                                        color:
+                                            Styles.btnColor[Config.themeMode],
+                                      ),
+                                child: Text(
+                                  textShowTime,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: Styles.textSize,
+                                    color: _selectedTabIndex != 0
+                                        ? Styles
+                                            .boldTextColor[Config.themeMode]
+                                        : Styles.textSelectionColor[
+                                            Config.themeMode],
                                   ),
                                 ),
-                                Container(
-                                  width: (wS - 30) * 0.5 - 5,
-                                  padding: const EdgeInsets.all(5),
-                                  margin: const EdgeInsets.only(left: 5),
-                                  decoration: _selectedTabIndex == 1
-                                      ? BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          gradient: gradient,
-                                        )
-                                      : BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color:
-                                              Styles.btnColor[Config.themeMode],
-                                        ),
-                                  child: Text(
-                                    textInfo,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: Styles.textSize,
-                                      color: _selectedTabIndex != 1
-                                          ? Styles
-                                              .boldTextColor[Config.themeMode]
-                                          : Styles.textSelectionColor[
-                                              Config.themeMode],
-                                    ),
+                              ),
+                              Container(
+                                width: (wS - 30) * 0.5 - 5,
+                                padding: const EdgeInsets.all(5),
+                                margin: const EdgeInsets.only(left: 5),
+                                decoration: _selectedTabIndex == 1
+                                    ? BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10),
+                                        gradient: gradient,
+                                      )
+                                    : BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10),
+                                        color:
+                                            Styles.btnColor[Config.themeMode],
+                                      ),
+                                child: Text(
+                                  textInfo,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: Styles.textSize,
+                                    color: _selectedTabIndex != 1
+                                        ? Styles
+                                            .boldTextColor[Config.themeMode]
+                                        : Styles.textSelectionColor[
+                                            Config.themeMode],
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         //Phần chọn thông tin
@@ -417,8 +415,8 @@ class _MovieDetailState extends State<MovieDetail>
                                           ],
                                         ),
                                         Container(
-                                          padding: EdgeInsets.all(5),
-                                          margin: EdgeInsets.only(top: 5),
+                                          padding: const EdgeInsets.all(5),
+                                          margin: const EdgeInsets.only(top: 5),
                                           decoration: BoxDecoration(
                                               border: Border.all(
                                                   color: Styles.textColor[
@@ -451,7 +449,7 @@ class _MovieDetailState extends State<MovieDetail>
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Container(

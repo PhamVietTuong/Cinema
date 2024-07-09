@@ -1,4 +1,5 @@
-﻿using Cinema.Contracts;
+﻿using AutoMapper;
+using Cinema.Contracts;
 using Cinema.Data;
 using Cinema.Data.Enum;
 using Cinema.Data.Models;
@@ -9,12 +10,67 @@ namespace Cinema.Repository
 {
     public class MovieRepository : IMovieRepository
     {
+        private readonly IMapper _mapper;
         private readonly CinemaContext _context;
 
-        public MovieRepository(CinemaContext context)
+        public MovieRepository(CinemaContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
+        public async Task<List<MovieDTO>> GetMoviesOriginal()
+        {
+            var m = await _context.Movie.Include(x => x.AgeRestriction).ToListAsync();
+            var result = m.Select(x => _mapper.Map<MovieDTO>(x)).ToList();
+            foreach (var movie in result)
+            {
+                var movieTypeDetails = await _context.MovieTypeDetail.Include(d => d.MovieType).Where(x => x.MovieId == movie.Id).Select(x => x.MovieType).ToListAsync();
+                movie.MovieTypes = _mapper.Map<List<MovieTypeDTO>>(movieTypeDetails);
+            }
+            return result;
+        }
+
+        public async Task<MovieDTO> GetMovieById(Guid id)
+        {
+            var m = await _context.Movie.Include(x => x.AgeRestriction).FirstOrDefaultAsync(x => x.Id == id);
+            var r = _mapper.Map<MovieDTO>(m);
+            r.MovieTypes = await _context.MovieTypeDetail
+                    .Include(x => x.MovieType)
+                    .Where(x => x.MovieId == r.Id)
+                    .Select(x => _mapper.Map<MovieTypeDTO>(x.MovieType))
+                    .ToListAsync();
+            return r;
+        }
+        public async Task<MovieDTO> CreateMovie(MovieDTO movie)
+        {
+            var m = _mapper.Map<Movie>(movie);
+            if (movie.File != null && movie.File.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(movie.File.FileName);
+                var filePath = Path.Combine("wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await movie.File.CopyToAsync(stream);
+                }
+                m.Image = fileName;
+            }
+
+            _context.Movie.Add(m);
+            await _context.SaveChangesAsync();
+
+            foreach (var movieType in movie.MovieTypes)
+            {
+                _context.MovieTypeDetail.Add(new MovieTypeDetail
+                {
+                    MovieId = m.Id,
+                    MovieTypeId = movieType.Id
+                });
+            }
+            await _context.SaveChangesAsync();
+            return movie;
+        }
+      
 
         public async Task<List<MovieDetailViewModel>> GetMovieList()
         {
@@ -259,7 +315,7 @@ namespace Cinema.Repository
                     ShowTimeType = isDulexe ? ShowTimeType.Deluxe : ShowTimeType.Standard
                 };
             }).ToList();
-            
+
             return showtimeViewModels;
         }
 

@@ -17,7 +17,7 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   var index = 0;
   List<Widget> pages = [
-     HomePage(),
+     const HomePage(),
     const TheaterScreen(),
     const Center(
       child: Text("News"),

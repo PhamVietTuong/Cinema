@@ -93,7 +93,7 @@ CREATE TABLE [DiscountType] (
 )
 
 CREATE table [Discount] (
-	[Code] nvarchar(255) NULL,
+	[Code] nvarchar(255) not NULL,
 	[DiscountTypeId] UNIQUEIDENTIFIER NOT NULL,
 	[Name] nvarchar(255) NOT NULL,
 	[Image] nvarchar(255)  NULL,
@@ -136,7 +136,7 @@ CREATE TABLE [User] (
 	[MemberShipId] uniqueidentifier NOT NULL,
     [Status] bit NOT NULL,
     PRIMARY KEY (Id),
-	FOREIGN KEY (UserTypeId) REFERENCES UserType(Id)
+	FOREIGN KEY (UserTypeId) REFERENCES UserType(Id),
 	FOREIGN KEY (MemberShipId) REFERENCES MemberShip(Id)
 );
 

@@ -1,5 +1,6 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data.Enum;
+using Cinema.Data.Models;
 using Cinema.DTOs;
 using Cinema.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,8 +29,8 @@ namespace Cinema.Controllers
         private readonly ISeatTypeRepository _seatTypeRepository;
         private readonly IUserTypeRepository _userTypeRepository;
 
-        public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository, 
-            ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository, 
+        public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository,
+            ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository,
             IUserTypeRepository userTypeRepository)
         {
             _ageRestrictionRepository = ageRestrictionRepository;
@@ -55,7 +56,7 @@ namespace Cinema.Controllers
                 var theaterResults = await _theaterRepository.GetTheatersByName(name);
                 if (theaterResults != null && theaterResults.Any())
                 {
-                    return Ok(new { theaters =theaterResults});
+                    return Ok(new { theaters = theaterResults });
                 }
 
                 var movieResults = await _movieRepository.GetMoviesByName(name);
@@ -77,6 +78,53 @@ namespace Cinema.Controllers
 
         #region Movie
 
+        [HttpGet("GetMovieListAdmin")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<MovieDTO>>> GetMovieListAdmin()
+        {
+            try
+            {
+                var result = await _movieRepository.GetMoviesOriginal();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
+        [HttpGet("GetMovieById/{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<MovieDTO>> GetMovieById(Guid id)
+        {
+            try
+            {
+                var result = await _movieRepository.GetMovieById(id);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
+        [HttpPost("CreateMovie")]
+        [AllowAnonymous]
+        public async Task<ActionResult<MovieDTO>> CreateMovie([FromForm] MovieDTO m)
+        {
+            try
+            {
+                var result = await _movieRepository.CreateMovie(m);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
+
+    
         [HttpGet("GetMovieList")]
         [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()

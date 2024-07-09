@@ -95,22 +95,22 @@ DECLARE @GUID_theater5 UNIQUEIDENTIFIER;
 
 --theater
 SET @GUID_theater1 = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater1, N'CKC Quận 1', N'65 Huỳnh Thúc Kháng, Phường Bến Nghé ,Quận 1,Thành Phố Hồ Chí Minh','ckc_quan1.jpg','02437654321',
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater1, N'CKC Quận 1', N'65 Huỳnh Thúc Kháng, Phường Bến Nghé ,Quận 1, Thành Phố Hồ Chí Minh','ckc_quan1.jpg','02437654321',
 1)
 SET @GUID_theater2 = NEWID();
 INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater2, N'CKC Quận 3', N'Lầu 6 - 7,
-19 Cao Thắng, P.2, Q.3, Tp. Hồ Chí Minh','ckc_quan3.jpg','02838456789',
+19 Cao Thắng, P.2, Q.3, Thành Phố Hồ Chí Minh','ckc_quan3.jpg','02838456789',
 1)
 SET @GUID_theater3 = NEWID();
-INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater3, N'CKC Quận 10', N'116 Nguyễn Tri Phương, Q.10, Tp. Hồ Chí Minh','ckc_quan10.jpg','02363839999',
+INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater3, N'CKC Quận 10', N'116 Nguyễn Tri Phương, Q.10, Thành Phố Hồ Chí Minh','ckc_quan10.jpg','02363839999',
 1)
 SET @GUID_theater4 = NEWID();
 INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater4, N'CKC Quận 5', N'Tầng 7, Hùng Vương Plaza,
-126 Hùng Vương, Q.5, Tp. Hồ Chí Minh','ckc_quan5.jpg','02253851234',
+126 Hùng Vương, Q.5, Thành Phố Hồ Chí Minh','ckc_quan5.jpg','02253851234',
 1)
 SET @GUID_theater5 = NEWID();
 INSERT Theater(Id, Name, Address, Image, Phone, Status) VALUES (@GUID_theater5, N'CKC Quận 7', N'Lầu 4, Siêu Thị Vincom 3/2,
-3C Đường 3/2, Q.7, Tp. Hồ Chí Minh','ckc_quan7.jpg','02923734567',
+3C Đường 3/2, Q.7, Thành Phố Hồ Chí Minh','ckc_quan7.jpg','02923734567',
 1)
 
 --room
