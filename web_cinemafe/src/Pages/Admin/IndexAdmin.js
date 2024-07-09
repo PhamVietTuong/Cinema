@@ -110,6 +110,14 @@ const IndexAdmin = () => {
                     </DrawerHeader>
                     <Divider />
                     <List>
+                        <Link to="Movie">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Movie" />
+                            </ListItemButton>
+                        </Link>
                         <Link to="AgeRestriction">
                             <ListItemButton>
                                 <ListItemIcon>

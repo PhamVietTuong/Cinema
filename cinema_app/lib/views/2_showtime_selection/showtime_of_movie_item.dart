@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import '../../components/age_restriction_box.dart';
 
 class ShowTimeOfMovieItem extends StatefulWidget {
-   ShowTimeOfMovieItem({
+   const ShowTimeOfMovieItem({
     super.key,
     required this.movie,
     required this.booking,

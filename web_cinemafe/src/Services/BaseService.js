@@ -23,6 +23,7 @@ export class baseService {
             headers: { Authorization: `Bearer ${this.getToken()}` }
         });
     };
+    
 
     postImage = (url, model) => {
         const headers = {

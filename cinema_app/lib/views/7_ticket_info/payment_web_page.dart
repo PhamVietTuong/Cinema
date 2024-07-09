@@ -20,7 +20,7 @@ class _WebPageViewState extends State<WebPageView> {
   late String url;
   Stream<int> get countStream async* {
     while (true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       yield CountDown.time;
     }
   }
@@ -31,7 +31,7 @@ class _WebPageViewState extends State<WebPageView> {
   void initState() {
     super.initState();
     CountDown.index=5;
-    subscription = countStream.listen((_count) {
+    subscription = countStream.listen((count) {
     
           if (CountDown.time == 0&&CountDown.index==5) {
         Navigator.of(context).popUntil((route) {
@@ -71,6 +71,7 @@ class _WebPageViewState extends State<WebPageView> {
               onHttpError: (HttpResponseError error) {},
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) async {
+               
                 if (request.url.contains("VNPayReturn")||request.url.contains("MomoIpn")) {
                   final response = await http.get(Uri.parse(request.url));
                   dynamic json = jsonDecode(response.body);

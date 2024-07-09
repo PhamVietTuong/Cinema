@@ -24,7 +24,9 @@ class _TheaterScreenState extends State<TheaterScreen>
         [Styles.translate(titleAppbar), Styles.translate(stateDes)]);
     titleAppbar = res[0];
     stateDes = res[1];
-    setState(() {});
+    setState(() {
+      _isLoadingData = false;
+    });
   }
 
   @override

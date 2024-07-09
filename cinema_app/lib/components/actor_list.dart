@@ -8,7 +8,7 @@ class ActorList extends StatefulWidget {
   const ActorList({super.key, required this.actors});
 
   @override
-  _ActorListState createState() => _ActorListState();
+  State<ActorList> createState() => _ActorListState();
 }
 
 class _ActorListState extends State<ActorList> {
@@ -40,7 +40,7 @@ class _ActorListState extends State<ActorList> {
                       size: 50,
                     ),
                     Text(
-                      '${actorList[i]}',
+                      actorList[i],
                       style: TextStyle(
                         color: Styles.textColor[Config.themeMode],
                         fontSize: Styles.textSize,

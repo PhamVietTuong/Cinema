@@ -145,7 +145,7 @@ class _PayScreenState extends State<PayScreen> {
 
   Stream<int> get countStream async* {
     while (true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed( const Duration(seconds: 1));
       yield CountDown.time;
     }
   }
@@ -157,7 +157,7 @@ class _PayScreenState extends State<PayScreen> {
     super.initState();
     tranlate();
     CountDown.index = 3;
-    subscription = countStream.listen((_count) {
+    subscription = countStream.listen((count) {
       setState(() {});
       if (CountDown.time == 0 && CountDown.index == 3) {
         Navigator.of(context).popUntil((route) {
@@ -224,7 +224,7 @@ class _PayScreenState extends State<PayScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(right: 15),
-              padding: EdgeInsets.all(5),
+              padding:const EdgeInsets.all(5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
                   color: Styles.btnColor[Config.themeMode]),
@@ -410,7 +410,7 @@ class _PayScreenState extends State<PayScreen> {
                                 fontSize: Styles.titleFontSize,
                                 color: Styles.boldTextColor[Config.themeMode]),
                             decoration: InputDecoration(
-                                hintText: "$textVoucher",
+                                hintText: textVoucher,
                                 hintStyle: TextStyle(
                                     color:
                                         Styles.boldTextColor[Config.themeMode]),
@@ -432,7 +432,7 @@ class _PayScreenState extends State<PayScreen> {
                             color: Styles.btnColor[Config.themeMode]),
                         child:  Text(
                           textApply,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 18),
@@ -488,7 +488,7 @@ class _PayScreenState extends State<PayScreen> {
                       "ShowTimeId": widget.booking.showtime.showTimeId,
                       "RoomId": widget.booking.showtime.roomId,
                       "TheaterId": widget.booking.theater.id,
-                      "UserId": '5f24b03d-1cbd-4141-017d-08dc73cfa571',
+                      "UserId": '0B2F669A-D370-400D-8C46-43FE22D24A4F',
                       "OrderInfo": "CKC cinema app",
                       "InvoiceTickets": tBoxs
                           .map((e) => {
@@ -518,7 +518,7 @@ class _PayScreenState extends State<PayScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => TicketInfoScreen(
-                                opt: selectedOption!.title ?? "",
+                                opt: selectedOption!.title ,
                                 orderId: orderId,
                                 amount: amount,
                                 booking: widget.booking,
@@ -537,7 +537,7 @@ class _PayScreenState extends State<PayScreen> {
                       color: Styles.btnColor[Config.themeMode],
                       borderRadius: BorderRadius.circular(8)),
                   child: Text(
-                    "$textPay",
+                    textPay,
                     style: TextStyle(
                         color: Styles.boldTextColor[Config.themeMode],
                         fontWeight: FontWeight.bold,

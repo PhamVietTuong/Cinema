@@ -166,7 +166,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     setState(() {
       state ? selectedSeats.remove(seat) : selectedSeats.add(seat);
     });
-    if (selectedSeats.length > 0) {
+    if (selectedSeats.isNotEmpty) {
       // cần reset
       CountDown.start();
     } else {
@@ -429,7 +429,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
 
   Stream<int> get countStream async* {
     while (true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       yield CountDown.time;
     }
   }
@@ -443,7 +443,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
     super.initState();
     countSignle = widget.booking.countingSignle();
     countCouple = widget.booking.countingCouple();
-    subscription = countStream.listen((_count) {
+    subscription = countStream.listen((count) {
       setState(() {});
       if (CountDown.time == 0&&CountDown.index==1) {
         Navigator.of(context).popUntil((route) {
@@ -599,7 +599,7 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                                             maxCol > 6 ? wS * 2 - 20 : wS - 20,
                                         alignment: Alignment.center,
                                         child: Text(
-                                          "$textScreen",
+                                          textScreen,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: Styles.titleFontSize,
@@ -634,18 +634,18 @@ class _SeatScreenState extends State<SeatScreen> implements SeatViewContract {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ChairTypeColorBox(
-                                  title: "$textSingle",
+                                  title: textSingle,
                                   color: Styles.singleSeatColor),
                               ChairTypeColorBox(
-                                  title: "$textCouple",
+                                  title: textCouple,
                                   color: Styles.coupleSeatColor),
                               ChairTypeColorBox(
-                                  title: "$textSold", color: Styles.soldColor),
+                                  title: textSold, color: Styles.soldColor),
                               ChairTypeColorBox(
-                                  title: "$textSelect",
+                                  title: textSelect,
                                   color: Styles.selectedSeatColor),
                               ChairTypeColorBox(
-                                  title: "$textWait",
+                                  title: textWait,
                                   color: Styles.waitingSeatColor),
                             ]),
                       ),

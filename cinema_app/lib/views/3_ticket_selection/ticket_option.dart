@@ -71,7 +71,7 @@ class _TicketOptionItemState extends State<TicketOptionItem> {
               children: [
                 Expanded(
                   child: Text(
-                    '${textSeatTypeName}-${textticketTypeName}',
+                    '$textSeatTypeName-$textticketTypeName',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: Styles.textSize,

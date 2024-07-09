@@ -48,7 +48,7 @@ class _DayItemBoxState extends State<DayItemBox> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6),
         margin: const EdgeInsets.only(right: 8, bottom: 5),
-        constraints: BoxConstraints(minWidth: 80),
+        constraints: const BoxConstraints(minWidth: 80),
         decoration: BoxDecoration(
           color: widget.isSelected ? null : Styles.btnColor[Config.themeMode],
           gradient: widget.isSelected
