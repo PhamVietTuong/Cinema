@@ -608,6 +608,23 @@ namespace Cinema.Controllers
             }
         }
 
+        [HttpGet("GetListInvoice")]
+        //[Authorize(Roles = admin)]
+        [AllowAnonymous]
+        public async Task<ActionResult<RevenueTheaterViewModel>> GetListInvoice()
+        {
+            try
+            {
+                var result = await _invoiceRepository.GetListInvoiceAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         #endregion
 
         #region AgeRestriction
