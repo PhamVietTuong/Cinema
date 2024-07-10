@@ -241,7 +241,11 @@ CREATE TABLE [TicketType] (
 CREATE TABLE [SeatTypeTicketType] (
 	[SeatTypeId] uniqueidentifier NOT NULL,
 	[TicketTypeId] uniqueidentifier NOT NULL,
-	[Price] float not null,
+	[Price2D] float  null,
+	[Price3D] float  null,
+	[PriceDiscount2D]  float  null,
+	[PriceDiscount3D]  float  null,
+
 	CONSTRAINT PK_SeatTypeTicketType PRIMARY KEY ([SeatTypeId], [TicketTypeId]),
 	CONSTRAINT FK_SeatTypeTicketType_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES [SeatType] (Id),
 	CONSTRAINT FK_SeatTypeTicketType_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
@@ -287,7 +291,7 @@ CREATE TABLE [FoodAndDrink] (
 	PRIMARY KEY (Id),
 );
 
-CREATE TABLE FoodAndDrinkTheater (
+CREATE TABLE [FoodAndDrinkTheater] (
 	[FoodAndDrinkId] uniqueidentifier NOT NULL,
 	[TheaterId] uniqueidentifier NOT NULL,
 	[Price] float NOT NULL,

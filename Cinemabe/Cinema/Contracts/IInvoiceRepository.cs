@@ -9,5 +9,7 @@ namespace Cinema.Contracts
         Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(Guid? userId);
         Task<List<RevenueTheaterViewModel>> GetRevenueAsync(FilterRevenue filterRevenue);
         Task<List<InvoiceRowViewModel>> GetListInvoiceAsync();
+        Task<bool> SendInvoiceInfo(string code);
+
     }
 }

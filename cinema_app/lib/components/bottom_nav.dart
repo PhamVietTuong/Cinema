@@ -25,7 +25,7 @@ class _BottomNavState extends State<BottomNav> {
   void initState() {
     super.initState();
     pages = [
-      HomePage(),
+      const HomePage(),
       const TheaterScreen(),
       const Center(
         child: Text("News"),

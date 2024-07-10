@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông tin giao dịch</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        box-sizing: border-box;
+      }
+
+      /* Container */
+      .email-container {
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .header-title {
+        flex: 1;
+      }
+      .header-img {
+        width: 200px;
+      }
+      .header-title h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+      }
+
+      .header-title p {
+        margin-top: 10px;
+        color: #666;
+      }
+
+      .sys-info h2 {
+        margin: 5px 0;
+        font-size: 20px;
+        color: #333;
+      }
+
+      .sys-info h3 {
+        margin: 10px 0;
+        font-size: 18px;
+        color: #555;
+      }
+
+      .sys-info h4 {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #777;
+      }
+
+      .logo {
+        width: 100%;
+        max-width: 220px;
+        height: auto;
+      }
+
+      /* QR Code Container */
+      .qrcode-container {
+        text-align: center;
+        background-color: #ffffff;
+        border-radius: 5px;
+      }
+
+      .qrcode-container h2 {
+        margin-top: 0;
+        font-size: 18px;
+        color: #333;
+      }
+
+      /* Table */
+      table {
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      .table_full_width {
+        width: 100%;
+      }
+      .table_non_border td,
+      th {
+        border: none;
+      }
+      .table_td_left td {
+        text-align: left;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+      .td_left {
+        text-align: left;
+      }
+      th {
+        background-color: #447ae5;
+        color: white;
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+        color: #777;
+      }
+
+      /* Signature */
+      .signature {
+        margin-top: 20px;
+        padding-top: 10px;
+        border-top: 1px solid #ddd;
+        color: #777;
+      }
+      img{
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <div class="header-title">
+          <h2>Thông tin giao dịch</h2>
+          <p>Xin chào {{name}},</p>
+        </div>
+        <div class="header-img">
+          <img
+            src="http://103.104.122.137:9000/Images/logo.png"
+            alt="CKC Cinema"
+            class="logo"
+          />
+        </div>
+      </div>
+
+      <table class="table_full_width table_non_border">
+        <td class="td_left">
+          <div class="sys-info">
+            <h2>CKC CINEMA</h2>
+            <h4>{{theaterName}} - Địa chỉ: {{theaterAddress}}</h4>
+            <h3>XÁC NHẬN ĐẶT VÉ THÀNH CÔNG</h3>
+            <h1>MÃ ĐẶT VÉ: {{CODE}}</h1>
+          </div>
+        </td>
+        <td style="display: flex; justify-content: center">
+          <div class="qrcode-container">
+            <h2>Mã QR</h2>
+            <img
+              src="http://103.104.122.137:9000/Images/{{qr_image}}"
+              alt="QR"
+            />
+          </div>
+        </td>
+      </table>
+
+      <table class="table_non_border table_td_left">
+        <tr>
+          <td><strong>Phim</strong></td>
+          <td>: {{movieName}}</td>
+        </tr>
+        <tr>
+          <td><strong>Suất chiếu</strong></td>
+          <td>: {{showtime}}</td>
+        </tr>
+        <tr>
+          <td><strong>Phòng chiếu</strong></td>
+          <td>: {{roomName}}</td>
+        </tr>
+        <tr>
+          <td><strong>Rạp chiếu</strong></td>
+          <td>: {{theaterName}}</td>
+        </tr>
+        <tr>
+          <td><strong>Số ghế</strong></td>
+          <td>: {{numSeats}}</td>
+        </tr>
+      </table>
+
+      <table class="table_full_width">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mặt Hàng</th>
+            <th>Số Lượng</th>
+            <th>Đơn Giá</th>
+            <th>Thành Tiền (VND)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{items}}
+        </tbody>
+      </table>
+
+      <p>
+        Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Chúc bạn có một buổi xem
+        phim vui vẻ.
+      </p>
+
+      <p>
+        Mọi thắc mắc xin vui lòng liên hệ với chúng tôi qua email hoặc số điện
+        thoại được cung cấp dưới đây.
+      </p>
+
+      <div class="footer">
+        <p>Trân trọng,</p>
+        <p>Đội ngũ hỗ trợ khách hàng</p>
+      </div>
+    </div>
+  </body>
+</html>

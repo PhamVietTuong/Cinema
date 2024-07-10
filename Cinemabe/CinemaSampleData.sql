@@ -546,23 +546,23 @@ INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType2, N'Ðôi', 1)
 SET @GUID_seatType3 = NEWID();
 INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType3, N'Nằm', 1)
 
--- --đơn - hssv, lớn
--- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType1,45000,65000,45000,65000)
--- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType2,70000,90000,45000,65000)
--- --đôi - lớn
--- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType2,@GUID_TicketType2,145000,165000,95000,115000)
--- --nằm - hssv, lớn
--- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000, 110000,null,null)
--- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType2,190000,210000,null,null)
-
 --đơn - hssv, lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType1,45000)
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType2,70000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType1,45000,65000,45000,65000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType2,70000,90000,45000,65000)
 --đôi - lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType2,@GUID_TicketType2,145000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType2,@GUID_TicketType2,145000,165000,95000,115000)
 --nằm - hssv, lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000,)
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType2,190000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000, 110000,null,null)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType2,190000,210000,null,null)
+
+-- --đơn - hssv, lớn
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType1,45000)
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType2,70000)
+-- --đôi - lớn
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType2,@GUID_TicketType2,145000)
+-- --nằm - hssv, lớn
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000,)
+-- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType3,@GUID_TicketType2,190000)
 
 --combo
 DECLARE @GUID_cb1 UNIQUEIDENTIFIER;

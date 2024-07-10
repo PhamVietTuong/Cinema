@@ -1,11 +1,13 @@
+import 'package:cinema_app/data/DTO/res_get_code.dart';
 import 'package:cinema_app/data/injector.dart';
 import 'package:cinema_app/data/models/user.dart';
 
 abstract class UserViewContract {
   void onLoadError(String error);
-  void onLoadSuccess(String message);
-  void LoadLoginSuccess(User user);
- void onLoadToken(String token, DateTime expirationTime);
+  void onRegisterSuccess(String message);
+  void onLoginSuccess(User user);
+  void onGetCodeSuccess(ResGetCode res);
+  void onLoadToken(String token, DateTime expirationTime);
 }
 
 class UserPresenter {
@@ -19,7 +21,7 @@ class UserPresenter {
   Future<void> registerUser(Register register) async {
     try {
       await repository.register(register);
-      _view.onLoadSuccess('Đăng ký thành công');
+      _view.onRegisterSuccess('Đăng ký thành công');
     } catch (e) {
       _view.onLoadError('$e');
     }
@@ -28,22 +30,22 @@ class UserPresenter {
   Future<void> login(Login login) async {
     try {
       User user = await repository.login(login);
-      _view.LoadLoginSuccess(user);
+      _view.onLoginSuccess(user);
       _view.onLoadToken(user.token, user.expirationTime);
-     // print(user.expirationTime);
+      // print(user.expirationTime);
     } catch (e) {
       _view.onLoadError('$e');
       throw ('$e');
     }
   }
-  // Future<String> sendAuthCode(String email) async{
-  //   try{
-  //     await repository.sendAuthCode(email);
-  //     _view.onLoadSuccess('Gửi mã thành công');
-  //   }
-  //  catch (e) {
-  //     _view.onLoadError('$e');
-  //     throw ('$e');
-  //   }
-  // }
+
+  Future<void> sendAuthCode(String email) async {
+    try {
+      ResGetCode res = await repository.sendAuthCode(email);
+      _view.onGetCodeSuccess(res);
+    } catch (e) {
+      _view.onLoadError('$e');
+      throw ('$e');
+    }
+  }
 }

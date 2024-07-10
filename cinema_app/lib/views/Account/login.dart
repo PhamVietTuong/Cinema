@@ -1,11 +1,12 @@
 import 'package:cinema_app/components/bottom_nav.dart';
-import 'package:cinema_app/views/Account/user_info_page.dart';
-import 'package:cinema_app/views/home_screen.dart';
+import 'package:cinema_app/data/DTO/res_get_code.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
+
+import 'password/forgot_pass_screen.dart';
 
 class LoginContent extends StatefulWidget {
   const LoginContent({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _LoginContentState extends State<LoginContent>
   late UserPresenter _presenter;
   String textPass = "Mật khẩu";
   String textLogin = "Đăng nhập";
+  String textForgetPass = "Quêt mật khẩu";
   bool _obscurePassword = true;
   String? _token;
   DateTime? _tokenExpirationTime;
@@ -28,10 +30,11 @@ class _LoginContentState extends State<LoginContent>
     List<String> textTranlate = await Future.wait([
       Styles.translate(textPass),
       Styles.translate(textLogin),
+      Styles.translate(textForgetPass),
     ]);
     textPass = textTranlate[0];
     textLogin = textTranlate[1];
-
+    textForgetPass = textTranlate[2];
     setState(() {});
   }
 
@@ -50,7 +53,7 @@ class _LoginContentState extends State<LoginContent>
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Thông báo'),
-          content: Text('$error'),
+          content: Text(error),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),
@@ -65,13 +68,11 @@ class _LoginContentState extends State<LoginContent>
   }
 
   @override
-  void LoadLoginSuccess(User user) {
+  void onLoginSuccess(User user) {
     Config.saveInfoUser(user);
     showDialogOnLoadSuccess(user);
   }
-
-  @override
-  void onLoadSuccess(String message) {}
+  
   void showDialogOnLoadSuccess(User user) {
     showDialog(
       context: context,
@@ -87,9 +88,9 @@ class _LoginContentState extends State<LoginContent>
 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => BottomNav()),
+                  MaterialPageRoute(builder: (context) => const BottomNav()),
                 );
-              },  
+              },
             ),
           ],
         );
@@ -98,7 +99,7 @@ class _LoginContentState extends State<LoginContent>
   }
 
   void _saveTokenToLocal(String token, DateTime expirationTime) async {
-   // await Config.saveToken(token, expirationTime);
+    // await Config.saveToken(token, expirationTime);
     setState(() {
       _token = token;
       _tokenExpirationTime = expirationTime;
@@ -148,6 +149,40 @@ class _LoginContentState extends State<LoginContent>
             ),
           ),
           const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FogotPassScreen()));
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 0.5),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Styles.boldTextColor[Config.themeMode]!,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    textForgetPass,
+                    style: TextStyle(
+                      fontSize: Styles.titleFontSize,
+                      color: Styles.boldTextColor[Config.themeMode],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              )
+            ],
+          ),
           ElevatedButton(
             onPressed: () {
               String username = _usernameController.text;
@@ -179,7 +214,7 @@ class _LoginContentState extends State<LoginContent>
             },
             child: Text(
               textLogin,
-              style: TextStyle(fontSize: Styles.titleFontSize),
+              style: const TextStyle(fontSize: Styles.titleFontSize),
             ),
           )
         ],
@@ -190,5 +225,13 @@ class _LoginContentState extends State<LoginContent>
   @override
   void onLoadToken(String token, DateTime expirationTime) {
     _saveTokenToLocal(token, expirationTime);
+  }
+
+  @override
+  void onGetCodeSuccess(ResGetCode res) {
+  }
+
+  @override
+  void onRegisterSuccess(String message) {
   }
 }

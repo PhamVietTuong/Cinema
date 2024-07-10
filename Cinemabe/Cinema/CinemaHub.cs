@@ -211,6 +211,7 @@ namespace Cinema
             }
         }
 
+
         private async Task<double> CalculatePriceAsync(Guid ticketTypeId, string rowName, int colIndex, Guid roomId)
         {
             var seatType = await _context.Seat.FirstOrDefaultAsync(x => x.RowName == rowName && x.ColIndex == colIndex && x.RoomId == roomId);
@@ -225,7 +226,15 @@ namespace Cinema
                     .FirstOrDefaultAsync();
         }
 
+        public async Task PaymentFailed(InvoiceDTO entity)
+        {
+            await Clients.Group(GetGroupKey(entity.ShowTimeId, entity.RoomId)).SendAsync("ListOfSeatsSold", entity.InvoiceTickets.Select(x => new
+            {
+                x.RowName,
+                x.ColIndex
+            }), SeatStatus.Empty);
 
+        }
         public Task GetWaitingSeat(Guid showTimeId, Guid roomId)
         {
             var seatIds = _seatBeingSelected.Values.Where(x => x.ShowTimeId == showTimeId && x.RoomId == roomId).SelectMany(x => x.InfoSeats);
