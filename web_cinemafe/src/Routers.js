@@ -23,8 +23,9 @@ import Showing from "./Pages/User/Showing/Showing";
 import Cooming from "./Pages/User/Cooming/Cooming";
 import MoviePage from "./Pages/Admin/Movie/MoviePage"; 
 import EditMoviePage from "./Pages/Admin/Movie/EditMoviePage";
-
 import Revenue from "./Pages/Admin/Revenue/Revenue";
+import Invoice from "./Pages/Admin/Invoice/Invoice";
+import User from "./Pages/Admin/User/User";
 
 const Routers = () => {
     return (
@@ -79,6 +80,8 @@ const Routers = () => {
                         <Route path="theater" element={<Theater />} />
                         <Route path="theater/:id" element={<TheaterDetail />} />
                         <Route path="revenue" element={<Revenue />} />
+                        <Route path="invoice" element={<Invoice />} />
+                        <Route path="user" element={<User />} />
                     </Route>
                 </Routes>
             </Router>

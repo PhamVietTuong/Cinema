@@ -114,7 +114,7 @@ namespace Cinema.Controllers
         {
             if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(changePassword.Trim())) return BadRequest(" UserName or Password is empty");
 
-            if(Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
+            if (Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
 
             var result = await _userRepository.ChangePassword(changePassword, userName);
             return result ? Ok() : NotFound("Not found user");
@@ -138,6 +138,23 @@ namespace Cinema.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("GetListUser")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<UserRowViewModel>>> GetListUser()
+        {
+            try
+            {
+                var result = await _userRepository.GetListUserAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+
             }
         }
     }

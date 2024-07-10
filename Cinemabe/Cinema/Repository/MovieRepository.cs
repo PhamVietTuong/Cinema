@@ -39,6 +39,22 @@ namespace Cinema.Repository
                     .Where(x => x.MovieId == r.Id)
                     .Select(x => _mapper.Map<MovieTypeDTO>(x.MovieType))
                     .ToListAsync();
+            var resultShowTimeRooms = new List<ShowTimeRoomDTO>();
+
+            var showTimeRooms = await _context.ShowTimeRoom.Include(x => x.ShowTime).Include(x => x.Room).ThenInclude(x => x.Theater).Where(x => x.ShowTime.MovieId == id).ToListAsync();
+
+            foreach (var showTimeRoom in showTimeRooms)
+            {
+                resultShowTimeRooms.Add(new ShowTimeRoomDTO
+                {
+                    StartTime = showTimeRoom.ShowTime.StartTime,
+                    EndTime = showTimeRoom.ShowTime.EndTime,
+                    RoomName = showTimeRoom.Room.Name,
+                    ProjectionForm = showTimeRoom.ShowTime.ProjectionForm,
+                    TheaterName = showTimeRoom.Room.Theater.Name,
+                });
+            }
+            r.ShowTimeRooms = resultShowTimeRooms;
             return r;
         }
         public async Task<MovieDTO> CreateMovie(MovieDTO movie)
