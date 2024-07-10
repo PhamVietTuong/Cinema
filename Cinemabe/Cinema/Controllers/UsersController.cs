@@ -141,5 +141,22 @@ namespace Cinema.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        [HttpGet("GetListUser")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<UserRowViewModel>>> GetListUser()
+        {
+            try
+            {
+                var result = await _userRepository.GetListUserAsync();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+
+            }
+        }
     }
 }

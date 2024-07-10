@@ -20,6 +20,6 @@ namespace Cinema.DTOs
         public bool Status { get; set; }
         public List<MovieTypeDTO> MovieTypes { get; set; }
         public IFormFile File { get; set; }
-
+        public List<ShowTimeRoomDTO> ShowTimeRooms { get; set; }
     }
 }

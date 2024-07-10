@@ -189,7 +189,7 @@ const EditMoviePage = () => {
                             id="movie-type-select"
                             label="Thể loại phim"
                             multiple
-                            value={selectedMovieTypes}
+                            value={[]}
                             onChange={handleMovieTypesChange}
                             renderValue={(selected) => {
                                 var values = []
