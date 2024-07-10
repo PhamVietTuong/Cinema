@@ -369,5 +369,30 @@ namespace Cinema.Repository
 
             return entity;
         }
+
+		public async Task<List<UserRowViewModel>> GetListUserAsync()
+		{
+			var result = new List<UserRowViewModel>();
+
+			var users = await _context.User
+								.Include(x => x.UserType)
+								.ToListAsync();
+
+			foreach ( var user in users )
+			{
+				result.Add(new UserRowViewModel
+				{
+					Id = user.Id,
+					FullName = user.FullName,
+					BirthDay = user.BirthDay,
+					Gender = user.Gender,
+					Phone = user.Phone,
+					Email = user.Email,
+					UserType = user.UserType.Name,
+				});
+			}
+
+			return result;
+		}
     }
 }
