@@ -60,7 +60,6 @@ class _UserState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         backgroundColor: Styles.backgroundContent[Config.themeMode],
         title: Text(

@@ -69,7 +69,7 @@ class _RegisterContentState extends State<RegisterContent>
     );
     if (picked != null) {
       setState(() {
-        _birthdayController.text =Styles.formatDate( picked);
+        _birthdayController.text =picked.toIso8601String();
       });
     }
   }
@@ -297,7 +297,7 @@ class _RegisterContentState extends State<RegisterContent>
                   onPressed: _registerUser,
                   child: Text(
                     textRegister,
-                    style: TextStyle(fontSize: Styles.titleFontSize),
+                    style: const TextStyle(fontSize: Styles.titleFontSize),
                   ),
                 ),
               ],
