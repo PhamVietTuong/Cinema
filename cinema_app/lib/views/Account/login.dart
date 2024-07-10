@@ -1,9 +1,12 @@
 import 'package:cinema_app/components/bottom_nav.dart';
+import 'package:cinema_app/data/DTO/res_get_code.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
+
+import 'password/forgot_pass_screen.dart';
 
 class LoginContent extends StatefulWidget {
   const LoginContent({Key? key}) : super(key: key);
@@ -24,6 +27,8 @@ class _LoginContentState extends State<LoginContent>
   String textLoginSuccessful = "Đăng nhập thành công";
   String textOK = "Đồng ý";
 
+  String textForgetPass = "Quêt mật khẩu";
+
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
       Styles.translate(textPass),
@@ -32,6 +37,7 @@ class _LoginContentState extends State<LoginContent>
       Styles.translate(textContent),
       Styles.translate(textLoginSuccessful),
       Styles.translate(textOK),
+      Styles.translate(textForgetPass),
     ]);
     textPass = textTranlate[0];
     textLogin = textTranlate[1];
@@ -77,9 +83,7 @@ class _LoginContentState extends State<LoginContent>
     Config.saveInfoUser(user);
     showDialogOnLoadSuccess(user);
   }
-
-  @override
-  void onLoadSuccess(String message) {}
+  
   void showDialogOnLoadSuccess(User user) {
     showDialog(
       context: context,
@@ -98,6 +102,7 @@ class _LoginContentState extends State<LoginContent>
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const BottomNav()),
+                  MaterialPageRoute(builder: (context) => const BottomNav()),
                 );
               },
             ),
@@ -105,6 +110,15 @@ class _LoginContentState extends State<LoginContent>
         );
       },
     );
+  }
+
+  void _saveTokenToLocal(String token, DateTime expirationTime) async {
+    // await Config.saveToken(token, expirationTime);
+    setState(() {
+      _token = token;
+      _tokenExpirationTime = expirationTime;
+    });
+    print('Token : $_token , $_tokenExpirationTime');
   }
 
   @override
@@ -161,6 +175,7 @@ class _LoginContentState extends State<LoginContent>
             child: Text(
               textLogin,
               style: const TextStyle(fontSize: Styles.titleFontSize),
+              style: const TextStyle(fontSize: Styles.titleFontSize),
             ),
           )
         ],
@@ -169,5 +184,16 @@ class _LoginContentState extends State<LoginContent>
   }
 
   @override
+  void onLoadToken(String token, DateTime expirationTime) {
+    _saveTokenToLocal(token, expirationTime);
+  }
+
+  @override
+  void onGetCodeSuccess(ResGetCode res) {
+  }
+
+  @override
+  void onRegisterSuccess(String message) {
+  }
   void loadUpdateSuccess(user) {}
 }

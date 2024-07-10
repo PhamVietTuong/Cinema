@@ -1,4 +1,4 @@
-import 'package:cinema_app/views/Account/account_screen.dart';
+import 'package:cinema_app/data/DTO/res_get_code.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
@@ -129,7 +129,7 @@ class _RegisterContentState extends State<RegisterContent>
   }
 
   @override
-  void onLoadSuccess(String message) {
+  void onRegisterSuccess(String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -287,4 +287,9 @@ class _RegisterContentState extends State<RegisterContent>
 
   @override
   void loadUpdateSuccess(user) {}
+  void onLoginSuccess(User user) {}
+
+  @override
+  void onGetCodeSuccess(ResGetCode res) {
+  }
 }
