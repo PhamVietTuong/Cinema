@@ -8,5 +8,7 @@ namespace Cinema.Contracts
         Task<bool> UpdateCodeStatusAsync(string orderId, int resultCode);
         Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(Guid? userId);
         Task<List<RevenueTheaterViewModel>> GetRevenueAsync(FilterRevenue filterRevenue);
+        Task<bool> SendInvoiceInfo(string code);
+
     }
 }

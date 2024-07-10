@@ -84,17 +84,19 @@ namespace Cinema.Controllers
 
                 if (isUpdated)
                 {
+                    await _invoiceRepository.SendInvoiceInfo(ipnRequest.OrderId);
+
                     var resultCode = ipnRequest.ResultCode;
                     var message = ipnRequest.Message;
+                    var movieInfo = default(InvoiceViewModel);
+
+                    if (resultCode == 0)
+                    {
+                        movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
+                    }
+
                     if (ipnRequest.OrderInfo.Contains("web"))
                     {
-                        var movieInfo = default(InvoiceViewModel);
-
-                        if (resultCode == 0)
-                        {
-                            movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
-                        }
-
                         var resultData = new
                         {
                             barcode = ipnRequest.OrderId,
@@ -131,44 +133,6 @@ namespace Cinema.Controllers
             }
         }
 
-        // [HttpPost("VNPayIPN")]
-        // public IActionResult VNPayIPN(Dictionary<string, string> vnpParams)
-        // {
-        //     var secretKey = _configuration["VNPay:HashSecret"];
-        //     var responseData = new Dictionary<string, string>
-        //     {
-        //         { "RspCode", "00" }, // Default is "success"
-        //         { "Message", "Confirm Success" }
-        //     };
-
-        //     try
-        //     {
-        //         var secureHash = vnpParams["vnp_SecureHash"];
-        //         vnpParams.Remove("vnp_SecureHash");
-
-        //         var sortedVnpParams = new SortedList<string, string>(vnpParams);
-        //         var signData = string.Join("&", sortedVnpParams.Select(kv => $"{WebUtility.UrlEncode(kv.Key)}={WebUtility.UrlEncode(kv.Value)}"));
-        //         var computedHash = VnPayHelper.ComputeHmacSha512Hash(secretKey, signData);
-
-        //         if (secureHash != computedHash)
-        //         {
-        //             responseData["RspCode"] = "97"; // Error code for invalid signature
-        //             responseData["Message"] = "Invalid signature";
-        //         }
-        //         else
-        //         {
-        //             // Verify other payment information such as amount, order ID, transaction status, etc.
-        //             // Update the payment result to your database here
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         responseData["RspCode"] = "99"; // Error code for unknown error
-        //         responseData["Message"] = "Unknown error: " + ex.Message;
-        //     }
-
-        //     return Ok(responseData);
-        // }
         [HttpGet("VNPayReturn")]
         public async Task<IActionResult> VNPayReturnAsync()
         {
@@ -210,49 +174,67 @@ namespace Cinema.Controllers
             {
                 message = "Payment failed because user canceled";
             }
-            bool isUpdated = await _invoiceRepository.UpdateCodeStatusAsync(vnpParams["vnp_TxnRef"], Int32.Parse(responseCode));
 
-            var response = new Dictionary<string, string>
+            bool isUpdated = await _invoiceRepository.UpdateCodeStatusAsync(vnpParams["vnp_TxnRef"], Int32.Parse(responseCode));
+            if (isUpdated)
+            {
+                var responseSuc = new Dictionary<string, string>
             {
                 { "RspCode", responseCode },
                 { "Message", message }
             };
 
-            if (application.Contains("web"))
-            {
-                var movieInfo = default(InvoiceViewModel);
+                await _invoiceRepository.SendInvoiceInfo(vnpParams["vnp_TxnRef"]);
 
-                if (responseCode == "00")
+                if (application.Contains("web"))
                 {
-                    movieInfo = await _invoiceRepository.GetInvoiceAsync(vnpParams["vnp_TxnRef"]);
-                }
+                    var movieInfo = default(InvoiceViewModel);
 
-                if (movieInfo != null)
-                {
-                    var resultData = new
+                    if (responseCode == "00")
                     {
-                        barcode = vnpParams["vnp_TxnRef"],
-                        resultCode = responseCode,
-                        movieInfo
-                    };
-                    var resultJson = JsonConvert.SerializeObject(resultData);
-                    var bytes = Encoding.UTF8.GetBytes(resultJson);
-                    var base64Result = Convert.ToBase64String(bytes);
+                        movieInfo = await _invoiceRepository.GetInvoiceAsync(vnpParams["vnp_TxnRef"]);
+                    }
 
-                    var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
-                    return Redirect(customUrl);
+                    if (movieInfo != null)
+                    {
+                        var resultData = new
+                        {
+                            barcode = vnpParams["vnp_TxnRef"],
+                            resultCode = responseCode,
+                            movieInfo
+                        };
+                        var resultJson = JsonConvert.SerializeObject(resultData);
+                        var bytes = Encoding.UTF8.GetBytes(resultJson);
+                        var base64Result = Convert.ToBase64String(bytes);
+
+                        var customUrl = $"http://localhost:3000/checkout/info?result={base64Result}";
+                        return Redirect(customUrl);
+                    }
+                    else
+                    {
+                        return BadRequest(new { error = "Failed to retrieve movie information" });
+                    }
                 }
-                else
+                else if (application.Contains("app"))
                 {
-                    return BadRequest(new { error = "Failed to retrieve movie information" });
+                    return Ok(responseSuc);
                 }
+
+                return Ok(responseSuc);
             }
-            else if (application.Contains("app"))
+            else
             {
-                return Ok(response);
+                responseCode = "99";
+                message = "Failed to update order status";
+                var responseFail = new Dictionary<string, string>
+
+            {
+                { "RspCode", responseCode },
+                { "Message", message }
+            };
+                return BadRequest(responseFail);
             }
 
-            return Ok(response);
         }
     }
 }

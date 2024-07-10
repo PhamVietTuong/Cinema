@@ -1,8 +1,8 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data;
 using Cinema.Data.Enum;
-using Cinema.Data.Models;
 using Cinema.DTOs;
+using Cinema.Helper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Repository
@@ -94,9 +94,9 @@ namespace Cinema.Repository
         {
             var invoices = await _context.Invoice.Where(x => x.UserId == userId).ToListAsync();
 
-            var result = new List<InvoiceViewModel>();  
+            var result = new List<InvoiceViewModel>();
 
-            foreach(var invoice in invoices)
+            foreach (var invoice in invoices)
             {
                 var invoiceTicket = await _context.InvoiceTicket
                     .Include(x => x.Room)
@@ -150,5 +150,96 @@ namespace Cinema.Repository
             return result;
         }
 
+        [Obsolete]
+        public async Task<bool> SendInvoiceInfo(string code)
+        {
+            var invoice = await _context.Invoice
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Code == code);
+            if (invoice == null)
+            {
+                return false;
+            }
+            else
+            {
+                var foods = await _context.InvoiceFoodAndDrink.Include(x => x.FoodAndDrink).Where(x => x.Code == code).ToListAsync();
+                var res = new InfoReceiveMail
+                {
+                    Code = code,
+                    Email = invoice.User.Email,
+                    UserName = invoice.User.FullName
+                };
+                var tickets = await _context.InvoiceTicket
+                    .Include(inv => inv.ShowTime)
+                        .ThenInclude(inv => inv.Movie)
+                    .Include(x => x.Room)
+                        .ThenInclude(x => x.Theater).Where(inv => inv.Code == code).ToListAsync();
+                var ticketFist = tickets.First();
+                res.RoomName = ticketFist.Room.Name;
+                res.TheaterName = ticketFist.Room.Theater.Name;
+                res.TheaterAddress = ticketFist.Room.Theater.Address;
+                res.MovieName = ticketFist.ShowTime.Movie.Name;
+                res.ShowTime = ticketFist.ShowTime.StartTime.ToString("HH:mm:ss dd/MM/yyyy");
+
+                foreach (var item in tickets)
+                {
+                    var ticket = new InfoProduct
+                    {
+                        Name = item.SeatName,
+                        Price = item.Price,
+                        IsTicket = true
+                    };
+                    res.Products.Add(ticket);
+                }
+
+                foreach (var item in foods)
+                {
+                    var food = new InfoProduct
+                    {
+                        Name = item.FoodAndDrink.Name,
+                        Price = item.Price,
+                        IsTicket = false
+                    };
+                    res.Products.Add(food);
+                }
+                // QRCodeGenerator qrGenerator = new();
+                // qrGenerator.GenerateQRCode(code, Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images"));
+
+                string pathFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "FormMail", "InfoInvoice.html");
+
+                if (!File.Exists(pathFile))
+                {
+                    throw new FileNotFoundException($"File not found: {pathFile}");
+                }
+                string Content = File.ReadAllText(pathFile);
+
+                string tableProduct = "";
+                int sumTickets = res.Products.Where(x => x.IsTicket).ToList().Count;
+                int sumFoodAndDrinks = res.Products.Where(x => !x.IsTicket).ToList().Count;
+
+                foreach (var item in res.Products)
+                {
+                    int index = 1;
+                    int quantity = 1;
+                    if (item.Quantity.HasValue && item.Quantity != 0)
+                    {
+                        quantity = item.Quantity.Value;
+                    }
+                    tableProduct += $"<tr><td>{index}</td><td>{item.Name}</td><td>{item.Price}</td><td>{quantity}</td><td>{item.Price * quantity}</td></tr>";
+                }
+                Content = Content
+                    .Replace("{{name}}", res.UserName.Split(' ').Last())
+                    .Replace("{{CODE}}", res.Code)
+                    .Replace("{{roomName}}", res.RoomName)
+                    .Replace("{{theaterName}}", res.TheaterName)
+                    .Replace("{{theaterAddress}}", res.TheaterAddress)
+                    .Replace("{{movieName}}", res.MovieName)
+                    .Replace("{{showtime}}", res.ShowTime)
+                    .Replace("{{numSeats}}", sumTickets.ToString())
+                    .Replace("{{items}}", tableProduct);
+                SendMail provider = new();
+                return await provider.SendEmailAsync(res.Email, $"Thông tin đặt vé xem phim - Mã thanh toán {code}", $"{Content}");
+            }
+        }
     }
 }

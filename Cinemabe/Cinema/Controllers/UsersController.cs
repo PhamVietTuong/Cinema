@@ -91,7 +91,7 @@ namespace Cinema.Controllers
 
         [HttpPost("SendAuthCode")]
         [AllowAnonymous]
-        public async Task<IActionResult> SendAuthenticationCode(SendAuthCode sendAuthCode)
+        public async Task<IActionResult> SendAuthenticationCode(RequestSendAuthCode sendAuthCode)
         {
             if (string.IsNullOrEmpty(sendAuthCode.Email.Trim()))
             {
@@ -104,7 +104,8 @@ namespace Cinema.Controllers
             }
 
             var authenticationCode = await _userRepository.SendAuthenticationCode(sendAuthCode.Email.Trim());
-            return authenticationCode != null ? Ok(authenticationCode) : NotFound("Not found user or send email error");
+
+            return Ok(authenticationCode);
 
         }
 
@@ -114,7 +115,7 @@ namespace Cinema.Controllers
         {
             if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(changePassword.Trim())) return BadRequest(" UserName or Password is empty");
 
-            if(Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
+            if (Validate.IsValidPassword(changePassword) == false) return BadRequest("Password is not valid");
 
             var result = await _userRepository.ChangePassword(changePassword, userName);
             return result ? Ok() : NotFound("Not found user");

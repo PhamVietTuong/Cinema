@@ -3,7 +3,10 @@
 import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
+import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/services/base_url.dart';
 import 'package:http/http.dart' as http;
+
 class User {
   String id;
   String fullname;
@@ -150,7 +153,7 @@ class Login {
 abstract class UserRepository {
   Future<void> register(Register register);
   Future<User> login(Login login);
- // Future<void> sendAuthCode(String email);
+  Future<ResGetCode> sendAuthCode(String email);
 }
 
 class UserRepositoryIml implements UserRepository {
@@ -169,8 +172,8 @@ class UserRepositoryIml implements UserRepository {
     if (register.password != register.confirmPassword) {
       throw ('Mật khẩu và mật khẩu nhập lại không khớp.');
     }
-    if(!isValidUsername(register.userName)){
-      throw('Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới và không có khoảng trắng');
+    if (!isValidUsername(register.userName)) {
+      throw ('Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới và không có khoảng trắng');
     }
     if (!isValidPassword(register.password)) {
       throw ('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.');
@@ -239,7 +242,7 @@ class UserRepositoryIml implements UserRepository {
         final jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse); // Giải mã JSON thành đối tượng User
       } else {
-       // print(response.body);
+        // print(response.body);
         throw (response.body);
       }
     } catch (e) {
@@ -249,28 +252,24 @@ class UserRepositoryIml implements UserRepository {
 
 //end login
 
-// //SendAuthCode
-// Future<String> sendAuthCode(String email) async {
-//   final url = Uri.parse('$serverUrl/api/Users/SendAuthCoder');
-//   final response = await http.post(
-//     url,
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'accept': '*/*',
-//     },
-//     body: jsonEncode(email),
-//   );
-//   if (response.statusCode == 200) {
-
-//     print('Đã gửi mã xác thực thành công.');
-//     print(jsonDecode(response.body));
-//     return jsonDecode(response.body);
-//   } else {
-//     print('Gửi mã xác thực thất bại. Mã lỗi: ${response.statusCode}');
-//     print('Nội dung lỗi: ${response.body}');
-//     return "";
-//   }
-// }
+//SendAuthCode
+  @override
+  Future<ResGetCode> sendAuthCode(String email) async {
+    final url = '$serverUrl/api/Users/SendAuthCode';
+    try {
+      final response = await BaseUrl.post(url, jsonEncode({'email': email}));
+      if (response.statusCode == 200) {
+        print('Đã gửi mã xác thực thành công.');
+        return ResGetCode.formJson(jsonDecode(response.body));
+      } else {
+        print('Gửi mã xác thực thất bại. Mã lỗi: ${response.statusCode}');
+        throw (response.body);
+      }
+    } catch (e) {
+      print(e);
+      throw ('$e');
+    }
+  }
 
 // //end SendAuthCode
 }
