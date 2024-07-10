@@ -4,8 +4,8 @@ import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/models/validation.dart';
 import 'package:cinema_app/services/base_url.dart';
-import 'package:http/http.dart' as http;
 
 class User {
   String id;
@@ -154,13 +154,15 @@ abstract class UserRepository {
   Future<void> register(Register register);
   Future<User> login(Login login);
   Future<ResGetCode> sendAuthCode(String email);
+  Future<User> updateUser(User user);
+  // Future<void> sendAuthCode(String email);
 }
 
 class UserRepositoryIml implements UserRepository {
 //Handle event registration
   @override
   Future<void> register(Register register) async {
-    final url = Uri.parse('$serverUrl/api/Users/Register');
+    final url = '$serverUrl/api/Users/Register';
 
     if (register.userName.isEmpty ||
         register.fullName.isEmpty ||
@@ -172,28 +174,23 @@ class UserRepositoryIml implements UserRepository {
     if (register.password != register.confirmPassword) {
       throw ('Mật khẩu và mật khẩu nhập lại không khớp.');
     }
-    if (!isValidUsername(register.userName)) {
+    if (!Validation.isValidUsername(register.userName)) {
       throw ('Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới và không có khoảng trắng');
     }
-    if (!isValidPassword(register.password)) {
+    if (!Validation.isValidPassword(register.password)) {
       throw ('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.');
     }
 
-    if (register.email.isNotEmpty && !isValidEmail(register.email)) {
+    if (register.email.isNotEmpty && !Validation.isValidEmail(register.email)) {
       throw ('Địa chỉ email không hợp lệ.');
     }
 
-    if (register.phone.isNotEmpty && !isValidPhone(register.phone)) {
+    if (register.phone.isNotEmpty && !Validation.isValidPhone(register.phone)) {
       throw ('Số điện thoại không hợp lệ.');
     }
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(register.toJson()),
-      );
-
+      final response = await BaseUrl.post(url,  jsonEncode(register.toJson()));
       if (response.statusCode == 200) {
         print('Đăng ký thành công');
       } else {
@@ -204,43 +201,37 @@ class UserRepositoryIml implements UserRepository {
     }
   }
 
-  bool isValidPassword(String password) {
-    final regex = RegExp(
-        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
-    return regex.hasMatch(password);
-  }
-
-  bool isValidEmail(String email) {
-    final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-    return regex.hasMatch(email);
-  }
-
-  bool isValidPhone(String phone) {
-    final regex = RegExp(r'^\d{10}$'); // Kiểm tra số điện thoại 10 chữ số
-    return regex.hasMatch(phone);
-  }
-
-  bool isValidUsername(String username) {
-    final RegExp regex = RegExp(r'^[a-zA-Z0-9_]{8,20}$');
-    return regex.hasMatch(username);
-  }
 //end registration
 
 //Handle event login
   @override
   Future<User> login(Login login) async {
-    final url = Uri.parse('$serverUrl/api/Users/LoginUser');
+    final url = '$serverUrl/api/Users/LoginUser';
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(login.toJson()), // Chuyển đối tượng Login thành JSON
-      );
-
+      final response = await BaseUrl.post(url,  jsonEncode(login.toJson()));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse); // Giải mã JSON thành đối tượng User
+      } else {
+        // print(response.body);
+        // print(response.body);
+        throw (response.body);
+      }
+    } catch (e) {
+      throw ('$e');
+    }
+  }
+
+   @override
+  Future<User> updateUser(User user) async {
+    final url = '$serverUrl/api/Users/UpdateUser';
+
+    try {
+      final response = await BaseUrl.post(url,  jsonEncode(user.toJson()));
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return User.fromJson(jsonResponse);
       } else {
         // print(response.body);
         throw (response.body);

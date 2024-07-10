@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:cinema_app/data/models/movie.dart';
+import 'package:cinema_app/services/base_url.dart';
 
 import '../../config.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +43,7 @@ class ShowtimeRepositoryIml implements ShowtimeRepository {
     String api = '$serverUrl/api/Cinemas/GetShowTimeByTheaterId$theaterId';
     print("API fetch Showtimes by date: $api");
 
-    final response = await http.get(Uri.parse(api));
+    final response = await BaseUrl.get(api);
     if (response.statusCode == 204) return [];
 
     if (response.statusCode == 200) {

@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UserInfoPage(
-                              InfoUser: Config.userInfo!,
+                              infoUser: Config.userInfo!,
                             )),
                   );
                 },

@@ -13,12 +13,16 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserState extends State<UserScreen> {
+  double _currentRanking = 0.0;
+
   String textAppBar = "Thành viên";
   String textInfoUser = "Thông tin người dùng";
   String textTransactionHistory = "Lịch sử giao dịch";
   String textMovie = "Danh sách phim";
   String textFavorite = "Phim yêu thích";
   String textLogin = "Đăng nhập";
+  String textRegister = "Đăng ký";
+  String textRank = "Điểm thành viên";
 
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
@@ -28,6 +32,8 @@ class _UserState extends State<UserScreen> {
       Styles.translate(textMovie),
       Styles.translate(textFavorite),
       Styles.translate(textLogin),
+      Styles.translate(textRank),
+      Styles.translate(textRegister),
     ]);
     textAppBar = textTranlate[0];
     textInfoUser = textTranlate[1];
@@ -35,13 +41,14 @@ class _UserState extends State<UserScreen> {
     textMovie = textTranlate[3];
     textFavorite = textTranlate[4];
     textLogin = textTranlate[5];
-
+    textRank = textTranlate[6];
+    textRegister = textTranlate[7];
     setState(() {});
   }
 
   void refresh() {
     widget.refresh();
-   tranlate();
+    tranlate();
   }
 
   @override
@@ -68,7 +75,10 @@ class _UserState extends State<UserScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  SettingsScreen(refresh: refresh , )),
+                MaterialPageRoute(
+                    builder: (context) => SettingsScreen(
+                          refresh: refresh,
+                        )),
               );
             },
           ),
@@ -81,9 +91,10 @@ class _UserState extends State<UserScreen> {
           children: [
             Config.userInfo != null
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width * 0.3,
@@ -93,28 +104,53 @@ class _UserState extends State<UserScreen> {
                               fit: BoxFit.contain,
                             ),
                           ),
-                          Text(
-                            Config.userInfo!.fullname,
-                            style: TextStyle(
-                              color: Styles.boldTextColor[Config.themeMode],
-                              fontSize: Styles.titleFontSize,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                Config.userInfo!.fullname,
+                                style: TextStyle(
+                                  color: Styles.boldTextColor[Config.themeMode],
+                                  fontSize: Styles.titleFontSize,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UserInfoPage(
+                                              infoUser: Config.userInfo!,
+                                            )),
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(3),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.edit_note_outlined,
+                                        color: Styles
+                                            .boldTextColor[Config.themeMode],
+                                        size: Styles.iconSizeInLineText,
+                                      ),
+                                      Text(
+                                        textInfoUser,
+                                        style: TextStyle(
+                                            color: Styles.boldTextColor[
+                                                Config.themeMode],
+                                            fontSize: Styles.textSize),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => UserInfoPage(
-                                            InfoUser: Config.userInfo!,
-                                          )),
-                                );
-                              },
-                              icon: Icon(
-                                Icons.edit_note_outlined,
-                                color: Styles.boldTextColor[Config.themeMode],
-                                size: Styles.iconSizeInTitle,
-                              )),
                         ],
                       ),
                       SizedBox(
@@ -199,7 +235,28 @@ class _UserState extends State<UserScreen> {
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        textRank,
+                        style: TextStyle(
+                            fontSize: Styles.titleFontSize,
+                            color: Styles.boldTextColor[Config.themeMode]),
+                      ),
+                      Slider(
+                        value: _currentRanking,
+                        min: 0,
+                        max: 100,
+                        divisions: 100,
+                        label: _currentRanking.round().toString(),
+                        onChanged: (double value) {
+                          setState(() {
+                            _currentRanking = value;
+                          });
+                        },
+                      ),
                     ],
                   )
                 : Column(
@@ -231,7 +288,7 @@ class _UserState extends State<UserScreen> {
                           ),
                         ),
                         child: Text(
-                          textLogin,
+                          '${textLogin} / ${textRegister}',
                           style: TextStyle(
                             color: Styles.boldTextColor[Config.themeMode],
                             fontSize: Styles.titleFontSize,

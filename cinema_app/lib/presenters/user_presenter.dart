@@ -7,6 +7,8 @@ abstract class UserViewContract {
   void onRegisterSuccess(String message);
   void onLoginSuccess(User user);
   void onGetCodeSuccess(ResGetCode res);
+  void loadUpdateSuccess(User user);
+  void loadLoginSuccess(User user);
   void onLoadToken(String token, DateTime expirationTime);
 }
 
@@ -30,8 +32,18 @@ class UserPresenter {
   Future<void> login(Login login) async {
     try {
       User user = await repository.login(login);
-      _view.onLoginSuccess(user);
-      _view.onLoadToken(user.token, user.expirationTime);
+      _view.loadLoginSuccess(user);
+      // print(user.expirationTime);
+    } catch (e) {
+      _view.onLoadError('$e');
+      throw ('$e');
+    }
+  }
+
+  Future<void> updateUser(User userInfo) async {
+    try {
+      User user = await repository.updateUser(userInfo);
+      _view.loadUpdateSuccess(user);
       // print(user.expirationTime);
     } catch (e) {
       _view.onLoadError('$e');
