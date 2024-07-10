@@ -19,11 +19,10 @@ class _LoginContentState extends State<LoginContent>
   late UserPresenter _presenter;
   String textPass = "Mật khẩu";
   String textLogin = "Đăng nhập";
-  String textNotification="Thông báo";
-  String textContent="Vui lòng điền đủ thông tin đăng nhập";
-String textLoginSuccessful="Đăng nhập thành công";
-String textOK="Đồng ý";
-  bool _obscurePassword = true;
+  String textNotification = "Thông báo";
+  String textContent = "Vui lòng điền đủ thông tin đăng nhập";
+  String textLoginSuccessful = "Đăng nhập thành công";
+  String textOK = "Đồng ý";
 
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
@@ -33,14 +32,13 @@ String textOK="Đồng ý";
       Styles.translate(textContent),
       Styles.translate(textLoginSuccessful),
       Styles.translate(textOK),
-
     ]);
     textPass = textTranlate[0];
     textLogin = textTranlate[1];
-    textNotification=textTranlate[2];
-    textContent=textTranlate[3];
-    textLoginSuccessful=textTranlate[4];
-    textOK=textTranlate[5];
+    textNotification = textTranlate[2];
+    textContent = textTranlate[3];
+    textLoginSuccessful = textTranlate[4];
+    textOK = textTranlate[5];
 
     setState(() {});
   }
@@ -59,11 +57,11 @@ String textOK="Đồng ý";
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text(textNotification),
-          content: Text('$error'),
+          title: Text(textNotification),
+          content: Text(error),
           actions: <Widget>[
             TextButton(
-              child:  Text(textOK),
+              child: Text(textOK),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -75,7 +73,7 @@ String textOK="Đồng ý";
   }
 
   @override
-  void LoadLoginSuccess(User user) {
+  void loadLoginSuccess(User user) {
     Config.saveInfoUser(user);
     showDialogOnLoadSuccess(user);
   }
@@ -87,30 +85,32 @@ String textOK="Đồng ý";
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text(textNotification),
-          content:  Text(textLoginSuccessful),
+          title: Text(textNotification),
+          content: Text(textLoginSuccessful),
           actions: <Widget>[
             TextButton(
-              child:  Text(textOK),
+              child: Text(textOK),
               onPressed: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst,);
+                Navigator.of(context).popUntil(
+                  (route) => route.isFirst,
+                );
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => BottomNav()),
-                  );
-              },  
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const BottomNav()),
+                );
+              },
             ),
           ],
         );
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
-      padding: const EdgeInsetsDirectional.only(bottom: 15, top: 10),
       decoration: BoxDecoration(
         color: Styles.backgroundContent[Config.themeMode],
         borderRadius: BorderRadius.circular(10),
@@ -119,51 +119,32 @@ String textOK="Đồng ý";
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InfoTextField(
-            title: "Tên đăng nhập",
-            info: _usernameController,
+            lableText: "Tên đăng nhập",
+            textController: _usernameController,
             icon: const Icon(Icons.person),
+            readOnly: false,
+            obscurePassword: false,
           ),
-          const SizedBox(height: 15),
-          TextField(
-            style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
-            controller: _passwordController,
-            obscureText: _obscurePassword,
-            decoration: InputDecoration(
-              labelText: textPass,
-              prefixIcon: const Icon(Icons.lock),
-              labelStyle:
-                  TextStyle(color: Styles.boldTextColor[Config.themeMode]),
-              prefixIconColor: Styles.boldTextColor[Config.themeMode],
-              focusColor: Styles.boldTextColor[Config.themeMode],
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
-                child: Icon(
-                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
+          InfoTextField(
+              textController: _passwordController,
+              icon: const Icon(Icons.password),
+              lableText: 'Mật khẩu',
+              readOnly: false,
+              obscurePassword: true),
           ElevatedButton(
             onPressed: () {
               String username = _usernameController.text;
               String password = _passwordController.text;
-
               if (username.isEmpty || password.isEmpty) {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title:  Text(textNotification),
-                      content:  Text(
-                          textContent),
+                      title: Text(textNotification),
+                      content: Text(textContent),
                       actions: <Widget>[
                         TextButton(
-                          child:  Text(textOK),
+                          child: Text(textOK),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -179,11 +160,14 @@ String textOK="Đồng ý";
             },
             child: Text(
               textLogin,
-              style: TextStyle(fontSize: Styles.titleFontSize),
+              style: const TextStyle(fontSize: Styles.titleFontSize),
             ),
           )
         ],
       ),
     );
   }
+
+  @override
+  void loadUpdateSuccess(user) {}
 }

@@ -2,8 +2,9 @@
 
 import 'dart:convert';
 
+import 'package:cinema_app/services/base_url.dart';
+
 import '../../config.dart';
-import 'package:http/http.dart' as http;
 
 class TicketOption {
   String ticketTypeId;
@@ -45,12 +46,8 @@ class TicketRepositoryIml implements TicketRepository {
     String api = '$serverUrl/api/Cinemas/TicketTypeByShowTimeAndRoomId';
     print("API fetch theates: $api");
 
-    final response = await http.post(Uri.parse(api),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({"showTimeId": showtimeId, "roomId": roomId}));
-
+    final response = await BaseUrl.post(
+        api, jsonEncode({"showTimeId": showtimeId, "roomId": roomId}));
     if (response.statusCode == 204) return [];
     if (response.statusCode == 200) {
       final List<dynamic> theaterJsonList = jsonDecode(response.body);

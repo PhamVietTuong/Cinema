@@ -120,7 +120,7 @@ class _UserState extends State<UserScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => UserInfoPage(
-                                              InfoUser: Config.userInfo!,
+                                              infoUser: Config.userInfo!,
                                             )),
                                   );
                                 },

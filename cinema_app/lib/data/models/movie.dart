@@ -5,6 +5,7 @@ import 'dart:convert';
 
 
 import 'package:cinema_app/config.dart';
+import 'package:cinema_app/services/base_url.dart';
 import 'package:http/http.dart' as http;
 
 import 'showtime.dart';
@@ -126,7 +127,7 @@ class MovieRepositoryIml implements MovieRepository {
     String api = '$serverUrl/api/Cinemas/GetMovieList';
     // print("API fetch movies: $api");
 
-    final response = await http.get(Uri.parse(api));
+    final response = await BaseUrl.get(api);
 
     if (response.statusCode != 200) {
       throw Exception('Failed to fetch movies');
@@ -140,12 +141,7 @@ class MovieRepositoryIml implements MovieRepository {
   Future<Movie> fetchMovieDetail(String movieID, int projectionForm) async {
     String api = '$serverUrl/api/Cinemas/MovieDetail';
 
-    final response = await http.post(Uri.parse(api),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({"id": movieID, "projectionForm": projectionForm}));
-
+    final response = await BaseUrl.post(api, jsonEncode({"id": movieID, "projectionForm": projectionForm}));
     if (response.statusCode == 200) {
       final dynamic movieJson = jsonDecode(response.body);
       return Movie.fromJson(movieJson);
@@ -159,7 +155,7 @@ class MovieRepositoryIml implements MovieRepository {
   Future<Map<String, dynamic>> searchByName(String name) async {
     String api = '$serverUrl/api/Cinemas/SearchByName$name';
 
-    final response = await http.get(Uri.parse(api));
+    final response = await BaseUrl.get(api);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
