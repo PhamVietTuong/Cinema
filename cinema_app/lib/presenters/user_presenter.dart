@@ -7,6 +7,8 @@ abstract class UserViewContract {
   void onRegisterSuccess(String message);
   void onLoginSuccess(User user);
   void onGetCodeSuccess(ResGetCode res);
+  void loadUpdateSuccess(User user);
+  void loadLoginSuccess(User user);
   void onLoadToken(String token, DateTime expirationTime);
 }
 

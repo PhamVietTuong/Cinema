@@ -1,12 +1,11 @@
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/views/Account/password/forgot_pass_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
-
-import 'password/forgot_pass_screen.dart';
 
 class LoginContent extends StatefulWidget {
   const LoginContent({Key? key}) : super(key: key);
@@ -27,7 +26,9 @@ class _LoginContentState extends State<LoginContent>
   String textLoginSuccessful = "Đăng nhập thành công";
   String textOK = "Đồng ý";
 
-  String textForgetPass = "Quêt mật khẩu";
+  String textForgetPass = "Quên mật khẩu";
+  String? _token;
+  DateTime? _tokenExpirationTime;
 
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
@@ -45,6 +46,7 @@ class _LoginContentState extends State<LoginContent>
     textContent = textTranlate[3];
     textLoginSuccessful = textTranlate[4];
     textOK = textTranlate[5];
+    textForgetPass=textTranlate[6];
 
     setState(() {});
   }
@@ -83,7 +85,7 @@ class _LoginContentState extends State<LoginContent>
     Config.saveInfoUser(user);
     showDialogOnLoadSuccess(user);
   }
-  
+
   void showDialogOnLoadSuccess(User user) {
     showDialog(
       context: context,
@@ -101,7 +103,6 @@ class _LoginContentState extends State<LoginContent>
 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const BottomNav()),
                   MaterialPageRoute(builder: (context) => const BottomNav()),
                 );
               },
@@ -145,6 +146,40 @@ class _LoginContentState extends State<LoginContent>
               lableText: 'Mật khẩu',
               readOnly: false,
               obscurePassword: true),
+   Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FogotPassScreen()));
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 0.5),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Styles.boldTextColor[Config.themeMode]!,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    textForgetPass,
+                    style: TextStyle(
+                      fontSize: Styles.titleFontSize,
+                      color: Styles.boldTextColor[Config.themeMode],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              )
+            ],
+          ),
           ElevatedButton(
             onPressed: () {
               String username = _usernameController.text;
@@ -175,7 +210,6 @@ class _LoginContentState extends State<LoginContent>
             child: Text(
               textLogin,
               style: const TextStyle(fontSize: Styles.titleFontSize),
-              style: const TextStyle(fontSize: Styles.titleFontSize),
             ),
           )
         ],
@@ -189,11 +223,14 @@ class _LoginContentState extends State<LoginContent>
   }
 
   @override
-  void onGetCodeSuccess(ResGetCode res) {
-  }
+  void onGetCodeSuccess(ResGetCode res) {}
 
   @override
-  void onRegisterSuccess(String message) {
-  }
+  void onRegisterSuccess(String message) {}
+  @override
   void loadUpdateSuccess(user) {}
+
+  @override
+  void onLoginSuccess(User user) {
+  }
 }

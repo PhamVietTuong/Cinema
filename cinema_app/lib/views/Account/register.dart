@@ -1,4 +1,5 @@
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
@@ -287,9 +288,18 @@ class _RegisterContentState extends State<RegisterContent>
 
   @override
   void loadUpdateSuccess(user) {}
-  void onLoginSuccess(User user) {}
 
   @override
   void onGetCodeSuccess(ResGetCode res) {
+  }
+  
+  @override
+  void onLoadToken(String token, DateTime expirationTime) {
+    // TODO: implement onLoadToken
+  }
+  
+  @override
+  void onLoginSuccess(User user) {
+    // TODO: implement onLoginSuccess
   }
 }

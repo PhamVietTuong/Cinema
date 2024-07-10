@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
+import 'package:cinema_app/data/DTO/res_get_code.dart';
 import 'package:cinema_app/data/models/validation.dart';
 import 'package:cinema_app/services/base_url.dart';
 
