@@ -161,7 +161,7 @@ namespace Cinema
 
                     foreach (var seat in entity.InvoiceTickets)
                     {
-                        var price = await CalculatePriceAsync(seat.TicketTypeId, seat.RowName, seat.ColIndex, entity.RoomId);
+                        var price = await CalculatePriceAsync(seat.TicketTypeId, seat.RowName, seat.ColIndex, entity.RoomId, entity.ShowTimeId);
                         totalPrice += price;
                         var invoiceTicket = new InvoiceTicket
                         {
@@ -212,18 +212,34 @@ namespace Cinema
         }
 
 
-        private async Task<double> CalculatePriceAsync(Guid ticketTypeId, string rowName, int colIndex, Guid roomId)
+        private async Task<double> CalculatePriceAsync(Guid ticketTypeId, string rowName, int colIndex, Guid roomId, Guid showTimeId)
         {
             var seatType = await _context.Seat.FirstOrDefaultAsync(x => x.RowName == rowName && x.ColIndex == colIndex && x.RoomId == roomId);
             if (seatType == null)
             {
                 return 0;
             }
-
-            return await _context.SeatTypeTicketType
+            var showtime = await _context.ShowTime.FirstOrDefaultAsync(x => x.Id == showTimeId);
+            var seatTypeTicketType = await _context.SeatTypeTicketType
                     .Where(x => x.TicketTypeId == ticketTypeId && x.SeatTypeId == seatType.SeatTypeId)
-                    .Select(x => x.Price)
                     .FirstOrDefaultAsync();
+            var price = 0.0;
+            TimeSpan timeMorning = new(10, 0, 0);
+            TimeSpan timeNight = new(22, 0, 0);
+            if (showtime.ProjectionForm == ProjectionForm.Time2D)
+            {
+                price = showtime.StartTime.TimeOfDay >= timeMorning && showtime.StartTime.TimeOfDay <= timeNight ?
+                    seatTypeTicketType.Price2D :
+                    seatTypeTicketType.PriceDiscount2D;
+            }
+            else
+            {
+                price = showtime.StartTime.TimeOfDay >= timeMorning && showtime.StartTime.TimeOfDay <= timeNight ?
+                    seatTypeTicketType.Price3D :
+                    seatTypeTicketType.PriceDiscount3D;
+            }
+
+            return price;
         }
 
         public async Task PaymentFailed(InvoiceDTO entity)

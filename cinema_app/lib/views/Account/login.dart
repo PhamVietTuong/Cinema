@@ -46,7 +46,7 @@ class _LoginContentState extends State<LoginContent>
     textContent = textTranlate[3];
     textLoginSuccessful = textTranlate[4];
     textOK = textTranlate[5];
-    textForgetPass=textTranlate[6];
+    textForgetPass = textTranlate[6];
 
     setState(() {});
   }
@@ -146,7 +146,7 @@ class _LoginContentState extends State<LoginContent>
               lableText: 'Mật khẩu',
               readOnly: false,
               obscurePassword: true),
-   Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
@@ -229,8 +229,4 @@ class _LoginContentState extends State<LoginContent>
   void onRegisterSuccess(String message) {}
   @override
   void loadUpdateSuccess(user) {}
-
-  @override
-  void onLoginSuccess(User user) {
-  }
 }
