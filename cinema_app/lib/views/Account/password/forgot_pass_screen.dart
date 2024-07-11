@@ -189,7 +189,7 @@ class _FogotPassScreenState extends State<FogotPassScreen>
                                           pause();
                                           userPre
                                               .sendAuthCode(
-                                                _controllerEmail.text,
+                                                _controllerEmail.text.trim(),
                                               )
                                               .then((value) => {
                                                     showSimpleNotification(
@@ -299,7 +299,7 @@ class _FogotPassScreenState extends State<FogotPassScreen>
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const ChangePassWordScreen(),
+                                               ChangePassWordScreen(username: _controllerEmail.text.trim()),
                                         ));
                                   },
                                   child: Text(
@@ -330,8 +330,6 @@ class _FogotPassScreenState extends State<FogotPassScreen>
   @override
   void onLoadError(String error) {}
 
-  @override
-  void onLoadToken(String token, DateTime expirationTime) {}
 
   @override
   void onGetCodeSuccess(ResGetCode res) async {
@@ -353,4 +351,8 @@ class _FogotPassScreenState extends State<FogotPassScreen>
 
   @override
   void loadUpdateSuccess(User user) {}
+  
+  @override
+  void loadChangePassSuccess(bool res) {
+  }
 }

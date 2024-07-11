@@ -84,7 +84,6 @@ namespace Cinema.Controllers
 
                 if (isUpdated)
                 {
-                    await _invoiceRepository.SendInvoiceInfo(ipnRequest.OrderId);
 
                     var resultCode = ipnRequest.ResultCode;
                     var message = ipnRequest.Message;
@@ -93,6 +92,8 @@ namespace Cinema.Controllers
                     if (resultCode == 0)
                     {
                         movieInfo = await _invoiceRepository.GetInvoiceAsync(ipnRequest.OrderId);
+                        await _invoiceRepository.SendInvoiceInfo(ipnRequest.OrderId);
+
                     }
 
                     if (ipnRequest.OrderInfo.Contains("web"))
@@ -184,7 +185,10 @@ namespace Cinema.Controllers
                 { "Message", message }
             };
 
-                await _invoiceRepository.SendInvoiceInfo(vnpParams["vnp_TxnRef"]);
+                if (responseCode == "00")
+                {
+                    await _invoiceRepository.SendInvoiceInfo(vnpParams["vnp_TxnRef"]);
+                }
 
                 if (application.Contains("web"))
                 {

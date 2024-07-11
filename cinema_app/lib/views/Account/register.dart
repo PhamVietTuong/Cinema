@@ -293,8 +293,10 @@ class _RegisterContentState extends State<RegisterContent>
   void onGetCodeSuccess(ResGetCode res) {
   }
   
+  
   @override
-  void onLoadToken(String token, DateTime expirationTime) {
+  void loadChangePassSuccess(bool res) {
+    // TODO: implement loadChangePassSuccess
   }
   
  
