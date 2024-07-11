@@ -3,7 +3,7 @@ import { SeatStatus } from "../../Enum/SeatStatus";
 import { InfoTicketBooking } from "../../Models/InfoTicketBooking";
 import { cinemasService } from "../../Services/CinemasService";
 import { connection } from "../../connectionSignalR";
-import { INFO_SEARCH, SET_MOVIE, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_DATA_STATICTICAL, SET_INFO_THEATER, SET_INVOICE_BY_CODE, SET_LIST_AGERESTRICTION, SET_LIST_INVOICE_BY_USER, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, SET_LIST_THEATER_ROOM } from "./Type/CinemasType";
+import { INFO_SEARCH, SET_MOVIE, REMOVE_SEAT_BEING_SELECTED, SAVE_BOOKING_INFO, SEAT_BEING_SELECTED, SET_COMBO, SET_DATA_STATICTICAL, SET_INFO_THEATER, SET_INVOICE_BY_CODE, SET_LIST_AGERESTRICTION, SET_LIST_INVOICE_BY_USER, SET_LIST_MOVIETYPE, SET_LIST_MOVIE_BY_THEATER_ID, SET_LIST_MOVIE_BY_THEATER_ID_BOOK_QUICK_TICKET, SET_LIST_SEATTYPE, SET_LIST_SHOWTIME_BY_MOVIEID, SET_LIST_TICKETTYPE, SET_LIST_USERTYPE, SET_MOVIE_DETAIL, SET_MOVIE_LIST, SET_SEAT, SET_THEATER_DETAIL, SET_THEATER_LIST, SET_TICKET_TYPE, TOTAL_CHOOSES_SEAT_TYPE, SET_LIST_THEATER_ROOM, SET_LIST_INVOICE } from "./Type/CinemasType";
 import { paymentsService } from "../../Services/PaymentsService";
 
 export const MovieListAction = () => {
@@ -1011,6 +1011,28 @@ export const UpdateMovieAction = (MovieDTO, navigate) => {
             }
         } catch (error) {
             console.log("GetRevenueAction: ", error);
+        }
+    }
+}
+export const GetListInvoiceAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.GetListInvoice(code);
+            dispatch({
+                type: SET_LIST_INVOICE,
+                listInvoice: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetListInvoiceAction: ", error);
+                }
+            });
         }
     }
 }

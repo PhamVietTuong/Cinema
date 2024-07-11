@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { userService } from "../../Services/UserService";
-import { LOGIN_USER, LOGOUT } from "./Type/UserType";
+import { LOGIN_USER, LOGOUT, SET_LIST_USER } from "./Type/UserType";
 
 export const LoginUserAction = (loginInfo, rememberMe, callBack) => {
     return async (dispatch) => {
@@ -148,6 +148,59 @@ export const ChangePasswordAction = (changePassword, userName) => {
                     console.log("UpdateUserAction: ", error);
                 }
             });
+        }
+    }
+}
+
+export const GetListUserAction = (code) => {
+    return async (dispatch) => {
+        try {
+            const result = await userService.GetListUser(code);
+            dispatch({
+                type: SET_LIST_USER,
+                listUser: result.data,
+            })
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("GetListUserAction: ", error);
+                }
+            });
+        }
+    }
+}
+
+export const CreateUserAction = (register) => {
+    return async (dispatch) => {
+        try {
+            const result = await userService.RegisterUser(register);
+
+            if (result.status === 200) {
+                Swal.fire({
+                    text: "Thêm thành công!",
+                    padding: "15px",
+                    width: "350px",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
+            }
+
+        } catch (error) {
+            Swal.fire({
+                text: error.response.data,
+                padding: "15px",
+                width: "425px",
+                confirmButtonText: "Thử lại",
+            });
+            console.log("CreateUserAction: ", error);
         }
     }
 }

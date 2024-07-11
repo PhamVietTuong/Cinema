@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+
 import 'package:cinema_app/services/base_url.dart';
 
 import '../../config.dart';
@@ -28,16 +29,11 @@ class PaymentRepositoryIml implements PaymentRepository {
     String api = '$serverUrl/api/Payments/$option';
     print("payment api: $api");
 
-    final response = await http.post(Uri.parse(api),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
+    final response = await BaseUrl.post(api,  jsonEncode({
           "Amount": paymentRequest.amout,
           "OrderInfo": paymentRequest.des,
           "OrderId": paymentRequest.orderId
         }));
-
     if (response.statusCode == 200) {
       final dynamic json = jsonDecode(response.body);
       print(json["paymentUrl"]);

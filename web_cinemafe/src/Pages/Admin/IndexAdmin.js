@@ -170,7 +170,7 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="Giới hạng độ tuổi" />
+                                <ListItemText primary="Giới hạn độ tuổi" />
                             </ListItemButton>
                         </Link>
 
@@ -225,6 +225,24 @@ const IndexAdmin = () => {
                                     <Inbox />
                                 </ListItemIcon>
                                 <ListItemText primary="Thống kê" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="invoice">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Hóa đơn" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="user">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Người dùng" />
                             </ListItemButton>
                         </Link>
                     </List>

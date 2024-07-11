@@ -18,13 +18,13 @@ namespace Cinema.Repository
 		private readonly CinemaContext _context;
 		private readonly IConfiguration _configuration;
 
-        public UserRepository(CinemaContext context, IConfiguration configuration)
+		public UserRepository(CinemaContext context, IConfiguration configuration)
 		{
 			_context = context;
 			_configuration = configuration;
-        }
+		}
 
-        public async Task<User> CreateAsync(User entity)
+		public async Task<User> CreateAsync(User entity)
 		{
 			PasswordHashSalt passwordHashSalt = PasswordUtils.EncryptPassword(entity.PasswordHash);
 			var userTypeExit = await _context.UserType.AnyAsync(x => x.Name == "user");
@@ -316,13 +316,16 @@ namespace Cinema.Repository
 
 
 		//create method send authentication code via email
-		public async Task<string> SendAuthenticationCode(string email)
+		public async Task<ResultSendCode> SendAuthenticationCode(string email)
 		{
+			ResultSendCode resCode = new();
 			var user = await _context.User.Where(x => x.Email == email).FirstOrDefaultAsync();
 
 			if (user == null)
 			{
-				return null;
+				resCode.IsSuccess = false;
+				resCode.Message = "Không tìm thấy email";
+				return resCode;
 			}
 
 			var code = new Random().Next(100000, 999999).ToString();
@@ -330,8 +333,18 @@ namespace Cinema.Repository
 
 			// Gửi email
 			SendMail provider = new();
-			var result = await provider.SendEmailAsync(email, "Mã xác nhận của bạn", $"<H1>Mã xác nhận của bạn là: {code}</H1>");
-			return result ? code : null;
+			var result = await provider.SendEmailAsync(email, "Mã xác nhận quên mật khẩu", $"<H1>Mã xác nhận của bạn là: {code}</H1>");
+			if (result)
+			{
+				resCode.IsSuccess = true;
+				resCode.Message = code;
+			}
+			else
+			{
+				resCode.IsSuccess = false;
+				resCode.Message = "Gửi email thất bại";
+			}
+			return resCode;
 		}
 
 		public async Task<bool> ChangePassword(string PassWord, string UserName)
@@ -350,24 +363,49 @@ namespace Cinema.Repository
 			return true;
 		}
 
-        public async Task<bool> ExistsAsync(Guid id)
-        {
-            return await _context.User.AnyAsync(x => x.Id == id);
-        }
+		public async Task<bool> ExistsAsync(Guid id)
+		{
+			return await _context.User.AnyAsync(x => x.Id == id);
+		}
 
-        public async Task<UserDTO> UpdateAsync(UserDTO entity)
-        {
-            var user = await _context.User.FirstOrDefaultAsync(x => x.Id == entity.Id);
+		public async Task<UserDTO> UpdateAsync(UserDTO entity)
+		{
+			var user = await _context.User.FirstOrDefaultAsync(x => x.Id == entity.Id);
 
-            user.FullName = entity.FullName;
-            user.Phone = entity.Phone;
-            user.Email = entity.Email;
-            user.Gender = entity.Gender;
-            user.BirthDay = entity.BirthDay;
+			user.FullName = entity.FullName;
+			user.Phone = entity.Phone;
+			user.Email = entity.Email;
+			user.Gender = entity.Gender;
+			user.BirthDay = entity.BirthDay;
 
-            await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync();
 
-            return entity;
-        }
-    }
+			return entity;
+		}
+
+		public async Task<List<UserRowViewModel>> GetListUserAsync()
+		{
+			var result = new List<UserRowViewModel>();
+
+			var users = await _context.User
+								.Include(x => x.UserType)
+								.ToListAsync();
+
+			foreach (var user in users)
+			{
+				result.Add(new UserRowViewModel
+				{
+					Id = user.Id,
+					FullName = user.FullName,
+					BirthDay = user.BirthDay,
+					Gender = user.Gender,
+					Phone = user.Phone,
+					Email = user.Email,
+					UserType = user.UserType.Name,
+				});
+			}
+
+			return result;
+		}
+	}
 }

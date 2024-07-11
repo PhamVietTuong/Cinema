@@ -1,6 +1,6 @@
 import 'package:cinema_app/components/bottom_nav.dart';
-import 'package:cinema_app/views/Account/user_info_page.dart';
-import 'package:cinema_app/views/home_screen.dart';
+import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/views/Account/password/forgot_pass_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/components/text_field.dart';
@@ -21,16 +21,32 @@ class _LoginContentState extends State<LoginContent>
   late UserPresenter _presenter;
   String textPass = "Mật khẩu";
   String textLogin = "Đăng nhập";
-  bool _obscurePassword = true;
+  String textNotification = "Thông báo";
+  String textContent = "Vui lòng điền đủ thông tin đăng nhập";
+  String textLoginSuccessful = "Đăng nhập thành công";
+  String textOK = "Đồng ý";
+
+  String textForgetPass = "Quên mật khẩu";
   String? _token;
   DateTime? _tokenExpirationTime;
+
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
       Styles.translate(textPass),
       Styles.translate(textLogin),
+      Styles.translate(textNotification),
+      Styles.translate(textContent),
+      Styles.translate(textLoginSuccessful),
+      Styles.translate(textOK),
+      Styles.translate(textForgetPass),
     ]);
     textPass = textTranlate[0];
     textLogin = textTranlate[1];
+    textNotification = textTranlate[2];
+    textContent = textTranlate[3];
+    textLoginSuccessful = textTranlate[4];
+    textOK = textTranlate[5];
+    textForgetPass=textTranlate[6];
 
     setState(() {});
   }
@@ -49,11 +65,11 @@ class _LoginContentState extends State<LoginContent>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Thông báo'),
-          content: Text('$error'),
+          title: Text(textNotification),
+          content: Text(error),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text(textOK),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -65,31 +81,31 @@ class _LoginContentState extends State<LoginContent>
   }
 
   @override
-  void LoadLoginSuccess(User user) {
+  void loadLoginSuccess(User user) {
     Config.saveInfoUser(user);
     showDialogOnLoadSuccess(user);
   }
 
-  @override
-  void onLoadSuccess(String message) {}
   void showDialogOnLoadSuccess(User user) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Thông báo'),
-          content: const Text('Đăng nhập thành công'),
+          title: Text(textNotification),
+          content: Text(textLoginSuccessful),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: Text(textOK),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).popUntil(
+                  (route) => route.isFirst,
+                );
 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => BottomNav()),
+                  MaterialPageRoute(builder: (context) => const BottomNav()),
                 );
-              },  
+              },
             ),
           ],
         );
@@ -98,7 +114,7 @@ class _LoginContentState extends State<LoginContent>
   }
 
   void _saveTokenToLocal(String token, DateTime expirationTime) async {
-   // await Config.saveToken(token, expirationTime);
+    // await Config.saveToken(token, expirationTime);
     setState(() {
       _token = token;
       _tokenExpirationTime = expirationTime;
@@ -110,7 +126,6 @@ class _LoginContentState extends State<LoginContent>
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
-      padding: const EdgeInsetsDirectional.only(bottom: 15, top: 10),
       decoration: BoxDecoration(
         color: Styles.backgroundContent[Config.themeMode],
         borderRadius: BorderRadius.circular(10),
@@ -119,51 +134,66 @@ class _LoginContentState extends State<LoginContent>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InfoTextField(
-            title: "Tên đăng nhập",
-            info: _usernameController,
+            lableText: "Tên đăng nhập",
+            textController: _usernameController,
             icon: const Icon(Icons.person),
+            readOnly: false,
+            obscurePassword: false,
           ),
-          const SizedBox(height: 15),
-          TextField(
-            style: TextStyle(color: Styles.boldTextColor[Config.themeMode]),
-            controller: _passwordController,
-            obscureText: _obscurePassword,
-            decoration: InputDecoration(
-              labelText: textPass,
-              prefixIcon: const Icon(Icons.lock),
-              labelStyle:
-                  TextStyle(color: Styles.boldTextColor[Config.themeMode]),
-              prefixIconColor: Styles.boldTextColor[Config.themeMode],
-              focusColor: Styles.boldTextColor[Config.themeMode],
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
+          InfoTextField(
+              textController: _passwordController,
+              icon: const Icon(Icons.password),
+              lableText: 'Mật khẩu',
+              readOnly: false,
+              obscurePassword: true),
+   Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FogotPassScreen()));
                 },
-                child: Icon(
-                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 0.5),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Styles.boldTextColor[Config.themeMode]!,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    textForgetPass,
+                    style: TextStyle(
+                      fontSize: Styles.titleFontSize,
+                      color: Styles.boldTextColor[Config.themeMode],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(
+                width: 10,
+              )
+            ],
           ),
-          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               String username = _usernameController.text;
               String password = _passwordController.text;
-
               if (username.isEmpty || password.isEmpty) {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text('Thông báo'),
-                      content: const Text(
-                          'Vui lòng điền đầy đủ thông tin đăng nhập'),
+                      title: Text(textNotification),
+                      content: Text(textContent),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text('OK'),
+                          child: Text(textOK),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -179,7 +209,7 @@ class _LoginContentState extends State<LoginContent>
             },
             child: Text(
               textLogin,
-              style: TextStyle(fontSize: Styles.titleFontSize),
+              style: const TextStyle(fontSize: Styles.titleFontSize),
             ),
           )
         ],
@@ -190,5 +220,17 @@ class _LoginContentState extends State<LoginContent>
   @override
   void onLoadToken(String token, DateTime expirationTime) {
     _saveTokenToLocal(token, expirationTime);
+  }
+
+  @override
+  void onGetCodeSuccess(ResGetCode res) {}
+
+  @override
+  void onRegisterSuccess(String message) {}
+  @override
+  void loadUpdateSuccess(user) {}
+
+  @override
+  void onLoginSuccess(User user) {
   }
 }

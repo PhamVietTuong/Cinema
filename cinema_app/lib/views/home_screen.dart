@@ -2,7 +2,6 @@ import 'package:cinema_app/components/info_movie.dart';
 import 'package:cinema_app/components/slide_show.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/movie.dart';
-import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/movie_presenter.dart';
 import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:cinema_app/views/Account/user_info_page.dart';
@@ -97,10 +96,10 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AccountScreen()),
+                    MaterialPageRoute(builder: (context) => const AccountScreen()),
                   );
                 },
-                icon: Icon(Icons.person_outlined),
+                icon: const Icon(Icons.person_outlined),
                 color: Styles.boldTextColor[Config.themeMode],
                 iconSize: Styles.iconInAppBar,
               )
@@ -110,11 +109,11 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UserInfoPage(
-                              InfoUser: Config.userInfo!,
+                              infoUser: Config.userInfo!,
                             )),
                   );
                 },
-                icon: Icon(Icons.person_outlined),
+                icon: const Icon(Icons.person_outlined),
                 color: Styles.boldTextColor[Config.themeMode],
                 iconSize: Styles.iconInAppBar,
               ),

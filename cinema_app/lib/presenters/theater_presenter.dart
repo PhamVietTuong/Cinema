@@ -38,7 +38,7 @@ class TheaterPresenter {
       //  _view.onLoadTheaterError();
     } catch (error) {
       // Xử lý lỗi
-      print('Error fetching theaters: $error');
+      print('Error fetching combo: $error');
       _view.onLoadError();
     }
   }

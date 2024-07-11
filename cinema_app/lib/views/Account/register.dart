@@ -1,3 +1,5 @@
+import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
@@ -17,21 +19,24 @@ class _RegisterContentState extends State<RegisterContent>
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _birthdayController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final TextEditingController _birthdayController = TextEditingController();
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  
   late UserPresenter _presenter;
   bool isMale = true;
-  String selectedGender = 'Nam';
+ late String selectedGender;
   String textPass = "Mật khẩu";
   String textConfirmPass = "Nhập lại mật khẩu";
   String textbirthday = "Ngày sinh";
   String textRegister = "Đăng ký";
-  String textMale = "Nam";
+ late String textMale;
   String textWoman = "Nữ";
+  String textErorr = "Lỗi";
+  String textClose = Constants.textClose;
+  String textSuccess = "Thành công";
+ late List<String> gender;
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
       Styles.translate(textPass),
@@ -40,6 +45,9 @@ class _RegisterContentState extends State<RegisterContent>
       Styles.translate(textRegister),
       Styles.translate(textMale),
       Styles.translate(textWoman),
+      Styles.translate(textErorr),
+      Styles.translate(textClose),
+      Styles.translate(textSuccess),
       Styles.translate(selectedGender),
     ]);
     textPass = textTranlate[0];
@@ -48,28 +56,36 @@ class _RegisterContentState extends State<RegisterContent>
     textRegister = textTranlate[3];
     textMale = textTranlate[4];
     textWoman = textTranlate[5];
-    selectedGender = textTranlate[6];
-
+    textErorr = textTranlate[6];
+    textClose = textTranlate[7];
+    textSuccess = textTranlate[8];
+    selectedGender = textTranlate[9];
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
+    textMale=Config.languageMode==Constants.codeVNKey?"Nam":"Nam giới";
+    selectedGender=textMale;
     _presenter = UserPresenter(this);
+    _birthdayController.text =
+        DateTime.now().toLocal().toString().split(' ')[0];
+    gender=[textMale,textWoman];
     tranlate();
+
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime.parse(_birthdayController.text),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
     if (picked != null) {
       setState(() {
-        _birthdayController.text = picked.toIso8601String();
+        _birthdayController.text = picked.toLocal().toString().split(' ')[0];
       });
     }
   }
@@ -98,14 +114,14 @@ class _RegisterContentState extends State<RegisterContent>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Lỗi'),
+          title: Text(textErorr),
           content: Text(error),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Đóng'),
+              child: Text(textClose),
             ),
           ],
         );
@@ -114,19 +130,27 @@ class _RegisterContentState extends State<RegisterContent>
   }
 
   @override
-  void onLoadSuccess(String message) {
+  void onRegisterSuccess(String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Thành công'),
+          title: Text(textSuccess),
           content: Text(message),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).popUntil(
+                  (route) => route.isFirst,
+                );
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AccountScreen()),
+                );
               },
-              child: const Text('Đóng'),
+              child: Text(textClose),
             ),
           ],
         );
@@ -136,13 +160,14 @@ class _RegisterContentState extends State<RegisterContent>
 
   @override
   Widget build(BuildContext context) {
+    //  print(selectedGender);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsetsDirectional.only(bottom: 15),
             decoration: BoxDecoration(
               color: Styles.backgroundContent[Config.themeMode],
               borderRadius: BorderRadius.circular(10),
@@ -150,104 +175,65 @@ class _RegisterContentState extends State<RegisterContent>
             child: Column(
               children: [
                 InfoTextField(
-                    info: _usernameController,
-                    icon: const Icon(Icons.person),
-                    title: 'Tên đăng nhập'),
-                const SizedBox(height: 15),
-                InfoTextField(
-                    info: _fullNameController,
-                    icon: const Icon(Icons.person_pin),
-                    title: 'Họ và tên'),
-                const SizedBox(height: 15),
-                InfoTextField(
-                    info: _emailController,
-                    icon: const Icon(Icons.email),
-                    title: 'Email'),
-                const SizedBox(height: 15),
-                InfoTextField(
-                    info: _phoneController,
-                    icon: const Icon(Icons.phone),
-                    title: 'Số điện thoại'),
-                const SizedBox(height: 15),
-                TextField(
-                  style:
-                      TextStyle(color: Styles.boldTextColor[Config.themeMode]),
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: textPass,
-                    prefixIcon: const Icon(Icons.lock),
-                    labelStyle: TextStyle(
-                        color: Styles.boldTextColor[Config.themeMode]),
-                    prefixIconColor: Styles.boldTextColor[Config.themeMode],
-                    focusColor: Styles.boldTextColor[Config.themeMode],
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                      child: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                    ),
-                  ),
+                  textController: _usernameController,
+                  icon: const Icon(Icons.person),
+                  lableText: 'Tên đăng nhập',
+                  readOnly: false,
+                  obscurePassword: false,
                 ),
-                const SizedBox(height: 15),
-                TextField(
-                  style:
-                      TextStyle(color: Styles.boldTextColor[Config.themeMode]),
-                  controller: _confirmPasswordController,
-                  obscureText: _obscureConfirmPassword,
-                  decoration: InputDecoration(
-                    labelText: textConfirmPass,
-                    prefixIcon: const Icon(Icons.lock),
-                    labelStyle: TextStyle(
-                        color: Styles.boldTextColor[Config.themeMode]),
-                    prefixIconColor: Styles.boldTextColor[Config.themeMode],
-                    focusColor: Styles.boldTextColor[Config.themeMode],
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureConfirmPassword = !_obscureConfirmPassword;
-                        });
-                      },
-                      child: Icon(
-                        _obscureConfirmPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                    ),
-                  ),
+                InfoTextField(
+                  textController: _fullNameController,
+                  icon: const Icon(Icons.person_pin),
+                  lableText: 'Họ và tên',
+                  readOnly: false,
+                  obscurePassword: false,
                 ),
-                const SizedBox(height: 15),
+                InfoTextField(
+                  textController: _emailController,
+                  icon: const Icon(Icons.email),
+                  lableText: 'Email',
+                  readOnly: false,
+                  obscurePassword: false,
+                ),
+                InfoTextField(
+                  textController: _phoneController,
+                  icon: const Icon(Icons.phone),
+                  lableText: 'Số điện thoại',
+                  obscurePassword: false,
+                  readOnly: false,
+                ),
+                InfoTextField(
+                  textController: _passwordController,
+                  icon: const Icon(Icons.password),
+                  lableText: 'Mật khẩu',
+                  obscurePassword: true,
+                  readOnly: false,
+                ),
+                InfoTextField(
+                  textController: _passwordController,
+                  icon: const Icon(Icons.password),
+                  lableText: 'Nhập lại mật khẩu',
+                  obscurePassword: true,
+                  readOnly: false,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: TextField(
-                        style: TextStyle(
-                            color: Styles.boldTextColor[Config.themeMode]),
-                        controller: _birthdayController,
-                        onTap: () {
-                          _selectDate(context);
-                        },
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          labelText: textbirthday,
-                          prefixIcon: const Icon(Icons.calendar_today),
-                          labelStyle: TextStyle(
-                              color: Styles.boldTextColor[Config.themeMode]),
-                          prefixIconColor:
-                              Styles.boldTextColor[Config.themeMode],
-                          focusColor: Styles.boldTextColor[Config.themeMode],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
+                        child: InfoTextField(
+                      textController: _birthdayController,
+                      icon: const Icon(Icons.date_range),
+                      lableText: "Ngày sinh",
+                      readOnly: true,
+                      obscurePassword: false,
+                      onTap: () {
+                        _selectDate(context);
+                        setState(() {
+                          
+                        });
+                      },
+                    )),
                     DropdownButton<String>(
                       value: selectedGender,
                       icon: const Icon(Icons.arrow_drop_down),
@@ -259,32 +245,22 @@ class _RegisterContentState extends State<RegisterContent>
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedGender = newValue!;
-                          if (newValue == '$selectedGender') {
+                          if (newValue == selectedGender) {
                             isMale = true;
                           } else {
                             isMale = false;
                           }
                         });
                       },
-                      items: isMale
-                          ? <String>[
-                              '$textMale',
-                              '$textWoman',
+                      items:<String>[
+                              textMale,
+                              textWoman,
                             ].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
                               );
                             }).toList()
-                          : <String>[
-                              '$textWoman',
-                              '$textMale',
-                            ].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
                     ),
                   ],
                 ),
@@ -295,7 +271,7 @@ class _RegisterContentState extends State<RegisterContent>
                   onPressed: _registerUser,
                   child: Text(
                     textRegister,
-                    style: TextStyle(fontSize: Styles.titleFontSize),
+                    style: const TextStyle(fontSize: Styles.titleFontSize),
                   ),
                 ),
               ],
@@ -307,7 +283,23 @@ class _RegisterContentState extends State<RegisterContent>
   }
 
   @override
-  void onLoadToken(String token, DateTime expirationTime) {}
+  // ignore: non_constant_identifier_names
+  void loadLoginSuccess(User user) {}
+
   @override
-  void LoadLoginSuccess(User user) {}
+  void loadUpdateSuccess(user) {}
+
+  @override
+  void onGetCodeSuccess(ResGetCode res) {
+  }
+  
+  @override
+  void onLoadToken(String token, DateTime expirationTime) {
+    // TODO: implement onLoadToken
+  }
+  
+  @override
+  void onLoginSuccess(User user) {
+    // TODO: implement onLoginSuccess
+  }
 }

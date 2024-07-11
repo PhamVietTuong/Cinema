@@ -1,4 +1,7 @@
-﻿Use [Cinema];
+﻿Use [Cinema]
+
+if OBJECT_ID('dbo.News', 'U') IS NOT NULL
+DROP TABLE dbo.News;
 
 IF OBJECT_ID('dbo.Comment', 'U') IS NOT NULL
 DROP TABLE dbo.Comment;
@@ -73,7 +76,16 @@ IF OBJECT_ID('dbo.MovieType', 'U') IS NOT NULL
 DROP TABLE dbo.MovieType;
 
 
-
+Create table [News] (
+	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Title] nvarchar(255) NOT NULL,
+	[Content] nvarchar(255)  NULL,
+	[Status] bit NOT NULL,
+	[CreateAt] datetime NOT NULL,
+	[Image] nvarchar(255)  NULL,
+	[UpdatedAt] datetime(255)  NULL,
+	PRIMARY KEY (Id)
+)
 
 CREATE TABLE [Holiday] (
 	[Id] UNIQUEIDENTIFIER NOT NULL,
@@ -229,10 +241,11 @@ CREATE TABLE [TicketType] (
 CREATE TABLE [SeatTypeTicketType] (
 	[SeatTypeId] uniqueidentifier NOT NULL,
 	[TicketTypeId] uniqueidentifier NOT NULL,
-	[Price2D] float NOT NULL,
-	[Price3D] float NOT NULL,
-	[PriceDiscount2D] float NULL,
-	[PriceDiscount3D] float NULL,
+	[Price2D] float  null,
+	[Price3D] float  null,
+	[PriceDiscount2D]  float  null,
+	[PriceDiscount3D]  float  null,
+
 	CONSTRAINT PK_SeatTypeTicketType PRIMARY KEY ([SeatTypeId], [TicketTypeId]),
 	CONSTRAINT FK_SeatTypeTicketType_SeatType FOREIGN KEY ([SeatTypeId]) REFERENCES [SeatType] (Id),
 	CONSTRAINT FK_SeatTypeTicketType_TicketType FOREIGN KEY ([TicketTypeId]) REFERENCES [TicketType] (Id),
@@ -278,7 +291,7 @@ CREATE TABLE [FoodAndDrink] (
 	PRIMARY KEY (Id),
 );
 
-CREATE TABLE FoodAndDrinkTheater (
+CREATE TABLE [FoodAndDrinkTheater] (
 	[FoodAndDrinkId] uniqueidentifier NOT NULL,
 	[TheaterId] uniqueidentifier NOT NULL,
 	[Price] float NOT NULL,

@@ -5,7 +5,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useEffect, useState } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Button, Divider, Grid, Tabs, TextField, Typography } from '@mui/material';
+import { Button, Divider, Grid, IconButton, InputAdornment, Tabs, TextField, Typography } from '@mui/material';
 import { LOGOUT } from '../../../Redux/Actions/Type/UserType';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
@@ -287,7 +287,7 @@ const Profile = () => {
                                         name='changePassword'
                                         InputLabelProps={{ shrink: true }}
                                         value={passwordData.changePassword}
-                                        onChange={handleInputChangePassword}
+                                        onChange={handleInputChangePassword}                                      
                                     // onBlur={(event) => validateField(event.target.name, event.target.value)}
                                     // error={!!errors.changePassword}
                                     // helperText={errors.changePassword} 

@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/food_and_drink.dart';
-import 'package:http/http.dart' as http;
+import 'package:cinema_app/services/base_url.dart';
 
 class Theater {
   String id;
@@ -42,7 +42,8 @@ class TheaterRepositoryIml implements TheaterRepository {
     String api = '$serverUrl/api/Cinemas/GetTheaterList';
     print("API fetch theates: $api");
 
-    final response = await http.get(Uri.parse(api));
+    final response = await BaseUrl.get(api);
+    
     if (response.statusCode == 204) return [];
     if (response.statusCode == 200) {
       final List<dynamic> theaterJsonList = jsonDecode(response.body);
@@ -57,7 +58,7 @@ class TheaterRepositoryIml implements TheaterRepository {
     String api = '$serverUrl/api/Cinemas/ComboByTheaterId/$theaterId';
     print("API fetch combos: $api");
 
-    final response = await http.get(Uri.parse(api));
+    final response = await BaseUrl.get(api);
     if (response.statusCode == 204) return [];
     if (response.statusCode == 200) {
       final List<dynamic> comboJsonList = jsonDecode(response.body);

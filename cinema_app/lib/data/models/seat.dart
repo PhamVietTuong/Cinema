@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:cinema_app/data/models/seat_row.dart';
+import 'package:cinema_app/services/base_url.dart';
 import 'package:http/http.dart' as http;
 import '../../config.dart';
 
@@ -50,12 +51,7 @@ class SeatRepositoryIml implements SeatRepository {
     String api = '$serverUrl/api/Cinemas/SeatByShowTimeAndRoomId';
     print("API fetch Seats by room id: $api");
 
-    final response = await http.post(Uri.parse(api),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({"showTimeId": showtimeId, "roomId": roomId}));
-
+    final response = await BaseUrl.post(api,  jsonEncode({"showTimeId": showtimeId, "roomId": roomId}));
     if (response.statusCode == 204) return [];
     if (response.statusCode == 200) {
       final dynamic seatJson = jsonDecode(response.body);
