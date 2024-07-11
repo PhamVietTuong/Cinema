@@ -149,6 +149,14 @@ export class CinemasService extends baseService {
     GetRevenue = (filterRevenue) => {
         return this.post(`api/Cinemas/GetRevenue`, filterRevenue)
     }
+
+    GetTheaterRoomList = () => {
+        return this.get(`api/Cinemas/GetTheaterRoomList`)
+    }
+
+    UpdateMovie = (MovieDTO) => {
+        return this.post(`api/Cinemas/UpdateMovie`, MovieDTO)
+    }
 }
 
 export const cinemasService = new CinemasService()

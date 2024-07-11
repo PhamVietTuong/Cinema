@@ -9,7 +9,7 @@ import IndexUser from "./Pages/User/IndexUser";
 import IndexAdmin from "./Pages/Admin/IndexAdmin";
 import AgeRestriction from "./Pages/Admin/AgeRestriction/AgeRestriction";
 import Checkout from "./Pages/User/Checkout/Checkout";
-import { ProtectedRouteCheckout, ProtectedRouteLogin } from "./Pages/User/ProtectedRoute";
+import { ProtectedRouteAdmin, ProtectedRouteCheckout, ProtectedRouteLogin } from "./Pages/User/ProtectedRoute";
 import ForgetPassword from "./Pages/User/ForgetPassword/ForgetPassword";
 import TicketType from "./Pages/Admin/TicketType/TicketType";
 import MovieType from "./Pages/Admin/MovieType/MovieType";
@@ -21,7 +21,7 @@ import TheaterDetail from "./Pages/Admin/Theater/TheaterDetail";
 import Profile from "./Pages/User/Account/Profile";
 import Showing from "./Pages/User/Showing/Showing";
 import Cooming from "./Pages/User/Cooming/Cooming";
-import MoviePage from "./Pages/Admin/Movie/MoviePage"; 
+import MoviePage from "./Pages/Admin/Movie/MoviePage";
 import EditMoviePage from "./Pages/Admin/Movie/EditMoviePage";
 
 import Revenue from "./Pages/Admin/Revenue/Revenue";
@@ -65,9 +65,17 @@ const Routers = () => {
                             }
                         />
                         <Route path="checkout/info" element={<InfoTicketBooking />} />
-                        <Route path="account/account-profile" element={<Profile />} />
+                        <Route path="account/account-profile" element={
+                            <ProtectedRouteCheckout>
+                                <Profile />
+                            </ProtectedRouteCheckout>} 
+                        />
                     </Route>
-                    <Route path="/admin" element={<IndexAdmin />}>
+                    <Route path="/admin" element={
+                        <ProtectedRouteAdmin>
+                            <IndexAdmin />
+                        </ProtectedRouteAdmin>
+                    }>
                         <Route index path="admin" element={<AgeRestriction />} />
                         <Route path="Movie" element={<MoviePage />} />
                         <Route path="Movie/:id" element={<EditMoviePage />} />

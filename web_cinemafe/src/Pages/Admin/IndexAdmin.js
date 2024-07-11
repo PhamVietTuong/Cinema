@@ -1,11 +1,13 @@
-import { Drafts,  Inbox, Menu } from "@mui/icons-material";
-import { Box, CssBaseline, Divider, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, styled, useTheme } from "@mui/material";
+import { Drafts, Inbox, Menu } from "@mui/icons-material";
+import { Box, CssBaseline, Divider, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, styled, Menu as MuiMenu, MenuItem } from "@mui/material";
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 
 import './IndexAdmin.css'
+import { useDispatch, useSelector } from "react-redux";
+import { LOGOUT } from "../../Redux/Actions/Type/UserType";
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -73,7 +75,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const IndexAdmin = () => {
+    const {
+        loginInfo,
+    } = useSelector((state) => state.UserReducer);
     const [openDrawer, setOpenDrawer] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleDrawerClose = () => {
         setOpenDrawer(false);
@@ -81,6 +89,22 @@ const IndexAdmin = () => {
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
     };
+
+    const handleMouseEnter = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMouseLeave = () => {
+        setAnchorEl(null);
+    };
+
+    const handleHomePageClick = (path) => {
+        navigate(path);
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -102,6 +126,29 @@ const IndexAdmin = () => {
                         <Typography variant="h6" noWrap component="div" className="IndexAdminTypography">
                             Mini variant drawer
                         </Typography>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            className="IndexAdminTypography"
+                            onMouseEnter={handleMouseEnter}
+                        >
+                            {loginInfo?.fullName}
+                        </Typography>
+                        <MuiMenu
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleMouseLeave}
+                            MenuListProps={{ onMouseLeave: handleMouseLeave }}
+                        >
+                            <MenuItem onClick={() => handleHomePageClick('/')}>Trang chủ</MenuItem>
+                            <MenuItem onClick={() => {
+                                dispatch({
+                                    type: LOGOUT,
+                                })
+                            }}>Đăng xuất</MenuItem>
+                        </MuiMenu>
                     </Toolbar>
                 </AppBar>
                 <Drawer variant="permanent" open={openDrawer} className="IndexAdminDrawer">
@@ -115,7 +162,7 @@ const IndexAdmin = () => {
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
-                                <ListItemText primary="Movie" />
+                                <ListItemText primary="Phim" />
                             </ListItemButton>
                         </Link>
                         <Link to="AgeRestriction">
@@ -182,7 +229,7 @@ const IndexAdmin = () => {
                         </Link>
                     </List>
                 </Drawer>
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }} style={{ backgroundColor: '#ebeef2'}}>
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }} style={{ backgroundColor: '#ebeef2' }}>
                     <DrawerHeader />
                     <Outlet />
                 </Box>
