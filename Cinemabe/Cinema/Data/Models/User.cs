@@ -20,5 +20,7 @@ namespace Cinema.Data.Models
 		public bool Gender { get; set; }
         [JsonIgnore]
         public bool Status { get; set; }
+        public Guid MemberShipId { get; set; }
+        public MemberShip MemberShip { get; set; }
     }
 }

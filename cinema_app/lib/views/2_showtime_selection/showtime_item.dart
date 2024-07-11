@@ -23,16 +23,18 @@ class ShowtimeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TicketOptionScreen(
-                selectedDate: selectedDate,
-                booking: booking,
-                showtimeRoom: showtimeRoom,
-                movie: movie,
-              ),
-            ));
+        Config.userInfo != null
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TicketOptionScreen(
+                    selectedDate: selectedDate,
+                    booking: booking,
+                    showtimeRoom: showtimeRoom,
+                    movie: movie,
+                  ),
+                ))
+            : (print("Chưa đăng nhập"));
       },
       child: Container(
         padding: const EdgeInsets.all(2),

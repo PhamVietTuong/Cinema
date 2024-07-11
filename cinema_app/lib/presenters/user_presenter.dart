@@ -5,7 +5,6 @@ import 'package:cinema_app/data/models/user.dart';
 abstract class UserViewContract {
   void onLoadError(String error);
   void onRegisterSuccess(String message);
-  void onLoginSuccess(User user);
   void onGetCodeSuccess(ResGetCode res);
   void loadUpdateSuccess(User user);
   void loadLoginSuccess(User user);

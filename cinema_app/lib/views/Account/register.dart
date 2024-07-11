@@ -210,7 +210,7 @@ class _RegisterContentState extends State<RegisterContent>
                   readOnly: false,
                 ),
                 InfoTextField(
-                  textController: _passwordController,
+                  textController: _confirmPasswordController,
                   icon: const Icon(Icons.password),
                   lableText: 'Nhập lại mật khẩu',
                   obscurePassword: true,
@@ -295,11 +295,7 @@ class _RegisterContentState extends State<RegisterContent>
   
   @override
   void onLoadToken(String token, DateTime expirationTime) {
-    // TODO: implement onLoadToken
   }
   
-  @override
-  void onLoginSuccess(User user) {
-    // TODO: implement onLoginSuccess
-  }
+ 
 }

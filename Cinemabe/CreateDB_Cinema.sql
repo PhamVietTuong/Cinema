@@ -39,11 +39,11 @@ DROP TABLE dbo.Seat;
 IF OBJECT_ID('dbo.Movie', 'U') IS NOT NULL
 DROP TABLE dbo.Movie;
 
-IF OBJECT_ID('dbo.[MemberShip]', 'U') IS NOT NULL
-DROP TABLE dbo.[MemberShip];
-
 IF OBJECT_ID('dbo.User', 'U') IS NOT NULL
 DROP TABLE dbo.[User];
+
+IF OBJECT_ID('dbo.[MemberShip]', 'U') IS NOT NULL
+DROP TABLE dbo.[MemberShip];
 
 IF OBJECT_ID('dbo.UserType', 'U') IS NOT NULL
 DROP TABLE [dbo].[UserType];
@@ -83,7 +83,7 @@ Create table [News] (
 	[Status] bit NOT NULL,
 	[CreateAt] datetime NOT NULL,
 	[Image] nvarchar(255)  NULL,
-	[UpdatedAt] datetime(255)  NULL,
+	[UpdatedAt] datetime  NULL,
 	PRIMARY KEY (Id)
 )
 
@@ -122,7 +122,7 @@ CREATE TABLE [MemberShip] (
 	[Id] UNIQUEIDENTIFIER NOT NULL,
 	[Name] nvarchar(255) NOT NULL,
 	[Description] nvarchar(255)  NULL,
-	[Value] float NOT NULL,
+	[Value] int NOT NULL,
 	[Status] bit NOT NULL,
 	PRIMARY KEY (Id)
 )
@@ -145,7 +145,7 @@ CREATE TABLE [User] (
     [PasswordHash] varchar(512) NOT NULL,
     [PasswordSalt] varchar(128) NOT NULL,
 	--05/07/2024
-	[MemberShipId] uniqueidentifier NOT NULL,
+	[MemberShipId] uniqueidentifier  NULL,
     [Status] bit NOT NULL,
     PRIMARY KEY (Id),
 	FOREIGN KEY (UserTypeId) REFERENCES UserType(Id),
