@@ -102,7 +102,7 @@ const EditMoviePage = () => {
     const handleProjectionFormChange = (event) => {
         setNewShowTime((prevData) => ({
             ...prevData,
-            projectionForm: event.target.value,
+            projectionForm: Number(event.target.value),
         }));
     };
 
@@ -154,6 +154,7 @@ const EditMoviePage = () => {
                 endTime: '',
                 projectionForm: ProjectionForm.Time2D,
             });
+            setRoomShowtimes([]);
         }
     };
 
@@ -431,14 +432,14 @@ const EditMoviePage = () => {
                                 value={newShowTime.projectionForm}
                                 onChange={handleProjectionFormChange}
                             >
-                                <FormControlLabel value={ProjectionForm.Time2D} control={<Radio />} label="2D" />
-                                <FormControlLabel value={ProjectionForm.Time3D} control={<Radio />} label="3D" />
+                                <FormControlLabel value={ProjectionForm.Time2D} control={<Radio />} label="2D" disabled={movieData.Time2D === -1} />
+                                <FormControlLabel value={ProjectionForm.Time3D} control={<Radio />} label="3D" disabled={movieData.time3D === -1} />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
                         <Button variant="contained" color="primary" onClick={handleAddShowTime}>
-                            Add Showtime
+                            Thêm xuất chiếu
                         </Button>
                     </Grid>
                 </Grid>

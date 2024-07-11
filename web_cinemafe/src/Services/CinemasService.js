@@ -1,6 +1,4 @@
-import { Axios } from "axios";
 import { baseService } from "./BaseService";
-import { DOMAIN, TOKEN } from "../Ustil/Settings/Config";
 
 export class CinemasService extends baseService {
     GetMovieList = () => {
