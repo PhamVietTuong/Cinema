@@ -16,5 +16,6 @@ namespace Cinema.DTOs
         public RoomStatus Status { get; set; }
         public List<RowNameViewModel> RowName { get; set; }
         public List<RowNameViewModel> RowNameNew { get; set; }
+        public List<ShowTimeRoomDTO> ShowTimeRooms { get; set; }
     }
 }

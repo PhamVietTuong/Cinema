@@ -20,5 +20,7 @@ namespace Cinema.Contracts
 		Task<List<DateTime>> GetDateByMovieID(Guid movieID, ProjectionForm ProjectionForm);
 		Task<List<ShowTimeRowViewModel>> GetShowTimeByMovieID(Guid movieID, DateTime date, ProjectionForm ProjectionForm);
 
-	}
+        Task<MovieDTO> UpdateAsync(MovieDTO entity);
+
+    }
 }

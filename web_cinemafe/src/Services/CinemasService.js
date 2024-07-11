@@ -150,6 +150,14 @@ export class CinemasService extends baseService {
         return this.post(`api/Cinemas/GetRevenue`, filterRevenue)
     }
 
+    GetTheaterRoomList = () => {
+        return this.get(`api/Cinemas/GetTheaterRoomList`)
+    }
+
+    UpdateMovie = (MovieDTO) => {
+        return this.post(`api/Cinemas/UpdateMovie`, MovieDTO)
+    }
+    
     GetListInvoice = () => {
         return this.get(`api/Cinemas/GetListInvoice`)
     }
