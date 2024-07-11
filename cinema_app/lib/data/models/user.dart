@@ -155,7 +155,8 @@ abstract class UserRepository {
   Future<User> login(Login login);
   Future<ResGetCode> sendAuthCode(String email);
   Future<User> updateUser(User user);
-  // Future<void> sendAuthCode(String email);
+
+  Future<bool> changePass(String pass, String username);
 }
 
 class UserRepositoryIml implements UserRepository {
@@ -190,7 +191,7 @@ class UserRepositoryIml implements UserRepository {
     }
 
     try {
-      final response = await BaseUrl.post(url,  jsonEncode(register.toJson()));
+      final response = await BaseUrl.post(url, jsonEncode(register.toJson()));
       if (response.statusCode == 200) {
         print('Đăng ký thành công');
       } else {
@@ -209,7 +210,7 @@ class UserRepositoryIml implements UserRepository {
     final url = '$serverUrl/api/Users/LoginUser';
 
     try {
-      final response = await BaseUrl.post(url,  jsonEncode(login.toJson()));
+      final response = await BaseUrl.post(url, jsonEncode(login.toJson()));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse); // Giải mã JSON thành đối tượng User
@@ -223,12 +224,12 @@ class UserRepositoryIml implements UserRepository {
     }
   }
 
-   @override
+  @override
   Future<User> updateUser(User user) async {
     final url = '$serverUrl/api/Users/UpdateUser';
 
     try {
-      final response = await BaseUrl.post(url,  jsonEncode(user.toJson()));
+      final response = await BaseUrl.post(url, jsonEncode(user.toJson()));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse);
@@ -254,6 +255,30 @@ class UserRepositoryIml implements UserRepository {
         return ResGetCode.formJson(jsonDecode(response.body));
       } else {
         print('Gửi mã xác thực thất bại. Mã lỗi: ${response.statusCode}');
+        throw (response.body);
+      }
+    } catch (e) {
+      print(e);
+      throw ('$e');
+    }
+  }
+
+  @override
+  Future<bool> changePass(String pass, String username) async {
+    final url =
+        '$serverUrl/api/Users/ChangePassword?changePassword=$pass&userName=$username';
+    try {
+      final body = jsonEncode({
+        'userName': username,
+        'changePassword': pass,
+      });
+
+      final response = await BaseUrl.post(url, body);
+      if (response.statusCode == 200) {
+        print('Đổi mật khẩu thành công');
+        return true;
+      } else {
+        print('Đổi mật khẩu thất bại. Mã lỗi: ${response.statusCode}');
         throw (response.body);
       }
     } catch (e) {

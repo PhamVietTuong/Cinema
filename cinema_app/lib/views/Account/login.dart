@@ -218,15 +218,13 @@ class _LoginContentState extends State<LoginContent>
   }
 
   @override
-  void onLoadToken(String token, DateTime expirationTime) {
-    _saveTokenToLocal(token, expirationTime);
-  }
-
-  @override
   void onGetCodeSuccess(ResGetCode res) {}
 
   @override
   void onRegisterSuccess(String message) {}
   @override
   void loadUpdateSuccess(user) {}
+
+  @override
+  void loadChangePassSuccess(bool res) {}
 }
