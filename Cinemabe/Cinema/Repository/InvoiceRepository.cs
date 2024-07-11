@@ -92,7 +92,7 @@ namespace Cinema.Repository
 
         public async Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(Guid? userId)
         {
-            var invoices = await _context.Invoice.Where(x => x.UserId == userId).ToListAsync();
+            var invoices = await _context.Invoice.Where(x => x.UserId == userId && x.Status == InvoiceStatus.Successful).ToListAsync();
 
             var result = new List<InvoiceViewModel>();
 

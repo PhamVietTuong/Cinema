@@ -47,6 +47,8 @@ namespace Cinema.Repository
             {
                 resultShowTimeRooms.Add(new ShowTimeRoomDTO
                 {
+                    ShowTimeId = showTimeRoom.ShowTimeId,
+                    RoomId = showTimeRoom.RoomId,
                     StartTime = showTimeRoom.ShowTime.StartTime,
                     EndTime = showTimeRoom.ShowTime.EndTime,
                     RoomName = showTimeRoom.Room.Name,
@@ -379,6 +381,104 @@ namespace Cinema.Repository
                 }
             }
             return results;
+        }
+
+        public async Task<MovieDTO> UpdateAsync(MovieDTO entity)
+        {
+            var movie = await _context.Movie.FirstOrDefaultAsync(x => x.Id == entity.Id);
+
+            movie.Actor = entity.Actor;
+            movie.Name = entity.Name;
+            movie.Director = entity.Director;
+            movie.AgeRestrictionId = entity.AgeRestrictionId;
+            movie.Description = entity.Description;
+            movie.Image = entity.Image;
+            movie.Languages = entity.Languages;
+            movie.ReleaseDate = entity.ReleaseDate;
+            movie.Time2D = entity.Time2D;
+            movie.Time3D = entity.Time3D;
+            movie.Trailer = entity.Trailer;
+            movie.Status = entity.Status;
+
+            var movieTypeDetails = await _context.MovieTypeDetail.Where(x => x.MovieId == entity.Id).ToListAsync();
+
+            foreach(var movieTypeDetail in movieTypeDetails)
+            {
+                if(!entity.MovieTypes.Select(x => x.Id).Contains(movieTypeDetail.MovieTypeId))
+                {
+                    _context.MovieTypeDetail.Remove(movieTypeDetail);
+                }
+            }
+
+            foreach (var movieType in entity.MovieTypes)
+            {
+                if (!movieTypeDetails.Any(x => x.MovieTypeId == movieType.Id))
+                {
+                    _context.MovieTypeDetail.Add(new MovieTypeDetail
+                    {
+                        MovieId = entity.Id,
+                        MovieTypeId = movieType.Id
+                    });
+                }
+            }
+
+            var existingShowTimes = await _context.ShowTime.Where(x => x.MovieId == entity.Id).ToListAsync();
+            var showTimeRoomDetails = await _context.ShowTimeRoom.Where(x => existingShowTimes.Select(y => y.Id).Contains(x.ShowTimeId)).ToListAsync();
+
+            foreach (var showTimeRoom in showTimeRoomDetails)
+            {
+                if (!entity.ShowTimeRooms.Any(x => x.ShowTimeId == showTimeRoom.ShowTimeId && x.RoomId == showTimeRoom.RoomId))
+                {
+                    _context.ShowTimeRoom.Remove(showTimeRoom);
+                }
+            }
+
+            foreach (var showTime in existingShowTimes)
+            {
+                if (!entity.ShowTimeRooms.Any(x => x.ShowTimeId == showTime.Id))
+                {
+                    _context.ShowTime.Remove(showTime);
+                }
+            }
+
+            foreach (var showTimeRoom in entity.ShowTimeRooms)
+            {
+                var showTime = await _context.ShowTime.FirstOrDefaultAsync(x => x.Id == showTimeRoom.ShowTimeId);
+
+                if (showTime == null)
+                {
+                    showTime = new ShowTime
+                    {
+                        Id = Guid.NewGuid(),
+                        MovieId = entity.Id,
+                        StartTime = showTimeRoom.StartTime,
+                        EndTime = showTimeRoom.EndTime,
+                        ProjectionForm = showTimeRoom.ProjectionForm,
+                        Status = true 
+                    };
+                    _context.ShowTime.Add(showTime);
+                }
+                else
+                {
+                    showTime.StartTime = showTimeRoom.StartTime;
+                    showTime.EndTime = showTimeRoom.EndTime;
+                    showTime.ProjectionForm = showTimeRoom.ProjectionForm;
+                }
+
+                var showTimeRoomEntry = await _context.ShowTimeRoom.FirstOrDefaultAsync(x => x.ShowTimeId == showTime.Id && x.RoomId == showTimeRoom.RoomId);
+                if (showTimeRoomEntry == null)
+                {
+                    _context.ShowTimeRoom.Add(new ShowTimeRoom
+                    {
+                        ShowTimeId = showTime.Id,
+                        RoomId = showTimeRoom.RoomId
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
     }
 }

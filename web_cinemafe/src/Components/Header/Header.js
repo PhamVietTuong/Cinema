@@ -114,6 +114,14 @@ const Header = (props) => {
                                                             <FontAwesomeIcon icon={faUser} />
                                                             Thông tin cá nhân
                                                         </Link>
+                                                        {
+                                                            loginInfo.type === 'admin' && (
+                                                                <Link to="/admin" className="link" href="">
+                                                                    <FontAwesomeIcon icon={faUser} />
+                                                                    Quản trị viên
+                                                                </Link>
+                                                            )
+                                                        }
                                                         <span className="dot">/</span>
                                                         <span className="link" onClick={() => {
                                                             dispatch({

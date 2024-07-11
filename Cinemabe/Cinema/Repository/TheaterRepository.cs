@@ -344,5 +344,50 @@ namespace Cinema.Repository
 
             return resultDto;
         }
+
+        public async Task<List<TheaterRoomDTO>> GetTheaterRoomListAsync()
+        {
+            var theaters = await _context.Theater.Where(x => x.Status).ToListAsync();
+
+            var theaterRoomDTOs = new List<TheaterRoomDTO>();
+
+            foreach (var theater in theaters)
+            {
+                var rooms = await _context.Room.Where(x => x.TheaterId == theater.Id && x.Status == RoomStatus.Active).ToListAsync();
+
+                var roomDTOs = new List<RoomDTO>();
+                foreach (var room in rooms)
+                {
+                    var showTimeRooms = await _context.ShowTimeRoom.Include(x => x.ShowTime).Where(x => x.RoomId == room.Id && x.ShowTime.StartTime >= DateTime.Now.Date).ToListAsync();
+
+                    var showTimeRoomDTOs = new List<ShowTimeRoomDTO>();
+                    foreach(var showTimeRoom in showTimeRooms)
+                    {
+                        showTimeRoomDTOs.Add(new ShowTimeRoomDTO
+                        {
+                           StartTime = showTimeRoom.ShowTime.StartTime,
+                           EndTime = showTimeRoom.ShowTime.EndTime,
+                           ProjectionForm = showTimeRoom.ShowTime.ProjectionForm,
+                        });
+                    }
+
+                    roomDTOs.Add(new RoomDTO
+                    {
+                        Id = room.Id,
+                        Name = room.Name,
+                        ShowTimeRooms = showTimeRoomDTOs,
+                    });
+                }
+
+                theaterRoomDTOs.Add(new TheaterRoomDTO
+                {
+                    TheaterId = theater.Id,
+                    TheaterName = theater.Name,
+                    Rooms = roomDTOs,
+                });
+            }
+
+            return theaterRoomDTOs;
+        }
     }
 }

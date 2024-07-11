@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { connection } from './connectionSignalR';
-import { CLEAN } from './Redux/Actions/Type/CinemasType';
+import { connection } from '../connectionSignalR';
+import { CLEAN } from '../Redux/Actions/Type/CinemasType';
 
 const PageViews = () => {
     const location = useLocation();

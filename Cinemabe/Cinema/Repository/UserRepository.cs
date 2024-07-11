@@ -209,8 +209,8 @@ namespace Cinema.Repository
 				{
 					Token = tokenHandler.WriteToken(token),
 					ExpirationTime = expirationTime,
-					Authority = authority
-				};
+					Authority = role
+                };
 			}
 			else
 			{

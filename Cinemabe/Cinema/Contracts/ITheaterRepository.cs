@@ -13,5 +13,6 @@ namespace Cinema.Contracts
         Task<List<TheaterDTO>> GetTheaterListAsync();
         Task<TheaterDTO> UpdateAsync(TheaterDTO entity);
         Task<TheaterDTO> CreateAsync(TheaterDTO entity);
+        Task<List<TheaterRoomDTO>> GetTheaterRoomListAsync();
     }
 }

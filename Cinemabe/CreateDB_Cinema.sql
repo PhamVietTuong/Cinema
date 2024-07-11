@@ -137,7 +137,7 @@ CREATE TABLE [User] (
     [Id] uniqueidentifier NOT NULL,
 	[UserTypeId] uniqueidentifier NOT NULL,
     [UserName] varchar(255) NOT NULL,
-    [FullName] varchar(255) NOT NULL,
+    [FullName] nvarchar(255) NOT NULL,
     [Email] varchar(255) NOT NULL,
     [Phone] varchar(255),
 	[BirthDay] datetime,
