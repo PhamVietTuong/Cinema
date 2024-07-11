@@ -295,11 +295,6 @@ class _RegisterContentState extends State<RegisterContent>
   
   @override
   void onLoadToken(String token, DateTime expirationTime) {
-    // TODO: implement onLoadToken
   }
   
-  @override
-  void onLoginSuccess(User user) {
-    // TODO: implement onLoginSuccess
-  }
 }

@@ -226,14 +226,14 @@ class UserRepositoryIml implements UserRepository {
    @override
   Future<User> updateUser(User user) async {
     final url = '$serverUrl/api/Users/UpdateUser';
-
     try {
       final response = await BaseUrl.post(url,  jsonEncode(user.toJson()));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
+        print(jsonDecode(response.body));
         return User.fromJson(jsonResponse);
       } else {
-        // print(response.body);
+         print(response.body);
         throw (response.body);
       }
     } catch (e) {

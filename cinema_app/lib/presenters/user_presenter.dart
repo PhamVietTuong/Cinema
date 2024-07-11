@@ -5,7 +5,6 @@ import 'package:cinema_app/data/models/user.dart';
 abstract class UserViewContract {
   void onLoadError(String error);
   void onRegisterSuccess(String message);
-  void onLoginSuccess(User user);
   void onGetCodeSuccess(ResGetCode res);
   void loadUpdateSuccess(User user);
   void loadLoginSuccess(User user);
@@ -42,12 +41,12 @@ class UserPresenter {
 
   Future<void> updateUser(User userInfo) async {
     try {
+      print('Updating user with: ${userInfo.toJson()}');
       User user = await repository.updateUser(userInfo);
       _view.loadUpdateSuccess(user);
-      // print(user.expirationTime);
     } catch (e) {
+      print('Error : $e');
       _view.onLoadError('$e');
-      throw ('$e');
     }
   }
 

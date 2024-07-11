@@ -210,10 +210,7 @@ class _FogotPassScreenState extends State<FogotPassScreen>
   }
 
   @override
-  void onLoginSuccess(User user) {}
-
-  @override
-  void onLoadError(String error) {}
+    void onLoadError(String error) {}
 
   @override
   void onLoadToken(String token, DateTime expirationTime) {}
