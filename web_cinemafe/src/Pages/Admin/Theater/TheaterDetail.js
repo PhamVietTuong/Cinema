@@ -3,7 +3,7 @@ import './TheaterDetail.css';
 import { useEffect, useState } from "react";
 import { GetInfoTheaterByIdAction, UpdateTheaterAction } from "../../../Redux/Actions/CinemasAction";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Card, CardActions, CardContent, Collapse, FormControlLabel, Grid, IconButton, Switch, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Collapse, FormControlLabel, Grid, IconButton, Switch, TextField, Typography } from "@mui/material";
 import { DOMAIN } from "../../../Ustil/Settings/Config";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import GenerateSeats from "./GenerateSeat";
@@ -107,9 +107,11 @@ const TheaterDetail = () => {
     const handleRoomStatusChange = (index) => {
         setSeatData((prevData) => {
             const newData = [...prevData];
+            const currentStatus = newData[index].status;
+
             newData[index] = {
                 ...newData[index],
-                status: !newData[index].status === true ? RoomStatus.Active : RoomStatus.WaitForCancellation
+                status: currentStatus === RoomStatus.Active ? RoomStatus.WaitForCancellation : RoomStatus.Active
             };
             return newData;
         });
@@ -196,14 +198,23 @@ const TheaterDetail = () => {
                             }
                         />
 
-                        <Button 
-                            type="submit" 
-                            variant="contained" 
-                            color="primary"
-                            style={{ display: 'block', marginTop: '16px' }}
-                        >
-                            Lưu
-                        </Button>
+                        <Box sx={{ display: 'flex', mt: 2 }}>
+                            <Button
+                                onClick={() => navigate('/admin/theater')}
+                                variant="contained"
+                                color="primary"
+                                sx={{ mr: 3 }}
+                            >
+                                Hủy
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                            >
+                                Lưu
+                            </Button>
+                        </Box>
                     </form>
                 </Grid>
             </Grid>

@@ -6,7 +6,7 @@ namespace Cinema.Contracts
     {
         Task<InvoiceViewModel> GetInvoiceAsync(string code);
         Task<bool> UpdateCodeStatusAsync(string orderId, int resultCode);
-        Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(Guid? userId);
+        Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(string phone);
         Task<List<RevenueTheaterViewModel>> GetRevenueAsync(FilterRevenue filterRevenue);
         Task<List<InvoiceRowViewModel>> GetListInvoiceAsync();
         Task<bool> SendInvoiceInfo(string code);

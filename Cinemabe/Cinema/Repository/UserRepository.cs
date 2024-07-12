@@ -139,11 +139,11 @@ namespace Cinema.Repository
 
 			if (userType == "user")
 			{
-				userToValidate = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+				userToValidate = await _context.User.Where(x => x.Phone == userName || x.Email == userName).FirstOrDefaultAsync();
 			}
 			else if (userType == "admin")
 			{
-				userToValidate = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+				userToValidate = await _context.User.Where(x => x.Phone == userName || x.Email == userName).FirstOrDefaultAsync();
 			}
 
 			return ValidateLogin(userToValidate, password);
@@ -176,12 +176,12 @@ namespace Cinema.Repository
 
 			if (userType == "user")
 			{
-				user = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+				user = await _context.User.Where(x => x.Phone == userName || x.Email == userName).FirstOrDefaultAsync();
 				authority = "user";
 			}
 			else if (userType == "admin")
 			{
-				user = await _context.User.Where(x => x.Phone == userName || x.UserName == userName || x.Email == userName).FirstOrDefaultAsync();
+				user = await _context.User.Where(x => x.Phone == userName || x.Email == userName).FirstOrDefaultAsync();
 				authority = "admin";
 			}
 
@@ -190,14 +190,13 @@ namespace Cinema.Repository
 				user.UserType = await _context.UserType.FindAsync(user.UserTypeId);
 
 				var role = user.UserType.Name;
-				var userId = user.Id.ToString();
 				var tokenHandler = new JwtSecurityTokenHandler();
 				var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]);
 				DateTime expirationTime = DateTime.Now.AddHours(allowedHours);
 
 				var tokenDescriptor = new SecurityTokenDescriptor
 				{
-					Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.Role, role), new Claim(ClaimTypes.NameIdentifier, userId) }),
+					Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.Role, role)}),
 					Issuer = _configuration["JWT:ValidIssuer"],
 					Audience = _configuration["JWT:ValidAudience"],
 					Expires = expirationTime,
@@ -222,19 +221,15 @@ namespace Cinema.Repository
 		{
 			try
 			{
-				if (string.IsNullOrEmpty(register.UserName) || string.IsNullOrEmpty(register.FullName) ||
+				if (string.IsNullOrEmpty(register.FullName) ||
 					string.IsNullOrEmpty(register.Password) || string.IsNullOrEmpty(register.ConfirmPassword) || string.IsNullOrEmpty(register.Email) || string.IsNullOrEmpty(register.Phone)|| string.IsNullOrEmpty(register.BirthDay.ToString()))
 				{
-					throw new ArgumentException("Tên người dùng, họ và tên, email, số điện thoại, ngày sinh, mật khẩu không được để trống.");
+					throw new ArgumentException("Họ và tên, email, số điện thoại, ngày sinh, mật khẩu không được để trống.");
 				}
 
 				if (!Validate.IsValidPassword(register.Password))
 				{
 					throw new ArgumentException("Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
-				}
-				if (!Validate.IsValidUsername(register.UserName))
-				{
-					throw new ArgumentException("Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới.");
 				}
 				if ( !Validate.IsEmail(register.Email))
 				{
@@ -244,12 +239,6 @@ namespace Cinema.Repository
 				if (!Validate.IsPhoneNumber(register.Phone))
 				{
 					throw new ArgumentException("Số điện thoại không hợp lệ.");
-				}
-
-				var existingUser = await _context.User.FirstOrDefaultAsync(u => u.UserName.ToLower() == register.UserName.ToLower());
-				if (existingUser != null)
-				{
-					throw new ArgumentException("Tên người dùng đã tồn tại.");
 				}
 
 				if (!string.IsNullOrEmpty(register.Email))
@@ -287,9 +276,7 @@ namespace Cinema.Repository
 				var memberFirst = await _context.MemberShip.FirstOrDefaultAsync(x => x.Value == 0);
 				var newUser = new User
 				{
-					Id = Guid.NewGuid(),
 					UserTypeId = userType.Id,
-					UserName = register.UserName,
 					FullName = register.FullName,
 					Email = register.Email,
 					Phone = register.Phone,
@@ -352,7 +339,7 @@ namespace Cinema.Repository
 
 		public async Task<bool> ChangePassword(string PassWord, string UserName)
 		{
-			var user = await _context.User.Where(x => x.UserName == UserName || x.Phone == UserName || x.Email == UserName).FirstOrDefaultAsync();
+			var user = await _context.User.Where(x => x.Phone == UserName || x.Email == UserName).FirstOrDefaultAsync();
 
 			if (user == null)
 			{
@@ -366,14 +353,14 @@ namespace Cinema.Repository
 			return true;
 		}
 
-		public async Task<bool> ExistsAsync(Guid id)
+		public async Task<bool> ExistsAsync(string phone)
 		{
-			return await _context.User.AnyAsync(x => x.Id == id);
+			return await _context.User.AnyAsync(x => x.Phone == phone);
 		}
 
 		public async Task<UserDTO> UpdateAsync(UserDTO entity)
 		{
-			var user = await _context.User.FirstOrDefaultAsync(x => x.Id == entity.Id);
+			var user = await _context.User.FirstOrDefaultAsync(x => x.Phone == entity.Phone);
 
 			user.FullName = entity.FullName;
 			user.Phone = entity.Phone;
@@ -398,7 +385,6 @@ namespace Cinema.Repository
 			{
 				result.Add(new UserRowViewModel
 				{
-					Id = user.Id,
 					FullName = user.FullName,
 					BirthDay = user.BirthDay,
 					Gender = user.Gender,

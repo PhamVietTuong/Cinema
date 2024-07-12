@@ -607,13 +607,13 @@ namespace Cinema.Controllers
             }
         }
 
-        [HttpGet("GetInvoiceList/{userId}")]
+        [HttpGet("GetInvoiceList/{phone}")]
         [Authorize(Roles = both)]
-        public async Task<ActionResult<InvoiceViewModel>> GetInvoiceList(Guid userId)
+        public async Task<ActionResult<InvoiceViewModel>> GetInvoiceList(string phone)
         {
             try
             {
-                var result = await _invoiceRepository.InvoiceListOfUserAsync(userId);
+                var result = await _invoiceRepository.InvoiceListOfUserAsync(phone);
 
                 return Ok(result);
             }

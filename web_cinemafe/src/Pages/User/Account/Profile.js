@@ -140,8 +140,8 @@ const Profile = () => {
     const { listInvoiceByUser } = useSelector((state) => state.CinemasReducer)
 
     useEffect(() => {
-        dispatch(GetInvoiceListAction(loginInfo.id));
-    }, [dispatch]);
+        dispatch(GetInvoiceListAction(loginInfo.phone));
+    }, [dispatch, loginInfo.phone]);
 
     const [openTicketInfo, setOpenTickInfo] = useState(false);
     const [codeOfInvoice, setCodeOfInvoice] = useState({});

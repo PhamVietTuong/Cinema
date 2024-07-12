@@ -3,7 +3,7 @@ import React from "react";
 
 const HighlightedText = ({ label, text }) => {
     let textColor = '#333';
-    if (text === 'Đã chiếu' || text === -1) {
+    if (text === 'Đã chiếu' || text === "-1") {
         textColor = 'red';
     } else if (text === 'Đang chiếu') {
         textColor = 'green'; 

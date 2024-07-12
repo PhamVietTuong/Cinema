@@ -103,7 +103,7 @@ const Checkout = () => {
                                                                         </FormLabel>
                                                                     </FormControl>
                                                                     <div className='CheckoutButtonPayment'>
-                                                                        <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth>
+                                                                        <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth onClick={navigate("/")}>
                                                                             Quay lại
                                                                         </Button>
                                                                         <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth onClick={handleCheckout}>
