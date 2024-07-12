@@ -1,3 +1,4 @@
+import 'package:cinema_app/data/models/invoice.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/data/models/seat.dart';
 import 'package:cinema_app/data/models/user.dart';
@@ -21,6 +22,8 @@ class Injector {
   static SeatRepository seatRepoIml = SeatRepositoryIml();
   static UserRepository userRepoIml = UserRepositoryIml();
   static PaymentRepository paymentRepoIml = PaymentRepositoryIml();
+  static  InvoiceRepository invoiceRepoIml = InvoiceRepositoryIml();
+
 
 
 
@@ -32,4 +35,6 @@ class Injector {
   SeatRepository getSeatRepository() => seatRepoIml;
   UserRepository getUserRepository() => userRepoIml;
   PaymentRepository getPaymentRepository() => paymentRepoIml;
+  InvoiceRepository getInvoiceRepository()=>invoiceRepoIml;
+
 }

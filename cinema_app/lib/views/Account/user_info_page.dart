@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/DTO/update_user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
@@ -10,15 +9,16 @@ import 'package:cinema_app/data/models/user.dart';
 
 // ignore: must_be_immutable
 class UserInfoPage extends StatefulWidget {
-  UserInfoPage({Key? key, required this.infoUser}) : super(key: key);
-  User infoUser;
-
+  const UserInfoPage({
+    Key? key,
+  }) : super(key: key);
   @override
   State<UserInfoPage> createState() => _UserInfoPageState();
 }
 
 class _UserInfoPageState extends State<UserInfoPage>
     implements UserViewContract {
+  late bool isMale;
   String textAppBar = "Thông tin người dùng";
   String textSignOut = "Đăng xuất";
   String textTitleSignOut = "Xác nhận đăng xuất";
@@ -26,8 +26,8 @@ class _UserInfoPageState extends State<UserInfoPage>
   String textUpdate = "Cập nhật thông tin";
   String textClose = Constants.textClose;
   late UserPresenter _presenter;
-
-  bool isEditing = false; // State variable to track edit mode
+  late List<String> lstGender;
+  bool isEditing = false;
 
 //  late TextEditingController userName;
   late TextEditingController fullName;
@@ -39,13 +39,15 @@ class _UserInfoPageState extends State<UserInfoPage>
   @override
   void initState() {
     super.initState();
-    //  userName = TextEditingController(text: widget.infoUser.username);
-    fullName = TextEditingController(text: widget.infoUser.fullname);
-    email = TextEditingController(text: widget.infoUser.email);
-    phone = TextEditingController(text: widget.infoUser.phone);
+
+    fullName = TextEditingController(text: Config.userInfo!.fullname);
+    email = TextEditingController(text: Config.userInfo!.email);
+    phone = TextEditingController(text: Config.userInfo!.phone);
+    gender =
+        TextEditingController(text: Config.userInfo!.gender ? "Nam" : "Nữ");
+    isMale = Config.userInfo!.gender;
     birthDay = TextEditingController(
-        text: widget.infoUser.birthday.toLocal().toString().split(' ')[0]);
-    gender = TextEditingController(text: widget.infoUser.gender ? "Nam" : "Nữ");
+        text: Config.userInfo!.birthday.toLocal().toString().split(' ')[0]);
     translate();
     _presenter = UserPresenter(this);
   }
@@ -101,7 +103,7 @@ class _UserInfoPageState extends State<UserInfoPage>
               child: Text(textSignOut),
               onPressed: () async {
                 await Config.logOut();
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.popUntil(context, (route) => route.isFirst);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const BottomNav()),
@@ -115,33 +117,35 @@ class _UserInfoPageState extends State<UserInfoPage>
   }
 
   void handleSave() {
-    final updatedUser = User(
-      username: Config.userInfo!.username,
+    final updatedUser = UpdateUser(
       fullname: fullName.text,
       email: email.text,
       phone: phone.text,
-      birthday: DateTime.parse(birthDay.text),
+      gender: isMale,
       id: Config.userInfo!.id,
-      status: 1,
     );
+    updatedUser.birthday = DateTime.parse(birthDay.text);
+    print("yyyyyyyyyyyy");
 
-    print('Updating user with: ${jsonEncode(updatedUser.toJson())}');
+    // print('Updating user with: ${jsonEncode(updatedUser.toJson())}');
 
     _presenter.updateUser(updatedUser);
   }
 
   @override
-  void loadLoginSuccess(User user) {
-    // Handle login success if needed
-  }
+  void loadLoginSuccess(User user) {}
 
   @override
-  void loadUpdateSuccess(User user) {
+  void loadUpdateSuccess(UpdateUser user) {
     setState(() {
       isEditing = false;
-      widget.infoUser = user;
+      Config.userInfo!.fullname = user.fullname;
+      Config.userInfo!.birthday = user.birthday;
+      Config.userInfo!.gender = user.gender;
+      Config.userInfo!.phone = user.phone;
+      Config.userInfo!.email = user.email;
     });
-    Config.saveInfoUser(user);
+    Config.saveInfoUser(Config.userInfo!);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Cập nhật thông tin thành công!')),
     );
@@ -165,9 +169,7 @@ class _UserInfoPageState extends State<UserInfoPage>
 
   @override
   Widget build(BuildContext context) {
-    print( Config.userInfo!.username,);
-    print(widget.infoUser.fullname);
-
+    print(Config.userInfo!.birthday.toIso8601String());
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -214,7 +216,7 @@ class _UserInfoPageState extends State<UserInfoPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.infoUser.fullname,
+                    Config.userInfo!.fullname,
                     style: TextStyle(
                       color: Styles.boldTextColor[Config.themeMode],
                       fontSize: Styles.iconSizeInTitle,
@@ -267,15 +269,35 @@ class _UserInfoPageState extends State<UserInfoPage>
                 icon: const Icon(Icons.date_range),
                 obscurePassword: false,
               ),
-              InfoTextField(
-                textController: gender,
-                lableText: 'Giới tính',
-                readOnly: !isEditing,
-                icon: gender.text == "Nam"
-                    ? const Icon(Icons.male_outlined)
-                    : const Icon(Icons.female),
-                obscurePassword: false,
-              ),
+
+              isEditing
+                  ? DropdownButton<String>(
+                      value: gender.text,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: Styles.titleFontSize,
+                      elevation: 5,
+                      dropdownColor: Styles.backgroundContent[Config.themeMode],
+                      style: TextStyle(
+                          color: Styles.boldTextColor[Config.themeMode]),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          gender.text = newValue!;
+                          isMale = newValue == "Nam";
+                        });
+                      },
+                      items: <String>[
+                        "Nam",
+                        "Nữ",
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    )
+                  : InfoTextField(
+                      textController: gender,
+                      icon: const Icon(Icons.date_range_outlined)),
               const SizedBox(height: 20),
               if (!isEditing)
                 OutlinedButton(

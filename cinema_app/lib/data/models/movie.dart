@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/services/base_url.dart';
-import 'package:http/http.dart' as http;
 
 import 'showtime.dart';
 // import '../../constants.dart';
