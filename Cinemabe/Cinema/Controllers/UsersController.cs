@@ -110,7 +110,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("ChangePassword")]
-        [Authorize(Roles = user)]
+        [AllowAnonymous]
         public async Task<IActionResult> ChangePassword(string changePassword, string userName)
         {
             if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(changePassword.Trim())) return BadRequest(" UserName or Password is empty");

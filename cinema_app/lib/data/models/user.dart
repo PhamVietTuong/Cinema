@@ -155,8 +155,9 @@ abstract class UserRepository {
   Future<void> register(Register register);
   Future<User> login(Login login);
   Future<ResGetCode> sendAuthCode(String email);
-  Future<UpdateUser> updateUser(UpdateUser user);
-  // Future<void> sendAuthCode(String email);
+  Future<User> updateUser(User user);
+
+  Future<bool> changePass(String pass, String username);
 }
 
 class UserRepositoryIml implements UserRepository {
@@ -253,6 +254,30 @@ class UserRepositoryIml implements UserRepository {
         return ResGetCode.formJson(jsonDecode(response.body));
       } else {
         print('Gửi mã xác thực thất bại. Mã lỗi: ${response.statusCode}');
+        throw (response.body);
+      }
+    } catch (e) {
+      print(e);
+      throw ('$e');
+    }
+  }
+
+  @override
+  Future<bool> changePass(String pass, String username) async {
+    final url =
+        '$serverUrl/api/Users/ChangePassword?changePassword=$pass&userName=$username';
+    try {
+      final body = jsonEncode({
+        'userName': username,
+        'changePassword': pass,
+      });
+
+      final response = await BaseUrl.post(url, body);
+      if (response.statusCode == 200) {
+        print('Đổi mật khẩu thành công');
+        return true;
+      } else {
+        print('Đổi mật khẩu thất bại. Mã lỗi: ${response.statusCode}');
         throw (response.body);
       }
     } catch (e) {
