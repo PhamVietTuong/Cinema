@@ -351,9 +351,12 @@ class _FogotPassScreenState extends State<FogotPassScreen>
   void loadLoginSuccess(User user) {}
 
   @override
-  void loadUpdateSuccess(User user) {}
   
   @override
   void loadChangePassSuccess(bool res) {
+  }
+  
+  @override
+  void loadUpdateSuccess(UpdateUser user) {
   }
 }

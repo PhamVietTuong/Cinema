@@ -155,7 +155,7 @@ abstract class UserRepository {
   Future<void> register(Register register);
   Future<User> login(Login login);
   Future<ResGetCode> sendAuthCode(String email);
-  Future<User> updateUser(User user);
+  Future<UpdateUser> updateUser(UpdateUser user);
 
   Future<bool> changePass(String pass, String username);
 }

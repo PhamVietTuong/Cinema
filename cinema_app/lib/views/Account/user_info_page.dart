@@ -162,9 +162,6 @@ class _UserInfoPageState extends State<UserInfoPage>
   }
 
   @override
-  void onLoadToken(String token, DateTime expirationTime) {}
-
-  @override
   void onRegisterSuccess(String message) {}
 
   @override
@@ -232,7 +229,7 @@ class _UserInfoPageState extends State<UserInfoPage>
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 15),
               // InfoTextField(
               //   textController: userName,
               //   lableText: 'Tên đăng nhập',
@@ -247,6 +244,7 @@ class _UserInfoPageState extends State<UserInfoPage>
                 icon: const Icon(Icons.person_pin),
                 obscurePassword: false,
               ),
+              const SizedBox(height: 15,),
               InfoTextField(
                 textController: email,
                 lableText: 'Email',
@@ -254,6 +252,8 @@ class _UserInfoPageState extends State<UserInfoPage>
                 icon: const Icon(Icons.email_outlined),
                 obscurePassword: false,
               ),
+              const SizedBox(height: 15,),
+
               InfoTextField(
                 textController: phone,
                 lableText: 'Số điện thoại',
@@ -261,6 +261,8 @@ class _UserInfoPageState extends State<UserInfoPage>
                 icon: const Icon(Icons.phone),
                 obscurePassword: false,
               ),
+              const SizedBox(height: 15,),
+
               InfoTextField(
                 textController: birthDay,
                 lableText: 'Sinh nhật',
@@ -269,6 +271,7 @@ class _UserInfoPageState extends State<UserInfoPage>
                 icon: const Icon(Icons.date_range),
                 obscurePassword: false,
               ),
+              const SizedBox(height: 15,),
 
               isEditing
                   ? DropdownButton<String>(
@@ -324,4 +327,7 @@ class _UserInfoPageState extends State<UserInfoPage>
       ),
     );
   }
+
+  @override
+  void loadChangePassSuccess(bool res) {}
 }

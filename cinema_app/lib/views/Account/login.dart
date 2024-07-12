@@ -1,5 +1,6 @@
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/DTO/update_user.dart';
 import 'package:cinema_app/views/Account/password/forgot_pass_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
@@ -79,7 +80,7 @@ class _LoginContentState extends State<LoginContent>
   @override
   void loadLoginSuccess(User user) {
     Config.saveInfoUser(user);
-    print(Config.userInfo!.birthday);
+    //print(Config.userInfo!.birthday);
     showDialogOnLoadSuccess(user);
   }
 
@@ -108,13 +109,6 @@ class _LoginContentState extends State<LoginContent>
         );
       },
     );
-  }
-
-  void _saveTokenToLocal(String token, DateTime expirationTime) async {
-    // await Config.saveToken(token, expirationTime);
-    setState(() {
-    });
-    //print('Token : $_token , $_tokenExpirationTime');
   }
 
   @override
@@ -219,9 +213,11 @@ class _LoginContentState extends State<LoginContent>
 
   @override
   void onRegisterSuccess(String message) {}
-  @override
-  void loadUpdateSuccess(user) {}
 
   @override
   void loadChangePassSuccess(bool res) {}
+
+  @override
+  void loadUpdateSuccess(UpdateUser user) {
+  }
 }
