@@ -17,6 +17,7 @@ namespace Cinema.Controllers
     {
         private const string user = "user";
         private const string admin = "admin";
+        private const string both = "admin,user";
 
         private readonly IAgeRestrictionRepository _ageRestrictionRepository;
         private readonly IFoodAndDrinkRepository _foodAndDrinkRepository;
@@ -79,7 +80,7 @@ namespace Cinema.Controllers
         #region Movie
 
         [HttpGet("GetMovieListAdmin")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<List<MovieDTO>>> GetMovieListAdmin()
         {
             try
@@ -109,7 +110,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("CreateMovie")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<MovieDTO>> CreateMovie([FromForm] MovieDTO m)
         {
             try
@@ -170,12 +171,27 @@ namespace Cinema.Controllers
             }
         }
 
+        [HttpPost("UpdateMovie")]
+        [Authorize(Roles = admin)]
+        public async Task<ActionResult<MovieDetailViewModel>> UpdateMovie(MovieDTO entity)
+        {
+            try
+            {
+                var result = await _movieRepository.UpdateAsync(entity);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
         #endregion
 
         #region MovieType
 
         [HttpGet("GetMovieTypeList")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<List<MovieTypeDTO>>> GetMovieTypeList()
         {
             try
@@ -191,7 +207,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("UpdateMovieType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<MovieTypeDTO>> UpdateMovieType(MovieTypeDTO entity)
         {
             try
@@ -212,7 +228,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("CreateMovieType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<MovieTypeDTO>> CreateMovieType(MovieTypeDTO entity)
         {
             try
@@ -271,7 +287,7 @@ namespace Cinema.Controllers
         #region SeatType
 
         [HttpGet("GetSeatTypeList")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<List<SeatTypeDTO>>> GetSeatTypeList()
         {
             try
@@ -287,7 +303,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("UpdateSeatType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<SeatTypeDTO>> UpdateSeatType(SeatTypeDTO entity)
         {
             try
@@ -308,7 +324,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("CreateSeatType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<SeatTypeDTO>> CreateSeatType(SeatTypeDTO entity)
         {
             try
@@ -365,7 +381,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetTheater/{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = both)]
         public async Task<ActionResult<TheaterDTO>> GetTheater(Guid id)
         {
             try
@@ -386,7 +402,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetTheaterListAdmin")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<List<TheaterDTO>>> GetTheaterListAdmin()
         {
             try
@@ -402,7 +418,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("UpdateTheater")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<TheaterDTO>> UpdateTheater(TheaterDTO entity)
         {
             try
@@ -423,12 +439,28 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("CreateTheater")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<TheaterDTO>> CreateTheater([FromForm] TheaterDTO entity)
         {
             try
             {
                 var result = await _theaterRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("GetTheaterRoomList")]
+        [Authorize(Roles = admin)]
+        public async Task<ActionResult<List<TheaterDTO>>> GetTheaterRoomList()
+        {
+            try
+            {
+                var result = await _theaterRepository.GetTheaterRoomListAsync();
 
                 return Ok(result);
             }
@@ -474,7 +506,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("UpdateTicketType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<TicketTypeDTO>> UpdateTicketType(TicketTypeDTO entity)
         {
             try
@@ -495,7 +527,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("CreateTicketType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<TicketTypeDTO>> CreateTicketType(TicketTypeDTO entity)
         {
             try
@@ -560,7 +592,7 @@ namespace Cinema.Controllers
         #region Invoice
 
         [HttpGet("GetInvoice/{code}")]
-        [Authorize(Roles = user)]
+        [Authorize(Roles = both)]
         public async Task<ActionResult<InvoiceViewModel>> GetInvoice(string code)
         {
             try
@@ -576,7 +608,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetInvoiceList/{userId}")]
-        [Authorize(Roles = user)]
+        [Authorize(Roles = both)]
         public async Task<ActionResult<InvoiceViewModel>> GetInvoiceList(Guid userId)
         {
             try
@@ -592,8 +624,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("GetRevenue")]
-        //[Authorize(Roles = admin)]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<RevenueTheaterViewModel>> GetRevenue([FromBody] FilterRevenue filterRevenue)
         {
             try
@@ -609,8 +640,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetListInvoice")]
-        //[Authorize(Roles = admin)]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<RevenueTheaterViewModel>> GetListInvoice()
         {
             try
@@ -630,7 +660,7 @@ namespace Cinema.Controllers
         #region AgeRestriction
 
         [HttpGet("GetAgeRestrictionList")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<List<AgeRestrictionDTO>>> GetAgeRestrictionList()
         {
             try
@@ -646,7 +676,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("UpdateAgeRestriction")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<AgeRestrictionDTO>> UpdateAgeRestriction(AgeRestrictionDTO entity)
         {
             try
@@ -667,7 +697,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("CreateAgeRestriction")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<AgeRestrictionDTO>> CreateAgeRestriction(AgeRestrictionDTO entity)
         {
             try
@@ -687,7 +717,7 @@ namespace Cinema.Controllers
         #region UserType
 
         [HttpGet("GetUserTypeList")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<List<UserTypeDTO>>> GetUserTypeList()
         {
             try
@@ -703,7 +733,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("UpdateUserType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<UserTypeDTO>> UpdateUserType(UserTypeDTO entity)
         {
             try
@@ -724,7 +754,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("CreateUserType")]
-        [AllowAnonymous]
+        [Authorize(Roles = admin)]
         public async Task<ActionResult<UserTypeDTO>> CreateUserType(UserTypeDTO entity)
         {
             try

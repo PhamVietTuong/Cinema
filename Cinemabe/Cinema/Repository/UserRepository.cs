@@ -209,8 +209,8 @@ namespace Cinema.Repository
 				{
 					Token = tokenHandler.WriteToken(token),
 					ExpirationTime = expirationTime,
-					Authority = authority
-				};
+					Authority = role
+                };
 			}
 			else
 			{
@@ -283,6 +283,8 @@ namespace Cinema.Repository
 				}
 
 				var passwordHashSalt = PasswordUtils.EncryptPassword(register.Password);
+
+				var memberFirst = await _context.MemberShip.FirstOrDefaultAsync(x => x.Value == 0);
 				var newUser = new User
 				{
 					Id = Guid.NewGuid(),
@@ -294,6 +296,7 @@ namespace Cinema.Repository
 					BirthDay = register.BirthDay,
 					//nam:true, nu:false
 					Gender = register.Gender,
+					MemberShipId = memberFirst.Id,
 					Status = true,
 					PasswordSalt = passwordHashSalt.Salt,
 					PasswordHash = passwordHashSalt.Hash,

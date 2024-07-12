@@ -52,41 +52,38 @@ class _InfoTextFieldState extends State<InfoTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: TextField(
-        onTap: widget.onTap,
-        controller: widget.textController,
-        style: TextStyle(
+    return TextField(
+      onTap: widget.onTap,
+      controller: widget.textController,
+      style: TextStyle(
+        color: Styles.boldTextColor[Config.themeMode],
+        fontSize: Styles.titleFontSize,
+      ),
+      obscureText: _isObscure, // Sử dụng biến trạng thái
+      readOnly: widget.readOnly,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        labelText: textTitle,
+        labelStyle: TextStyle(
           color: Styles.boldTextColor[Config.themeMode],
-          fontSize: Styles.titleFontSize,
+          fontSize: Styles.iconSizeInLineText,
         ),
-        obscureText: _isObscure, // Sử dụng biến trạng thái
-        readOnly: widget.readOnly,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          labelText: textTitle,
-          labelStyle: TextStyle(
-            color: Styles.boldTextColor[Config.themeMode],
-            fontSize: Styles.iconSizeInLineText,
-          ),
-          prefixIcon: widget.icon,
-          suffixIcon: widget.obscurePassword
-              ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _isObscure = !_isObscure;
-                    });
-                  },
-                  child: Icon(
-                    _isObscure ? Icons.visibility : Icons.visibility_off,
-                    color: Styles.boldTextColor[Config.themeMode],
-                  ),
-                )
-              : null,
-        ),
+        prefixIcon: widget.icon,
+        suffixIcon: widget.obscurePassword
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isObscure = !_isObscure;
+                  });
+                },
+                child: Icon(
+                  _isObscure ? Icons.visibility : Icons.visibility_off,
+                  color: Styles.boldTextColor[Config.themeMode],
+                ),
+              )
+            : null,
       ),
     );
   }

@@ -488,7 +488,7 @@ class _PayScreenState extends State<PayScreen> {
                       "ShowTimeId": widget.booking.showtime.showTimeId,
                       "RoomId": widget.booking.showtime.roomId,
                       "TheaterId": widget.booking.theater.id,
-                      "UserId": '0B2F669A-D370-400D-8C46-43FE22D24A4F',
+                      "UserId": Config.userInfo!.id,
                       "OrderInfo": "CKC cinema app",
                       "InvoiceTickets": tBoxs
                           .map((e) => {

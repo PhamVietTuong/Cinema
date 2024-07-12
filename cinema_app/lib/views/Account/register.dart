@@ -210,7 +210,7 @@ class _RegisterContentState extends State<RegisterContent>
                   readOnly: false,
                 ),
                 InfoTextField(
-                  textController: _passwordController,
+                  textController: _confirmPasswordController,
                   icon: const Icon(Icons.password),
                   lableText: 'Nhập lại mật khẩu',
                   obscurePassword: true,

@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/components/bottom_nav.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import 'config.dart';
 
 void main() async {
- HttpOverrides.global = MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Config.initialize();
   runApp(const MyApp());
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return  MaterialApp(
+    return OverlaySupport.global(
+        child: MaterialApp(
       title: 'Cinema App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -36,8 +37,7 @@ class MyApp extends StatelessWidget {
           },
         ),
       ),
-      home:const BottomNav(),
-
-    );
+      home: const BottomNav(),
+    ));
   }
 }

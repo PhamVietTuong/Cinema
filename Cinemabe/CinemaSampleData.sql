@@ -17,6 +17,17 @@ DELETE FROM SeatType;
 DELETE FROM FoodAndDrinkTheater;
 DELETE FROM Theater;
 DELETE FROM FoodAndDrink;
+DELETE FROM InvoiceFoodAndDrink;
+DELETE FROM InvoiceTicket;
+DELETE FROM Invoice;
+DELETE FROM News;
+DELETE FROM Comment;
+DELETE FROM Holiday;
+DELETE FROM Discount;
+DELETE FROM DiscountType;
+Delete From MemberShip;
+
+
 
 
 DECLARE @NEW_GUID UNIQUEIDENTIFIER;
@@ -40,39 +51,39 @@ Insert MemberShip(Id, Name, Description,Value, Status) values (@Guid_MemberShip1
 (@Guid_MemberShip2, N'Bạc', null,5000, 1), (@Guid_MemberShip3, N'Vàng', null,10000, 1)
 --holiday
 -- Tết Nguyên Đán
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Tết Nguyên Đán', N'Tết Âm lịch, ngày lễ lớn nhất ở Việt Nam', '02-10', '02-10', 1);
 
 -- Ngày Quốc tế Lao động
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Ngày Quốc tế Lao động', N'Ngày lễ kỷ niệm công nhân và lao động quốc tế', '05-01', '05-01', 1);
 
 -- Ngày Giải phóng miền Nam
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Ngày Giải phóng miền Nam', N'Kỷ niệm ngày Giải phóng miền Nam, thống nhất đất nước', '04-30', '04-30', 1);
 
 -- Tết Trung Thu
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Tết Trung Thu', N'Ngày lễ dành cho thiếu nhi', '09-13', '09-13', 1);
 
 -- Giáng Sinh
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Giáng Sinh', N'Ngày lễ kỷ niệm Chúa Giêsu ra đời', '12-25', '12-25', 1);
 
 -- Ngày Quốc khánh
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Ngày Quốc khánh', N'Ngày kỷ niệm thành lập nước Việt Nam', '09-02', '09-02', 1);
 
 -- Ngày Phụ nữ Việt Nam
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Ngày Phụ nữ Việt Nam', N'Ngày tôn vinh phụ nữ Việt Nam', '10-20', '10-20', 1);
 
 -- ngày quốc tế phụ nữ
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Ngày quốc tế phụ nữ', N'Ngày quốc tế phụ nữ', '03-08', '03-08', 1);
 
 -- Ngày Nhà giáo Việt Nam
-INSERT INTO [Holiday] ([Id], [Name], [Description], [StartDate], [EndDate], [Status])
+INSERT INTO [Holiday] ([Id], [Name], [Description], [StartTime], [EndTime], [Status])
 VALUES (NEWID(), N'Ngày Nhà giáo Việt Nam', N'Ngày tôn vinh các nhà giáo', '11-20', '11-20', 1);
 
 DECLARE @Guid_DiscountType1 UNIQUEIDENTIFIER;
@@ -80,11 +91,11 @@ DECLARE @Guid_DiscountType2 UNIQUEIDENTIFIER;
 DECLARE @Guid_DiscountType3 UNIQUEIDENTIFIER;
 --discount type 
 SET @Guid_DiscountType1 = NEWID();
-INSERT DiscountType(Id, Name) VALUES (@Guid_DiscountType1, N'amout')
+INSERT DiscountType(Id, Name, status) VALUES (@Guid_DiscountType1, N'amout', 1)
 SET @Guid_DiscountType2 = NEWID();
-INSERT DiscountType(Id, Name) VALUES (@Guid_DiscountType2, N'precent')
+INSERT DiscountType(Id, Name,status) VALUES (@Guid_DiscountType2, N'precent',1)
 SET @Guid_DiscountType3 = NEWID();
-INSERT DiscountType(Id, Name) VALUES (@Guid_DiscountType3, N'gift')
+INSERT DiscountType(Id, Name,status) VALUES (@Guid_DiscountType3, N'gift',1)
 
 --user type
 set @NEW_GUID =NEWID();
@@ -466,62 +477,62 @@ INSERT MovieTypeDetail(MovieId, MovieTypeId) VALUES (@GUID_movie10, @GUID_movieT
 --kong
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-06-11T08:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-07-13T08:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-06-11T09:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,0, '2024-07-14T09:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,1, '2024-06-11T08:30:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID, @GUID_movie1,1, '2024-07-13T08:30:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 --spider
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,0, '2024-06-11T11:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,0, '2024-07-13T11:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-11T11:30:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-07-13T11:30:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-06-11T12:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie5,1, '2024-07-13T12:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 
 --dune
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-06-11T14:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-07-13T14:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-06-11T15:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie3,0, '2024-07-13T15:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --batman
 --2d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie4,0, '2024-06-11T14:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie4,0, '2024-07-13T14:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room2);
 
 --avatar
 --3d
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-11T18:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-07-13T18:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-11T17:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-07-13T17:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room1);
 
 SET @NEW_GUID = NEWID();
-INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-06-11T21:00:00', getdate(), 1)
+INSERT ShowTime(Id, MovieId, ProjectionForm, StartTime, EndTime, Status) VALUES (@NEW_GUID,@GUID_movie2,0, '2024-07-13T21:00:00', getdate(), 1)
 INSERT ShowTimeRoom(ShowTimeId, RoomId) VALUES ( @NEW_GUID, @GUID_room3);
 
 --ticket type
@@ -549,11 +560,11 @@ INSERT SeatType(Id, Name, Status) VALUES (@GUID_seatType3, N'Nằm', 1)
 --đơn - hssv, lớn
 Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType1,45000,65000,45000,65000)
 Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType1,@GUID_TicketType2,70000,90000,45000,65000)
---đôi - lớn
+--đôi - lớn                                             
 Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType2,@GUID_TicketType2,145000,165000,95000,115000)
 --nằm - hssv, lớn
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000, 110000,null,null)
-Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType2,190000,210000,null,null)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType1, 90000, 110000,90000,110000)
+Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price2D, Price3D,PriceDiscount2D,PriceDiscount3D) VALUES(@GUID_seatType3,@GUID_TicketType2,190000,210000,190000,210000)
 
 -- --đơn - hssv, lớn
 -- Insert SeatTypeTicketType(SeatTypeId, TicketTypeId,Price) VALUES(@GUID_seatType1,@GUID_TicketType1,45000)
