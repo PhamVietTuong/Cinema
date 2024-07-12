@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'package:cinema_app/data/models/seat_row.dart';
 import 'package:cinema_app/services/base_url.dart';
-import 'package:http/http.dart' as http;
 import '../../config.dart';
 
 class Seat {

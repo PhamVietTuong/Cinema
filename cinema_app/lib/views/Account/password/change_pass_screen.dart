@@ -3,6 +3,7 @@
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/DTO/update_user.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
 import 'package:flutter/material.dart';
@@ -184,9 +185,6 @@ class _ChangePassWordScreenState extends State<ChangePassWordScreen>
   void loadLoginSuccess(User user) {}
 
   @override
-  void loadUpdateSuccess(User user) {}
-
-  @override
   void onGetCodeSuccess(ResGetCode res) {}
 
   @override
@@ -199,4 +197,8 @@ class _ChangePassWordScreenState extends State<ChangePassWordScreen>
 
   @override
   void onRegisterSuccess(String message) {}
+
+  @override
+  void loadUpdateSuccess(UpdateUser user) {
+  }
 }

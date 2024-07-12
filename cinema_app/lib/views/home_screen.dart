@@ -96,7 +96,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AccountScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const AccountScreen()),
                   );
                 },
                 icon: const Icon(Icons.person_outlined),
@@ -107,10 +108,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => UserInfoPage(
-                              infoUser: Config.userInfo!,
-                            )),
+                    MaterialPageRoute(builder: (context) => const UserInfoPage()),
                   );
                 },
                 icon: const Icon(Icons.person_outlined),

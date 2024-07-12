@@ -23,20 +23,20 @@ class _RegisterContentState extends State<RegisterContent>
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  
+
   late UserPresenter _presenter;
   bool isMale = true;
- late String selectedGender;
+  late String selectedGender;
   String textPass = "Mật khẩu";
   String textConfirmPass = "Nhập lại mật khẩu";
   String textbirthday = "Ngày sinh";
   String textRegister = "Đăng ký";
- late String textMale;
+  late String textMale;
   String textWoman = "Nữ";
   String textErorr = "Lỗi";
   String textClose = Constants.textClose;
   String textSuccess = "Thành công";
- late List<String> gender;
+  late List<String> gender;
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
       Styles.translate(textPass),
@@ -66,14 +66,13 @@ class _RegisterContentState extends State<RegisterContent>
   @override
   void initState() {
     super.initState();
-    textMale=Config.languageMode==Constants.codeVNKey?"Nam":"Nam giới";
-    selectedGender=textMale;
+    textMale = Config.languageMode == Constants.codeVNKey ? "Nam" : "Nam giới";
+    selectedGender = textMale;
     _presenter = UserPresenter(this);
     _birthdayController.text =
         DateTime.now().toLocal().toString().split(' ')[0];
-    gender=[textMale,textWoman];
+    gender = [textMale, textWoman];
     tranlate();
-
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -143,7 +142,6 @@ class _RegisterContentState extends State<RegisterContent>
                 Navigator.of(context).popUntil(
                   (route) => route.isFirst,
                 );
-
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -160,14 +158,13 @@ class _RegisterContentState extends State<RegisterContent>
 
   @override
   Widget build(BuildContext context) {
-    //  print(selectedGender);
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Styles.backgroundContent[Config.themeMode],
               borderRadius: BorderRadius.circular(10),
@@ -181,12 +178,18 @@ class _RegisterContentState extends State<RegisterContent>
                   readOnly: false,
                   obscurePassword: false,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 InfoTextField(
                   textController: _fullNameController,
                   icon: const Icon(Icons.person_pin),
                   lableText: 'Họ và tên',
                   readOnly: false,
                   obscurePassword: false,
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 InfoTextField(
                   textController: _emailController,
@@ -195,12 +198,18 @@ class _RegisterContentState extends State<RegisterContent>
                   readOnly: false,
                   obscurePassword: false,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 InfoTextField(
                   textController: _phoneController,
                   icon: const Icon(Icons.phone),
                   lableText: 'Số điện thoại',
                   obscurePassword: false,
                   readOnly: false,
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 InfoTextField(
                   textController: _passwordController,
@@ -209,6 +218,9 @@ class _RegisterContentState extends State<RegisterContent>
                   obscurePassword: true,
                   readOnly: false,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 InfoTextField(
                   textController: _confirmPasswordController,
                   icon: const Icon(Icons.password),
@@ -216,8 +228,10 @@ class _RegisterContentState extends State<RegisterContent>
                   obscurePassword: true,
                   readOnly: false,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
@@ -229,39 +243,40 @@ class _RegisterContentState extends State<RegisterContent>
                       obscurePassword: false,
                       onTap: () {
                         _selectDate(context);
-                        setState(() {
-                          
-                        });
+                        setState(() {});
                       },
                     )),
-                    DropdownButton<String>(
-                      value: selectedGender,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: Styles.titleFontSize,
-                      elevation: 5,
-                      dropdownColor: Styles.backgroundContent[Config.themeMode],
-                      style: TextStyle(
-                          color: Styles.boldTextColor[Config.themeMode]),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedGender = newValue!;
-                          if (newValue == selectedGender) {
-                            isMale = true;
-                          } else {
-                            isMale = false;
-                          }
-                        });
-                      },
-                      items:<String>[
-                              textMale,
-                              textWoman,
-                            ].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList()
+                    const SizedBox(
+                      width: 5,
                     ),
+                    DropdownButton<String>(
+                        value: selectedGender,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: Styles.titleFontSize,
+                        elevation: 5,
+                        dropdownColor:
+                            Styles.backgroundContent[Config.themeMode],
+                        style: TextStyle(
+                            color: Styles.boldTextColor[Config.themeMode]),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedGender = newValue!;
+                            if (newValue == selectedGender) {
+                              isMale = true;
+                            } else {
+                              isMale = false;
+                            }
+                          });
+                        },
+                        items: <String>[
+                          textMale,
+                          textWoman,
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList()),
                   ],
                 ),
                 const SizedBox(
@@ -290,10 +305,8 @@ class _RegisterContentState extends State<RegisterContent>
   void loadUpdateSuccess(user) {}
 
   @override
-  void onGetCodeSuccess(ResGetCode res) {
-  }
-  
-  
+  void onGetCodeSuccess(ResGetCode res) {}
+
   @override
   void loadChangePassSuccess(bool res) {
     // TODO: implement loadChangePassSuccess

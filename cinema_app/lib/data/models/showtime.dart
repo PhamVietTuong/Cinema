@@ -5,7 +5,6 @@ import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/services/base_url.dart';
 
 import '../../config.dart';
-import 'package:http/http.dart' as http;
 
 class ShowtimeRoom {
   String roomId;

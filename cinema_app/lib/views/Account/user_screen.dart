@@ -1,5 +1,6 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/Account/account_screen.dart';
+import 'package:cinema_app/views/Account/invoice/history_invoice_screen.dart';
 import 'package:cinema_app/views/Account/setting_screen.dart';
 import 'package:cinema_app/views/Account/user_info_page.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,7 @@ class _UserState extends State<UserScreen> {
       ),
       backgroundColor: Styles.backgroundColor[Config.themeMode],
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Config.userInfo != null
@@ -119,13 +120,12 @@ class _UserState extends State<UserScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => UserInfoPage(
-                                              infoUser: Config.userInfo!,
-                                            )),
+                                        builder: (context) =>
+                                            const UserInfoPage()),
                                   );
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.all(3),
+                                  padding: const EdgeInsets.all(3),
                                   decoration: BoxDecoration(
                                     color: Colors.grey,
                                     borderRadius: BorderRadius.circular(30),
@@ -186,7 +186,14 @@ class _UserState extends State<UserScreen> {
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HistoryInvoiceScreen()),
+                                );
+                              },
                               child: Container(
                                 child: Column(
                                   children: [
@@ -288,7 +295,7 @@ class _UserState extends State<UserScreen> {
                           ),
                         ),
                         child: Text(
-                          '${textLogin} / ${textRegister}',
+                          '$textLogin / $textRegister',
                           style: TextStyle(
                             color: Styles.boldTextColor[Config.themeMode],
                             fontSize: Styles.titleFontSize,

@@ -210,7 +210,7 @@ namespace Cinema.Repository
 					Token = tokenHandler.WriteToken(token),
 					ExpirationTime = expirationTime,
 					Authority = role
-                };
+				};
 			}
 			else
 			{
@@ -223,9 +223,9 @@ namespace Cinema.Repository
 			try
 			{
 				if (string.IsNullOrEmpty(register.UserName) || string.IsNullOrEmpty(register.FullName) ||
-					string.IsNullOrEmpty(register.Password) || string.IsNullOrEmpty(register.ConfirmPassword))
+					string.IsNullOrEmpty(register.Password) || string.IsNullOrEmpty(register.ConfirmPassword) || string.IsNullOrEmpty(register.Email) || string.IsNullOrEmpty(register.Phone)|| string.IsNullOrEmpty(register.BirthDay.ToString()))
 				{
-					throw new ArgumentException("Tên người dùng, họ và tên, mật khẩu không được để trống.");
+					throw new ArgumentException("Tên người dùng, họ và tên, email, số điện thoại, ngày sinh, mật khẩu không được để trống.");
 				}
 
 				if (!Validate.IsValidPassword(register.Password))
@@ -236,12 +236,12 @@ namespace Cinema.Repository
 				{
 					throw new ArgumentException("Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới.");
 				}
-				if (!string.IsNullOrEmpty(register.Email) && !Validate.IsEmail(register.Email))
+				if ( !Validate.IsEmail(register.Email))
 				{
 					throw new ArgumentException("Địa chỉ email không hợp lệ.");
 				}
 
-				if (!string.IsNullOrEmpty(register.Phone) && !Validate.IsPhoneNumber(register.Phone))
+				if (!Validate.IsPhoneNumber(register.Phone))
 				{
 					throw new ArgumentException("Số điện thoại không hợp lệ.");
 				}

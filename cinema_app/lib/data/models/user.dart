@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/DTO/update_user.dart';
 import 'package:cinema_app/data/models/validation.dart';
 import 'package:cinema_app/services/base_url.dart';
 
@@ -154,7 +155,7 @@ abstract class UserRepository {
   Future<void> register(Register register);
   Future<User> login(Login login);
   Future<ResGetCode> sendAuthCode(String email);
-  Future<User> updateUser(User user);
+  Future<UpdateUser> updateUser(UpdateUser user);
 
   Future<bool> changePass(String pass, String username);
 }
@@ -165,13 +166,16 @@ class UserRepositoryIml implements UserRepository {
   Future<void> register(Register register) async {
     final url = '$serverUrl/api/Users/Register';
 
-    if (register.userName.isEmpty ||
-        register.fullName.isEmpty ||
-        register.password.isEmpty ||
-        register.confirmPassword.isEmpty) {
-      throw ('Tên người dùng, họ và tên, mật khẩu không được để trống.');
+    if (register.userName.trim().isEmpty ||
+        register.fullName.trim().isEmpty ||
+        register.password.trim().isEmpty ||
+        register.confirmPassword.trim().isEmpty ||
+        register.email.trim().isEmpty||
+        register.phone.trim().isEmpty||
+        register.birthDay.toString().isEmpty
+        ) {
+      throw ('Tên người dùng, họ và tên, email, số điện thoại, ngày sinh, mật khẩu không được để trống.');
     }
-
     if (register.password != register.confirmPassword) {
       throw ('Mật khẩu và mật khẩu nhập lại không khớp.');
     }
@@ -181,15 +185,12 @@ class UserRepositoryIml implements UserRepository {
     if (!Validation.isValidPassword(register.password)) {
       throw ('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.');
     }
-
-    if (register.email.isNotEmpty && !Validation.isValidEmail(register.email)) {
+    if (!Validation.isValidEmail(register.email)) {
       throw ('Địa chỉ email không hợp lệ.');
     }
-
-    if (register.phone.isNotEmpty && !Validation.isValidPhone(register.phone)) {
+    if (!Validation.isValidPhone(register.phone)) {
       throw ('Số điện thoại không hợp lệ.');
     }
-
     try {
       final response = await BaseUrl.post(url, jsonEncode(register.toJson()));
       if (response.statusCode == 200) {
@@ -201,14 +202,12 @@ class UserRepositoryIml implements UserRepository {
       throw ('$e');
     }
   }
-
 //end registration
 
 //Handle event login
   @override
   Future<User> login(Login login) async {
     final url = '$serverUrl/api/Users/LoginUser';
-
     try {
       final response = await BaseUrl.post(url, jsonEncode(login.toJson()));
       if (response.statusCode == 200) {
@@ -225,14 +224,14 @@ class UserRepositoryIml implements UserRepository {
   }
 
   @override
-  Future<User> updateUser(User user) async {
+  Future<UpdateUser> updateUser(UpdateUser user) async {
     final url = '$serverUrl/api/Users/UpdateUser';
-
     try {
       final response = await BaseUrl.post(url, jsonEncode(user.toJson()));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        return User.fromJson(jsonResponse);
+        print(jsonDecode(response.body));
+        return UpdateUser.fromJson(jsonResponse);
       } else {
         // print(response.body);
         throw (response.body);
