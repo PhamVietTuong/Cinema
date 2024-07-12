@@ -116,7 +116,7 @@ const Header = (props) => {
                                                         </Link>
                                                         {
                                                             loginInfo.type === 'admin' && (
-                                                                <Link to="/admin" className="link" href="">
+                                                                <Link to="/admin/revenue" className="link" href="">
                                                                     <FontAwesomeIcon icon={faUser} />
                                                                     Quản trị viên
                                                                 </Link>

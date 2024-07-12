@@ -37,6 +37,9 @@ namespace Cinema.Data
 
             modelBuilder.Entity<Invoice>()
                 .HasKey(x => new { x.Code });
+
+            modelBuilder.Entity<User>()
+                .HasKey(x => new { x.Phone });
         }
 
         public DbSet<User> User { get; set; }

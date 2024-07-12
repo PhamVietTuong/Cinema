@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { userService } from "../../Services/UserService";
-import { LOGIN_USER, LOGOUT, SET_LIST_USER } from "./Type/UserType";
+import { LOGIN_USER, LOGOUT, SET_LIST_USER, SET_RESULT_SEND_CODE } from "./Type/UserType";
 
 export const LoginUserAction = (loginInfo, rememberMe, callBack) => {
     return async (dispatch) => {
@@ -64,17 +64,10 @@ export const ForgetPasswordAction = (email, navigate) => {
             const result = await userService.ForgetPassword(email);
 
             if (result.status === 200) {
-                Swal.fire({
-                    title: `ĐẶT LẠI MẬT KHẨU THÀNH CÔNG`,
-                    text: "Mật khẩu đã được đặt lại, vui lòng kiểm tra email và tiến hành đăng nhập.",
-                    padding: "15px",
-                    width: "650px",
-                    confirmButtonText: "Đăng nhập",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        navigate("/login");
-                    }
-                });
+                dispatch({
+                    type: SET_RESULT_SEND_CODE,
+                    resultSendCode: result.data,
+                })
             }
         } catch (error) {
             Swal.fire({
@@ -84,6 +77,36 @@ export const ForgetPasswordAction = (email, navigate) => {
                 confirmButtonText: "Thử lại",
             });
             console.log("LoginUserAction: ", error);
+        }
+    }
+}
+
+
+export const ChangePasswordNewAction = (changePassword, userName, navigate) => {
+    return async (dispatch) => {
+        try {
+            const result = await userService.ChangePassword(changePassword, userName, navigate);
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Đổi mật khẩu thành công, vui lòng đăng nhập lại!",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    navigate("/login");
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                padding: "24px",
+                width: "400px",
+                title: "Đã xảy ra lỗi!",
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("UpdateUserAction: ", error);
+                }
+            });
         }
     }
 }

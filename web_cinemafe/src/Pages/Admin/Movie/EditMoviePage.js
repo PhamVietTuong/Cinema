@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DOMAIN } from "../../../Ustil/Settings/Config";
 import { useNavigate, useParams } from "react-router-dom";
 import { MovieByIdActionAdmin, GetAgeRestrictionListAction, GetMovieTypeListAction, GetTheaterRoomListAction, UpdateMovieAction } from "../../../Redux/Actions/CinemasAction";
-import { TextField, Grid, Button, Box, FormControl, InputLabel, Select, MenuItem, FormHelperText, Typography, Radio, RadioGroup, FormControlLabel } from "@mui/material";
+import { TextField, Grid, Button, Box, FormControl, InputLabel, Select, MenuItem, FormHelperText, Typography, Radio, RadioGroup, FormControlLabel, Switch } from "@mui/material";
 import moment from 'moment';
 import HighlightedText from './HighlightedText';
 import { format } from 'date-fns';
@@ -66,6 +66,10 @@ const EditMoviePage = () => {
             ...prevData,
             [name]: value,
         }));
+    };
+
+    const handleSwitchChange = (event) => {
+        setMovieData({ ...movieData, [event.target.name]: event.target.checked });
     };
 
     const handleNewShowTimeChange = (event) => {
@@ -186,12 +190,31 @@ const EditMoviePage = () => {
     }
 
     useEffect(() => {
-        console.log(movieData);
-    }, [movieData]);
+        if (movie) {
+            setMovieData({
+                id: movie.id,
+                name: movie.name,
+                ageRestrictionId: movie.ageRestrictionId,
+                image: movie.image,
+                time2D: movie.time2D,
+                time3D: movie.time3D,
+                releaseDate: movie.releaseDate,
+                actor: movie.actor,
+                director: movie.director,
+                description: movie.description,
+                languages: movie.languages,
+                trailer: movie.trailer,
+                status: movie.status,
+                movieTypes: movie.movieTypes,
+                showTimeRooms: movie.showTimeRooms,
+            });
+        }
+    }, [movie]);
+
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ margin: 'auto', mt: 5 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-                <Button onClick={() => { }} color="secondary">Hủy</Button>
+                <Button onClick={() => navigate('/admin/Movie')} color="secondary">Hủy</Button>
                 <Button type="submit" color="primary">Lưu</Button>
             </Box>
             <Grid container spacing={2} display={"flex"}>
@@ -340,6 +363,18 @@ const EditMoviePage = () => {
                         variant="outlined"
                         value={movieData.trailer}
                         onChange={handleChange}
+                    />
+                    <FormControlLabel
+                        label="Trạng thái"
+                        labelPlacement="start"
+                        control={
+                            <Switch
+                                checked={movieData.status}
+                                onChange={handleSwitchChange}
+                                name="status"
+                                color="primary"
+                            />
+                        }
                     />
                 </Grid>
             </Grid>

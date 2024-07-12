@@ -1,5 +1,5 @@
 import { TOKEN, USER_LOGIN } from "../../Ustil/Settings/Config";
-import { LOGIN_USER, LOGOUT, REGISTER_USER, SET_LIST_USER } from "../Actions/Type/UserType";
+import { LOGIN_USER, LOGOUT, REGISTER_USER, SET_LIST_USER, SET_RESULT_SEND_CODE } from "../Actions/Type/UserType";
 
 let user = {};
 if (localStorage.getItem(USER_LOGIN) || sessionStorage.getItem(USER_LOGIN)) {
@@ -9,8 +9,9 @@ if (localStorage.getItem(USER_LOGIN) || sessionStorage.getItem(USER_LOGIN)) {
 const stateDefault = {
     loginInfo: user,
     isLoggedIn: Object.keys(user).length !== 0,
-    userId: user.id,
+    userId: user.phone,
     listUser: [],
+    resultSendCode: {}
 }
 
 export const UserReducer = (state = stateDefault, action) => {
@@ -30,7 +31,7 @@ export const UserReducer = (state = stateDefault, action) => {
                 ...state,
                 isLoggedIn: true,
                 loginInfo: loginInfo,
-                userId: loginInfo.id
+                userId: loginInfo.phone
             };
         }
 
@@ -50,6 +51,11 @@ export const UserReducer = (state = stateDefault, action) => {
 
         case SET_LIST_USER: {
             return { ...state, listUser: action.listUser };
+        }
+
+        case SET_RESULT_SEND_CODE: {
+            console.log(action.resultSendCode);
+            return { ...state, resultSendCode: action.resultSendCode };
         }
 
         default: return { ...state };

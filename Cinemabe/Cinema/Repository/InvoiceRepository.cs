@@ -90,9 +90,9 @@ namespace Cinema.Repository
             return true;
         }
 
-        public async Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(Guid? userId)
+        public async Task<List<InvoiceViewModel>> InvoiceListOfUserAsync(string phone)
         {
-            var invoices = await _context.Invoice.Where(x => x.UserId == userId && x.Status == InvoiceStatus.Successful).ToListAsync();
+            var invoices = await _context.Invoice.Where(x => x.Phone == phone && x.Status == InvoiceStatus.Successful).ToListAsync();
 
             var result = new List<InvoiceViewModel>();
 

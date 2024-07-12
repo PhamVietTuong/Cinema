@@ -14,12 +14,11 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
 const schemaLogin = yup.object().shape({
-    userName: yup.string().required('Vui lòng nhập tài khoản, Email hoặc số điện thoại'),
+    userName: yup.string().required('Vui lòng nhập email hoặc số điện thoại'),
     password: yup.string().required('Vui lòng nhập mật khẩu'),
 });
 
 const schemaRegister = yup.object().shape({
-    userName: yup.string().required('Vui lòng nhập tên đăng nhập'),
     password: yup.string()
         .required('Vui lòng nhập mật khẩu')
         .matches(
@@ -108,7 +107,6 @@ const Login = () => {
     //register
     const [formRegisterData, setFormRegisterData] = useState({
         userTypeName: 'user',
-        userName: '',
         fullName: '',
         email: '',
         phone: '',
@@ -118,7 +116,6 @@ const Login = () => {
         gender: true,
     });
     const [errorsRegister, setErrorsRegister] = useState({
-        userName: '',
         fullName: '',
         email: '',
         phone: '',
@@ -180,12 +177,6 @@ const Login = () => {
         }
     };
 
-    useEffect(() => {
-        if (formRegisterData.birthDay) {
-            validateFieldRegister('birthDay', formRegisterData.birthDay);
-        }
-    }, [formRegisterData.birthDay]);
-
     return (
         <div class="app-content">
             <section className="sec-regis">
@@ -199,7 +190,7 @@ const Login = () => {
                                 </TabList>
                                 <TabPanel value="login" className="loginTabPanel">
                                     <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="loginFormControl">
-                                        <FormLabel sx={{ mb: 1 }} className="loginFormLabel">Tài khoản, Email hoặc số điện thoại <span className="required">*</span></FormLabel>
+                                        <FormLabel sx={{ mb: 1 }} className="loginFormLabel">Email hoặc số điện thoại <span className="required">*</span></FormLabel>
                                         <OutlinedInput
                                             name="userName"
                                             onChange={handleInputChangeLogin}
@@ -278,7 +269,7 @@ const Login = () => {
                                     </FormControl>
 
                                     <FormControl sx={{ m: 1 }} className="loginFormControl">
-                                        <FormLabel sx={{ mb: 1, mt: 2 }} className="loginFormLabel">Gender</FormLabel>
+                                        <FormLabel sx={{ mb: 1, mt: 2 }} className="loginFormLabel">Giới tính</FormLabel>
                                         <RadioGroup
                                             row
                                             defaultValue="true"
@@ -300,18 +291,6 @@ const Login = () => {
                                         />
                                         {!!errorsRegister.phone && (
                                             <FormHelperText>{errorsRegister.phone}</FormHelperText>
-                                        )}
-                                    </FormControl>
-
-                                    <FormControl sx={{ m: 1 }} variant="outlined" fullWidth className="loginFormControl">
-                                        <FormLabel sx={{ mb: 1, mt: 2 }} className="loginFormLabel">Tên đăng nhập <span className="required">*</span></FormLabel>
-                                        <OutlinedInput
-                                            name="userName"
-                                            onChange={handleInputChangeRegister}
-                                            onBlur={(event) => validateFieldRegister(event.target.name, event.target.value)}
-                                        />
-                                        {!!errorsRegister.userName && (
-                                            <FormHelperText>{errorsRegister.userName}</FormHelperText>
                                         )}
                                     </FormControl>
 

@@ -149,7 +149,7 @@ namespace Cinema
                 {
                     var invoice = new Invoice
                     {
-                        UserId = entity.UserId,
+                        Phone = entity.UserId,
                         Code = DateTime.Now.ToString("yyMMddhhmmss"),
                         Status = InvoiceStatus.Unpaid,
                         CreationTime = DateTime.Now,
