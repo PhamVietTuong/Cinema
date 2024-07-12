@@ -9,7 +9,7 @@ import IndexUser from "../Pages/User/IndexUser";
 import IndexAdmin from "../Pages/Admin/IndexAdmin";
 import AgeRestriction from "../Pages/Admin/AgeRestriction/AgeRestriction";
 import Checkout from "../Pages/User/Checkout/Checkout";
-import { ProtectedRouteAdmin, ProtectedRouteCheckout, ProtectedRouteLogin } from "./ProtectedRoute";
+import { ProtectedRouteAdmin, ProtectedRouteCheckout, ProtectedRouteInfo, ProtectedRouteLogin } from "./ProtectedRoute";
 import ForgetPassword from "../Pages/User/ForgetPassword/ForgetPassword";
 import TicketType from "../Pages/Admin/TicketType/TicketType";
 import MovieType from "../Pages/Admin/MovieType/MovieType";
@@ -67,9 +67,9 @@ const Routers = () => {
                         />
                         <Route path="checkout/info" element={<InfoTicketBooking />} />
                         <Route path="account/account-profile" element={
-                            <ProtectedRouteCheckout>
+                            <ProtectedRouteInfo>
                                 <Profile />
-                            </ProtectedRouteCheckout>} 
+                            </ProtectedRouteInfo>} 
                         />
                     </Route>
                     <Route path="/admin" element={

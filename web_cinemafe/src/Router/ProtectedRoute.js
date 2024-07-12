@@ -47,3 +47,14 @@ export const ProtectedRouteAdmin = ({ children }) => {
 
     return children;
 };
+
+export const ProtectedRouteInfo = ({ children }) => {
+    const { isLoggedIn } = useSelector((state) => state.UserReducer);
+    const location = useLocation();
+
+    if (!isLoggedIn) {
+        return <Navigate to="/login" state={{ from: location }} />;
+    }
+
+    return children;
+};

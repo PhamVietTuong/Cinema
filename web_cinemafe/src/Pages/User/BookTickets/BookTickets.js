@@ -125,7 +125,6 @@ const BookTickets = () => {
                                             <Tab label="Phim đang chiếu" value="1" className='BTSTab' />
                                             <Tab label="Phim sắp chiếu" value="2" className='BTSTab' />
                                             <Tab label="Suất chiếu đặc biệt" value="3" className='BTSTab' />
-                                            <Tab label="Bảng giá vé" value="4" className='BTSTab' />
                                         </TabList>
                                     </Box>
                                     <TabPanel value="1">
