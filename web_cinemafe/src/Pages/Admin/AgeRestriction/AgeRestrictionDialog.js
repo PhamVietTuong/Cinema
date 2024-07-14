@@ -5,9 +5,9 @@ import { CreateAgeRestrictionAction, UpdateAgeRestrictionAction } from "../../..
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
-    description: yup.string().required('Description is required'),
-    abbreviation: yup.string().required('Abbreviation is required'),
+    name: yup.string().required('Vui lòng nhập thông tin!'),
+    description: yup.string().required('Vui lòng nhập thông tin!'),
+    abbreviation: yup.string().required('Vui lòng nhập thông tin!'),
 });
 
 const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
@@ -16,7 +16,7 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
         name: '',
         description: '',
         abbreviation: '',
-        status: false,
+        status: true,
     });
 
     const [errors, setErrors] = useState({
@@ -40,7 +40,7 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                 name: '',
                 description: '',
                 abbreviation: '',
-                status: false,
+                status: true,
             });
         }
     }, [row]);
@@ -105,13 +105,13 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {isEditing ? "Edit Age Restriction" : "Create Age Restriction"}
+                        {isEditing ? "Sửa giới hạn độ tuổi" : "Thêm giới hạn độ tuổi"}
                     </DialogTitle>
                     <DialogContent>
                         <TextField
                             margin="dense"
                             name="name"
-                            label="Name"
+                            label="Tên ký hiệu"
                             type="text"
                             fullWidth
                             value={formData.name}
@@ -123,7 +123,7 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                         <TextField
                             margin="dense"
                             name="description"
-                            label="Description"
+                            label="Mô tả"
                             type="text"
                             fullWidth
                             value={formData.description}
@@ -135,7 +135,7 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                         <TextField
                             margin="dense"
                             name="abbreviation"
-                            label="Abbreviation"
+                            label="Viết tắt"
                             type="text"
                             fullWidth
                             value={formData.abbreviation}
@@ -144,8 +144,8 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                             error={!!errors.abbreviation}
                             helperText={errors.abbreviation}
                         />
-                        <FormControlLabel
-                            label="Status"
+                        {/* <FormControlLabel
+                            label="Trạng thái"
                             labelPlacement="start"
                             control={
                                 <Switch
@@ -155,12 +155,12 @@ const AgeRestrictionDialog = ({ open, onClose, row, isEditing }) => {
                                     color="primary"
                                 />
                             }
-                        />
+                        /> */}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={onClose}>Cancel</Button>
+                        <Button onClick={onClose}>Hủy</Button>
                         <Button onClick={handleSubmit} autoFocus>
-                            Save
+                            Lưu
                         </Button>
                     </DialogActions>
                 </Dialog>

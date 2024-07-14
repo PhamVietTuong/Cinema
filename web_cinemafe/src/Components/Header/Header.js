@@ -28,7 +28,7 @@ const Header = (props) => {
     return (
         <>
             <header className="hd --second">
-                <div className="popup-download-app">
+                {/* <div className="popup-download-app">
                     <div>
                         <div className="hd-top">
                             <div className="container">
@@ -52,7 +52,7 @@ const Header = (props) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="hd-mid" >
                     <div className="container" >
                         <div className="hd-mid-wr" >
@@ -142,7 +142,7 @@ const Header = (props) => {
 
                                     </div>
                                 </div>
-                                <div className="hd-lg" >
+                                {/* <div className="hd-lg" >
                                     <div className="lg-action" >
                                         <div className="lg-popup" >
                                             <div className="lg-option" >
@@ -162,7 +162,7 @@ const Header = (props) => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -195,17 +195,14 @@ const Header = (props) => {
                                     </a>
                                 </div>
                             </div>
-                            <div className="hd-bot-km" >
-                                <a className="link km" href="/chuong-trinh-khuyen-mai/">
+                            <div className="hd-bot-dc" >
+                                {/* <a className="link dc" href="/">
                                     Khuyến mãi
+                                </a> */}
+                                <a className="link news" href="/news">
+                                    Tin tức
                                 </a>
-                                <a className="link tsk" href="/to-chuc-su-kien/">
-                                    Thuê sự kiện
-                                </a>
-                                <a className="link tcgt" href="/cac-loai-hinh-giai-tri-khac/">
-                                    Tất cả các giải trí
-                                </a>
-                                <a className="link gt" href="/about-us/">
+                                <a className="link about-us" href="/about-us">
                                     Giới thiệu
                                 </a>
                             </div>

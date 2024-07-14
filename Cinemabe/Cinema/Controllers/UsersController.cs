@@ -36,7 +36,7 @@ namespace Cinema.Controllers
                 User user = await _userRepository.ValidateLogin(loginInfo.Username, loginInfo.Password, "user");
                 if (user == null)
                 {
-                    return BadRequest("Thông tin chưa chính xác, đăng nhập thất bại!.");
+                    return BadRequest("Thông tin không chính xác!");
                 }
 
                 TokenInfo token = await _userRepository.GenerateToken(loginInfo.Username, "user");
@@ -122,7 +122,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost("UpdateUser")]
-        [Authorize(Roles = user)]
+        [Authorize(Roles = connectedRole)]
         public async Task<ActionResult<UserDTO>> UpdateUser(UserDTO entity)
         {
             try

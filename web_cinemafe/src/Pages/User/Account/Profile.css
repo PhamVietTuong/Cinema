@@ -118,3 +118,8 @@
     color: #fff;
     text-align: center;
 }
+
+.inputFormChangPassword {
+    font-family: "Josefin Sans",
+        sans-serif !important;
+}

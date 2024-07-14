@@ -130,10 +130,10 @@ export const UpdateUserAction = (userDTO) => {
             }
         } catch (error) {
             await Swal.fire({
-                padding: "24px",
-                width: "400px",
-                title: "Đã xảy ra lỗi!",
-                confirmButtonText: "Ok",
+                text: error.response.data,
+                padding: "15px",
+                width: "425px",
+                confirmButtonText: "Thử lại",
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log("UpdateUserAction: ", error);
@@ -211,7 +211,7 @@ export const CreateUserAction = (register) => {
                     confirmButtonText: "Ok",
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.reload();
+                        dispatch(GetListUserAction());
                     }
                 });
             }
