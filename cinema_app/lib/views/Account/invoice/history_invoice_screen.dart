@@ -31,7 +31,7 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           color: Styles.boldTextColor[
-              Config.themeMode], // Cung cấp màu mặc định nếu null
+              Config.themeMode], 
           onPressed: () {
             Navigator.pop(context);
           },
@@ -41,7 +41,7 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
             color: Styles.boldTextColor[
-                Config.themeMode], // Cung cấp màu mặc định nếu null
+                Config.themeMode], 
           ),
         ),
         backgroundColor: Styles.backgroundContent[Config.themeMode],
@@ -82,7 +82,7 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color:
-                                  Styles.textSelectionColor[Config.themeMode],
+                                  Styles.titleColor[Config.themeMode],
                               fontSize: Styles.titleFontSize,
                             ),
                           ),
@@ -93,7 +93,7 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color:
-                                  Styles.textSelectionColor[Config.themeMode],
+                                  Styles.titleColor[Config.themeMode],
                               fontSize: Styles.titleFontSize,
                             ),
                           ),
@@ -104,13 +104,18 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color:
-                                  Styles.textSelectionColor[Config.themeMode],
+                                  Styles.titleColor[Config.themeMode],
                               fontSize: Styles.titleFontSize,
                             ),
                           ),
                         ),
                       ],
                     ),
+                    if(lstInvoi.isEmpty)
+                      Center(child: Text("Chưa có hóa đơn nào", style: TextStyle(
+                      color: Styles.boldTextColor[Config.themeMode],
+                      fontSize: Styles.titleFontSize,
+                    ),),),
                     Column(
                       children: lstInvoi
                           .map((e) => HistoryInvoiceItem(invoice: e))

@@ -45,7 +45,7 @@ class Invoice {
         ageRestrictionDescription = json["ageRestrictionDescription"] ?? "",
         theaterName = json["theaterName"] ?? "",
         code = json["code"] ?? "",
-        showTimeStartTime = DateTime.parse(json["showTimeStartTime"] ?? DateTime.now().toIso8601String()),
+        showTimeStartTime = DateTime.parse(json["showTimeStartTime"] ?? DateTime.now()),
         roomName = json["roomName"] ?? "",
         numberTicket = json["numberTicket"] ?? 0,
         showTimeType = json["showTimeType"] ?? "",
@@ -88,12 +88,10 @@ class FoodAndDrink {
     required this.quantity,
   });
 
-  factory FoodAndDrink.fromJson(Map<String, dynamic> json) {
-    return FoodAndDrink(
-      foodAndDrinkName: json['foodAndDrinkName'] ?? '',
-      quantity: json['quantity'] ?? 0,
-    );
-  }
+  FoodAndDrink.fromJson(Map<String, dynamic> json)
+ :
+ foodAndDrinkName = json["foodAndDrinkName"] ?? "",
+ quantity = json["quantity"] ?? "";
 
   Map<String, dynamic> toJson() {
     return {
@@ -110,7 +108,7 @@ abstract class InvoiceRepository {
 class InvoiceRepositoryIml implements InvoiceRepository {
   @override
   Future<List<Invoice>> invoice() async {
-    final url = '$serverUrl/api/Cinemas/GetInvoiceList/${Config.userInfo?.id}';
+    final url = '$serverUrl/api/Cinemas/GetInvoiceList/${Config.userInfo?.phone}';
     final response = await BaseUrl.get(url);
 
     if (response.statusCode != 200) {
