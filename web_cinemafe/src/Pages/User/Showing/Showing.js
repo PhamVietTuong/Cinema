@@ -22,10 +22,6 @@ const Showing = () => {
     } = useSelector((state) => state.CinemasReducer);
 
     useEffect(() => {
-        console.log(resultInfoSearch);
-    }, [resultInfoSearch]);
-
-    useEffect(() => {
         if (movieList && movieList.length > 0) {
             const today = moment();
             const showing = movieList.filter(movie => moment(movie.releaseDate).isBefore(today));

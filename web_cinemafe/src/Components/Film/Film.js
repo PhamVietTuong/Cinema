@@ -7,8 +7,6 @@ import { CSSTransition } from 'react-transition-group';
 import { useState } from "react";
 
 const Film = (props) => {
-    const [showTrailerPopup, setShowTrailerPopup] = useState(false);
-
     return (
         <>
             <div className="web-movie-box">
@@ -37,7 +35,7 @@ const Film = (props) => {
                     </Link>
 
                     <div className="info-action">
-                        <a className="video pointer" rel="noopener noreferrer" onClick={() => setShowTrailerPopup(true)}>
+                        <a className="video pointer" rel="noopener noreferrer" onClick={() => props.setShowTrailerPopup({ status: true, id: props.movie.id })}>
                             <span className="ic">
                                 <img src="https://cinestar.com.vn/assets/images/icon-play-vid.svg" alt="Play Trailer"></img>
                             </span>
@@ -47,24 +45,6 @@ const Film = (props) => {
                     </div>
                 </div>
             </div>
-
-            {/* <CSSTransition
-                in={showTrailerPopup}
-                unmountOnExit
-                timeout={{ enter: 0, exit: 300 }}
-            >
-                <div className="modalDetail" onClick={() => setShowTrailerPopup(false)}>
-                    <iframe
-                        style={{ position: "relative" }}
-                        title="title4"
-                        allowfullscreen="true"
-                        width="996px"
-                        height="500px"
-                        src={`https://www.youtube.com/embed/${props.movie.trailer}`}
-                        frameborder="0"
-                    ></iframe>
-                </div>
-            </CSSTransition> */}
         </>
     );
 }

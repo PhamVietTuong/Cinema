@@ -61,8 +61,6 @@ const TheaterDetail = () => {
             rooms: seatData,
         };
 
-        console.log(formDataToSubmit);
-
         dispatch(UpdateTheaterAction(formDataToSubmit, navigate));
     };
 
@@ -134,11 +132,6 @@ const TheaterDetail = () => {
             setSeatData(infoTheater.rooms || []);
         }
     }, [infoTheater]);
-
-    useEffect(() => {
-        console.log(seatData);
-        console.log(seatData.rowNameNew);
-    }, [formData, seatData]);
 
     return (
         <>

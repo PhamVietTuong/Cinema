@@ -134,7 +134,6 @@ const ForgetPassword = () => {
     };
 
     useEffect(() => {
-        console.log(resultSendCode);
         if (Object.keys(resultSendCode).length !== 0) {
             setStep(2);
         }

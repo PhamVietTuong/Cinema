@@ -379,7 +379,7 @@ const EditMoviePage = () => {
                 </Grid>
             </Grid>
             <Box sx={{ marginTop: 2 }}>
-                <Typography variant="h6" sx={{ mb: 2 }}>Thêm xuất chiếu</Typography>
+                {/* <Typography variant="h6" sx={{ mb: 2 }}>Thêm xuất chiếu</Typography>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <FormControl fullWidth margin="dense">
@@ -477,7 +477,7 @@ const EditMoviePage = () => {
                             Thêm xuất chiếu
                         </Button>
                     </Grid>
-                </Grid>
+                </Grid> */}
                 <Grid container spacing={2} sx={{ justifyContent: 'space-between', padding: 2 }}>
                     {movieData?.showTimeRooms?.map((item, index) => (
                         <Grid key={index} item sx={{ display: "flex", mb: 2, position: 'relative' }} xs={12} xl={5.9}>

@@ -3,11 +3,15 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper/modules';
-import './Slide.css'
+import './Slide.css';
 import Film from '../Film/Film';
+import { useEffect, useState } from 'react';
 
 const Slide = (props) => {
-    return ( 
+    const [showTrailerPopup, setShowTrailerPopup] = useState({ status: false, id: null });
+
+    const selectedMovie = props.movieList.find(movie => movie.id === showTrailerPopup.id);
+    return (
         <>
             <div className='web-movie-content'>
                 <div className='web-movie-list'>
@@ -25,8 +29,8 @@ const Slide = (props) => {
                             {
                                 props.movieList.map((item) => {
                                     return (
-                                        < SwiperSlide >
-                                            <Film movie={item}></Film>
+                                        <SwiperSlide key={item.id}>
+                                            <Film movie={item} setShowTrailerPopup={setShowTrailerPopup}></Film>
                                         </SwiperSlide>
                                     )
                                 })
@@ -34,9 +38,25 @@ const Slide = (props) => {
                         </Swiper>
                     </div>
                 </div>
-            </div >
+            </div>
+            {
+                showTrailerPopup.status && (
+                    
+                    <div className={`modalDetail ${showTrailerPopup.status ? 'enter-done' : ''}`} onClick={() => setShowTrailerPopup({ status: false, id: null })} >
+                            <iframe
+                                style={{ position: "relative" }}
+                                title="title4"
+                                allowFullScreen
+                                width="996px"
+                                height="500px"
+                                src={`https://www.youtube.com/embed/${selectedMovie.trailer}`}
+                                frameBorder="0"
+                            ></iframe>
+                        </div>
+                )
+            }
         </>
-     );
+    );
 }
- 
+
 export default Slide;

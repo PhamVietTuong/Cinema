@@ -185,7 +185,7 @@ a {
 
 .hd-search-wr input {
     background-color: #fff;
-    border-radius: 1000px;
+    border-radius: 16px;
     font-size: 14px;
     font-weight: 400;
     height: 40px;
@@ -498,4 +498,25 @@ a {
     opacity: 1;
     transform: translate(0);
     visibility: visible;
+}
+
+.search-history {
+    position: absolute;
+    background: #fff;
+    color: rgb(71, 85, 105);
+    width: 100%;
+    line-height: 25px;
+    top: 90%;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    z-index: 1000;
+}
+
+.search-term {
+    cursor: pointer;
+    padding-left: 16px;
+}
+
+.search-term:hover {
+background-color: rgba(39, 39, 42, 0.12);
 }

@@ -11,5 +11,7 @@ namespace Cinema.DTOs
         public Guid RoomId   { get; set; }
         public string RoomName { get; set; }
         public string TheaterName { get; set; }
+        public string MovieName { get; set; }
+        public Guid MovieId { get; set; }
     }
 }

@@ -3,7 +3,6 @@ import './TheaterComponent.css'
 import { Button } from '@mui/material';
 import { DOMAIN } from '../../Ustil/Settings/Config';
 const TheaterComponent = (props) => {
-    console.log(props);
     return ( 
         <>
             <div className="cinema-rental-custom">
