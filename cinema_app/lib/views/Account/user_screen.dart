@@ -1,5 +1,6 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/Account/account_screen.dart';
+import 'package:cinema_app/views/Account/invoice/history_invoice_screen.dart';
 import 'package:cinema_app/views/Account/setting_screen.dart';
 import 'package:cinema_app/views/Account/user_info_page.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,7 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserState extends State<UserScreen> {
-  double _currentRanking = 0.0;
-
-  String textAppBar = "Thành viên";
+ String textAppBar = "Thành viên";
   String textInfoUser = "Thông tin người dùng";
   String textTransactionHistory = "Lịch sử giao dịch";
   String textMovie = "Danh sách phim";
@@ -86,74 +85,74 @@ class _UserState extends State<UserScreen> {
       ),
       backgroundColor: Styles.backgroundColor[Config.themeMode],
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Config.userInfo != null
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            child: Image.asset(
-                              'assets/img/user.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                Config.userInfo!.fullname,
-                                style: TextStyle(
-                                  color: Styles.boldTextColor[Config.themeMode],
-                                  fontSize: Styles.titleFontSize,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UserInfoPage(
-                                              infoUser: Config.userInfo!,
-                                            )),
-                                  );
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.edit_note_outlined,
-                                        color: Styles
-                                            .boldTextColor[Config.themeMode],
-                                        size: Styles.iconSizeInLineText,
-                                      ),
-                                      Text(
-                                        textInfoUser,
-                                        style: TextStyle(
-                                            color: Styles.boldTextColor[
-                                                Config.themeMode],
-                                            fontSize: Styles.textSize),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                      const SizedBox(
+                        height: 10,
                       ),
                       SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        child: Image.asset(
+                          'assets/img/user.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        Config.userInfo!.fullname,
+                        softWrap: true,
+                        style: TextStyle(
+                          color: Styles.boldTextColor[Config.themeMode],
+                          fontSize: Styles.appbarFontSize,
+                          fontWeight: FontWeight.bold
+                          
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const UserInfoPage()),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Styles.btnColor[Config.themeMode]!),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.edit_calendar_outlined,
+                                  size: Styles.iconSizeInLineText,
+                                  color:
+                                      Styles.boldTextColor[Config.themeMode]),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                textInfoUser,
+                                style: TextStyle(
+                                    fontSize: Styles.textSize,
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode]),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -162,50 +161,53 @@ class _UserState extends State<UserScreen> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {},
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.favorite_border_outlined,
-                                      color: Styles
-                                          .boldTextColor[Config.themeMode],
-                                      size: Styles.iconSizeInTitle,
-                                    ),
-                                    Text(
-                                      textFavorite,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Styles
-                                              .boldTextColor[Config.themeMode],
-                                          fontSize: Styles.textSize),
-                                    ),
-                                  ],
-                                ),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.favorite_border_outlined,
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
+                                    size: Styles.iconSizeInTitle,
+                                  ),
+                                  Text(
+                                    textFavorite,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Styles
+                                            .boldTextColor[Config.themeMode],
+                                        fontSize: Styles.textSize),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.history,
-                                      color: Styles
-                                          .boldTextColor[Config.themeMode],
-                                      size: Styles.iconSizeInTitle,
-                                    ),
-                                    Text(
-                                      textTransactionHistory,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Styles
-                                              .boldTextColor[Config.themeMode],
-                                          fontSize: Styles.textSize),
-                                    ),
-                                  ],
-                                ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HistoryInvoiceScreen()),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.history,
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
+                                    size: Styles.iconSizeInTitle,
+                                  ),
+                                  Text(
+                                    textTransactionHistory,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Styles
+                                            .boldTextColor[Config.themeMode],
+                                        fontSize: Styles.textSize),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -236,32 +238,12 @@ class _UserState extends State<UserScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        textRank,
-                        style: TextStyle(
-                            fontSize: Styles.titleFontSize,
-                            color: Styles.boldTextColor[Config.themeMode]),
-                      ),
-                      Slider(
-                        value: _currentRanking,
-                        min: 0,
-                        max: 100,
-                        divisions: 100,
-                        label: _currentRanking.round().toString(),
-                        onChanged: (double value) {
-                          setState(() {
-                            _currentRanking = value;
-                          });
-                        },
-                      ),
+                   
                     ],
                   )
                 : Column(
                     children: [
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width * 0.3,
                         height: MediaQuery.of(context).size.height * 0.1,
                         child: Image.asset(
@@ -274,7 +256,7 @@ class _UserState extends State<UserScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AccountScreen()),
+                                builder: (context) => const AccountScreen()),
                           );
                         },
                         style: OutlinedButton.styleFrom(
@@ -288,7 +270,7 @@ class _UserState extends State<UserScreen> {
                           ),
                         ),
                         child: Text(
-                          '${textLogin} / ${textRegister}',
+                          '$textLogin / $textRegister',
                           style: TextStyle(
                             color: Styles.boldTextColor[Config.themeMode],
                             fontSize: Styles.titleFontSize,

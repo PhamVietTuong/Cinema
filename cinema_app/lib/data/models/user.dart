@@ -4,11 +4,11 @@ import 'dart:convert';
 
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/DTO/update_user.dart';
 import 'package:cinema_app/data/models/validation.dart';
 import 'package:cinema_app/services/base_url.dart';
 
 class User {
-  String id;
   String fullname;
   String phone;
   String email;
@@ -16,20 +16,17 @@ class User {
   String image;
   bool gender;
   int status;
-  String username;
   String token;
   DateTime expirationTime;
 
   User({
-    required this.id,
     this.fullname = "",
     this.phone = "",
     this.email = "",
     DateTime? birthday,
     this.image = "",
     this.gender = false,
-    this.status = 0,
-    this.username = "",
+    this.status = 1,
     this.token = "",
     DateTime? expirationTime,
   })  : birthday = birthday ?? DateTime.now(),
@@ -37,35 +34,31 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json["id"] ?? "",
       fullname: json["fullName"] ?? "",
       phone: json["phone"] ?? "",
       email: json["email"] ?? "",
-      birthday: json["birthday"] != null
-          ? DateTime.parse(json["birthday"])
+      birthday: json["birthDay"] != null
+          ? DateTime.tryParse(json["birthDay"]) 
           : DateTime.now(),
       image: json["image"] ?? "",
       gender: json["gender"] ?? false,
-      status: json["status"] ?? 0,
-      username: json["userName"] ?? "",
+      status: json["status"] ?? 1,
       token: json["token"] ?? "",
       expirationTime: json["expirationTime"] != null
-          ? DateTime.parse(json["expirationTime"])
+          ? DateTime.tryParse(json["expirationTime"])
           : DateTime.now(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
       "fullName": fullname,
       "phone": phone,
       "email": email,
-      "birthday": birthday.toIso8601String(),
+      "birthDay": birthday.toIso8601String(),
       "image": image,
       "gender": gender,
       "status": status,
-      "userName": username,
       "token": token,
       "expirationTime": expirationTime.toIso8601String(),
     };
@@ -74,7 +67,6 @@ class User {
 
 class Register {
   final String userTypeName;
-  final String userName;
   final String fullName;
   final String email;
   final String phone;
@@ -85,7 +77,6 @@ class Register {
 
   Register({
     required this.userTypeName,
-    required this.userName,
     required this.fullName,
     required this.password,
     required this.confirmPassword,
@@ -98,7 +89,6 @@ class Register {
   factory Register.fromJson(Map<String, dynamic> json) {
     return Register(
       userTypeName: json['userTypeName'] ?? '',
-      userName: json['userName'] ?? '',
       fullName: json['fullName'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
@@ -114,7 +104,6 @@ class Register {
   Map<String, dynamic> toJson() {
     return {
       'userTypeName': userTypeName,
-      'userName': userName,
       'fullName': fullName,
       'email': email,
       'phone': phone,
@@ -154,7 +143,7 @@ abstract class UserRepository {
   Future<void> register(Register register);
   Future<User> login(Login login);
   Future<ResGetCode> sendAuthCode(String email);
-  Future<User> updateUser(User user);
+  Future<UpdateUser> updateUser(UpdateUser user);
 
   Future<bool> changePass(String pass, String username);
 }
@@ -165,31 +154,28 @@ class UserRepositoryIml implements UserRepository {
   Future<void> register(Register register) async {
     final url = '$serverUrl/api/Users/Register';
 
-    if (register.userName.isEmpty ||
-        register.fullName.isEmpty ||
-        register.password.isEmpty ||
-        register.confirmPassword.isEmpty) {
-      throw ('Tên người dùng, họ và tên, mật khẩu không được để trống.');
+    if (
+        register.fullName.trim().isEmpty ||
+        register.password.trim().isEmpty ||
+        register.confirmPassword.trim().isEmpty ||
+        register.email.trim().isEmpty||
+        register.phone.trim().isEmpty||
+        register.birthDay.toString().isEmpty
+        ) {
+      throw ('Tên người dùng, họ và tên, email, số điện thoại, ngày sinh, mật khẩu không được để trống.');
     }
-
     if (register.password != register.confirmPassword) {
       throw ('Mật khẩu và mật khẩu nhập lại không khớp.');
-    }
-    if (!Validation.isValidUsername(register.userName)) {
-      throw ('Tên đăng nhập có độ dài từ 8 đến 20 ký tự, bao gồm  ký tự chữ cái, số và dấu gạch dưới và không có khoảng trắng');
     }
     if (!Validation.isValidPassword(register.password)) {
       throw ('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.');
     }
-
-    if (register.email.isNotEmpty && !Validation.isValidEmail(register.email)) {
+    if (!Validation.isValidEmail(register.email)) {
       throw ('Địa chỉ email không hợp lệ.');
     }
-
-    if (register.phone.isNotEmpty && !Validation.isValidPhone(register.phone)) {
+    if (!Validation.isValidPhone(register.phone)) {
       throw ('Số điện thoại không hợp lệ.');
     }
-
     try {
       final response = await BaseUrl.post(url, jsonEncode(register.toJson()));
       if (response.statusCode == 200) {
@@ -201,22 +187,18 @@ class UserRepositoryIml implements UserRepository {
       throw ('$e');
     }
   }
-
 //end registration
 
 //Handle event login
   @override
   Future<User> login(Login login) async {
     final url = '$serverUrl/api/Users/LoginUser';
-
     try {
       final response = await BaseUrl.post(url, jsonEncode(login.toJson()));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         return User.fromJson(jsonResponse); // Giải mã JSON thành đối tượng User
       } else {
-        // print(response.body);
-        // print(response.body);
         throw (response.body);
       }
     } catch (e) {
@@ -225,14 +207,14 @@ class UserRepositoryIml implements UserRepository {
   }
 
   @override
-  Future<User> updateUser(User user) async {
+  Future<UpdateUser> updateUser(UpdateUser user) async {
     final url = '$serverUrl/api/Users/UpdateUser';
-
     try {
       final response = await BaseUrl.post(url, jsonEncode(user.toJson()));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        return User.fromJson(jsonResponse);
+        print(jsonDecode(response.body));
+        return UpdateUser.fromJson(jsonResponse);
       } else {
         // print(response.body);
         throw (response.body);

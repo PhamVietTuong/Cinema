@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cinema_app/data/models/invoice.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -212,7 +213,6 @@ class Config {
   static Future<void> setLanguageMode(String mode) async {
     await _prefs.setString(Constants.languageModeKey, mode);
     languageMode = mode;
-
   }
 
   static Future<void> loadMode() async {
@@ -265,17 +265,30 @@ class Config {
     await _prefs.setStringList(Constants.searchHistory, searchHistory);
   }
 
-  static Future<void> saveInfoUser(User? user) async {
-    if (user != null) {
-      String jsonString = json.encode(user.toJson());
-      await _prefs.setString(Constants.userkey, jsonString);
-      userInfo = user;
-    }
+  static Future<void> saveInfoUser(User user) async {
+    String jsonString = json.encode(user.toJson());
+    await _prefs.setString(Constants.userkey, jsonString);
+    userInfo = user;
   }
 
   static Future<void> logOut() async {
     await _prefs.remove(Constants.userkey);
     userInfo = null;
+  }
+
+ static Future<void> saveInvoice(List<Invoice> invoices) async {
+    List<Map<String, dynamic>> jsonList = invoices.map((invoice) => invoice.toJson()).toList();
+    String jsonString = json.encode(jsonList);
+    await _prefs.setString(Constants.invoicekey, jsonString);
+  }
+  static Future<List<Invoice>> getStoredInvoices() async {
+    final String? jsonString = _prefs.getString(Constants.invoicekey);
+
+    if (jsonString != null) {
+      final List<dynamic> jsonList = jsonDecode(jsonString);
+      return jsonList.map((json) => Invoice.fromJson(json)).toList();
+    }
+    return [];
   }
 }
 
@@ -296,6 +309,7 @@ class Constants {
   static const String tokenExpirationKey = "tokenExpiration";
   static const String searchHistory = "searchHistory";
   static const String userkey = "user";
+  static const String invoicekey = "invoice";
 
   static const String codeVNKey = 'vi'; // Vietnamese
   static const String codeENKey = 'en'; // English

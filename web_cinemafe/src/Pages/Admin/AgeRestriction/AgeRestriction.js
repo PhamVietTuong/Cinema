@@ -32,20 +32,20 @@ const AgeRestriction = () => {
     };
 
     const columns = useMemo(() => [
-        { field: 'name', headerName: 'Name', flex: 1 },
-        { field: 'description', headerName: 'Description', flex: 2 },
-        { field: 'abbreviation', headerName: 'Abbreviation', flex: 1 },
-        {
-            field: 'status',
-            headerName: 'Status',
-            flex: 1,
-            renderCell: (params) => (
-                <Switch
-                    checked={params.value}
-                    color="primary"
-                />
-            )
-        },
+        { field: 'name', headerName: 'Tên ký hiệu', flex: 1 },
+        { field: 'description', headerName: 'Mô tả', flex: 2 },
+        { field: 'abbreviation', headerName: 'Viết tắt', flex: 1 },
+        // {
+        //     field: 'status',
+        //     headerName: 'Trạng thái',
+        //     flex: 1,
+        //     renderCell: (params) => (
+        //         <Switch
+        //             checked={params.value}
+        //             color="primary"
+        //         />
+        //     )
+        // },
         {
             field: 'actions',
             type: 'actions',
@@ -70,7 +70,7 @@ const AgeRestriction = () => {
         <>
             <Box sx={{ width: 1, mb: 2 }}>
                 <Button variant="contained" color="primary" onClick={handleCreateClick}>
-                    Add New Age Restriction
+                    Thêm giới hạn độ tuổi mới
                 </Button>
             </Box>
             <Box sx={{ height: 400, width: 1 }}>

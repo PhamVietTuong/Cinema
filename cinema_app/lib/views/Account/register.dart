@@ -15,7 +15,6 @@ class RegisterContent extends StatefulWidget {
 
 class _RegisterContentState extends State<RegisterContent>
     implements UserViewContract {
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -23,20 +22,20 @@ class _RegisterContentState extends State<RegisterContent>
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  
+
   late UserPresenter _presenter;
   bool isMale = true;
- late String selectedGender;
+  String selectedGender = 'Nam giới';
   String textPass = "Mật khẩu";
   String textConfirmPass = "Nhập lại mật khẩu";
   String textbirthday = "Ngày sinh";
   String textRegister = "Đăng ký";
- late String textMale;
-  String textWoman = "Nữ";
+  String textMale = "Nam giới";
+  String textWoman = "Nữ giới";
   String textErorr = "Lỗi";
   String textClose = Constants.textClose;
   String textSuccess = "Thành công";
- late List<String> gender;
+  late List<String> gender;
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
       Styles.translate(textPass),
@@ -66,20 +65,15 @@ class _RegisterContentState extends State<RegisterContent>
   @override
   void initState() {
     super.initState();
-    textMale=Config.languageMode==Constants.codeVNKey?"Nam":"Nam giới";
-    selectedGender=textMale;
     _presenter = UserPresenter(this);
-    _birthdayController.text =
-        DateTime.now().toLocal().toString().split(' ')[0];
-    gender=[textMale,textWoman];
+    _birthdayController.text = Styles.formatDate(DateTime.now());
     tranlate();
-
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.parse(_birthdayController.text),
+      initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
@@ -92,7 +86,6 @@ class _RegisterContentState extends State<RegisterContent>
 
   void _registerUser() {
     var register = Register(
-      userName: _usernameController.text,
       fullName: _fullNameController.text,
       email: _emailController.text,
       phone: _phoneController.text,
@@ -128,7 +121,6 @@ class _RegisterContentState extends State<RegisterContent>
       },
     );
   }
-
   @override
   void onRegisterSuccess(String message) {
     showDialog(
@@ -143,7 +135,6 @@ class _RegisterContentState extends State<RegisterContent>
                 Navigator.of(context).popUntil(
                   (route) => route.isFirst,
                 );
-
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -160,26 +151,21 @@ class _RegisterContentState extends State<RegisterContent>
 
   @override
   Widget build(BuildContext context) {
-    //  print(selectedGender);
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Styles.backgroundContent[Config.themeMode],
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               children: [
-                InfoTextField(
-                  textController: _usernameController,
-                  icon: const Icon(Icons.person),
-                  lableText: 'Tên đăng nhập',
-                  readOnly: false,
-                  obscurePassword: false,
+                const SizedBox(
+                  height: 10,
                 ),
                 InfoTextField(
                   textController: _fullNameController,
@@ -188,12 +174,18 @@ class _RegisterContentState extends State<RegisterContent>
                   readOnly: false,
                   obscurePassword: false,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 InfoTextField(
                   textController: _emailController,
                   icon: const Icon(Icons.email),
                   lableText: 'Email',
                   readOnly: false,
                   obscurePassword: false,
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 InfoTextField(
                   textController: _phoneController,
@@ -202,12 +194,18 @@ class _RegisterContentState extends State<RegisterContent>
                   obscurePassword: false,
                   readOnly: false,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 InfoTextField(
                   textController: _passwordController,
                   icon: const Icon(Icons.password),
                   lableText: 'Mật khẩu',
                   obscurePassword: true,
                   readOnly: false,
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 InfoTextField(
                   textController: _confirmPasswordController,
@@ -216,52 +214,63 @@ class _RegisterContentState extends State<RegisterContent>
                   obscurePassword: true,
                   readOnly: false,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
-                        child: InfoTextField(
-                      textController: _birthdayController,
-                      icon: const Icon(Icons.date_range),
-                      lableText: "Ngày sinh",
-                      readOnly: true,
-                      obscurePassword: false,
-                      onTap: () {
-                        _selectDate(context);
-                        setState(() {
-                          
-                        });
-                      },
-                    )),
-                    DropdownButton<String>(
-                      value: selectedGender,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: Styles.titleFontSize,
-                      elevation: 5,
-                      dropdownColor: Styles.backgroundContent[Config.themeMode],
-                      style: TextStyle(
-                          color: Styles.boldTextColor[Config.themeMode]),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedGender = newValue!;
-                          if (newValue == selectedGender) {
-                            isMale = true;
-                          } else {
-                            isMale = false;
-                          }
-                        });
-                      },
-                      items:<String>[
-                              textMale,
-                              textWoman,
-                            ].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList()
+                      child: TextField(
+                        style: TextStyle(
+                            color: Styles.boldTextColor[Config.themeMode]),
+                        controller: _birthdayController,
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: textbirthday,
+                          prefixIcon: const Icon(Icons.calendar_today),
+                          labelStyle: TextStyle(
+                              color: Styles.boldTextColor[Config.themeMode]),
+                          prefixIconColor:
+                              Styles.boldTextColor[Config.themeMode],
+                          focusColor: Styles.boldTextColor[Config.themeMode],
+                        ),
+                      ),
                     ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    DropdownButton<String>(
+                        value: selectedGender,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: Styles.titleFontSize,
+                        elevation: 5,
+                        dropdownColor:
+                            Styles.backgroundContent[Config.themeMode],
+                        style: TextStyle(
+                            color: Styles.boldTextColor[Config.themeMode]),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedGender = newValue!;
+                            if (newValue == "Nam") {
+                              isMale = true;
+                            } else {
+                              isMale = false;
+                            }
+                          });
+                        },
+                        items: <String>[
+                          textMale,
+                          textWoman,
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList()),
                   ],
                 ),
                 const SizedBox(
@@ -269,9 +278,20 @@ class _RegisterContentState extends State<RegisterContent>
                 ),
                 ElevatedButton(
                   onPressed: _registerUser,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Styles.btnColor[Config.themeMode],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                  ),
                   child: Text(
                     textRegister,
-                    style: const TextStyle(fontSize: Styles.titleFontSize),
+                    style: TextStyle(
+                      color: Styles.boldTextColor[Config.themeMode],
+                      fontSize: Styles.titleFontSize,
+                    ),
                   ),
                 ),
               ],
@@ -290,14 +310,10 @@ class _RegisterContentState extends State<RegisterContent>
   void loadUpdateSuccess(user) {}
 
   @override
-  void onGetCodeSuccess(ResGetCode res) {
-  }
-  
-  
+  void onGetCodeSuccess(ResGetCode res) {}
+
   @override
   void loadChangePassSuccess(bool res) {
     // TODO: implement loadChangePassSuccess
   }
-  
- 
 }

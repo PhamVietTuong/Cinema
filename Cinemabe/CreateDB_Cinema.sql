@@ -134,20 +134,18 @@ CREATE TABLE [UserType] (
 )
 
 CREATE TABLE [User] (
-    [Id] uniqueidentifier NOT NULL,
 	[UserTypeId] uniqueidentifier NOT NULL,
-    [UserName] varchar(255) NOT NULL,
     [FullName] nvarchar(255) NOT NULL,
     [Email] varchar(255) NOT NULL,
-    [Phone] varchar(255),
-	[BirthDay] datetime,
-	[Gender] bit,
+    [Phone] varchar(255) NOT NULL,
+	[BirthDay] datetime NOT NULL,
+	[Gender] bit NOT NULL,
     [PasswordHash] varchar(512) NOT NULL,
     [PasswordSalt] varchar(128) NOT NULL,
 	--05/07/2024
 	[MemberShipId] uniqueidentifier  NULL,
     [Status] bit NOT NULL,
-    PRIMARY KEY (Id),
+    PRIMARY KEY (Phone),
 	FOREIGN KEY (UserTypeId) REFERENCES UserType(Id),
 	FOREIGN KEY (MemberShipId) REFERENCES MemberShip(Id)
 );
@@ -182,25 +180,25 @@ CREATE TABLE [Movie] (
 Create table [Comment] (
 	[Id] UNIQUEIDENTIFIER NOT NULL,
 	[MovieId] UNIQUEIDENTIFIER NOT NULL,
-	[UserId] UNIQUEIDENTIFIER NOT NULL,
+	[Phone] varchar(255) NOT NULL,
 	[Content] nvarchar(255) NOT NULL,
 	[Status] bit NOT NULL,
 	[CreatedDate] datetime NOT NULL default getdate(),
 	[ParentId] UNIQUEIDENTIFIER NULL,
 	PRIMARY KEY (Id),
 	CONSTRAINT FK_Comment_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
-	CONSTRAINT FK_Comment_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+	CONSTRAINT FK_Comment_User FOREIGN KEY ([Phone]) REFERENCES [User] (Phone),
 	CONSTRAINT FK_Comment_Parent FOREIGN KEY ([ParentId]) REFERENCES [Comment] (Id),
 )
 
 Create table [Evaluation] (
-	[UserId] UNIQUEIDENTIFIER NOT NULL,
+	[Phone] varchar(255) NOT NULL,
 	[MovieId] UNIQUEIDENTIFIER NOT NULL,
 	[Star] int NOT NULL,
 	[CreatedDate] datetime NOT NULL default getdate(),
-	PRIMARY KEY (UserId, MovieId),
+	PRIMARY KEY (Phone, MovieId),
 	CONSTRAINT FK_Evaluation_Movie FOREIGN KEY ([MovieId]) REFERENCES [Movie] (Id),
-	CONSTRAINT FK_Evaluation_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+	CONSTRAINT FK_Evaluation_User FOREIGN KEY ([Phone]) REFERENCES [User] (Phone),
 )
 
 
@@ -301,12 +299,12 @@ CREATE TABLE [FoodAndDrinkTheater] (
 )
 
 CREATE TABLE [Invoice] (
-	[UserId] uniqueidentifier NOT NULL,
+	[Phone] varchar(255) NOT NULL,
 	[Code] nvarchar(100)  NOT NULL,
 	[CreationTime] datetime NOT NULL,
 	[Status] int NOT NULL,
 	PRIMARY KEY ([Code]),
-	CONSTRAINT FK_Invoice_User FOREIGN KEY ([UserId]) REFERENCES [User] (Id),
+	CONSTRAINT FK_Invoice_User FOREIGN KEY ([Phone]) REFERENCES [User] (Phone),
 )
 
 CREATE TABLE [InvoiceTicket] (

@@ -1,5 +1,6 @@
 import 'package:cinema_app/components/bottom_nav.dart';
 import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/DTO/update_user.dart';
 import 'package:cinema_app/views/Account/password/forgot_pass_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
@@ -25,10 +26,7 @@ class _LoginContentState extends State<LoginContent>
   String textContent = "Vui lòng điền đủ thông tin đăng nhập";
   String textLoginSuccessful = "Đăng nhập thành công";
   String textOK = "Đồng ý";
-
   String textForgetPass = "Quên mật khẩu";
-  String? _token;
-  DateTime? _tokenExpirationTime;
 
   void tranlate() async {
     List<String> textTranlate = await Future.wait([
@@ -56,11 +54,11 @@ class _LoginContentState extends State<LoginContent>
     super.initState();
     _presenter = UserPresenter(this);
     tranlate();
+
   }
 
   @override
   void onLoadError(String error) {
-    // Xử lý khi có lỗi
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -82,7 +80,10 @@ class _LoginContentState extends State<LoginContent>
 
   @override
   void loadLoginSuccess(User user) {
+    print(user);
+
     Config.saveInfoUser(user);
+    //print(Config.userInfo!.birthday);
     showDialogOnLoadSuccess(user);
   }
 
@@ -113,19 +114,11 @@ class _LoginContentState extends State<LoginContent>
     );
   }
 
-  void _saveTokenToLocal(String token, DateTime expirationTime) async {
-    // await Config.saveToken(token, expirationTime);
-    setState(() {
-      _token = token;
-      _tokenExpirationTime = expirationTime;
-    });
-    print('Token : $_token , $_tokenExpirationTime');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Styles.defaultHorizontal),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Styles.backgroundContent[Config.themeMode],
         borderRadius: BorderRadius.circular(10),
@@ -134,12 +127,13 @@ class _LoginContentState extends State<LoginContent>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InfoTextField(
-            lableText: "Tên đăng nhập",
+            lableText: "Nhập số điện thoại hoặc email",
             textController: _usernameController,
             icon: const Icon(Icons.person),
             readOnly: false,
             obscurePassword: false,
           ),
+        const SizedBox(height: 10,),
           InfoTextField(
               textController: _passwordController,
               icon: const Icon(Icons.password),
@@ -206,10 +200,20 @@ class _LoginContentState extends State<LoginContent>
               }
               Login loginInfo = Login(username: username, password: password);
               _presenter.login(loginInfo);
+              
             },
+            style: ElevatedButton.styleFrom(
+                    backgroundColor: Styles.btnColor[Config.themeMode],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                  ),
             child: Text(
               textLogin,
-              style: const TextStyle(fontSize: Styles.titleFontSize),
+              style:  TextStyle( color: Styles.boldTextColor[Config.themeMode],
+                      fontSize: Styles.titleFontSize,),
             ),
           )
         ],
@@ -222,9 +226,11 @@ class _LoginContentState extends State<LoginContent>
 
   @override
   void onRegisterSuccess(String message) {}
-  @override
-  void loadUpdateSuccess(user) {}
 
   @override
   void loadChangePassSuccess(bool res) {}
+
+  @override
+  void loadUpdateSuccess(UpdateUser user) {
+  }
 }

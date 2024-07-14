@@ -7,7 +7,7 @@
             InvoiceTickets = new List<InvoiceTicketDTO>();
             FoodAndDrinks = new List<InvoiceFoodAndDrinkDTO>();
         }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public Guid RoomId { get; set; }
         public Guid ShowTimeId { get; set; }
         public Guid TheaterId { get; set; }

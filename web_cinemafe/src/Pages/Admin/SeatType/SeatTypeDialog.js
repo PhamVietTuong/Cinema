@@ -5,7 +5,7 @@ import { CreateSeatTypeAction, UpdateSeatTypeAction } from "../../../Redux/Actio
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
+    name: yup.string().required('Vui lòng nhập thông tin!'),
 });
 
 const SeatTypeDialog = ({ open, onClose, row, isEditing }) => {
@@ -30,7 +30,7 @@ const SeatTypeDialog = ({ open, onClose, row, isEditing }) => {
         } else {
             setFormData({
                 name: '',
-                status: false,
+                status: true,
             });
         }
     }, [row]);
@@ -95,13 +95,13 @@ const SeatTypeDialog = ({ open, onClose, row, isEditing }) => {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {isEditing ? "Edit Seat Type" : "Create Seat Type"}
+                        {isEditing ? "Sửa loại ghế" : "Thêm loại ghế"}
                     </DialogTitle>
                     <DialogContent>
                         <TextField
                             margin="dense"
                             name="name"
-                            label="Name"
+                            label="Tên"
                             type="text"
                             fullWidth
                             value={formData.name}
@@ -110,8 +110,8 @@ const SeatTypeDialog = ({ open, onClose, row, isEditing }) => {
                             error={!!errors.name}
                             helperText={errors.name}
                         />                      
-                        <FormControlLabel
-                            label="Status"
+                        {/* <FormControlLabel
+                            label="Trạng thái"
                             labelPlacement="start"
                             control={
                                 <Switch
@@ -121,12 +121,12 @@ const SeatTypeDialog = ({ open, onClose, row, isEditing }) => {
                                     color="primary"
                                 />
                             }
-                        />
+                        /> */}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={onClose}>Cancel</Button>
+                        <Button onClick={onClose}>Hủy</Button>
                         <Button onClick={handleSubmit} autoFocus>
-                            Save
+                            Lưu
                         </Button>
                     </DialogActions>
                 </Dialog>

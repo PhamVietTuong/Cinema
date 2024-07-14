@@ -96,7 +96,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AccountScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const AccountScreen()),
                   );
                 },
                 icon: const Icon(Icons.person_outlined),
@@ -108,9 +109,7 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => UserInfoPage(
-                              infoUser: Config.userInfo!,
-                            )),
+                        builder: (context) => const UserInfoPage()),
                   );
                 },
                 icon: const Icon(Icons.person_outlined),
@@ -119,14 +118,15 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
               ),
         backgroundColor: Styles.backgroundContent[Config.themeMode],
         actions: [
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: const Icon(
-          //     Icons.notifications,
-          //     size: Styles.iconInAppBar,
-          //   ),
-          //   color: Styles.boldTextColor[Config.themeMode],
-          // ),
+          IconButton(
+            onPressed: () {
+            },
+            icon: const Icon(
+              Icons.fastfood_outlined,
+              size: Styles.iconInAppBar,
+            ),
+            color: Styles.boldTextColor[Config.themeMode],
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -228,7 +228,8 @@ class _HomePageState extends State<HomePage> implements MovieViewContract {
                                 ),
                               ),
                               Container(
-                                width: (wS - 30) * 0.33,
+                                width: (wS - 30) * 0.33 - 4,
+                                margin: const EdgeInsets.symmetric(horizontal: 2),
                                 padding: const EdgeInsets.all(5),
                                 decoration: _selectedTabIndex == 1
                                     ? BoxDecoration(

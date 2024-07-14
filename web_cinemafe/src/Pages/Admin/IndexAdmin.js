@@ -157,68 +157,6 @@ const IndexAdmin = () => {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        <Link to="Movie">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Inbox />
-                                </ListItemIcon>
-                                <ListItemText primary="Phim" />
-                            </ListItemButton>
-                        </Link>
-                        <Link to="AgeRestriction">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Inbox />
-                                </ListItemIcon>
-                                <ListItemText primary="Giới hạn độ tuổi" />
-                            </ListItemButton>
-                        </Link>
-
-                        <Link to="TicketType">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Inbox />
-                                </ListItemIcon>
-                                <ListItemText primary="Loại vé" />
-                            </ListItemButton>
-                        </Link>
-
-                        <Link to="MovieType">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Inbox />
-                                </ListItemIcon>
-                                <ListItemText primary="Thể loại phim" />
-                            </ListItemButton>
-                        </Link>
-
-                        <Link to="SeatType">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Inbox />
-                                </ListItemIcon>
-                                <ListItemText primary="Loại ghế" />
-                            </ListItemButton>
-                        </Link>
-
-                        <Link to="UserType">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Inbox />
-                                </ListItemIcon>
-                                <ListItemText primary="Loại người dùng" />
-                            </ListItemButton>
-                        </Link>
-
-                        <Link to="theater">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Inbox />
-                                </ListItemIcon>
-                                <ListItemText primary="Rạp" />
-                            </ListItemButton>
-                        </Link>
-
                         <Link to="revenue">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -237,12 +175,75 @@ const IndexAdmin = () => {
                             </ListItemButton>
                         </Link>
 
+                        <Link to="Movie">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Phim" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="MovieType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Thể loại phim" />
+                            </ListItemButton>
+                        </Link>
+                        
+                        <Link to="AgeRestriction">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Giới hạn độ tuổi" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="theater">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Chi nhánh" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="TicketType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Loại vé" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="SeatType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Loại ghế" />
+                            </ListItemButton>
+                        </Link>
+
                         <Link to="user">
                             <ListItemButton>
                                 <ListItemIcon>
                                     <Inbox />
                                 </ListItemIcon>
                                 <ListItemText primary="Người dùng" />
+                            </ListItemButton>
+                        </Link>
+
+                        <Link to="UserType">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Loại người dùng" />
                             </ListItemButton>
                         </Link>
                     </List>

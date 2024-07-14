@@ -353,12 +353,12 @@ namespace Cinema.Repository
 
             foreach (var theater in theaters)
             {
-                var rooms = await _context.Room.Where(x => x.TheaterId == theater.Id && x.Status == RoomStatus.Active).ToListAsync();
+                var rooms = await _context.Room.Where(x => x.TheaterId == theater.Id && x.Status == RoomStatus.Active).OrderBy(x => x.Name).ToListAsync();
 
                 var roomDTOs = new List<RoomDTO>();
                 foreach (var room in rooms)
                 {
-                    var showTimeRooms = await _context.ShowTimeRoom.Include(x => x.ShowTime).Where(x => x.RoomId == room.Id && x.ShowTime.StartTime >= DateTime.Now.Date).ToListAsync();
+                    var showTimeRooms = await _context.ShowTimeRoom.Include(x => x.ShowTime).Where(x => x.RoomId == room.Id && x.ShowTime.StartTime >= DateTime.Now.Date).OrderBy(x => x.ShowTime.StartTime).ToListAsync();
 
                     var showTimeRoomDTOs = new List<ShowTimeRoomDTO>();
                     foreach(var showTimeRoom in showTimeRooms)

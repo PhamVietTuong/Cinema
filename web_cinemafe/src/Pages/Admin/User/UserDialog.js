@@ -19,8 +19,10 @@ const schema = yup.object().shape({
     email: yup.string().email('Email không hợp lệ').required('Vui lòng điền thông tin!'),
     phone: yup.string().matches(/^\d+$/, 'Số điện thoại phải là số!').required('Vui lòng điền thông tin!'),
     birthDay: yup.date().max(new Date(), 'Ngày sinh phải nhỏ hơn ngày hiện tại!').required('Vui lòng điền thông tin!'),
-    userName: yup.string().required('Vui lòng điền thông tin!'),
-    password: yup.string().required('Vui lòng điền thông tin!'),
+    password: yup.string().required('Vui lòng điền thông tin!').matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt"
+    ),
     confirmPassword: yup.string().required('Vui lòng điền thông tin!'),
 });
 
@@ -40,7 +42,6 @@ const UserDialog = ({ open, onClose }) => {
         phone: '',
         birthDay: CurrentDate(),
         gender: true,
-        userName: '',
         password: '',
         confirmPassword: '',
         status: true,
@@ -51,7 +52,6 @@ const UserDialog = ({ open, onClose }) => {
         email: '',
         phone: '',
         birthDay: '',
-        userName: '',
         password: '',
         confirmPassword: '',
     });
@@ -74,6 +74,16 @@ const UserDialog = ({ open, onClose }) => {
     const validateField = async (name, value) => {
         try {
             await yup.reach(schema, name).validate(value);
+            if (name === 'confirmPassword') {
+                const password = formData.password;
+                if (value !== password) {
+                    setErrors({
+                        ...errors,
+                        confirmPassword: "Mật khẩu không khớp",
+                    });
+                    return;
+                }
+            }
             setErrors({
                 ...errors,
                 [name]: '',
@@ -89,6 +99,9 @@ const UserDialog = ({ open, onClose }) => {
     const handleSubmit = async () => {
         try {
             await schema.validate(formData, { abortEarly: false });
+            if (errors.confirmPassword) {
+                return;
+            }
             dispatch(CreateUserAction(formData));
             onClose();
         } catch (error) {
@@ -101,7 +114,7 @@ const UserDialog = ({ open, onClose }) => {
             });
         }
     };
-    
+
     return (
         <>
             <Fragment>
@@ -118,6 +131,7 @@ const UserDialog = ({ open, onClose }) => {
                         <FormControl fullWidth margin="dense">
                             <InputLabel>Loại người dùng</InputLabel>
                             <Select
+                                label="Loại người dùng"
                                 name="userTypeName"
                                 value={formData.userTypeName}
                                 onChange={handleInputChange}
@@ -139,6 +153,33 @@ const UserDialog = ({ open, onClose }) => {
                             onBlur={(event) => validateField(event.target.name, event.target.value)}
                             error={!!errors.fullName}
                             helperText={errors.fullName}
+                        />
+                        <FormControl fullWidth margin="dense">
+                            <InputLabel>Giới tính</InputLabel>
+                            <Select
+                                label="Giới tính"
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value={true}>Nam</MenuItem>
+                                <MenuItem value={false}>Nữ</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField
+                            margin="dense"
+                            name="birthDay"
+                            label="Ngày sinh"
+                            type="date"
+                            fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            value={formData.birthDay}
+                            onChange={handleInputChange}
+                            onBlur={(event) => validateField(event.target.name, event.target.value)}
+                            error={!!errors.birthDay}
+                            helperText={errors.birthDay}
                         />
                         <TextField
                             margin="dense"
@@ -163,45 +204,7 @@ const UserDialog = ({ open, onClose }) => {
                             onBlur={(event) => validateField(event.target.name, event.target.value)}
                             error={!!errors.phone}
                             helperText={errors.phone}
-                        />
-                        <TextField
-                            margin="dense"
-                            name="birthDay"
-                            label="Ngày sinh"
-                            type="date"
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            value={formData.birthDay}
-                            onChange={handleInputChange}
-                            onBlur={(event) => validateField(event.target.name, event.target.value)}
-                            error={!!errors.birthDay}
-                            helperText={errors.birthDay}
-                        />
-                        <FormControl fullWidth margin="dense">
-                            <InputLabel>Giới tính</InputLabel>
-                            <Select
-                                name="gender"
-                                value={formData.gender}
-                                onChange={handleInputChange}
-                            >
-                                <MenuItem value={true}>Nam</MenuItem>
-                                <MenuItem value={false}>Nữ</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            margin="dense"
-                            name="userName"
-                            label="Tài khoản"
-                            type="text"
-                            fullWidth
-                            value={formData.userName}
-                            onChange={handleInputChange}
-                            onBlur={(event) => validateField(event.target.name, event.target.value)}
-                            error={!!errors.userName}
-                            helperText={errors.userName}
-                        />
+                        />                      
                         <TextField
                             margin="dense"
                             name="password"
