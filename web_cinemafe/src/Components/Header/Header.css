@@ -14,7 +14,7 @@ a {
     font-family: "Josefin Sans", sans-serif;
     background-color: #0f172a;
     display: inline-block;
-    height: 186px;
+    height: 140px;
     left: 0;
     position: fixed;
     top: 0;
@@ -421,21 +421,21 @@ a {
     transform: translateY(0);
 }
 
-.hd-bot-km {
+.hd-bot-dc {
     align-items: center;
     display: flex;
     gap: 24px;
 }
 
-.hd-bot-km a {
+.hd-bot-dc a {
     color: #fff;
 }
 
-.hd-bot-km .km:hover, .hd-bot-km .tsk:hover, .hd-bot-km .tcgt:hover, .hd-bot-km .gt:hover {
+.hd-bot-dc .dc:hover, .hd-bot-dc .news:hover, .hd-bot-dc .about-us:hover {
     color: #f3ea28;
 } 
 
-.hd-bot-km .link {
+.hd-bot-dc .link {
     text-decoration: underline;
     text-underline-position: under;
     transition: .3s ease-in-out;
@@ -463,7 +463,7 @@ a {
 
 .hd-regi-list.--second {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% - 5px);
     right: 0;
     flex-direction: column;
     align-items: flex-start;
@@ -473,7 +473,7 @@ a {
     gap: 0;
     transition: 0.3s ease-in-out;
     opacity: 0;
-        transform: translateY(5px);
+    transform: translateY(5px);
     visibility: hidden;
 }
 

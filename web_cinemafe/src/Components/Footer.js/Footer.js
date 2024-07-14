@@ -1,8 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Footer.css'
 import { faFacebook, faTiktok, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { TheaterListAction } from '../../Redux/Actions/CinemasAction';
 
 const Footer = () => {
+    const dispatch = useDispatch();
+    const { theaterList } = useSelector((state) => state.CinemasReducer)
+    useEffect(() => {
+        dispatch(TheaterListAction());
+    }, [dispatch]);
+
     return (
         <>
             <div className="footer">
@@ -15,13 +24,10 @@ const Footer = () => {
                             <div className="footer-list row">
                                 <div className="footer-item col col-4">
                                     <a href="/" className="ft-logo" aria-label="The logo of Cinestar">
-                                        <img src="/Images/HeaderAndFooter/footer-logo.png" alt="" />
+                                        <img src="/Images/logo.png" alt="" />
                                     </a>
-                                    <div className="ft-text">
-                                        <p className="txt-deskop">BE HAPPY, BE A STAR</p>
-                                    </div>
                                     <div className="ft-group-btn">
-                                        <a className="btn dat-ve" href="/movie">
+                                        <a className="btn dat-ve" href="/">
                                             <span className="txt">ĐẶT VÉ</span>
                                         </a>
                                         <a className="btn dat-bap-nuoc" href="/popcorn-drink">
@@ -32,7 +38,7 @@ const Footer = () => {
                                         <ul className="list">
                                             <li className="item item-fb">
                                                 <a
-                                                    href="https://www.facebook.com/cinestarcinemasvietnam"
+                                                    href="/"
                                                     className="link"
                                                     aria-label="Facebook of Cinestart"
                                                 >
@@ -42,7 +48,7 @@ const Footer = () => {
                                             <li className="item item-yt">
                                                 <a
                                                     className="link"
-                                                    href="https://www.youtube.com/@CinestarCinemasVietnam"
+                                                    href="/"
                                                     aria-label="Youtube of Cinestar"
                                                 >
                                                     <FontAwesomeIcon className="icon" icon={faYoutube} />
@@ -51,7 +57,7 @@ const Footer = () => {
                                             <li className="item item-tt">
                                                 <a
                                                     className="link"
-                                                    href="https://www.tiktok.com/@cinestar_cinemas?is_from_webapp=1&sender_device=pc"
+                                                    href="/"
                                                     aria-label="Tiktok of Cinestar"
                                                 >
                                                     <FontAwesomeIcon className="icon" icon={faTiktok} />
@@ -59,7 +65,7 @@ const Footer = () => {
                                             </li>
                                         </ul>
                                     </div>
-                                    <div className="ft-lg">
+                                    {/* <div className="ft-lg">
                                         <div className="txt">
                                             <p>Ngôn ngữ:</p>
                                         </div>
@@ -81,137 +87,72 @@ const Footer = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="footer-item col col-4">
-                                    <div className="row footer-item-top">
-                                        <div className="col-6 col">
-                                            <div className="text">
-                                                Tài khoản
-                                            </div>
-                                            <ul className="menu-list">
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/login/?prevUrl=">
-                                                        Đăng nhập
-                                                    </a>
-                                                </li>
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/register">
-                                                        Đăng ký
-                                                    </a>
-                                                </li>
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/membership">
-                                                        Membership
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="col-6 col">
-                                            <div className="text">
-                                                Thuê sự kiện
-                                            </div>
-                                            <ul className="menu-list">
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/he-thong-thue-rap/">
-                                                        Thuê rạp
-                                                    </a>
-                                                </li>
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/loai-hinh-cho-thue-khac/">
-                                                        Các loại hình cho thuê khác
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div className="row footer-item-bot">
-                                        <div className="col-6 col">
-                                            <div className="text">
-                                                Xem Phim
-                                            </div>
-                                            <ul className="menu-list">
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/movie/showing/">
-                                                        Phim đang chiếu
-                                                    </a>
-                                                </li>
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/movie/upcoming/">
-                                                        Phim sắp chiếu
-                                                    </a>
-                                                </li>
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/movie">
-                                                        Suất chiếu đặc biệt
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="col-6 col">
-                                            <div className="text">
-                                                Cinestar
-                                            </div>
-                                            <ul className="menu-list">
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/about-us">
-                                                        Giới thiệu
-                                                    </a>
-                                                </li>
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/contact">
-                                                        Liên hệ
-                                                    </a>
-                                                </li>
-                                                <li className="menu-item">
-                                                    <a className="menu-link" href="/career/">
-                                                        Tuyển dụng
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="footer-item col col-2">
                                     <div className="text">
-                                        Dịch vụ khác
+                                        Tài khoản
                                     </div>
                                     <ul className="menu-list">
                                         <li className="menu-item">
-                                            <a className="menu-link" href="/Restaurant">
-                                                Nhà hàng
+                                            <a className="menu-link" href="/login">
+                                                Đăng nhập
                                             </a>
                                         </li>
                                         <li className="menu-item">
-                                            <a className="menu-link" href="/Kidzone">
-                                                Kidzone
+                                            <a className="menu-link" href="/login">
+                                                Đăng ký
+                                            </a>
+                                        </li>
+                                        {/* <li className="menu-item">
+                                            <a className="menu-link" href="/membership">
+                                                Membership
+                                            </a>
+                                        </li> */}
+                                    </ul>
+                                </div>
+                                <div className="footer-item col col-2">
+                                    <div className="text">
+                                        Xem Phim
+                                    </div>
+                                    <ul className="menu-list">
+                                        <li className="menu-item">
+                                            <a className="menu-link" href="/movie/showing/">
+                                                Phim đang chiếu
                                             </a>
                                         </li>
                                         <li className="menu-item">
-                                            <a className="menu-link" href="/Bowling">
-                                                Bowling
+                                            <a className="menu-link" href="/movie/upcoming/">
+                                                Phim sắp chiếu
+                                            </a>
+                                        </li>
+                                        {/* <li className="menu-item">
+                                            <a className="menu-link" href="/movie">
+                                                Suất chiếu đặc biệt
+                                            </a>
+                                        </li> */}
+                                    </ul>
+                                </div>
+                                <div className="footer-item col col-2">
+                                    <div className="text">
+                                        CKC CINEMA
+                                    </div>
+                                    <ul className="menu-list">
+                                        <li className="menu-item">
+                                            <a className="menu-link" href="/about-us">
+                                                Giới thiệu
                                             </a>
                                         </li>
                                         <li className="menu-item">
-                                            <a className="menu-link" href="/billiard">
-                                                Billiards
+                                            <a className="menu-link" href="/news">
+                                                Tin tức
                                             </a>
                                         </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/gym">
-                                                Gym
+                                        {/* <li className="menu-item">
+                                            <a className="menu-link" href="/movie">
+                                                Suất chiếu đặc biệt
                                             </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/opera">
-                                                Nhà hát Opera
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/coffee">
-                                                Coffee
-                                            </a>
-                                        </li>
+                                        </li> */}
                                     </ul>
                                 </div>
                                 <div className="footer-item col col-2">
@@ -219,76 +160,24 @@ const Footer = () => {
                                         Hệ thống rạp
                                     </div>
                                     <ul className="menu-list">
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/">
-                                                Tất cả hệ thống rạp
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/8f3a5832-8340-4a43-89bc-6653817162f1">
-                                                Cinestar Quốc Thanh
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/667c7727-857e-4aac-8aeb-771a8f86cd14"
-                                            >
-                                                Cinestar Hai Bà Trưng (TP.HCM)
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/cf13e1ce-2c1f-4c73-8ce5-7ef65472db3c">
-                                                Cinestar Sinh Viên (Bình Dương)
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/8f54df74-3796-42ea-896e-cd638eec1fe3">
-                                                Cinestar Mỹ Tho
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a
-                                                className="menu-link"
-                                                href="/book-tickets/4a51b9ee-f143-4411-9dbb-5f54a1c382c0"
-                                            >
-                                                Cinestar Kiên Giang
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/104509be-034e-47c1-bf1b-aba7f2df4f28">
-                                                Cinestar Lâm Đồng
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/e08f986a-1937-419e-b1b1-759b7c74728b">
-                                                Cinestar Đà Lạt
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a className="menu-link" href="/book-tickets/f8a60463-5c34-49a9-9ae8-52081e387bb8">
-                                                Cinestar Huế
-                                            </a>
-                                        </li>
+                                        {theaterList.map((item, index) => (
+                                            <li key={index} className="menu-item">
+                                                <a className="menu-link" href={`/book-tickets/${item.id}`}>
+                                                    {item.name}
+                                                </a>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
                             <div className="footer-bottom" >
                                 <div className="footer-bottom-left" >
-                                    © 2023 Cinestar. All rights reserved.
+                                    © 2024 CKC Cinema. All rights reserved.
                                 </div>
                                 <ul className="menu-list">
                                     <li className="menu-item">
-                                        <a className="menu-link" href="/chinh-sach-bao-mat">
+                                        <a className="menu-link" href="/">
                                             Chính sách bảo mật
-                                        </a>
-                                    </li>
-                                    <li className="menu-item">
-                                        <a className="menu-link" href="/news">
-                                            Tin điện ảnh
-                                        </a>
-                                    </li>
-                                    <li className="menu-item">
-                                        <a className="menu-link" href="/faqs">
-                                            Hỏi và đáp
                                         </a>
                                     </li>
                                 </ul>
@@ -299,7 +188,7 @@ const Footer = () => {
                         <div classname="container" style={{ textAlign: "center" }}>
                             <div classname="ft-bct" style={{ width: 143, margin: "12px auto" }}>
                                 <a
-                                    href="http://online.gov.vn/HomePage/CustomWebsiteDisplay.aspx?DocId=51406"
+                                    href="http://online.gov.vn"
                                     target="_blank"
                                     aria-label="Ministry of Industry and Trade recognized Cinestar"
                                     bis_size='{"x":694,"y":6655,"w":143,"h":54,"abs_x":694,"abs_y":6655}'
@@ -314,14 +203,14 @@ const Footer = () => {
                             </div>
                             <div classname="ft-author-content" style={{ fontSize: 10 }}>
                                 <ul>
-                                    <li>
-                                        CÔNG TY CỔ PHẦN GIẢI TRÍ PHÁT HÀNH PHIM – RẠP CHIẾU PHIM NGÔI SAO
-                                        <br />
-                                        ĐỊA CHỈ: 135 HAI BÀ TRƯNG, PHƯỜNG BẾN NGHÉ, QUẬN 1, TP.HCM
+                                    <li style={{ margin: "0 0 4px 0" }}>
+                                        CÔNG TY CỔ PHẦN GIẢI TRÍ PHÁT HÀNH PHIM – RẠP CHIẾU PHIM CKC Cinema
+                                    </li>
+                                    <li style={{ margin: "0 0 4px 0" }}>
+                                        ĐỊA CHỈ: 65 HUỲNH THÚC KHÁNG, PHƯỜNG BẾN NGHÉ, QUẬN 1, TP.HCM
                                     </li>
                                     <li>
-                                        GIẤY CNĐKDN SỐ: 0312742744, ĐĂNG KÝ LẦN ĐẦU NGÀY 18/04/2014, ĐĂNG
-                                        KÝ THAY ĐỔI LẦN THỨ 2 NGÀY 15/09/2014, CẤP BỞI SỞ KH&amp;ĐT TP.HCM
+                                        GIẤY CNĐKDN SỐ: 88888888888, ĐĂNG KÝ NGÀY 15/06/2024
                                     </li>
                                 </ul>
                             </div>

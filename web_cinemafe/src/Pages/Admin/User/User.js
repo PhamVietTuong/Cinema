@@ -56,7 +56,7 @@ const User = () => {
                         <DataGrid
                             rows={listUser}
                             columns={columns}
-                            getRowId={(row) => row.id}
+                            getRowId={(row) => row.phone}
                             disableColumnFilter
                             disableColumnSelector
                             disableDensitySelector

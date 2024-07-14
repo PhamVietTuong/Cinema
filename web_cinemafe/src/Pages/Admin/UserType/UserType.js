@@ -33,7 +33,7 @@ const UserType = () => {
     };
 
     const columns = useMemo(() => [
-        { field: 'name', headerName: 'Name', flex: 1 },
+        { field: 'name', headerName: 'Tên', flex: 1 },
         {
             field: 'actions',
             type: 'actions',
@@ -58,7 +58,7 @@ const UserType = () => {
         <>
             <Box sx={{ width: 1, mb: 2 }}>
                 <Button variant="contained" color="primary" onClick={handleCreateClick}>
-                    Add New User Type
+                    Thêm loại người dùng mới
                 </Button>
             </Box>
             <Box sx={{ height: 400, width: 1 }}>

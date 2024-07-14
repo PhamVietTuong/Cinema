@@ -32,7 +32,7 @@ ol, ul {
 
 .footer .footer-item .ft-logo {
     display: block;
-    width: 43%;
+    width: 50%;
 }
 
 .footer .footer-item .footer-item-bot {
@@ -205,4 +205,8 @@ ol, ul {
     transition: all .3s;
     text-decoration: none;
     color: #fff;
+}
+
+.ft-author-content li {
+    margin: 2px;
 }

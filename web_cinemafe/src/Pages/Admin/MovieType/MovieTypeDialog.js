@@ -5,14 +5,14 @@ import { CreateMovieTypeAction, UpdateMovieTypeAction } from "../../../Redux/Act
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
+    name: yup.string().required('Vui lòng nhập thông tin!'),
 });
 
 const MovieTypeDialog = ({ open, onClose, row, isEditing }) => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         name: '',
-        status: false,
+        status: true,
     });
 
     const [errors, setErrors] = useState({
@@ -95,13 +95,13 @@ const MovieTypeDialog = ({ open, onClose, row, isEditing }) => {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {isEditing ? "Edit Movie Type" : "Create Movie Type"}
+                        {isEditing ? "Sửa loại phim" : "Thêm loại phim"}
                     </DialogTitle>
                     <DialogContent>
                         <TextField
                             margin="dense"
                             name="name"
-                            label="Name"
+                            label="Tên"
                             type="text"
                             fullWidth
                             value={formData.name}
@@ -110,8 +110,8 @@ const MovieTypeDialog = ({ open, onClose, row, isEditing }) => {
                             error={!!errors.name}
                             helperText={errors.name}
                         />                      
-                        <FormControlLabel
-                            label="Status"
+                        {/* <FormControlLabel
+                            label="Trạng thái"
                             labelPlacement="start"
                             control={
                                 <Switch
@@ -121,12 +121,12 @@ const MovieTypeDialog = ({ open, onClose, row, isEditing }) => {
                                     color="primary"
                                 />
                             }
-                        />
+                        /> */}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={onClose}>Cancel</Button>
+                        <Button onClick={onClose}>Hủy</Button>
                         <Button onClick={handleSubmit} autoFocus>
-                            Save
+                            Lưu
                         </Button>
                     </DialogActions>
                 </Dialog>

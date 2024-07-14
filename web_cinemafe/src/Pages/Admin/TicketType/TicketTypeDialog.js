@@ -5,14 +5,14 @@ import { CreateTicketTypeAction, UpdateTicketTypeAction } from "../../../Redux/A
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
+    name: yup.string().required('Vui lòng nhập thông tin!'),
 });
 
 const TicketTypeDialog = ({ open, onClose, row, isEditing }) => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         name: '',
-        status: false,
+        status: true,
     });
 
     const [errors, setErrors] = useState({
@@ -30,7 +30,7 @@ const TicketTypeDialog = ({ open, onClose, row, isEditing }) => {
         } else {
             setFormData({
                 name: '',
-                status: false,
+                status: true,
             });
         }
     }, [row]);
@@ -95,13 +95,13 @@ const TicketTypeDialog = ({ open, onClose, row, isEditing }) => {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {isEditing ? "Edit Ticket Type" : "Create Ticket Type"}
+                        {isEditing ? "Sửa loại vé" : "Thêm loại vé"}
                     </DialogTitle>
                     <DialogContent>
                         <TextField
                             margin="dense"
                             name="name"
-                            label="Name"
+                            label="Tên"
                             type="text"
                             fullWidth
                             value={formData.name}
@@ -110,7 +110,7 @@ const TicketTypeDialog = ({ open, onClose, row, isEditing }) => {
                             error={!!errors.name}
                             helperText={errors.name}
                         />                      
-                        <FormControlLabel
+                        {/* <FormControlLabel
                             label="Status"
                             labelPlacement="start"
                             control={
@@ -121,7 +121,7 @@ const TicketTypeDialog = ({ open, onClose, row, isEditing }) => {
                                     color="primary"
                                 />
                             }
-                        />
+                        /> */}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={onClose}>Cancel</Button>

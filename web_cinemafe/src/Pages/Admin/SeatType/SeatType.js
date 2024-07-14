@@ -33,18 +33,18 @@ const SeatType = () => {
     };
 
     const columns = useMemo(() => [
-        { field: 'name', headerName: 'Name', flex: 1 },
-        {
-            field: 'status',
-            headerName: 'Status',
-            flex: 1,
-            renderCell: (params) => (
-                <Switch
-                    checked={params.value}
-                    color="primary"
-                />
-            )
-        },
+        { field: 'name', headerName: 'Tên', flex: 1 },
+        // {
+        //     field: 'status',
+        //     headerName: 'Trạng thái',
+        //     flex: 1,
+        //     renderCell: (params) => (
+        //         <Switch
+        //             checked={params.value}
+        //             color="primary"
+        //         />
+        //     )
+        // },
         {
             field: 'actions',
             type: 'actions',
@@ -69,7 +69,7 @@ const SeatType = () => {
         <>
             <Box sx={{ width: 1, mb: 2 }}>
                 <Button variant="contained" color="primary" onClick={handleCreateClick}>
-                    Add New Seat Type
+                    Thêm loại ghế mới
                 </Button>
             </Box>
             <Box sx={{ height: 400, width: 1 }}>
