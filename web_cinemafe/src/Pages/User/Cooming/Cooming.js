@@ -23,10 +23,6 @@ const Cooming = () => {
     } = useSelector((state) => state.CinemasReducer);
 
     useEffect(() => {
-        console.log(resultInfoSearch);
-    }, [resultInfoSearch]);
-
-    useEffect(() => {
         if (movieList && movieList.length > 0) {
             const today = moment();
             const cooming = movieList.filter(movie => moment(movie.releaseDate).isAfter(today));

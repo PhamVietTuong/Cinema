@@ -26,6 +26,7 @@ import EditMoviePage from "../Pages/Admin/Movie/EditMoviePage";
 import Revenue from "../Pages/Admin/Revenue/Revenue";
 import Invoice from "../Pages/Admin/Invoice/Invoice";
 import User from "../Pages/Admin/User/User";
+import ShowTime from "../Pages/Admin/ShowTime/ShowTime";
 
 const Routers = () => {
     return (
@@ -90,6 +91,7 @@ const Routers = () => {
                         <Route path="revenue" element={<Revenue />} />
                         <Route path="invoice" element={<Invoice />} />
                         <Route path="user" element={<User />} />
+                        <Route path="showTime" element={<ShowTime />} />
                     </Route>
                 </Routes>
             </Router>
