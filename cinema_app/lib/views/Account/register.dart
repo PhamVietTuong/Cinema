@@ -15,7 +15,6 @@ class RegisterContent extends StatefulWidget {
 
 class _RegisterContentState extends State<RegisterContent>
     implements UserViewContract {
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -26,13 +25,13 @@ class _RegisterContentState extends State<RegisterContent>
 
   late UserPresenter _presenter;
   bool isMale = true;
-  late String selectedGender;
+  String selectedGender = 'Nam giới';
   String textPass = "Mật khẩu";
   String textConfirmPass = "Nhập lại mật khẩu";
   String textbirthday = "Ngày sinh";
   String textRegister = "Đăng ký";
-  late String textMale;
-  String textWoman = "Nữ";
+  String textMale = "Nam giới";
+  String textWoman = "Nữ giới";
   String textErorr = "Lỗi";
   String textClose = Constants.textClose;
   String textSuccess = "Thành công";
@@ -66,19 +65,15 @@ class _RegisterContentState extends State<RegisterContent>
   @override
   void initState() {
     super.initState();
-    textMale = Config.languageMode == Constants.codeVNKey ? "Nam" : "Nam giới";
-    selectedGender = textMale;
     _presenter = UserPresenter(this);
-    _birthdayController.text =
-        DateTime.now().toLocal().toString().split(' ')[0];
-    gender = [textMale, textWoman];
+    _birthdayController.text = Styles.formatDate(DateTime.now());
     tranlate();
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.parse(_birthdayController.text),
+      initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
@@ -91,7 +86,6 @@ class _RegisterContentState extends State<RegisterContent>
 
   void _registerUser() {
     var register = Register(
-      userName: _usernameController.text,
       fullName: _fullNameController.text,
       email: _emailController.text,
       phone: _phoneController.text,
@@ -127,7 +121,6 @@ class _RegisterContentState extends State<RegisterContent>
       },
     );
   }
-
   @override
   void onRegisterSuccess(String message) {
     showDialog(
@@ -171,13 +164,6 @@ class _RegisterContentState extends State<RegisterContent>
             ),
             child: Column(
               children: [
-                InfoTextField(
-                  textController: _usernameController,
-                  icon: const Icon(Icons.person),
-                  lableText: 'Tên đăng nhập',
-                  readOnly: false,
-                  obscurePassword: false,
-                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -235,19 +221,27 @@ class _RegisterContentState extends State<RegisterContent>
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
-                        child: InfoTextField(
-                      textController: _birthdayController,
-                      icon: const Icon(Icons.date_range),
-                      lableText: "Ngày sinh",
-                      readOnly: true,
-                      obscurePassword: false,
-                      onTap: () {
-                        _selectDate(context);
-                        setState(() {});
-                      },
-                    )),
+                      child: TextField(
+                        style: TextStyle(
+                            color: Styles.boldTextColor[Config.themeMode]),
+                        controller: _birthdayController,
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: textbirthday,
+                          prefixIcon: const Icon(Icons.calendar_today),
+                          labelStyle: TextStyle(
+                              color: Styles.boldTextColor[Config.themeMode]),
+                          prefixIconColor:
+                              Styles.boldTextColor[Config.themeMode],
+                          focusColor: Styles.boldTextColor[Config.themeMode],
+                        ),
+                      ),
+                    ),
                     const SizedBox(
-                      width: 5,
+                      width: 10,
                     ),
                     DropdownButton<String>(
                         value: selectedGender,
@@ -261,7 +255,7 @@ class _RegisterContentState extends State<RegisterContent>
                         onChanged: (String? newValue) {
                           setState(() {
                             selectedGender = newValue!;
-                            if (newValue == selectedGender) {
+                            if (newValue == "Nam") {
                               isMale = true;
                             } else {
                               isMale = false;
@@ -284,9 +278,20 @@ class _RegisterContentState extends State<RegisterContent>
                 ),
                 ElevatedButton(
                   onPressed: _registerUser,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Styles.btnColor[Config.themeMode],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                  ),
                   child: Text(
                     textRegister,
-                    style: const TextStyle(fontSize: Styles.titleFontSize),
+                    style: TextStyle(
+                      color: Styles.boldTextColor[Config.themeMode],
+                      fontSize: Styles.titleFontSize,
+                    ),
                   ),
                 ),
               ],
@@ -311,6 +316,4 @@ class _RegisterContentState extends State<RegisterContent>
   void loadChangePassSuccess(bool res) {
     // TODO: implement loadChangePassSuccess
   }
-  
- 
 }

@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
 using AutoMapper;
+using Microsoft.Win32;
 
 namespace Cinema.Repository
 {
@@ -359,16 +360,32 @@ namespace Cinema.Repository
 
 		public async Task<UserDTO> UpdateAsync(UserDTO entity)
 		{
-			var user = await _context.User.FirstOrDefaultAsync(x => x.Phone == entity.Phone);
+			try
+			{
+                var user = await _context.User.FirstOrDefaultAsync(x => x.Phone == entity.Phone);
 
-			user.FullName = entity.FullName;
-			user.Email = entity.Email;
-			user.Gender = entity.Gender;
-			user.BirthDay = entity.BirthDay;
+                if (!string.IsNullOrEmpty(entity.Email))
+                {
+                    var existingEmail = await _context.User.FirstOrDefaultAsync(u => u.Email.ToLower() == entity.Email.ToLower());
+                    if (existingEmail != null)
+                    {
+                        throw new ArgumentException("Email đã được đăng ký trước đó.");
+                    }
+                }
 
-			await _context.SaveChangesAsync();
+                user.FullName = entity.FullName;
+                user.Email = entity.Email;
+                user.Gender = entity.Gender;
+                user.BirthDay = entity.BirthDay;
 
-			return entity;
+                await _context.SaveChangesAsync();
+
+                return entity;
+            }
+			catch(ArgumentException)
+			{
+				throw;
+			}
 		}
 
 		public async Task<List<UserRowViewModel>> GetListUserAsync()

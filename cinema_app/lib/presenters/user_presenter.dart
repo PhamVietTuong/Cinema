@@ -35,8 +35,6 @@ class UserPresenter {
     try {
       User user = await repository.login(login);
       _view.loadLoginSuccess(user);
-      print(user.birthday);
-      // print(user.expirationTime);
     } catch (e) {
       _view.onLoadError('$e');
       throw ('$e');
@@ -49,16 +47,15 @@ class UserPresenter {
         _view.onLoadError('error');
         return;
       }
-        if (!Validation.isValidPhone(userInfo.phone)) {
+      if (!Validation.isValidPhone(userInfo.phone)) {
         _view.onLoadError('error');
         return;
       }
-      
-      if (userInfo.id.trim().isEmpty ||
-          userInfo.fullname.trim().isEmpty ||
+
+      if (userInfo.fullname.trim().isEmpty ||
           userInfo.phone.trim().isEmpty ||
           userInfo.email.trim().isEmpty ||
-          userInfo.birthday.toString().isEmpty) {
+          userInfo.birthDay.toString().isEmpty) {
         _view.onLoadError('error');
         return;
       }

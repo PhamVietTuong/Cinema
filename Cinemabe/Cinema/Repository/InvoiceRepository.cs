@@ -1,6 +1,7 @@
 ﻿using Cinema.Contracts;
 using Cinema.Data;
 using Cinema.Data.Enum;
+using Cinema.Data.Models;
 using Cinema.DTOs;
 using Cinema.Helper;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace Cinema.Repository
                         .ThenInclude(x => x.AgeRestriction)
                 .Include(x => x.Room)
                     .ThenInclude(x => x.Theater)
+                .Include(x => x.TicketType)
                 .Where(x => x.Code == invoice.Code).ToListAsync();
             var invoiceTicketShowTime = invoiceTicket.Select(x => x.ShowTime).FirstOrDefault();
             var invoiceTicketRoom = invoiceTicket.Select(x => x.Room).FirstOrDefault();
@@ -45,6 +47,36 @@ namespace Cinema.Repository
                 });
             }
 
+            string ticketTypes = "";
+            Dictionary<string, int> ticketTypeCounts = new Dictionary<string, int>();
+
+            foreach (var item in invoiceTicket)
+            {
+                string ticketTypeName = item.TicketType.Name;
+
+                if (ticketTypeCounts.ContainsKey(ticketTypeName))
+                {
+                    ticketTypeCounts[ticketTypeName]++;
+                }
+                else
+                {
+                    ticketTypeCounts[ticketTypeName] = 1;
+                }
+            }
+
+            int count = 0;
+            int totalTypes = ticketTypeCounts.Count;
+
+            foreach (var kvp in ticketTypeCounts)
+            {
+                count++;
+                if (count == totalTypes && totalTypes > 1)
+                {
+                    ticketTypes += ", ";
+                }
+                ticketTypes += $"{kvp.Value} {kvp.Key}";
+            }
+
             var result = new InvoiceViewModel
             {
                 MovieImage = invoiceTicketShowTime.Movie.Image,
@@ -61,6 +93,7 @@ namespace Cinema.Repository
                 SeatName = String.Join(", ", invoiceTicket.Select(x => x.SeatName)),
                 FoodAndDrinks = resultFoodAndDrinks,
                 TheaterAddress = invoiceTicketRoom.Theater.Address,
+                TicketType = ticketTypes,
             };
 
             return result;

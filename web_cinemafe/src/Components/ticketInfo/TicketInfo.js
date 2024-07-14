@@ -65,10 +65,10 @@ const TicketInfo = ({ show, handleClose, row }) => {
                                 <p className="tt">Số vé</p>
                                 <p className="ct">{invoiceByCode.numberTicket}</p>
                             </div>
-                            {/* <div className="inner-info-row type-ticket">
+                            <div className="inner-info-row type-ticket">
                                 <p className="tt">Loại vé</p>
-                                <p className="ct">Người Lớn</p>
-                            </div> */}
+                                <p className="ct">{invoiceByCode.ticketType}</p>
+                            </div>
                         </div>
                         <div className="inner-info">
                             <div className="inner-info-row num-position">
@@ -81,7 +81,7 @@ const TicketInfo = ({ show, handleClose, row }) => {
                                 <p className="tt">Rạp</p>
                                 <p className="ct">{invoiceByCode.theaterName}</p>
                                 <p className="dt">
-                                    65 Huỳnh Thúc Kháng
+                                {invoiceByCode.theaterAddress}
                                 </p>
                             </div>
                         </div>
@@ -94,7 +94,7 @@ const TicketInfo = ({ show, handleClose, row }) => {
                             </div>
                         </div>
                     </div>
-                    {/* <Button className="btn btn--pri btn-save btn-full-width">Tải vé về máy</Button> */}
+                    <Button className="btn btn--pri btn-save btn-full-width">Tải vé về máy</Button>
                 </Container>
             </Modal.Body>
         </Modal>
