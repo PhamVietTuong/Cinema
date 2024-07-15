@@ -1,5 +1,5 @@
-import { TOKEN, USER_LOGIN } from "../../Ustil/Settings/Config";
-import { LOGIN_USER, LOGOUT, REGISTER_USER, SET_LIST_USER, SET_RESULT_SEND_CODE } from "../Actions/Type/UserType";
+import { SEARCH_HISTORY, TOKEN, USER_LOGIN } from "../../Ustil/Settings/Config";
+import { ADD_SEARCH_HISTORY, LOGIN_USER, LOGOUT, REGISTER_USER, SET_LIST_USER, SET_RESULT_SEND_CODE } from "../Actions/Type/UserType";
 
 let user = {};
 if (localStorage.getItem(USER_LOGIN) || sessionStorage.getItem(USER_LOGIN)) {
@@ -11,7 +11,8 @@ const stateDefault = {
     isLoggedIn: Object.keys(user).length !== 0,
     userId: user.phone,
     listUser: [],
-    resultSendCode: {}
+    resultSendCode: {},
+    searchHistory: JSON.parse(localStorage.getItem(SEARCH_HISTORY)) || [],
 }
 
 export const UserReducer = (state = stateDefault, action) => {
@@ -40,6 +41,7 @@ export const UserReducer = (state = stateDefault, action) => {
             sessionStorage.removeItem(TOKEN);
             localStorage.removeItem(USER_LOGIN);
             localStorage.removeItem(TOKEN);
+            localStorage.removeItem(SEARCH_HISTORY);
             window.location.href = '/';
             return {
                 ...state,
@@ -54,8 +56,16 @@ export const UserReducer = (state = stateDefault, action) => {
         }
 
         case SET_RESULT_SEND_CODE: {
-            console.log(action.resultSendCode);
             return { ...state, resultSendCode: action.resultSendCode };
+        }
+
+        case ADD_SEARCH_HISTORY: {
+            const updatedSearchHistory = [...new Set([...state.searchHistory, action.searchTerm])];
+            localStorage.setItem(SEARCH_HISTORY, JSON.stringify(updatedSearchHistory));
+            return {
+                ...state,
+                searchHistory: updatedSearchHistory
+            };
         }
 
         default: return { ...state };

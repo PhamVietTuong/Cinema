@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { userService } from "../../Services/UserService";
-import { LOGIN_USER, LOGOUT, SET_LIST_USER, SET_RESULT_SEND_CODE } from "./Type/UserType";
+import { ADD_SEARCH_HISTORY, LOGIN_USER, LOGOUT, SET_LIST_USER, SET_RESULT_SEND_CODE } from "./Type/UserType";
 
 export const LoginUserAction = (loginInfo, rememberMe, callBack) => {
     return async (dispatch) => {
@@ -226,4 +226,11 @@ export const CreateUserAction = (register) => {
             console.log("CreateUserAction: ", error);
         }
     }
+}
+
+export const AddSearchHistoryAction = (searchTerm) => {
+    return {
+        type: ADD_SEARCH_HISTORY,
+        searchTerm,
+    };
 }

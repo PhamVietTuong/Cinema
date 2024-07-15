@@ -190,3 +190,37 @@ video {
 .booking-cinestar-wr {
     margin-bottom: 24px;
 }
+
+
+.movie-showing:after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: -3;
+}
+
+.movie-showing:after {
+    background: url(/public/Images/mobile-blur-2.webp) no-repeat;
+    background-position: top right;
+    filter: blur(100px);
+}
+
+.movie-showing:before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -3;
+    background: url(/public/Images/mobile-blur-6.webp) no-repeat;
+    background-position: top left;
+    filter: blur(100px);
+}

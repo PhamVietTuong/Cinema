@@ -39,7 +39,7 @@
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
     .ticket .food-box .content {
         flex-direction: row;
     }
@@ -57,7 +57,7 @@
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
     .ticket .food-box .content-top {
         align-items: flex-start;
         text-align: left;
@@ -79,4 +79,31 @@
 
 .ticket .ticket-ft .dot {
     color: #F03;
+}
+
+@media (max-width: 767px) {
+    .ticket .combo-item {
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .sec-ticket .food-box {
+        border: 1px solid rgba(248, 250, 252, .5);
+        border-radius: var(--rs);
+        padding: 10px;
+    }
+}
+
+@media (max-width: 767px) {
+    .food-box .content .content-top .sub-title {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 767px) {
+    .sec-ticket .food-box .content-top .desc {
+        color: #f3ea28;
+        font-size: 12px;
+    }
 }

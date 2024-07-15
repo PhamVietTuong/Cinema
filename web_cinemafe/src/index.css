@@ -329,6 +329,7 @@ p {
       z-index: 1;
       background-color: transparent;
       font-family: "Anton", sans-serif;
+      display: flex !important;
       align-items: center;
       justify-content: center;
 }
@@ -652,4 +653,28 @@ button {
 
 .btn--white:hover::after {
   width: 100%;
+}
+
+.PaginationMovie>ul>li>button {
+font-size: 14px;
+  font-family: Anton,
+    sans-serif;
+    color: rgb(248, 250, 252) !important;
+}
+
+.PaginationMovie>ul>li>button>svg {
+  font-size: 30px;
+}
+
+.PaginationMovie>ul>li>button:hover {
+  color: #f3ea28 !important;
+}
+.PaginationMovie > ul>li> .Mui-selected {
+  background-color: #f3ea28;
+    color: #0f172a !important;
+}
+
+.PaginationMovie>ul>li>.Mui-selected:hover {
+background: linear-gradient(106deg, #639, #36c 102.69%);  color: #0f172a !important;
+color: rgb(255, 255, 255) !important;
 }

@@ -29,10 +29,13 @@ namespace Cinema.Controllers
         private readonly IMovieTypeRepository _movieTypeRepository;
         private readonly ISeatTypeRepository _seatTypeRepository;
         private readonly IUserTypeRepository _userTypeRepository;
+        private readonly IShowTimeRoomRepository _showTimeRoomRepository;
+        private readonly INewsRepository _newsRepository;
 
         public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository,
             ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository,
-            IUserTypeRepository userTypeRepository)
+            IUserTypeRepository userTypeRepository, IShowTimeRoomRepository showTimeRoomRepository)
+            IUserTypeRepository userTypeRepository, INewsRepository newsRepository)
         {
             _ageRestrictionRepository = ageRestrictionRepository;
             _foodAndDrinkRepository = foodAndDrinkRepository;
@@ -44,6 +47,8 @@ namespace Cinema.Controllers
             _movieTypeRepository = movieTypeRepository;
             _seatTypeRepository = seatTypeRepository;
             _userTypeRepository = userTypeRepository;
+            _showTimeRoomRepository = showTimeRoomRepository;
+            _newsRepository = newsRepository;
         }
 
         #region Search theater, movie
@@ -384,7 +389,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetTheater/{id}")]
-        [Authorize(Roles = both)]
+        [AllowAnonymous]
         public async Task<ActionResult<TheaterDTO>> GetTheater(Guid id)
         {
             try
@@ -763,6 +768,45 @@ namespace Cinema.Controllers
             try
             {
                 var result = await _userTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region ShowTimeRoom
+
+        [HttpPost("UpdateShowTimeRoom")]
+        [Authorize(Roles = admin)]
+        public async Task<ActionResult<ShowTimeRoomDTO>> UpdateShowTimeRoom(ShowTimeRoomDTO entity)
+        {
+            try
+            {
+                var result = await _showTimeRoomRepository.UpdateAsync(entity);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
+        #endregion
+
+        #region News
+
+        [HttpGet("GetNewsList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<NewsDTO>>> GetNewsList()
+        {
+            try
+            {
+                var result = await _newsRepository.GetNewsListAsync();
 
                 return Ok(result);
             }

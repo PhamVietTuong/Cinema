@@ -37,7 +37,7 @@ namespace Cinema.Repository
 			{
 				var newUserTypes = new UserType
 				{
-					Name = "User",
+					Name = "admin",
 				};
 
 				await _context.AddAsync(newUserTypes);
@@ -173,7 +173,6 @@ namespace Cinema.Repository
 		{
 			User user = null;
 			string authority = string.Empty;
-			int allowedHours = 3;
 
 			if (userType == "user")
 			{
@@ -193,22 +192,22 @@ namespace Cinema.Repository
 				var role = user.UserType.Name;
 				var tokenHandler = new JwtSecurityTokenHandler();
 				var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]);
-				DateTime expirationTime = DateTime.Now.AddHours(allowedHours);
+                DateTime expirationTime = DateTime.Now.AddYears(3);
 
-				var tokenDescriptor = new SecurityTokenDescriptor
+                var tokenDescriptor = new SecurityTokenDescriptor
 				{
 					Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.Role, role)}),
 					Issuer = _configuration["JWT:ValidIssuer"],
 					Audience = _configuration["JWT:ValidAudience"],
-					Expires = expirationTime,
-					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-				};
-				var token = tokenHandler.CreateToken(tokenDescriptor);
+					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                    Expires = expirationTime,
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
 
 				return new TokenInfo
 				{
 					Token = tokenHandler.WriteToken(token),
-					ExpirationTime = expirationTime,
 					Authority = role
 				};
 			}
@@ -216,7 +215,7 @@ namespace Cinema.Repository
 			{
 				return null;
 			}
-		}
+		}	
 
 		public async Task<User> Register(Register register)
 		{
@@ -365,7 +364,7 @@ namespace Cinema.Repository
 			{
                 var user = await _context.User.FirstOrDefaultAsync(x => x.Phone == entity.Phone);
 
-                if (!string.IsNullOrEmpty(entity.Email))
+                if (!string.IsNullOrEmpty(entity.Email) && entity.Email.ToLower() != user.Email.ToLower())
                 {
                     var existingEmail = await _context.User.FirstOrDefaultAsync(u => u.Email.ToLower() == entity.Email.ToLower());
                     if (existingEmail != null)
@@ -375,7 +374,6 @@ namespace Cinema.Repository
                 }
 
                 user.FullName = entity.FullName;
-                user.Phone = entity.Phone;
                 user.Email = entity.Email;
                 user.Gender = entity.Gender;
                 user.BirthDay = entity.BirthDay;

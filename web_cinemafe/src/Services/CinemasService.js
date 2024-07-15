@@ -159,6 +159,10 @@ export class CinemasService extends baseService {
     GetListInvoice = () => {
         return this.get(`api/Cinemas/GetListInvoice`)
     }
+
+    UpdateShowTimeRoom = (showTimeRoomDTO) => {
+        return this.post(`api/Cinemas/UpdateShowTimeRoom`, showTimeRoomDTO)
+    }
 }
 
 export const cinemasService = new CinemasService()

@@ -40,7 +40,7 @@ namespace Cinema.Controllers
                 }
 
                 TokenInfo token = await _userRepository.GenerateToken(loginInfo.Username, "user");
-                return new AuthenticationResponse(user, token.Authority, token.Token, token.ExpirationTime);
+                return new AuthenticationResponse(user, token.Authority, token.Token);
             }
             catch (Exception e)
             {
@@ -61,7 +61,7 @@ namespace Cinema.Controllers
                 if (user == null) { return null; }
 
                 TokenInfo token = await _userRepository.GenerateToken(loginInfo.Username, "admin");
-                return new AuthenticationResponse(user, token.Authority, token.Token, token.ExpirationTime);
+                return new AuthenticationResponse(user, token.Authority, token.Token);
             }
             catch (Exception e)
             {

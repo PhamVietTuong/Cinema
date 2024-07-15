@@ -26,17 +26,17 @@ namespace Cinema.Account
 
 				var newUser = new User
 				{
-					UserName = "User",
 					PasswordHash = "Hacker2k3@",
 					PasswordSalt = "Hacker2k3@",
 					FullName = "User",
+					Phone = "012345678",
 					Email = "User@gmail.com",
 					BirthDay = DateTime.UtcNow,
 					Status = true,
 				};
 				var registeredUser = await userRepository.CreateAsync(newUser);
 
-                Console.WriteLine($"Register success: {"UserName: " + registeredUser.UserName + "Password: " + newUser.PasswordHash}");
+                Console.WriteLine($"Register success: {"Phone: " + registeredUser.Phone + "Password: " + newUser.PasswordHash}");
                 Console.ReadLine();
             };
 
