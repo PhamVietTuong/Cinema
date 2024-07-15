@@ -13,6 +13,39 @@ const Film = (props) => {
                 <div className="image">
                     <Link to={`/movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
                         <img src={`${DOMAIN}/Images/${props.movie.image}`} alt={`${props.movie.image}`} />
+
+                        <div class="content">
+                            <div class="inner">
+                                <p class="name">{props.movie.name} ({props.movie.ageRestrictionName})</p>
+                                <ul class="info-detail">
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/icon-tag.svg" />
+                                        </span>
+                                        <span class="txt">{props.movie.movieType}</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/icon-clock.svg" />
+                                        </span>
+                                        <span class="txt">{props.movie.time}'</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/earth-americas.svg" />
+                                        </span>
+                                        <span class="txt">Khác</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/subtitle.svg" />
+                                        </span>
+                                        <span class="txt">{props.movie.languages}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div className="attach">
                             <div className="type-movie">
                                 {props.movie.projectionForm === ProjectionForm.Time2D ? <span className="txt">2D</span> : <span className="txt">3D</span>}

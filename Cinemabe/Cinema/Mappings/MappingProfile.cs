@@ -20,7 +20,7 @@ namespace Cinema.Mappings
             CreateMap<Room, RoomDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<Movie, MovieDTO>().ReverseMap();
-
+            CreateMap<News, NewsDTO>().ReverseMap();
         }
     }
 }
