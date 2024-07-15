@@ -6,7 +6,7 @@ import { ListMovieByTheaterIdAction, ListShowTimeByMovieIdAction } from '../../.
 import moment from 'moment';
 import 'moment/locale/vi';
 import { ShowTimeType } from '../../../Enum/ShowTimeType';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const generateDates = (numDays) => {
     const dates = [];
@@ -19,6 +19,11 @@ const generateDates = (numDays) => {
 const dates = generateDates(3);
 
 const BookQuickTicket = (props) => {
+    const {
+        isLoggedIn,
+    } = useSelector((state) => state.UserReducer);
+    const navigate = useNavigate();
+
     const [theater, setTheater] = useState("");
     const [theaterId, setTheaterId] = useState("");
     const [selectedheaterName, setSelectedheaterName] = useState("");
@@ -122,6 +127,21 @@ const BookQuickTicket = (props) => {
             )
         }
     }, [theater, Movie, showTime, activeDateIndex]);
+
+    const filteredShowTimes = listShowTimeByMovieId.filter(item => {
+        const showTimeDate = moment(item.startTime);
+        if (moment(dateMovie).isSame(moment(), 'day')) {
+            return showTimeDate.isAfter(moment());
+        }
+        return true;
+    });
+
+    const handleLinkClick = () => (e) => {
+        if (!isLoggedIn) {
+            e.preventDefault();
+            return navigate("/login");
+        }
+    };
 
     return (
         <>
@@ -233,18 +253,14 @@ const BookQuickTicket = (props) => {
                                 onChange={handleShowTimeChange}
                             >
                                 {
-                                    listShowTimeByMovieId.length !== 0 ?
-                                        listShowTimeByMovieId.filter(item => {
-                                            const showTimeDate = moment(item.startTime);
-                                            if (moment(dateMovie).isSame(moment(), 'day')) {
-                                                return showTimeDate.isAfter(moment());
-                                            }
-                                            return true;
-                                        }).map((item) => (
+                                    filteredShowTimes.length !== 0 
+                                        ?
+                                        filteredShowTimes.map((item) => (
                                             <MenuItem
                                                 key={item.showTimeId}
                                                 value={`${item.showTimeId}|${item.roomId}|${moment(new Date(item.startTime)).format("HH:mm")}`}
                                                 className='BQTMenuItem'
+                                                onClick={handleLinkClick()}
                                             >
                                                 {moment(new Date(item.startTime)).format("HH:mm") + " - "} {item.showTimeType === ShowTimeType.Deluxe ? "Deluxe" : "Standard"}
                                             </MenuItem>

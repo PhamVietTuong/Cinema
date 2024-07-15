@@ -383,7 +383,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetTheater/{id}")]
-        [Authorize(Roles = both)]
+        [AllowAnonymous]
         public async Task<ActionResult<TheaterDTO>> GetTheater(Guid id)
         {
             try
