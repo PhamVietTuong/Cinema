@@ -34,8 +34,7 @@ namespace Cinema.Controllers
 
         public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository,
             ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository,
-            IUserTypeRepository userTypeRepository, IShowTimeRoomRepository showTimeRoomRepository)
-            IUserTypeRepository userTypeRepository, INewsRepository newsRepository)
+            IUserTypeRepository userTypeRepository, IShowTimeRoomRepository showTimeRoomRepository, INewsRepository newsRepository)
         {
             _ageRestrictionRepository = ageRestrictionRepository;
             _foodAndDrinkRepository = foodAndDrinkRepository;
