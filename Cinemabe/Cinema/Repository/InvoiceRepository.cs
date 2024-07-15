@@ -163,12 +163,14 @@ namespace Cinema.Repository
                 var totalSeat = await _context.InvoiceTicket
                     .Where(x => x.Invoice.CreationTime >= startDate
                                 && x.Invoice.CreationTime <= endDate
+                                && x.Invoice.Status == InvoiceStatus.Successful
                                 && x.Room.TheaterId == theater.Id)
                     .SumAsync(x => x.Price);
 
                 var totalFoodAndDrink = await _context.InvoiceFoodAndDrink
                     .Where(x => x.Invoice.CreationTime >= startDate
                                 && x.Invoice.CreationTime <= endDate
+                                && x.Invoice.Status == InvoiceStatus.Successful
                                 && x.TheaterId == theater.Id)
                     .SumAsync(x => x.Price * x.Quantity);
                 result.Add(new RevenueTheaterViewModel

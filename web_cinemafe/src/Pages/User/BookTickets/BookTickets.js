@@ -4,7 +4,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import BookTicket from '../../../Components/Film/BookTicket';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { ShowTimeByTheaterIdAction, TheaterAction } from '../../../Redux/Actions/CinemasAction';
 import { DOMAIN } from '../../../Ustil/Settings/Config';
@@ -17,6 +17,9 @@ const BookTickets = () => {
     const [value, setValue] = useState('1');
     const { theaterDetail, listMovieByTheaterId } = useSelector((state) => state.CinemasReducer)
     const [loading, setLoading] = useState(true);
+    const currentTime = moment();
+    const today = moment().startOf('day');
+    const endDate = moment().add(2, 'days').endOf('day');
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -33,10 +36,6 @@ const BookTickets = () => {
     }, [dispatch, id]);
 
     const isCurrentMovie = (movies) => {
-        const currentTime = moment();
-        const today = moment().startOf('day');
-        const endDate = moment().add(2, 'days').endOf('day');
-
         return movies
             .filter(movie => moment(movie.releaseDate).isSameOrBefore(today))
             .map(movie => {
@@ -68,16 +67,63 @@ const BookTickets = () => {
     };
 
     const isUpcomingMovie = (movies) => {
-        const today = moment().startOf('day');
-
         return movies
-            .filter(movie => moment(movie.releaseDate).isAfter(today))
+            .filter(movie => moment(movie.releaseDate).isAfter(today)).map(movie => {
+                const filteredSchedules = movie.schedules.filter(schedule =>
+                    moment(schedule.date).isBetween(today, endDate, null, '[]')
+                ).map(schedule => {
+                    const filteredTheaters = schedule.theaters.map(theater => {
+                        const filteredShowTimes = theater.showTimes.filter(showTime =>
+                            moment(showTime.startTime).isSameOrAfter(currentTime)
+                        );
+                        return {
+                            ...theater,
+                            showTimes: filteredShowTimes
+                        };
+                    }).filter(theater => theater.showTimes.length > 0);
+
+                    return {
+                        ...schedule,
+                        theaters: filteredTheaters
+                    };
+                }).filter(schedule => schedule.theaters.length > 0);
+
+                return {
+                    ...movie,
+                    schedules: filteredSchedules
+                };
+            })
     };
 
     const isSpecialMovie = (movies) => {
         const today = moment().startOf('day');
 
-        return movies.filter(movie => moment(movie.releaseDate).isAfter(today) && movie.isSpecial)
+        return movies.filter(movie => moment(movie.releaseDate).isAfter(today) && movie.isSpecial).map(movie => {
+            const filteredSchedules = movie.schedules.filter(schedule =>
+                moment(schedule.date).isBetween(today, endDate, null, '[]')
+            ).map(schedule => {
+                const filteredTheaters = schedule.theaters.map(theater => {
+                    const filteredShowTimes = theater.showTimes.filter(showTime =>
+                        moment(showTime.startTime).isSameOrAfter(currentTime)
+                    );
+                    return {
+                        ...theater,
+                        showTimes: filteredShowTimes
+                    };
+                }).filter(theater => theater.showTimes.length > 0);
+
+                return {
+                    ...schedule,
+                    theaters: filteredTheaters
+                };
+            }).filter(schedule => schedule.theaters.length > 0);
+
+            return {
+                ...movie,
+                schedules: filteredSchedules
+            };
+        })
+            .filter(movie => movie.schedules.length > 0);
     }
 
     if (loading) {

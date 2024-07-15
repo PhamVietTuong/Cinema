@@ -220,12 +220,12 @@ const Header = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="hd-bot-action-left">
+                                {/* <div className="hd-bot-action-left">
                                     <a className="hd-bot-loca lich-chieu" href="/showtimes/">
                                         <FontAwesomeIcon className="icon" icon={faCalendar} />
                                         <span className="txt">Lịch chiếu</span>
                                     </a>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="hd-bot-km">
                                 {/* <a className="link km" href="/chuong-trinh-khuyen-mai/">

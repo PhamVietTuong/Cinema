@@ -27,6 +27,7 @@ const TicketInfo = ({ show, handleClose, row }) => {
             dispatch(GetInvoiceAction(row.code));
         }
     }, [row.code]);
+    
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header className="modal-header">

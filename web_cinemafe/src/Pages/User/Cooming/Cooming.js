@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Slide from "../../../Components/Slide/Slide";
 import { MovieListAction } from "../../../Redux/Actions/CinemasAction";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, CircularProgress, Grid, Pagination } from "@mui/material";
 import TheaterComponent from "../../../Components/Theater/TheaterComponent";
 import moment from "moment";
 import Film from "../../../Components/Film/Film";
@@ -10,9 +10,10 @@ import Film from "../../../Components/Film/Film";
 const Cooming = () => {
     const dispatch = useDispatch();
     const { movieList } = useSelector((state) => state.CinemasReducer);
-
     const [movieCooming, setMovieCooming] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
 
     useEffect(() => {
         dispatch(MovieListAction()).then(() => setLoading(false));
@@ -33,6 +34,13 @@ const Cooming = () => {
 
     const hasMovies = resultInfoSearch?.movies && resultInfoSearch.movies.length > 0;
     const hasTheaters = resultInfoSearch?.theaters && resultInfoSearch.theaters.length > 0;
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+
+    const paginatedMovies = movieCooming.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const pageCount = Math.ceil(movieCooming.length / itemsPerPage);
 
     if (loading) {
         return (
@@ -87,20 +95,32 @@ const Cooming = () => {
                                     <h1 className="title">PHIM Sắp CHIẾU</h1>
                                     <Grid container spacing={3}>
                                         {
-                                            movieCooming.map((item) => (
+                                            paginatedMovies.map((item) => (
                                                 <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
                                                     <Film movie={item} />
                                                 </Grid>
                                             ))
                                         }
                                     </Grid>
+
+                                    <Box mt={4} display="flex" justifyContent="center">
+                                        <Pagination
+                                            count={pageCount}
+                                            page={currentPage}
+                                            onChange={handlePageChange}
+                                            variant="outlined"
+                                            size="large"
+                                            style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+                                            color="primary"
+                                            className="PaginationMovie"
+                                        />
+                                    </Box>
                                 </div>
                             </div>
                         </section>
                     </>
                 )
             }
-
         </>
     );
 }

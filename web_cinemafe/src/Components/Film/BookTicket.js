@@ -3,14 +3,19 @@ import './BookTicket.css'
 import { Accordion, AccordionDetails, AccordionSummary, Fade, Icon, SvgIcon, Typography } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
 import { DOMAIN } from '../../Ustil/Settings/Config';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { ShowTimeType } from '../../Enum/ShowTimeType';
+import { useSelector } from 'react-redux';
 
 const BookTicket = (props) => {
+    const {
+        isLoggedIn,
+    } = useSelector((state) => state.UserReducer);
     const [expanded, setExpanded] = useState("panel0");
     const [dates, setDates] = useState([]);
     const [activeDateIndex, setActiveDateIndex] = useState(0);
+    const navigate = useNavigate();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -33,6 +38,13 @@ const BookTicket = (props) => {
             const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             return dateOnly.getTime() === selectedDateOnly.getTime();
         });
+    };
+
+    const handleLinkClick = () => (e) => {
+        if (!isLoggedIn) {
+            e.preventDefault();
+            return navigate("/login");
+        }
     };
 
     return (
@@ -125,6 +137,7 @@ const BookTicket = (props) => {
                                                                                                         activeDateIndex: handleDateSelection(new Date(showTime.startTime))
                                                                                                     }} 
                                                                                                     className="movies-time-item"
+                                                                                                    onClick={handleLinkClick()}
                                                                                                     >
                                                                                                     {moment(new Date(showTime.startTime)).format("HH:mm")}
                                                                                                 </Link>
@@ -156,7 +169,10 @@ const BookTicket = (props) => {
                                                                                                         selectedheaterName: theater.theaterName,
                                                                                                         projectionForm: props.bookTicket.projectionForm,
                                                                                                         activeDateIndex: activeDateIndex
-                                                                                                    }} className="movies-time-item">
+                                                                                                    }} 
+                                                                                                    className="movies-time-item"
+                                                                                                    onClick={handleLinkClick()}
+                                                                                                    >
                                                                                                     {moment(new Date(showTime.startTime)).format("HH:mm")}
                                                                                                 </Link>
                                                                                             </div>
