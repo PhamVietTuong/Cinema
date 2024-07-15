@@ -29,10 +29,12 @@ namespace Cinema.Controllers
         private readonly IMovieTypeRepository _movieTypeRepository;
         private readonly ISeatTypeRepository _seatTypeRepository;
         private readonly IUserTypeRepository _userTypeRepository;
+        private readonly IShowTimeRoomRepository _showTimeRoomRepository;
         private readonly INewsRepository _newsRepository;
 
         public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository,
             ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository,
+            IUserTypeRepository userTypeRepository, IShowTimeRoomRepository showTimeRoomRepository)
             IUserTypeRepository userTypeRepository, INewsRepository newsRepository)
         {
             _ageRestrictionRepository = ageRestrictionRepository;
@@ -45,6 +47,7 @@ namespace Cinema.Controllers
             _movieTypeRepository = movieTypeRepository;
             _seatTypeRepository = seatTypeRepository;
             _userTypeRepository = userTypeRepository;
+            _showTimeRoomRepository = showTimeRoomRepository;
             _newsRepository = newsRepository;
         }
 
@@ -768,6 +771,25 @@ namespace Cinema.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region ShowTimeRoom
+
+        [HttpPost("UpdateShowTimeRoom")]
+        [Authorize(Roles = admin)]
+        public async Task<ActionResult<ShowTimeRoomDTO>> UpdateShowTimeRoom(ShowTimeRoomDTO entity)
+        {
+            try
+            {
+                var result = await _showTimeRoomRepository.UpdateAsync(entity);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
         }
 

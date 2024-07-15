@@ -54,6 +54,7 @@ class _LoginContentState extends State<LoginContent>
     super.initState();
     _presenter = UserPresenter(this);
     tranlate();
+
   }
 
   @override
@@ -79,6 +80,8 @@ class _LoginContentState extends State<LoginContent>
 
   @override
   void loadLoginSuccess(User user) {
+    print(user);
+
     Config.saveInfoUser(user);
     //print(Config.userInfo!.birthday);
     showDialogOnLoadSuccess(user);
@@ -124,7 +127,7 @@ class _LoginContentState extends State<LoginContent>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InfoTextField(
-            lableText: "Tên đăng nhập",
+            lableText: "Nhập số điện thoại hoặc email",
             textController: _usernameController,
             icon: const Icon(Icons.person),
             readOnly: false,
@@ -197,10 +200,20 @@ class _LoginContentState extends State<LoginContent>
               }
               Login loginInfo = Login(username: username, password: password);
               _presenter.login(loginInfo);
+              
             },
+            style: ElevatedButton.styleFrom(
+                    backgroundColor: Styles.btnColor[Config.themeMode],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                  ),
             child: Text(
               textLogin,
-              style: const TextStyle(fontSize: Styles.titleFontSize),
+              style:  TextStyle( color: Styles.boldTextColor[Config.themeMode],
+                      fontSize: Styles.titleFontSize,),
             ),
           )
         ],

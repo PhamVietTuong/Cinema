@@ -31,7 +31,6 @@ const InfoTicketBooking = () => {
                 try {
                     const decodedResult = decodeURIComponent(escape(atob(result)));
                     const decodedJson = JSON.parse(decodedResult);
-                    console.log(decodedJson);
                     setMovieInfo(decodedJson.movieInfo);
                     setQR(decodedJson.barcode)
                     setResultCode((decodedJson.resultCode === "00" || decodedJson.resultCode === 0) ? true : false)

@@ -1,0 +1,27 @@
+.schedule {
+    background-color: #3b44d1;
+    color: #fff;
+}
+
+.time-slots {
+    width: 50px;
+    border-right: 1px solid #ccc;
+}
+
+.time-slot {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px !important;
+}
+
+.current-date {
+    background-color: rgb(70, 68, 169) !important;
+}
+
+.select {
+    background-color: rgb(46, 45, 133) !important;
+    border: none;
+    box-shadow: 7px 7px 15px 2px #888888;
+}
