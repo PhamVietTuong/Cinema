@@ -365,7 +365,7 @@ namespace Cinema.Repository
 			{
                 var user = await _context.User.FirstOrDefaultAsync(x => x.Phone == entity.Phone);
 
-                if (!string.IsNullOrEmpty(entity.Email))
+                if (!string.IsNullOrEmpty(entity.Email) && entity.Email.ToLower() != user.Email.ToLower())
                 {
                     var existingEmail = await _context.User.FirstOrDefaultAsync(u => u.Email.ToLower() == entity.Email.ToLower());
                     if (existingEmail != null)
