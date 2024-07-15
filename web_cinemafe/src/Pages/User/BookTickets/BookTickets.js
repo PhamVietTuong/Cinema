@@ -183,7 +183,7 @@ const BookTickets = () => {
                                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                                         {
                                                             isCurrentMovie(listMovieByTheaterId).map((item) => (
-                                                                    <Grid item xs={6} key={item.id}>
+                                                                    <Grid item xs={12} lg={6} key={item.id}>
                                                                         <BookTicket bookTicket={item}></BookTicket>
                                                                     </Grid>
                                                             ))

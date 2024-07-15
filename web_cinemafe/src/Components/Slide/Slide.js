@@ -25,6 +25,16 @@ const Slide = (props) => {
                             navigation={true}
                             modules={[Pagination, Navigation]}
                             className="mySwiper"
+                            breakpoints={{
+                                375: { 
+                                    slidesPerView: 2,
+                                    spaceBetween: 15
+                                },
+                                768: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 30
+                                }
+                            }}
                         >
                             {
                                 props.movieList.map((item) => {

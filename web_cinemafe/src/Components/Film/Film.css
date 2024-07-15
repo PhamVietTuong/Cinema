@@ -10,10 +10,16 @@
     position: relative;
     border-radius: 4px;
     font-size: 10px;
-    height: auto;
+    height: 400px;
     overflow: hidden;
     width: 100%;
     border: 1px solid gray;
+}
+
+@media (max-width: 600px) {
+    .web-movie-box .image {
+            height: 300px;
+        }
 }
 
 .web-movie-box .image>a>img {
@@ -149,6 +155,12 @@ a {
     width: 150px !important;
     height: 40px;
     background: #f3ea28;
+}
+
+@media (max-width: 600px) {
+    .book-ticket {
+        width: 190px !important;
+    }
 }
 
 .book-ticket:hover {

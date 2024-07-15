@@ -97,7 +97,7 @@ const Showing = () => {
                                     <Grid container spacing={3}>
                                         {
                                             paginatedMovies.map((item, index) => (
-                                                <Grid item xs={12} sm={6} md={4} lg={3} key={`${item.id}-${index}`}>
+                                                <Grid item xs={6} sm={6} md={4} lg={3} key={`${item.id}-${index}`}>
                                                     <Film movie={item} />
                                                 </Grid>
                                             ))
