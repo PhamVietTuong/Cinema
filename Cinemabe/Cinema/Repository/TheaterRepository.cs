@@ -49,7 +49,7 @@ namespace Cinema.Repository
             .Include(x => x.ShowTime)
                 .ThenInclude(x => x.Movie)
                     .ThenInclude(m => m.AgeRestriction)
-            .Where(x => x.Room.TheaterId == theaterId && x.ShowTime.Status == true)
+            .Where(x => x.Room.TheaterId == theaterId && x.ShowTime.Status == true&&x.ShowTime.Movie.Status==true)
             .ToListAsync();
 
             var movies = showTimeRooms.Select(sRoom => sRoom.ShowTime.Movie).Distinct().ToList();

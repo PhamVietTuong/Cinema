@@ -1,4 +1,4 @@
-import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/models/res_get_code.dart';
 import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/data/models/user.dart';

@@ -18,6 +18,8 @@ namespace Cinema.Repository
             _context = context;
             _mapper = mapper;
         }
+
+
         public async Task<List<MovieDTO>> GetMoviesOriginal()
         {
             var m = await _context.Movie.Include(x => x.AgeRestriction).ToListAsync();
@@ -88,7 +90,7 @@ namespace Cinema.Repository
             await _context.SaveChangesAsync();
             return movie;
         }
-      
+
 
         public async Task<List<MovieDetailViewModel>> GetMovieList()
         {
@@ -337,14 +339,17 @@ namespace Cinema.Repository
             return showtimeViewModels;
         }
 
-        public async Task<List<MovieDetailViewModel>> GetMoviesByName(string name)
+        public async Task<List<MovieDetailViewModel>> GetMoviesByName(SearchDTO search)
         {
-            var input = name.Trim().ToLower().RemoveDiacritics();
+            var input = search.SearchKey.Trim().ToLower().RemoveDiacritics();
             var movies = await _context.Movie
                                .Include(x => x.AgeRestriction)
                                .Where(x => x.Status == true)
                                .ToListAsync();
-            var filteredMovies = movies.Where(x => x.Name.ToLower().RemoveDiacritics().Contains(input)).ToList();
+
+            var filteredMovies = search.IsActor
+            ? movies.Where(x => x.Actor.ToLower().RemoveDiacritics().Contains(input)).ToList()
+            : movies.Where(x => x.Name.ToLower().RemoveDiacritics().Contains(input)).ToList();
             var results = new List<MovieDetailViewModel>();
             foreach (var movie in filteredMovies)
             {
@@ -402,9 +407,9 @@ namespace Cinema.Repository
 
             var movieTypeDetails = await _context.MovieTypeDetail.Where(x => x.MovieId == entity.Id).ToListAsync();
 
-            foreach(var movieTypeDetail in movieTypeDetails)
+            foreach (var movieTypeDetail in movieTypeDetails)
             {
-                if(!entity.MovieTypes.Select(x => x.Id).Contains(movieTypeDetail.MovieTypeId))
+                if (!entity.MovieTypes.Select(x => x.Id).Contains(movieTypeDetail.MovieTypeId))
                 {
                     _context.MovieTypeDetail.Remove(movieTypeDetail);
                 }
@@ -426,5 +431,30 @@ namespace Cinema.Repository
 
             return entity;
         }
+
+        public async Task<List<CommentViewModel>> GetCommentsByMovieID(Guid movieId)
+        {
+            var comments = await _context.Comment
+       .Include(x => x.User)
+       .Where(x => x.MovieId == movieId && x.ParentId == null)
+       .Select(x => new CommentViewModel
+       {
+           Id = x.Id,
+           Content = x.Content,
+           UserName = x.User.FullName,
+           CreatedDate = x.CreatedDate,
+           Replies = x.Replies.Select(y => new CommentViewModel
+           {
+               Id = y.Id,
+               Content = y.Content,
+               UserName = y.User.FullName,
+               CreatedDate = y.CreatedDate,
+               Replies = new List<CommentViewModel>() // Initialize Replies as an empty list
+           }).ToList()
+       }).ToListAsync();
+
+            return comments;
+        }
     }
+
 }
