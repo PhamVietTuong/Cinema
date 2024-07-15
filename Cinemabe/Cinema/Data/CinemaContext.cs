@@ -40,6 +40,11 @@ namespace Cinema.Data
 
             modelBuilder.Entity<User>()
                 .HasKey(x => new { x.Phone });
+
+            modelBuilder.Entity<Evaluation>()
+                .HasKey(x => new { x.Phone, x.MovieId });
+            modelBuilder.Entity<Discount>()
+                .HasKey(x => new { x.Code });
         }
 
         public DbSet<User> User { get; set; }
@@ -59,29 +64,22 @@ namespace Cinema.Data
         public DbSet<Movie> Movie { get; set; }
 
         public DbSet<MovieType> MovieType { get; set; }
-
         public DbSet<MovieTypeDetail> MovieTypeDetail { get; set; }
-
         public DbSet<Room> Room { get; set; }
-
         public DbSet<Theater> Theater { get; set; }
-
         public DbSet<SeatType> SeatType { get; set; }
-
         public DbSet<ShowTimeRoom> ShowTimeRoom { get; set; }
-
         public DbSet<SeatTypeTicketType> SeatTypeTicketType { get; set; }
-
         public DbSet<InvoiceFoodAndDrink> InvoiceFoodAndDrink { get; set; }
-
         public DbSet<InvoiceTicket> InvoiceTicket { get; set; }
-
         public DbSet<Invoice> Invoice { get; set; }
-
         public DbSet<FoodAndDrinkTheater> FoodAndDrinkTheater { get; set; }
-
         public DbSet<News> News { get; set; }
-
         public DbSet<MemberShip> MemberShip { get; set; }
+        public DbSet<Comment> Comment { get; set; }
+        public DbSet<Evaluation> Evaluation { get; set; }
+        public DbSet<Holiday> Holiday { get; set; }
+        public DbSet<DiscountType> DiscountType { get; set; }
+        public DbSet<Discount> Discount { get; set; }
     }
 }

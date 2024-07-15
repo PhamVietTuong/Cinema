@@ -47,26 +47,29 @@ namespace Cinema.Controllers
         }
 
         #region Search theater, movie
-        [HttpGet("SearchByName{name}")]
+        [HttpPost("SearchByName")]
         [AllowAnonymous]
-        public async Task<ActionResult> Search(string name)
+        public async Task<ActionResult> Search(SearchDTO search)
         {
 
             try
             {
-                var theaterResults = await _theaterRepository.GetTheatersByName(name);
-                if (theaterResults != null && theaterResults.Any())
-                {
-                    return Ok(new { theaters = theaterResults });
-                }
-
-                var movieResults = await _movieRepository.GetMoviesByName(name);
+                var movieResults = await _movieRepository.GetMoviesByName(search);
                 if (movieResults != null && movieResults.Any())
                 {
                     return Ok(new { movies = movieResults });
                 }
 
+                if (search.IsActor == true)
+                {
+                    return NotFound(new { Message = "Không tìm thấy phim nào." });
+                }
 
+                var theaterResults = await _theaterRepository.GetTheatersByName(search.SearchKey);
+                if (theaterResults != null && theaterResults.Any())
+                {
+                    return Ok(new { theaters = theaterResults });
+                }
 
                 return NotFound(new { Message = "Không tìm thấy phim hoặc rạp chiếu phim nào." });
             }
@@ -125,7 +128,7 @@ namespace Cinema.Controllers
         }
 
 
-    
+
         [HttpGet("GetMovieList")]
         [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()

@@ -16,11 +16,12 @@ namespace Cinema.Contracts
 		Task<List<MovieDetailViewModel>> GetMovieList();
 		Task<MovieDetailViewModel> GetMovieDetail(MovieDetailDTO movieDetailDTO);
 		Task<List<MovieDetailViewModel>> GetMovieTheaterId(Guid theaterId);
-		Task<List<MovieDetailViewModel>> GetMoviesByName(string name);
+		Task<List<MovieDetailViewModel>> GetMoviesByName(SearchDTO searchDTO);
 		Task<List<DateTime>> GetDateByMovieID(Guid movieID, ProjectionForm ProjectionForm);
 		Task<List<ShowTimeRowViewModel>> GetShowTimeByMovieID(Guid movieID, DateTime date, ProjectionForm ProjectionForm);
 
-        Task<MovieDTO> UpdateAsync(MovieDTO entity);
+		Task<List<CommentViewModel>> GetCommentsByMovieID(Guid movieID);
+		Task<MovieDTO> UpdateAsync(MovieDTO entity);
 
-    }
+	}
 }

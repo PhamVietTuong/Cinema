@@ -1,9 +1,9 @@
-import 'package:cinema_app/data/DTO/res_get_code.dart';
+import 'package:cinema_app/data/models/res_get_code.dart';
 import 'package:cinema_app/data/injector.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/data/models/validation.dart';
 
-import '../data/DTO/update_user.dart';
+import '../data/models/update_user.dart';
 
 abstract class UserViewContract {
   void onLoadError(String error);
