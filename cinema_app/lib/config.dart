@@ -18,10 +18,7 @@ class Styles {
     "light_blue": Color(0xFFDCEEFB),
     "dark_green": Color(0xFF1B5E20),
     "light_green": Color(0xFFE8F5E9),
-    "dark_red": Color(0xFFB71C1C),
-    "light_red": Color(0xFFFFEBEE),
-    "dark_yellow": Color(0xFFB7950B),
-    "light_yellow": Color(0xFFFFF9C4),
+
   };
 
   static const Map<String, Color> backgroundContent = {
@@ -31,10 +28,6 @@ class Styles {
     "light_blue": Color(0xFFC1E1F9),
     "dark_green": Color(0xFF2E7D32),
     "light_green": Color(0xFFC8E6C9),
-    "dark_red": Color(0xFFC62828),
-    "light_red": Color(0xFFFFCDD2),
-    "dark_yellow": Color(0xFF7D5A09),
-    "light_yellow": Color(0xFFFFE082),
   };
 
   static const Map<String, Color> btnColor = {
@@ -44,10 +37,7 @@ class Styles {
     "light_blue": Color(0xFF74C0FC),
     "dark_green": Color(0xFF4CAF50),
     "light_green": Color(0xFFA5D6A7),
-    "dark_red": Color(0xFFD32F2F),
-    "light_red": Color(0xFFEF5350),
-    "dark_yellow": Color(0xFFC79100),
-    "light_yellow": Color(0xFFFFD54F),
+ 
   };
 
   static const Map<String, Color> boldTextColor = {
@@ -57,10 +47,7 @@ class Styles {
     "light_blue": Color(0xFF003366),
     "dark_green": Color(0xFFFFFFFF),
     "light_green": Color(0xFF1B5E20),
-    "dark_red": Color(0xFFFFFFFF),
-    "light_red": Color(0xFFB71C1C),
-    "dark_yellow": Color(0xFFFFFFFF),
-    "light_yellow": Color(0xFF7D5A09),
+  
   };
 
   static const Map<String, Color> textColor = {
@@ -70,10 +57,7 @@ class Styles {
     "light_blue": Color(0xFF1C3D5A),
     "dark_green": Color(0xFFA5D6A7),
     "light_green": Color(0xFF2E7D32),
-    "dark_red": Color(0xFFFFCDD2),
-    "light_red": Color(0xFFB71C1C),
-    "dark_yellow": Color(0xFFB7950B),
-    "light_yellow": Color(0xFF7D5A09),
+ 
   };
 
   static const Map<String, Color> gradientTop = {
@@ -83,10 +67,7 @@ class Styles {
     "light_blue": Color(0xFF1E90FF),
     "dark_green": Color(0xFF43A047),
     "light_green": Color(0xFF66BB6A),
-    "dark_red": Color(0xFFE53935),
-    "light_red": Color(0xFFEF5350),
-    "dark_yellow": Color(0xFFC79100),
-    "light_yellow": Color(0xFFFFE082),
+
   };
 
   static const Map<String, Color> gradientBot = {
@@ -96,10 +77,7 @@ class Styles {
     "light_blue": Color(0xFF4682B4),
     "dark_green": Color(0xFF388E3C),
     "light_green": Color(0xFF81C784),
-    "dark_red": Color(0xFFD32F2F),
-    "light_red": Color(0xFFE57373),
-    "dark_yellow": Color(0xFF7D5A09),
-    "light_yellow": Color(0xFFFFD54F),
+
   };
 
   static const Map<String, Color> titleColor = {
@@ -109,10 +87,7 @@ class Styles {
     "light_blue": Color(0xFF1C86EE),
     "dark_green": Color(0xFF2E7D32),
     "light_green": Color(0xFF388E3C),
-    "dark_red": Color(0xFFC62828),
-    "light_red": Color(0xFFE53935),
-    "dark_yellow": Color(0xFF7D5A09),
-    "light_yellow": Color(0xFF7D5A09),
+
   };
 
   static const Map<String, Color> textSelectionColor = {
@@ -122,10 +97,6 @@ class Styles {
     "light_blue": Color(0xffB0E0E6),
     "dark_green": Color(0xffC8E6C9),
     "light_green": Color(0xffC8E6C9),
-    "dark_red": Color(0xFFFFCDD2),
-    "light_red": Color(0xFFFFCDD2),
-    "dark_yellow": Color(0xFFFFF59D),
-    "light_yellow": Color(0xFFFFF9C4),
   };
 
   static const Map<String, Color> textBoldSelectionColor = {
@@ -135,10 +106,6 @@ class Styles {
     "light_blue": Color(0xFFFFFFFF),
     "dark_green": Color(0xFF000000),
     "light_green": Color(0xFFFFFFFF),
-    "dark_red": Color(0xFF000000),
-    "light_red": Color(0xFFFFFFFF),
-    "dark_yellow": Color(0xFF000000),
-    "light_yellow": Color(0xFF000000),
   };
 
   static const titleFontSize = 18.0;
@@ -276,11 +243,13 @@ class Config {
     userInfo = null;
   }
 
- static Future<void> saveInvoice(List<Invoice> invoices) async {
-    List<Map<String, dynamic>> jsonList = invoices.map((invoice) => invoice.toJson()).toList();
+  static Future<void> saveInvoice(List<Invoice> invoices) async {
+    List<Map<String, dynamic>> jsonList =
+        invoices.map((invoice) => invoice.toJson()).toList();
     String jsonString = json.encode(jsonList);
     await _prefs.setString(Constants.invoicekey, jsonString);
   }
+
   static Future<List<Invoice>> getStoredInvoices() async {
     final String? jsonString = _prefs.getString(Constants.invoicekey);
 
@@ -324,10 +293,6 @@ class Constants {
   static const String lightBlueTheme = "light_blue";
   static const String darkGreenTheme = "dark_green";
   static const String lightGreenTheme = "light_green";
-  static const String darkRedTheme = "dark_red";
-  static const String lightRedTheme = "light_red";
-  static const String darkYellowTheme = "dark_yellow";
-  static const String lightYellowTheme = "light_yellow";
 
   static final Map<String, String> themes = {
     darkPurpleTheme: "Chủ đề tối - Tím",
@@ -336,10 +301,6 @@ class Constants {
     lightBlueTheme: "Chủ đề sáng - Xanh lam",
     darkGreenTheme: "Chủ đề tối - Xanh lá cây",
     lightGreenTheme: "Chủ đề sáng - Xanh lá cây",
-    darkRedTheme: "Chủ đề tối - Đỏ",
-    lightRedTheme: "Chủ đề sáng - Đỏ",
-    darkYellowTheme: "Chủ đề tối - Vàng",
-    lightYellowTheme: "Chủ đề sáng - Vàng",
   };
 
   static final Map<String, String> languages = {

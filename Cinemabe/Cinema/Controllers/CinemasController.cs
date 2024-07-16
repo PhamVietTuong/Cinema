@@ -29,10 +29,12 @@ namespace Cinema.Controllers
         private readonly IMovieTypeRepository _movieTypeRepository;
         private readonly ISeatTypeRepository _seatTypeRepository;
         private readonly IUserTypeRepository _userTypeRepository;
+        private readonly IShowTimeRoomRepository _showTimeRoomRepository;
+        private readonly INewsRepository _newsRepository;
 
         public CinemasController(IAgeRestrictionRepository ageRestrictionRepository, IFoodAndDrinkRepository foodAndDrinkRepository, IInvoiceRepository invoiceRepository, IMovieRepository movieRepository,
             ISeatRepository seatRepository, ITheaterRepository theaterRepository, ITicketTypeRepository ticketTypeRepository, IMovieTypeRepository movieTypeRepository, ISeatTypeRepository seatTypeRepository,
-            IUserTypeRepository userTypeRepository)
+            IUserTypeRepository userTypeRepository, IShowTimeRoomRepository showTimeRoomRepository, INewsRepository newsRepository)
         {
             _ageRestrictionRepository = ageRestrictionRepository;
             _foodAndDrinkRepository = foodAndDrinkRepository;
@@ -44,29 +46,34 @@ namespace Cinema.Controllers
             _movieTypeRepository = movieTypeRepository;
             _seatTypeRepository = seatTypeRepository;
             _userTypeRepository = userTypeRepository;
+            _showTimeRoomRepository = showTimeRoomRepository;
+            _newsRepository = newsRepository;
         }
 
         #region Search theater, movie
-        [HttpGet("SearchByName{name}")]
+        [HttpPost("SearchByName")]
         [AllowAnonymous]
-        public async Task<ActionResult> Search(string name)
+        public async Task<ActionResult> Search(SearchDTO search)
         {
 
             try
             {
-                var theaterResults = await _theaterRepository.GetTheatersByName(name);
-                if (theaterResults != null && theaterResults.Any())
-                {
-                    return Ok(new { theaters = theaterResults });
-                }
-
-                var movieResults = await _movieRepository.GetMoviesByName(name);
+                var movieResults = await _movieRepository.GetMoviesByName(search);
                 if (movieResults != null && movieResults.Any())
                 {
                     return Ok(new { movies = movieResults });
                 }
 
+                if (search.IsActor == true)
+                {
+                    return NotFound(new { Message = "Không tìm thấy phim nào." });
+                }
 
+                var theaterResults = await _theaterRepository.GetTheatersByName(search.SearchKey);
+                if (theaterResults != null && theaterResults.Any())
+                {
+                    return Ok(new { theaters = theaterResults });
+                }
 
                 return NotFound(new { Message = "Không tìm thấy phim hoặc rạp chiếu phim nào." });
             }
@@ -78,6 +85,21 @@ namespace Cinema.Controllers
         #endregion
 
         #region Movie
+
+        [HttpGet("GetCommentList/{idMovie}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<CommentViewModel>>> GetCommentList(Guid idMovie)
+        {
+            try
+            {
+                var result = await _movieRepository.GetCommentsByMovieID(idMovie);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
 
         [HttpGet("GetMovieListAdmin")]
         [Authorize(Roles = admin)]
@@ -125,7 +147,7 @@ namespace Cinema.Controllers
         }
 
 
-    
+
         [HttpGet("GetMovieList")]
         [AllowAnonymous]
         public async Task<ActionResult<List<MovieDetailViewModel>>> GetMovieList()
@@ -381,7 +403,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet("GetTheater/{id}")]
-        [Authorize(Roles = both)]
+        [AllowAnonymous]
         public async Task<ActionResult<TheaterDTO>> GetTheater(Guid id)
         {
             try
@@ -760,6 +782,45 @@ namespace Cinema.Controllers
             try
             {
                 var result = await _userTypeRepository.CreateAsync(entity);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region ShowTimeRoom
+
+        [HttpPost("UpdateShowTimeRoom")]
+        [Authorize(Roles = admin)]
+        public async Task<ActionResult<ShowTimeRoomDTO>> UpdateShowTimeRoom(ShowTimeRoomDTO entity)
+        {
+            try
+            {
+                var result = await _showTimeRoomRepository.UpdateAsync(entity);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
+        #endregion
+
+        #region News
+
+        [HttpGet("GetNewsList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<NewsDTO>>> GetNewsList()
+        {
+            try
+            {
+                var result = await _newsRepository.GetNewsListAsync();
 
                 return Ok(result);
             }

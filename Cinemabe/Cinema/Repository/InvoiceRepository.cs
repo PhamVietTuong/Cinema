@@ -163,12 +163,14 @@ namespace Cinema.Repository
                 var totalSeat = await _context.InvoiceTicket
                     .Where(x => x.Invoice.CreationTime >= startDate
                                 && x.Invoice.CreationTime <= endDate
+                                && x.Invoice.Status == InvoiceStatus.Successful
                                 && x.Room.TheaterId == theater.Id)
                     .SumAsync(x => x.Price);
 
                 var totalFoodAndDrink = await _context.InvoiceFoodAndDrink
                     .Where(x => x.Invoice.CreationTime >= startDate
                                 && x.Invoice.CreationTime <= endDate
+                                && x.Invoice.Status == InvoiceStatus.Successful
                                 && x.TheaterId == theater.Id)
                     .SumAsync(x => x.Price * x.Quantity);
                 result.Add(new RevenueTheaterViewModel
@@ -283,9 +285,9 @@ namespace Cinema.Repository
                 string Content = File.ReadAllText(pathFile);
 
                 string tableProduct = "";
+                var total = 0.0;
                 int sumTickets = res.Products.Where(x => x.IsTicket).ToList().Count;
                 int sumFoodAndDrinks = res.Products.Where(x => !x.IsTicket).ToList().Count;
-
                 foreach (var item in res.Products)
                 {
                     int index = 1;
@@ -294,6 +296,7 @@ namespace Cinema.Repository
                     {
                         quantity = item.Quantity.Value;
                     }
+                    total += item.Price * quantity;
                     tableProduct += $"<tr><td>{index}</td><td>{item.Name}</td><td>{item.Price}</td><td>{quantity}</td><td>{item.Price * quantity}</td></tr>";
                 }
                 Content = Content
@@ -305,7 +308,8 @@ namespace Cinema.Repository
                     .Replace("{{movieName}}", res.MovieName)
                     .Replace("{{showtime}}", res.ShowTime)
                     .Replace("{{numSeats}}", sumTickets.ToString())
-                    .Replace("{{items}}", tableProduct);
+                    .Replace("{{items}}", tableProduct)
+                    .Replace("{{total}}", total.ToString());
                 SendMail provider = new();
                 return await provider.SendEmailAsync(res.Email, $"Thông tin đặt vé xem phim - Mã thanh toán {code}", $"{Content}");
             }

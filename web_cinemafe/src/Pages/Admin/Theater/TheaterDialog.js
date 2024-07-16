@@ -94,7 +94,6 @@ const TheaterDialog = ({ open, onClose}) => {
             for (const key in formData) {
                 formDataToSubmit.append(key, formData[key]);
             }
-            console.log(formData);
 
             dispatch(CreateTheaterAction(formDataToSubmit));
             onClose();

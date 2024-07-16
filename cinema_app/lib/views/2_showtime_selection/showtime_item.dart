@@ -2,6 +2,7 @@ import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/booking.dart';
 import 'package:cinema_app/data/models/movie.dart';
 import 'package:cinema_app/views/3_ticket_selection/ticket_option_screen.dart';
+import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/models/showtime.dart';
@@ -34,7 +35,12 @@ class ShowtimeItem extends StatelessWidget {
                     movie: movie,
                   ),
                 ))
-            : (print("Chưa đăng nhập"));
+            : (
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => const AccountScreen())))
+              );
       },
       child: Container(
         padding: const EdgeInsets.all(2),

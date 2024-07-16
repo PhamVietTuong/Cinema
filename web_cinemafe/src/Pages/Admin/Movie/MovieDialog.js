@@ -87,7 +87,6 @@ const MovieFormDialog = ({ open, onClose }) => {
         setSelectedMovieTypes(value);
         setErrors({ ...errors, movieTypes: '' });
         setMovieData({ ...movieData, movieTypes: value });
-        console.log(value)
     };
     const validateInput = () => {
         const errors = {};
@@ -135,8 +134,6 @@ const MovieFormDialog = ({ open, onClose }) => {
         if (file) {
             setErrors({ ...errors, image: '' });
             setMovieData({ ...movieData, "image": file.name, "File": file });
-
-            console.log(movieData)
         }
     };
 
@@ -154,7 +151,6 @@ const MovieFormDialog = ({ open, onClose }) => {
                 for (const key in movieData) {
                     formDataToSubmit.append(key, movieData[key]);
                 }
-                console.log(movieData);
                 dispatch(CreateMovieAction(movieData));
                 setMovieData({
                     name: "",

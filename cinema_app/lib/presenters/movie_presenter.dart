@@ -1,6 +1,8 @@
 import 'package:cinema_app/data/injector.dart';
 import 'package:cinema_app/data/models/movie.dart';
 
+import '../data/models/search_key.dart';
+
 abstract class MovieViewContract {
   void onLoadMoviesComplete(List<Movie> movies);
   void onLoadMovieDetailComplete(Movie movies);
@@ -36,13 +38,14 @@ class MoviePresenter {
       _view.onLoadError();
     }
   }
-   Future<void> searchByName(String name) async {
+
+  Future<void> searchByName(String key, {bool isActor = false}) async {
     try {
-      Map<String, dynamic> results = await _repository.searchByName(name);
+      SearchKey searchKey = SearchKey(searchkey: key, isActor: isActor);
+      Map<String, dynamic> results = await _repository.searchByName(searchKey);
       _view.onSearchComplete(results);
     } catch (error) {
       _view.onLoadError();
     }
   }
-
 }

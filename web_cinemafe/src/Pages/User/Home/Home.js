@@ -9,6 +9,7 @@ import TheaterComponent from "../../../Components/Theater/TheaterComponent";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import moment from "moment";
+import { CSSTransition } from 'react-transition-group';
 
 const Home = () => {
     const dispatch = useDispatch();

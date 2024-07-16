@@ -7,14 +7,45 @@ import { CSSTransition } from 'react-transition-group';
 import { useState } from "react";
 
 const Film = (props) => {
-    const [showTrailerPopup, setShowTrailerPopup] = useState(false);
-
     return (
         <>
             <div className="web-movie-box">
                 <div className="image">
                     <Link to={`/movie/${props.movie.id}`} state={{ projectionForm: props.movie.projectionForm }}>
                         <img src={`${DOMAIN}/Images/${props.movie.image}`} alt={`${props.movie.image}`} />
+
+                        <div class="content">
+                            <div class="inner">
+                                <p class="name">{props.movie.name} ({props.movie.ageRestrictionName})</p>
+                                <ul class="info-detail">
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/icon-tag.svg" />
+                                        </span>
+                                        <span class="txt">{props.movie.movieType}</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/icon-clock.svg" />
+                                        </span>
+                                        <span class="txt">{props.movie.time}'</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/earth-americas.svg" />
+                                        </span>
+                                        <span class="txt">Khác</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <span class="ic">
+                                            <img src="/Images/subtitle.svg" />
+                                        </span>
+                                        <span class="txt">{props.movie.languages}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div className="attach">
                             <div className="type-movie">
                                 {props.movie.projectionForm === ProjectionForm.Time2D ? <span className="txt">2D</span> : <span className="txt">3D</span>}
@@ -37,7 +68,7 @@ const Film = (props) => {
                     </Link>
 
                     <div className="info-action">
-                        <a className="video pointer" rel="noopener noreferrer" onClick={() => setShowTrailerPopup(true)}>
+                        <a className="video pointer" rel="noopener noreferrer" onClick={() => props.setShowTrailerPopup({ status: true, id: props.movie.id })}>
                             <span className="ic">
                                 <img src="https://cinestar.com.vn/assets/images/icon-play-vid.svg" alt="Play Trailer"></img>
                             </span>
@@ -47,24 +78,6 @@ const Film = (props) => {
                     </div>
                 </div>
             </div>
-
-            {/* <CSSTransition
-                in={showTrailerPopup}
-                unmountOnExit
-                timeout={{ enter: 0, exit: 300 }}
-            >
-                <div className="modalDetail" onClick={() => setShowTrailerPopup(false)}>
-                    <iframe
-                        style={{ position: "relative" }}
-                        title="title4"
-                        allowfullscreen="true"
-                        width="996px"
-                        height="500px"
-                        src={`https://www.youtube.com/embed/${props.movie.trailer}`}
-                        frameborder="0"
-                    ></iframe>
-                </div>
-            </CSSTransition> */}
         </>
     );
 }

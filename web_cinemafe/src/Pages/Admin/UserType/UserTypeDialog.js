@@ -5,14 +5,14 @@ import { CreateUserTypeAction, UpdateUserTypeAction } from "../../../Redux/Actio
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
+    name: yup.string().required('Vui lòng nhập thông tin!'),
 });
 
 const UserTypeDialog = ({ open, onClose, row, isEditing }) => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         name: '',
-        status: false,
+        status: true,
     });
 
     const [errors, setErrors] = useState({
@@ -30,7 +30,7 @@ const UserTypeDialog = ({ open, onClose, row, isEditing }) => {
         } else {
             setFormData({
                 name: '',
-                status: false,
+                status: true,
             });
         }
     }, [row]);
@@ -95,13 +95,13 @@ const UserTypeDialog = ({ open, onClose, row, isEditing }) => {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {isEditing ? "Edit User Type" : "Create User Type"}
+                        {isEditing ? "Sửa loại người dùng" : "Thêm loại người dùng"}
                     </DialogTitle>
                     <DialogContent>
                         <TextField
                             margin="dense"
                             name="name"
-                            label="Name"
+                            label="Tên"
                             type="text"
                             fullWidth
                             value={formData.name}

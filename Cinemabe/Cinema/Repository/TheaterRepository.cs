@@ -35,6 +35,8 @@ namespace Cinema.Repository
                     Address = theater.Address,
                     Image = theater.Image,
                     Phone = theater.Phone,
+                    CountRoom = _context.Room.Count(r => r.TheaterId == theater.Id && r.Status == RoomStatus.Active),
+                    CountSeat = _context.Seat.Count(s => s.Room.TheaterId == theater.Id && s.IsSeat == true)
                 });
             }
 
@@ -49,7 +51,7 @@ namespace Cinema.Repository
             .Include(x => x.ShowTime)
                 .ThenInclude(x => x.Movie)
                     .ThenInclude(m => m.AgeRestriction)
-            .Where(x => x.Room.TheaterId == theaterId && x.ShowTime.Status == true)
+            .Where(x => x.Room.TheaterId == theaterId && x.ShowTime.Status == true&&x.ShowTime.Movie.Status==true)
             .ToListAsync();
 
             var movies = showTimeRooms.Select(sRoom => sRoom.ShowTime.Movie).Distinct().ToList();
@@ -358,7 +360,7 @@ namespace Cinema.Repository
                 var roomDTOs = new List<RoomDTO>();
                 foreach (var room in rooms)
                 {
-                    var showTimeRooms = await _context.ShowTimeRoom.Include(x => x.ShowTime).Where(x => x.RoomId == room.Id && x.ShowTime.StartTime >= DateTime.Now.Date).OrderBy(x => x.ShowTime.StartTime).ToListAsync();
+                    var showTimeRooms = await _context.ShowTimeRoom.Include(x => x.ShowTime).ThenInclude(x => x.Movie).Where(x => x.RoomId == room.Id).OrderBy(x => x.ShowTime.StartTime).ToListAsync();
 
                     var showTimeRoomDTOs = new List<ShowTimeRoomDTO>();
                     foreach(var showTimeRoom in showTimeRooms)
@@ -368,6 +370,10 @@ namespace Cinema.Repository
                            StartTime = showTimeRoom.ShowTime.StartTime,
                            EndTime = showTimeRoom.ShowTime.EndTime,
                            ProjectionForm = showTimeRoom.ShowTime.ProjectionForm,
+                           MovieName = showTimeRoom.ShowTime.Movie.Name,
+                           MovieId = showTimeRoom.ShowTime.MovieId,
+                           ShowTimeId = showTimeRoom.ShowTimeId,
+                           RoomId = showTimeRoom.RoomId,
                         });
                     }
 

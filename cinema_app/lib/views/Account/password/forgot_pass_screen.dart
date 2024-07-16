@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/config.dart';
-import 'package:cinema_app/data/DTO/res_get_code.dart';
-import 'package:cinema_app/data/DTO/update_user.dart';
+import 'package:cinema_app/data/models/res_get_code.dart';
+import 'package:cinema_app/data/models/update_user.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:cinema_app/presenters/user_presenter.dart';
 import 'package:cinema_app/views/Account/password/change_pass_screen.dart';

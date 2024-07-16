@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { userService } from "../../Services/UserService";
-import { LOGIN_USER, LOGOUT, SET_LIST_USER, SET_RESULT_SEND_CODE } from "./Type/UserType";
+import { ADD_SEARCH_HISTORY, LOGIN_USER, LOGOUT, SET_LIST_USER, SET_RESULT_SEND_CODE } from "./Type/UserType";
 
 export const LoginUserAction = (loginInfo, rememberMe, callBack) => {
     return async (dispatch) => {
@@ -130,10 +130,10 @@ export const UpdateUserAction = (userDTO) => {
             }
         } catch (error) {
             await Swal.fire({
-                padding: "24px",
-                width: "400px",
-                title: "Đã xảy ra lỗi!",
-                confirmButtonText: "Ok",
+                text: error.response.data,
+                padding: "15px",
+                width: "425px",
+                confirmButtonText: "Thử lại",
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log("UpdateUserAction: ", error);
@@ -211,7 +211,7 @@ export const CreateUserAction = (register) => {
                     confirmButtonText: "Ok",
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.reload();
+                        dispatch(GetListUserAction());
                     }
                 });
             }
@@ -226,4 +226,11 @@ export const CreateUserAction = (register) => {
             console.log("CreateUserAction: ", error);
         }
     }
+}
+
+export const AddSearchHistoryAction = (searchTerm) => {
+    return {
+        type: ADD_SEARCH_HISTORY,
+        searchTerm,
+    };
 }

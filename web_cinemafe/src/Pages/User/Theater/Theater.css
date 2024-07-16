@@ -399,3 +399,69 @@ width: 110px;
         font-size: 14px;
     }
 }
+
+.seat-heading:after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: -3;
+}
+
+.seat-heading:after {
+    background: url(/public/Images/mobile-blur-2.webp) no-repeat;
+    background-position: top right;
+    filter: blur(100px);
+}
+
+.seat-heading:before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -3;
+    background: url(/public/Images/mobile-blur-6.webp) no-repeat;
+    background-position: top left;
+    filter: blur(100px);
+}
+
+.dt-food:after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: -3;
+}
+
+.dt-food:after {
+    background: url(/public/Images/mobile-blur-2.webp) no-repeat;
+    background-position: top right;
+    filter: blur(100px);
+}
+
+.dt-food:before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -3;
+    background: url(/public/Images/mobile-blur-6.webp) no-repeat;
+    background-position: top left;
+    filter: blur(100px);
+}

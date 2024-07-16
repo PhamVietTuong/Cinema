@@ -1014,6 +1014,7 @@ export const UpdateMovieAction = (MovieDTO, navigate) => {
         }
     }
 }
+
 export const GetListInvoiceAction = (code) => {
     return async (dispatch) => {
         try {
@@ -1033,6 +1034,29 @@ export const GetListInvoiceAction = (code) => {
                     console.log("GetListInvoiceAction: ", error);
                 }
             });
+        }
+    }
+}
+
+export const UpdateShowTimeRoomAction = (showTimeRoomDTO) => {
+    return async (dispatch) => {
+        try {
+            const result = await cinemasService.UpdateShowTimeRoom(showTimeRoomDTO);
+
+            if (result.status === 200) {
+                await Swal.fire({
+                    padding: "24px",
+                    width: "400px",
+                    title: "Cập nhật thành công!",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                })
+            }
+        } catch (error) {
+            console.log("UpdateShowTimeRoomAction: ", error);
         }
     }
 }

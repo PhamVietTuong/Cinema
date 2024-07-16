@@ -26,6 +26,7 @@ import EditMoviePage from "../Pages/Admin/Movie/EditMoviePage";
 import Revenue from "../Pages/Admin/Revenue/Revenue";
 import Invoice from "../Pages/Admin/Invoice/Invoice";
 import User from "../Pages/Admin/User/User";
+import ShowTime from "../Pages/Admin/ShowTime/ShowTime";
 
 const Routers = () => {
     return (
@@ -39,8 +40,8 @@ const Routers = () => {
                         <Route path="movie/:id" element={<Detail />} />
                         <Route path="book-tickets/:id" element={<BookTickets />} />
                         <Route path="movie/:movieId" element={<Detail />} />
-                        <Route path="Showing" element={<Showing />} />
-                        <Route path="Cooming" element={<Cooming />} />
+                        <Route path="showing" element={<Showing />} />
+                        <Route path="cooming" element={<Cooming />} />
                         <Route
                             path="login"
                             element={
@@ -90,6 +91,7 @@ const Routers = () => {
                         <Route path="revenue" element={<Revenue />} />
                         <Route path="invoice" element={<Invoice />} />
                         <Route path="user" element={<User />} />
+                        <Route path="showTime" element={<ShowTime />} />
                     </Route>
                 </Routes>
             </Router>

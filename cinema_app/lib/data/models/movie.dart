@@ -3,8 +3,8 @@
 //import 'dart:convert';
 import 'dart:convert';
 
-
 import 'package:cinema_app/config.dart';
+import 'package:cinema_app/data/models/search_key.dart';
 import 'package:cinema_app/services/base_url.dart';
 
 import 'showtime.dart';
@@ -48,7 +48,7 @@ class Movie {
     this.time = 0,
     this.trailer = "",
     this.projectionForm = 0,
-    this.isSpecial=true,
+    this.isSpecial = true,
   });
 
   Movie.fromJson(Map<String, dynamic> json)
@@ -68,13 +68,12 @@ class Movie {
         time = json["time"] ?? -1,
         trailer = json["trailer"] ?? "",
         projectionForm = json["projectionForm"] ?? 0,
-        isSpecial=json["isSpecial"]??true,
+        isSpecial = json["isSpecial"] ?? true,
         schedules = json["schedules"] != null
             ? (json["schedules"] as List)
                 .map((e) => Schedule.fromJson(e as Map<String, dynamic>))
                 .toList()
             : [];
-
 
   String getFullName() {
     return '$name $showTimeTypeName ($ageRestrictionName)';
@@ -117,7 +116,7 @@ abstract class MovieRepository {
   Future<List<Movie>> fetchMovies();
   Future<Movie> fetchMovieDetail(String movieID, int projectionForm);
 
-  Future<Map<String, dynamic>> searchByName(String name);
+  Future<Map<String, dynamic>> searchByName(SearchKey searchKey);
 }
 
 class MovieRepositoryIml implements MovieRepository {
@@ -140,7 +139,8 @@ class MovieRepositoryIml implements MovieRepository {
   Future<Movie> fetchMovieDetail(String movieID, int projectionForm) async {
     String api = '$serverUrl/api/Cinemas/MovieDetail';
 
-    final response = await BaseUrl.post(api, jsonEncode({"id": movieID, "projectionForm": projectionForm}));
+    final response = await BaseUrl.post(
+        api, jsonEncode({"id": movieID, "projectionForm": projectionForm}));
     if (response.statusCode == 200) {
       final dynamic movieJson = jsonDecode(response.body);
       return Movie.fromJson(movieJson);
@@ -151,10 +151,10 @@ class MovieRepositoryIml implements MovieRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> searchByName(String name) async {
-    String api = '$serverUrl/api/Cinemas/SearchByName$name';
+  Future<Map<String, dynamic>> searchByName(SearchKey searchKey) async {
+    String api = '$serverUrl/api/Cinemas/SearchByName';
 
-    final response = await BaseUrl.get(api);
+    final response = await BaseUrl.post(api, jsonEncode(searchKey.toJson()));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -164,6 +164,4 @@ class MovieRepositoryIml implements MovieRepository {
           'Failed to search by name, status code: ${response.statusCode}');
     }
   }
-
- 
 }

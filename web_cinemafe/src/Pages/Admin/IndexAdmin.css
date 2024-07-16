@@ -15,7 +15,7 @@
 .MuiBox-root, .MuiTypography-root {
     font-family: "Josefin Sans",
         sans-serif !important;
-        font-size: 16px !important;
+        font-size: 16px;
 }
 
 .IndexAdminDrawer .MuiPaper-root {

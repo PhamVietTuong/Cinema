@@ -1,4 +1,4 @@
-import { Drafts, Inbox, Menu } from "@mui/icons-material";
+import { Drafts, Inbox, Menu, ChevronLeft } from "@mui/icons-material";
 import { Box, CssBaseline, Divider, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, styled, Menu as MuiMenu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import MuiAppBar from '@mui/material/AppBar';
 import './IndexAdmin.css'
 import { useDispatch, useSelector } from "react-redux";
 import { LOGOUT } from "../../Redux/Actions/Type/UserType";
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -75,9 +76,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const IndexAdmin = () => {
-    const {
-        loginInfo,
-    } = useSelector((state) => state.UserReducer);
+    const { loginInfo } = useSelector((state) => state.UserReducer);
     const [openDrawer, setOpenDrawer] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
@@ -86,6 +85,7 @@ const IndexAdmin = () => {
     const handleDrawerClose = () => {
         setOpenDrawer(false);
     };
+
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
     };
@@ -114,18 +114,14 @@ const IndexAdmin = () => {
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
-                            onClick={handleDrawerOpen}
+                            onClick={openDrawer ? handleDrawerClose : handleDrawerOpen}
                             edge="start"
                             sx={{
                                 marginRight: 5,
-                                ...(openDrawer && { display: 'none' }),
                             }}
                         >
-                            <Menu />
+                            {openDrawer ? <ChevronLeft /> : <Menu />}
                         </IconButton>
-                        <Typography variant="h6" noWrap component="div" className="IndexAdminTypography">
-                            Mini variant drawer
-                        </Typography>
                         <Box sx={{ flexGrow: 1 }} />
                         <Typography
                             variant="h6"
@@ -144,9 +140,7 @@ const IndexAdmin = () => {
                         >
                             <MenuItem onClick={() => handleHomePageClick('/')}>Trang chủ</MenuItem>
                             <MenuItem onClick={() => {
-                                dispatch({
-                                    type: LOGOUT,
-                                })
+                                dispatch({ type: LOGOUT });
                             }}>Đăng xuất</MenuItem>
                         </MuiMenu>
                     </Toolbar>
@@ -165,7 +159,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Thống kê" />
                             </ListItemButton>
                         </Link>
-
                         <Link to="invoice">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -174,7 +167,14 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Hóa đơn" />
                             </ListItemButton>
                         </Link>
-
+                        <Link to="showTime">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Inbox />
+                                </ListItemIcon>
+                                <ListItemText primary="Quản lí xuất chiếu" />
+                            </ListItemButton>
+                        </Link>
                         <Link to="Movie">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -183,7 +183,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Phim" />
                             </ListItemButton>
                         </Link>
-
                         <Link to="MovieType">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -192,7 +191,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Thể loại phim" />
                             </ListItemButton>
                         </Link>
-                        
                         <Link to="AgeRestriction">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -201,7 +199,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Giới hạn độ tuổi" />
                             </ListItemButton>
                         </Link>
-
                         <Link to="theater">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -210,7 +207,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Chi nhánh" />
                             </ListItemButton>
                         </Link>
-
                         <Link to="TicketType">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -219,7 +215,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Loại vé" />
                             </ListItemButton>
                         </Link>
-
                         <Link to="SeatType">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -228,7 +223,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Loại ghế" />
                             </ListItemButton>
                         </Link>
-
                         <Link to="user">
                             <ListItemButton>
                                 <ListItemIcon>
@@ -237,7 +231,6 @@ const IndexAdmin = () => {
                                 <ListItemText primary="Người dùng" />
                             </ListItemButton>
                         </Link>
-
                         <Link to="UserType">
                             <ListItemButton>
                                 <ListItemIcon>

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { TicketBooking } from '../../../Redux/Actions/CinemasAction';
 import moment from 'moment';
 import "moment/locale/vi";
+import Swal from 'sweetalert2';
 
 const steps = ['THANH TOÁN', 'THÔNG TIN VÉ PHIM'];
 
@@ -49,6 +50,23 @@ const Checkout = () => {
     const handleActiveCheckout = (method) => {
         setSelectedPaymentMethod(method);
     }
+
+    const handleNavigateHome = () => {
+        Swal.fire({
+            title: "Bạn có chắc quay về trang chủ không",
+            padding: "15px",
+            width: "440px",
+            customClass: {
+                confirmButton: 'custom-ok-button'
+            },
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                navigate('/');
+            }
+        });
+    };
+    
     return (
         <>
             <section className='checkout checkout-customer'>
@@ -103,7 +121,7 @@ const Checkout = () => {
                                                                         </FormLabel>
                                                                     </FormControl>
                                                                     <div className='CheckoutButtonPayment'>
-                                                                        <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth onClick={navigate("/")}>
+                                                                        <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth onClick={handleNavigateHome}>
                                                                             Quay lại
                                                                         </Button>
                                                                         <Button className="btn btn-submit btn--pri  opacity-30 pointer-events-none" fullWidth onClick={handleCheckout}>
