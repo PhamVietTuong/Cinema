@@ -78,7 +78,7 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
                       children: [
                         Expanded(
                           child: Text(
-                            "Mã hóa đơn",
+                            "Hóa đơn",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color:
@@ -109,6 +109,17 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
                             ),
                           ),
                         ),
+                         Expanded(
+                          child: Text(
+                            "Điểm",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color:
+                                  Styles.titleColor[Config.themeMode],
+                              fontSize: Styles.titleFontSize,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     if(lstInvoi.isEmpty)
@@ -127,7 +138,6 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
             ),
     );
   }
-
   @override
   void onLoadError() {
     setState(() {

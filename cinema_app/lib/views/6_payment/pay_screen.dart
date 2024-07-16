@@ -65,10 +65,6 @@ class _PayScreenState extends State<PayScreen> {
       growable: true);
   final List<PaymentOption> paymentOptions = [
     const PaymentOption(
-      title: 'Visa, Master, JCB, AMEX, CUP',
-      img: "assets/img_demo/visa_masterCard_logo.png",
-    ),
-    const PaymentOption(
       title: 'Momo',
       img: "assets/img_demo/momo_logo.png",
     ),
@@ -145,7 +141,7 @@ class _PayScreenState extends State<PayScreen> {
 
   Stream<int> get countStream async* {
     while (true) {
-      await Future.delayed( const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       yield CountDown.time;
     }
   }
@@ -224,7 +220,7 @@ class _PayScreenState extends State<PayScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(right: 15),
-              padding:const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
                   color: Styles.btnColor[Config.themeMode]),
@@ -325,7 +321,7 @@ class _PayScreenState extends State<PayScreen> {
                           RichText(
                               text: TextSpan(
                                   children: [
-                                 TextSpan(text: "$textChair: "),
+                                TextSpan(text: "$textChair: "),
                                 TextSpan(
                                     text: widget.booking.seats
                                         .map((e) => e.name)
@@ -430,7 +426,7 @@ class _PayScreenState extends State<PayScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
                             color: Styles.btnColor[Config.themeMode]),
-                        child:  Text(
+                        child: Text(
                           textApply,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -488,7 +484,7 @@ class _PayScreenState extends State<PayScreen> {
                       "ShowTimeId": widget.booking.showtime.showTimeId,
                       "RoomId": widget.booking.showtime.roomId,
                       "TheaterId": widget.booking.theater.id,
-                     // "UserId": Config.userInfo!.id,
+                      "UserId": Config.userInfo!.phone,
                       "OrderInfo": "CKC cinema app",
                       "InvoiceTickets": tBoxs
                           .map((e) => {
@@ -518,7 +514,7 @@ class _PayScreenState extends State<PayScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => TicketInfoScreen(
-                                opt: selectedOption!.title ,
+                                opt: selectedOption!.title,
                                 orderId: orderId,
                                 amount: amount,
                                 booking: widget.booking,

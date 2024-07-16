@@ -214,25 +214,23 @@ class _UserState extends State<UserScreen> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {},
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.movie_filter_outlined,
-                                      color: Styles
-                                          .boldTextColor[Config.themeMode],
-                                      size: Styles.iconSizeInTitle,
-                                    ),
-                                    Text(
-                                      textMovie,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Styles
-                                              .boldTextColor[Config.themeMode],
-                                          fontSize: Styles.textSize),
-                                    ),
-                                  ],
-                                ),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.movie_filter_outlined,
+                                    color: Styles
+                                        .boldTextColor[Config.themeMode],
+                                    size: Styles.iconSizeInTitle,
+                                  ),
+                                  Text(
+                                    textMovie,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Styles
+                                            .boldTextColor[Config.themeMode],
+                                        fontSize: Styles.textSize),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
