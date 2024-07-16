@@ -27,6 +27,7 @@ import Revenue from "../Pages/Admin/Revenue/Revenue";
 import Invoice from "../Pages/Admin/Invoice/Invoice";
 import User from "../Pages/Admin/User/User";
 import ShowTime from "../Pages/Admin/ShowTime/ShowTime";
+import News from "../Pages/User/News/News";
 
 const Routers = () => {
     return (
@@ -71,6 +72,8 @@ const Routers = () => {
                             <ProtectedRouteInfo>
                                 <Profile />
                             </ProtectedRouteInfo>} 
+                        />
+                        <Route path="news" element={<News/>}
                         />
                     </Route>
                     <Route path="/admin" element={

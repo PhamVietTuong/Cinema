@@ -53,7 +53,6 @@ const ForgetPassword = () => {
         try {
             await schemaEmail.validate({ email: form.email }, { abortEarly: false });
             dispatch(ForgetPasswordAction({ email: form.email }, navigate));
-            setStep(2);
         } catch (validationErrors) {
             const newErrors = {};
             validationErrors.inner.forEach((error) => {
@@ -70,7 +69,9 @@ const ForgetPassword = () => {
                 setErrors({ ...errors, code: resultSendCode.message });
                 return
             }
-            if (form.code == resultSendCode.message) {
+            const decodedResult = decodeURIComponent(escape(atob(resultSendCode.message)));
+            const decodedJson = JSON.parse(decodedResult);
+            if (form.code == decodedJson) {
                 setStep(3);
             } else {
                 setErrors({ ...errors, code: 'Mã xác nhận không đúng' });
@@ -134,7 +135,7 @@ const ForgetPassword = () => {
     };
 
     useEffect(() => {
-        if (Object.keys(resultSendCode).length !== 0) {
+        if (resultSendCode.isSuccess) {
             setStep(2);
         }
     }, [resultSendCode]);
@@ -155,8 +156,8 @@ const ForgetPassword = () => {
                                     onChange={handleInputChange}
                                     onBlur={(event) => validateField(event.target.name, event.target.value)}
                                 />
-                                {!!errors.email && (
-                                    <FormHelperText>{errors.email}</FormHelperText>
+                                {(!!errors.email || !resultSendCode.isSuccess) && (
+                                    <FormHelperText>{errors.email || resultSendCode.message}</FormHelperText>
                                 )}
                             </FormControl>
                             <Button className="btn btn--pri changePasswordButton" onClick={handleSendCode}>

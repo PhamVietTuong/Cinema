@@ -1,5 +1,5 @@
 import { SEARCH_HISTORY, TOKEN, USER_LOGIN } from "../../Ustil/Settings/Config";
-import { ADD_SEARCH_HISTORY, LOGIN_USER, LOGOUT, REGISTER_USER, SET_LIST_USER, SET_RESULT_SEND_CODE } from "../Actions/Type/UserType";
+import { ADD_SEARCH_HISTORY, LOGIN_USER, LOGOUT, REGISTER_USER, REMOVE_SEARCH_HISTORY, SET_LIST_USER, SET_RESULT_SEND_CODE } from "../Actions/Type/UserType";
 
 let user = {};
 if (localStorage.getItem(USER_LOGIN) || sessionStorage.getItem(USER_LOGIN)) {
@@ -60,11 +60,26 @@ export const UserReducer = (state = stateDefault, action) => {
         }
 
         case ADD_SEARCH_HISTORY: {
-            const updatedSearchHistory = [...new Set([...state.searchHistory, action.searchTerm])];
+            const filteredSearchHistory = state.searchHistory.filter(item => {
+                return !(item.searchKey === action.searchTerm.searchKey && item.isActor === action.searchTerm.isActor);
+            });
+
+            const updatedSearchHistory = [...filteredSearchHistory, action.searchTerm];
+
             localStorage.setItem(SEARCH_HISTORY, JSON.stringify(updatedSearchHistory));
+
             return {
                 ...state,
                 searchHistory: updatedSearchHistory
+            };
+        }
+
+        case REMOVE_SEARCH_HISTORY: {
+            const updatedSearchHistory = state.searchHistory.filter(term => term !== action.searchTerm);
+            localStorage.setItem(SEARCH_HISTORY, JSON.stringify(updatedSearchHistory));
+            return {
+                ...state,
+                searchHistory: updatedSearchHistory,
             };
         }
 

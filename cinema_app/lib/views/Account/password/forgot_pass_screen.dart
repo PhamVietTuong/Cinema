@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cinema_app/components/text_field.dart';
 import 'package:cinema_app/config.dart';
@@ -83,7 +84,7 @@ class _FogotPassScreenState extends State<FogotPassScreen>
   }
 
   countDownTimeCode() async {
-    while (timeCode > 0&&isTimeIn) {
+    while (timeCode > 0 && isTimeIn) {
       await Future.delayed(const Duration(seconds: 1));
       setState(() {
         timeCode--;
@@ -288,8 +289,16 @@ class _FogotPassScreenState extends State<FogotPassScreen>
                               child: TextButton(
                                   onPressed: () {
                                     var code = _controllerCode.text.trim();
+                                    String base64Decoded = utf8.decode(
+                                        base64.decode(resView!.message));
+
+                                    String uriDecoded =
+                                        Uri.decodeComponent(base64Decoded);
+
+                                    var decodedJson = json.decode(uriDecoded);
+
                                     var resConfirm =
-                                        resView!.message.compareTo(code);
+                                        decodedJson.compareTo(code);
                                     if (resConfirm != 0) {
                                       textShowError = textErrorCode;
                                       resView!.message = "";
@@ -300,7 +309,10 @@ class _FogotPassScreenState extends State<FogotPassScreen>
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                               ChangePassWordScreen(username: _controllerEmail.text.trim()),
+                                              ChangePassWordScreen(
+                                                  username: _controllerEmail
+                                                      .text
+                                                      .trim()),
                                         ));
                                   },
                                   child: Text(
@@ -329,13 +341,13 @@ class _FogotPassScreenState extends State<FogotPassScreen>
   }
 
   @override
-    void onLoadError(String error) {}
-
+  void onLoadError(String error) {}
 
   @override
   void onGetCodeSuccess(ResGetCode res) async {
     resView = res;
     if (resView!.state) {
+      print(res.message);
       isTimeIn = true;
       countDownTimeCode();
     } else {
@@ -351,12 +363,9 @@ class _FogotPassScreenState extends State<FogotPassScreen>
   void loadLoginSuccess(User user) {}
 
   @override
-  
   @override
-  void loadChangePassSuccess(bool res) {
-  }
-  
+  void loadChangePassSuccess(bool res) {}
+
   @override
-  void loadUpdateSuccess(UpdateUser user) {
-  }
+  void loadUpdateSuccess(UpdateUser user) {}
 }

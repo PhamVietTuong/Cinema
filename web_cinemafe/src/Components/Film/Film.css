@@ -19,7 +19,7 @@
 @media (max-width: 600px) {
     .web-movie-box .image {
             height: 300px;
-        }
+    }
 }
 
 .web-movie-box .image>a>img {
@@ -253,7 +253,6 @@ a {
 
 .web-movie-box .video .ic {
     width: 24px;
-    height: 24px;
     border-radius: 1000px;
     border: 1px solid rgba(255, 255, 255, 0.5);
 }

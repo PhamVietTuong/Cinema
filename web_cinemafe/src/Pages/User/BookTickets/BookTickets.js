@@ -1,5 +1,5 @@
 import './BookTickets.css'
-import { Box, CircularProgress, Grid, Tab } from '@mui/material';
+import { Box, CircularProgress, Grid, Pagination, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import BookTicket from '../../../Components/Film/BookTicket';
 import { useState } from 'react';
@@ -20,6 +20,10 @@ const BookTickets = () => {
     const currentTime = moment();
     const today = moment().startOf('day');
     const endDate = moment().add(2, 'days').endOf('day');
+    const [currentPageisCurrentMovie, setCurrentPageisCurrentMovie] = useState(1);
+    const [currentPageisUpcomingMovie, setCurrentPageisUpcomingMovie] = useState(1);
+    const [currentPageisSpecialMovie, setCurrentPageisSpecialMovie] = useState(1);
+    const itemsPerPage = 8;
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -134,6 +138,27 @@ const BookTickets = () => {
         );
     }
 
+    const handlePageisCurrentMovieChange = (event, value) => {
+        setCurrentPageisCurrentMovie(value);
+    };
+
+    const paginatedMoviesisCurrentMovie = isCurrentMovie(listMovieByTheaterId).slice((currentPageisCurrentMovie - 1) * itemsPerPage, currentPageisCurrentMovie * itemsPerPage);
+    const pageCountisCurrentMovie = Math.ceil(isCurrentMovie(listMovieByTheaterId).length / itemsPerPage);
+
+    const handlePageisUpcomingMovieChange = (event, value) => {
+        setCurrentPageisUpcomingMovie(value);
+    };
+
+    const paginatedMoviesisUpcomingMovie = isUpcomingMovie(listMovieByTheaterId).slice((currentPageisUpcomingMovie - 1) * itemsPerPage, currentPageisUpcomingMovie * itemsPerPage);
+    const pageCountisUpcomingMovie = Math.ceil(isUpcomingMovie(listMovieByTheaterId).length / itemsPerPage);
+
+    const handlePageisSpecialMovieChange = (event, value) => {
+        setCurrentPageisSpecialMovie(value);
+    };
+
+    const paginatedMoviesisSpecialMovie = isSpecialMovie(listMovieByTheaterId).slice((currentPageisSpecialMovie - 1) * itemsPerPage, currentPageisSpecialMovie * itemsPerPage);
+    const pageCountisSpecialMovie = Math.ceil(isSpecialMovie(listMovieByTheaterId).length / itemsPerPage);
+
     return (
         <>
             <div className="app-content">
@@ -180,15 +205,31 @@ const BookTickets = () => {
                                         {
                                             Array.isArray(listMovieByTheaterId) && isCurrentMovie(listMovieByTheaterId).length > 0 ?
                                                 (
-                                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                                        {
-                                                            isCurrentMovie(listMovieByTheaterId).map((item) => (
+                                                    <>
+                                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                            {
+                                                                paginatedMoviesisCurrentMovie.map((item) => (
                                                                     <Grid item xs={12} lg={6} key={item.id}>
                                                                         <BookTicket bookTicket={item}></BookTicket>
                                                                     </Grid>
-                                                            ))
-                                                        }
-                                                    </Grid>
+                                                                ))
+                                                            }
+                                                        </Grid>
+
+                                                        <Box mt={4} display="flex" justifyContent="center">
+                                                            <Pagination
+                                                                count={pageCountisCurrentMovie}
+                                                                page={currentPageisCurrentMovie}
+                                                                onChange={handlePageisCurrentMovieChange}
+                                                                variant="outlined"
+                                                                size="large"
+                                                                style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+                                                                color="primary"
+                                                                className="PaginationMovie"
+                                                            />
+                                                        </Box>
+                                                    </>
+
                                                 ) : (
                                                     <div style={{ opacity: 1, transform: 'none' }}>
                                                         <div className="movies-noti">
@@ -208,15 +249,30 @@ const BookTickets = () => {
                                         {
                                             Array.isArray(listMovieByTheaterId) && isUpcomingMovie(listMovieByTheaterId).length > 0 ?
                                                 (
-                                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                                        {
-                                                            isUpcomingMovie(listMovieByTheaterId).map((item) => (
-                                                                <Grid item xs={6} key={item.id}>
-                                                                    <BookTicket bookTicket={item}></BookTicket>
-                                                                </Grid>
-                                                            ))
-                                                        }
-                                                    </Grid>
+                                                    <>
+                                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                            {
+                                                                paginatedMoviesisUpcomingMovie.map((item) => (
+                                                                    <Grid item xs={12} lg={6} key={item.id}>
+                                                                        <BookTicket bookTicket={item}></BookTicket>
+                                                                    </Grid>
+                                                                ))
+                                                            }
+                                                        </Grid>
+
+                                                        <Box mt={4} display="flex" justifyContent="center">
+                                                            <Pagination
+                                                                count={pageCountisUpcomingMovie}
+                                                                page={currentPageisUpcomingMovie}
+                                                                onChange={handlePageisUpcomingMovieChange}
+                                                                variant="outlined"
+                                                                size="large"
+                                                                style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+                                                                color="primary"
+                                                                className="PaginationMovie"
+                                                            />
+                                                        </Box>
+                                                    </>
                                                 ) : (
                                                     <div style={{ opacity: 1, transform: 'none' }}>
                                                         <div className="movies-noti">
@@ -237,15 +293,30 @@ const BookTickets = () => {
                                             {
                                                 Array.isArray(listMovieByTheaterId) && isSpecialMovie(listMovieByTheaterId).length > 0 ?
                                                     (
-                                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                                            {
-                                                                isSpecialMovie(listMovieByTheaterId).map((item) => (
-                                                                    <Grid item xs={6} key={item.id}>
-                                                                        <BookTicket bookTicket={item}></BookTicket>
-                                                                    </Grid>
-                                                                ))
-                                                            }
-                                                        </Grid>
+                                                        <>
+                                                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                                {
+                                                                    paginatedMoviesisSpecialMovie.map((item) => (
+                                                                        <Grid item xs={12} lg={6} key={item.id}>
+                                                                            <BookTicket bookTicket={item}></BookTicket>
+                                                                        </Grid>
+                                                                    ))
+                                                                }
+                                                            </Grid>
+
+                                                            <Box mt={4} display="flex" justifyContent="center">
+                                                                <Pagination
+                                                                    count={pageCountisSpecialMovie}
+                                                                    page={currentPageisSpecialMovie}
+                                                                    onChange={handlePageisSpecialMovieChange}
+                                                                    variant="outlined"
+                                                                    size="large"
+                                                                    style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+                                                                    color="primary"
+                                                                    className="PaginationMovie"
+                                                                />
+                                                            </Box>
+                                                        </>
                                                     ) : (
                                                         <div style={{ opacity: 1, transform: 'none' }}>
                                                             <div className="movies-noti">

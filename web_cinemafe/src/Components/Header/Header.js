@@ -8,28 +8,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT } from '../../Redux/Actions/Type/UserType';
 import { useDebounce } from 'use-debounce';
 import { SearchByNameAction, TheaterListAction } from '../../Redux/Actions/CinemasAction';
-import { AddSearchHistoryAction } from '../../Redux/Actions/UsersAction';
+import { AddSearchHistoryAction, RemoveSearchHistoryAction } from '../../Redux/Actions/UsersAction';
 
 const Header = (props) => {
     const dispatch = useDispatch();
     const { loginInfo, searchHistory } = useSelector((state) => state.UserReducer);
 
-    const [infoSearch, setInfoSearch] = useState('');
-    const [debouncedText] = useDebounce(infoSearch, 1000);
+    const [infoSearch, setInfoSearch] = useState({ searchKey: '', isActor: false });
     const [isSearchVisible, setIsSearchVisible] = useState(false);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [searchCategory, setSearchCategory] = useState(false);
     const searchRef = useRef(null);
-
-    useEffect(() => {
-        if (debouncedText) {
-            dispatch(SearchByNameAction(debouncedText));
-            dispatch(AddSearchHistoryAction(debouncedText));
-        }
-    }, [debouncedText, dispatch]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchRef.current && !searchRef.current.contains(event.target)) {
                 setIsSearchVisible(false);
+                setIsDropdownVisible(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -46,6 +41,28 @@ const Header = (props) => {
         setInfoSearch(term);
         setIsSearchVisible(false);
         dispatch(SearchByNameAction(term));
+
+    };
+
+    const handleSearch = () => {
+        if (infoSearch.searchKey) {
+            dispatch(SearchByNameAction(infoSearch));
+            dispatch(AddSearchHistoryAction(infoSearch));
+        }
+    };
+
+    const handleRemoveSearchTerm = (term) => {
+        dispatch(RemoveSearchHistoryAction(term));
+    };
+
+    const handleCategorySelect = (category) => {
+        setSearchCategory(category);
+        if (infoSearch.searchKey) {
+            const updatedSearchInfo = { ...infoSearch, isActor: category };
+            dispatch(SearchByNameAction(updatedSearchInfo));
+            dispatch(AddSearchHistoryAction(updatedSearchInfo));
+        }
+        setIsDropdownVisible(false);
     };
 
     return (
@@ -102,28 +119,46 @@ const Header = (props) => {
                                                         className="re-input !bg-white"
                                                         type="text"
                                                         placeholder="Tìm phim, rạp"
-                                                        value={infoSearch}
-                                                        onChange={(e) => setInfoSearch(e.target.value)}
+                                                        value={infoSearch.searchKey}
+                                                        onChange={(e) => setInfoSearch({ searchKey: e.target.value, isActor: false })}
                                                     />
-                                                    <button
-                                                        className="hd-search-form-btn"
-                                                        aria-label="Button search"
-                                                        type="submit"
+                                                    <div className="search-category-dropdown" 
+                                                    onMouseEnter={() => setIsDropdownVisible(true)} onMouseLeave={() => setIsDropdownVisible(false)}
                                                     >
-                                                        <FontAwesomeIcon icon={faMagnifyingGlass} />
-                                                    </button>
+                                                        <button
+                                                            className="hd-search-form-btn"
+                                                            aria-label="Button search"
+                                                            onClick={handleSearch}
+                                                        >
+                                                            <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                                        </button>
+                                                        {isDropdownVisible && (
+                                                            <div className="dropdown-menu">
+                                                                <div className="dropdown-item" onClick={() => handleCategorySelect(false)}>Tìm phim, rạp</div>
+                                                                <div className="dropdown-item" onClick={() => handleCategorySelect(true)}>Diễn viên</div>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         {isSearchVisible && (
                                             <div className="search-history">
                                                 {searchHistory.map((term, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className="search-term"
-                                                        onClick={() => handleSuggestionClick(term)}
-                                                    >
-                                                        {term}
+                                                    <div key={index} className="search-term-container">
+                                                        <div
+                                                            key={index}
+                                                            className="search-term"
+                                                            onClick={() => handleSuggestionClick(term)}
+                                                        >
+                                                            {term.searchKey}
+                                                        </div>
+                                                        <button
+                                                            className="remove-search-term-btn"
+                                                            onClick={() => handleRemoveSearchTerm(term)}
+                                                        >
+                                                            &times;
+                                                        </button>
                                                     </div>
                                                 ))}
                                             </div>
@@ -231,10 +266,11 @@ const Header = (props) => {
                                 {/* <a className="link km" href="/chuong-trinh-khuyen-mai/">
                                     Khuyến mãi
                                 </a>  */}
-                                <a className="link news" href="/news">
+                                <Link to={"news"} className="link news">
                                     Tin tức
-                                </a>
-                                <a className="link about-us" href="/about-us">
+                                </Link>
+                                
+                                <a className="link about-us" href="/">
                                     Giới thiệu
                                 </a>
                             </div>

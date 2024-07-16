@@ -136,8 +136,8 @@ export class CinemasService extends baseService {
         return this.post(`api/Cinemas/CreateUserType`, userTypeDTO)
     }
 
-    SearchByName = (name) => {
-        return this.get(`api/Cinemas/SearchByName${name}`)
+    SearchByName = (infoSearch) => {
+        return this.post(`api/Cinemas/SearchByName/`, infoSearch)
     }
 
     GetInvoiceList = (userId) => {
@@ -162,6 +162,10 @@ export class CinemasService extends baseService {
 
     UpdateShowTimeRoom = (showTimeRoomDTO) => {
         return this.post(`api/Cinemas/UpdateShowTimeRoom`, showTimeRoomDTO)
+    }
+
+    GetNewsList = () => {
+        return this.get(`api/Cinemas/GetNewsList`)
     }
 }
 
