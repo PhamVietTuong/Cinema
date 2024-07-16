@@ -15,16 +15,22 @@ class TheaterItem extends StatefulWidget {
 class _TheaterItemState extends State<TheaterItem> {
   late String theaterName;
   late String theaterAddres;
+  String room = "phòng";
+  String seat = "ghế";
   String stateDes = "Đang tải";
   void translate() async {
     List<String> res = await Future.wait([
       Styles.translate(theaterName),
       Styles.translate(theaterAddres),
-      Styles.translate(stateDes)
+      Styles.translate(stateDes),
+      Styles.translate(room),
+      Styles.translate(seat),
     ]);
     theaterName = res[0];
     theaterAddres = res[1];
     stateDes = res[2];
+    room = res[3];
+    seat = res[4];
     setState(() {});
   }
 
@@ -77,7 +83,7 @@ class _TheaterItemState extends State<TheaterItem> {
   Widget _buildImage(double screenWidth, double borderRadius) {
     return Container(
       width: screenWidth * 0.3,
-      height: 110,
+      height: 130,
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(borderRadius)),
       child: ClipRRect(
@@ -108,10 +114,30 @@ class _TheaterItemState extends State<TheaterItem> {
                   color: Styles.boldTextColor[Config.themeMode]),
             ),
             _buildAddressRow(),
+            _buidStateInfo(),
             _buildPhoneRow(),
           ],
         ),
       ),
+    );
+  }
+
+  _buidStateInfo() {
+    return Row(
+      children: [
+        Icon(
+          Icons.home,
+          size: Styles.iconSizeInLineText,
+          color: Styles.boldTextColor[Config.themeMode],
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          '${widget.theater.countRoom} $room - ${widget.theater.countSeat} $seat',
+          style: TextStyle(color: Styles.textColor[Config.themeMode]),
+        )
+      ],
     );
   }
 

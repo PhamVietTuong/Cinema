@@ -35,6 +35,8 @@ namespace Cinema.Repository
                     Address = theater.Address,
                     Image = theater.Image,
                     Phone = theater.Phone,
+                    CountRoom = _context.Room.Count(r => r.TheaterId == theater.Id && r.Status == RoomStatus.Active),
+                    CountSeat = _context.Seat.Count(s => s.Room.TheaterId == theater.Id && s.IsSeat == true)
                 });
             }
 
@@ -49,7 +51,7 @@ namespace Cinema.Repository
             .Include(x => x.ShowTime)
                 .ThenInclude(x => x.Movie)
                     .ThenInclude(m => m.AgeRestriction)
-            .Where(x => x.Room.TheaterId == theaterId && x.ShowTime.Status == true)
+            .Where(x => x.Room.TheaterId == theaterId && x.ShowTime.Status == true&&x.ShowTime.Movie.Status==true)
             .ToListAsync();
 
             var movies = showTimeRooms.Select(sRoom => sRoom.ShowTime.Movie).Distinct().ToList();
