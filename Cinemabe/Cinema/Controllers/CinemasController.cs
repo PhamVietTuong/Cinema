@@ -86,6 +86,21 @@ namespace Cinema.Controllers
 
         #region Movie
 
+        [HttpGet("GetCommentList/{idMovie}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<CommentViewModel>>> GetCommentList(Guid idMovie)
+        {
+            try
+            {
+                var result = await _movieRepository.GetCommentsByMovieID(idMovie);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+        }
+
         [HttpGet("GetMovieListAdmin")]
         [Authorize(Roles = admin)]
         public async Task<ActionResult<List<MovieDTO>>> GetMovieListAdmin()

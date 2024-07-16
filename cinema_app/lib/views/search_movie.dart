@@ -21,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen>
   MoviePresenter? _presenter;
   Map<String, dynamic>? _searchResults;
   List<String> _searchHistory = [];
-
+  bool isSearchByActor = false;
   @override
   void initState() {
     super.initState();
@@ -32,7 +32,7 @@ class _SearchScreenState extends State<SearchScreen>
   void _search() {
     String name = _controller.text.trim();
     if (name.isNotEmpty) {
-      _presenter?.searchByName(name);
+      _presenter?.searchByName(name, isActor: isSearchByActor);
     } else {
       setState(() {
         _searchResults = null;
@@ -69,6 +69,7 @@ class _SearchScreenState extends State<SearchScreen>
   void onSearchComplete(Map<String, dynamic> results) {
     setState(() {
       _searchResults = results;
+      print(_searchResults);
     });
   }
 
@@ -83,22 +84,21 @@ class _SearchScreenState extends State<SearchScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Styles.backgroundContent[Config.themeMode],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          color: Styles.boldTextColor[Config.themeMode],
-          onPressed: () {
-            Navigator.pop(this.context);
-          },
-        ),
-        title: Text(
-          "Tìm kiếm",
-          style: TextStyle(
-            fontSize: Styles.appbarFontSize,
+          backgroundColor: Styles.backgroundContent[Config.themeMode],
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new),
             color: Styles.boldTextColor[Config.themeMode],
+            onPressed: () {
+              Navigator.pop(this.context);
+            },
           ),
-        ),
-      ),
+          title: Text(
+            "Tìm kiếm",
+            style: TextStyle(
+              fontSize: Styles.appbarFontSize,
+              color: Styles.boldTextColor[Config.themeMode],
+            ),
+          )),
       backgroundColor: Styles.backgroundColor[Config.themeMode],
       body: SingleChildScrollView(
         child: Container(
@@ -107,64 +107,90 @@ class _SearchScreenState extends State<SearchScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: _controller,
-                onTapOutside: (event) {
-                  FocusScope.of(context).unfocus();
-                  if (_controller.text.isNotEmpty) {
-                    _saveSearchQuery(_controller.text);
-                  }
-                },
-                // onChanged: (value) {
-                //   _search();
-                // },
-                style: TextStyle(
-                  color: _controller.text.isNotEmpty
-                      ? Styles.textColor[Config.themeMode]
-                      : Colors.white,
-                  fontSize: Styles.textSize,
+               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                Text(
+                  "Tìm phim theo diễn viên",
+                  style: TextStyle(
+                    fontSize: Styles.textSize,
+                    color: Styles.boldTextColor[Config.themeMode],
+                  ),
                 ),
-                decoration: InputDecoration(
-                  labelText: 'Nhập từ khóa',
-                  labelStyle:
-                      TextStyle(color: Styles.textColor[Config.themeMode]),
-                  suffixIcon: _controller.text.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            color: Styles.textColor[Config.themeMode],
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _controller.clear();
-                              _search();
-                            });
-                          },
-                        )
-                      : IconButton(
-                          icon: Icon(
-                            Icons.search,
-                            color: Styles.textColor[Config.themeMode],
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _search();
-                            });
-                          },
+                Checkbox(
+                    value: isSearchByActor,
+                    onChanged: (newValue) {
+                      setState(() {
+                        isSearchByActor = newValue!;
+                      });
+                    })
+              ]),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                        if (_controller.text.isNotEmpty) {
+                          _saveSearchQuery(_controller.text);
+                          _search();
+                        }
+                      },
+                      // onChanged: (value) {
+                      //
+                      // },
+                      style: TextStyle(
+                        color: _controller.text.isNotEmpty
+                            ? Styles.textColor[Config.themeMode]
+                            : Colors.white,
+                        fontSize: Styles.textSize,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: 'Nhập từ khóa',
+                        labelStyle: TextStyle(
+                            color: Styles.textColor[Config.themeMode]),
+                        suffixIcon: _controller.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Styles.textColor[Config.themeMode],
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _controller.clear();
+                                    _search();
+                                  });
+                                },
+                              )
+                            : const SizedBox(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Styles.textColor[Config.themeMode]!),
+                          borderRadius:
+                              BorderRadius.circular(10.0), // Độ bo tròn các góc
                         ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Styles.textColor[Config.themeMode]!),
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Độ bo tròn các góc
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Styles.textColor[Config.themeMode]!),
+                          borderRadius:
+                              BorderRadius.circular(10.0), // Độ bo tròn các góc
+                        ),
+                      ),
+                    ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Styles.textColor[Config.themeMode]!),
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Độ bo tròn các góc
+                  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Styles.textColor[Config.themeMode],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _search();
+                      });
+                    },
                   ),
-                ),
+                ],
               ),
               const SizedBox(height: 5), // Khoảng cách giữa các phần tử
               Column(
