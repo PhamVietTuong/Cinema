@@ -61,10 +61,10 @@ class UserPresenter {
       }
 
       UpdateUser user = await repository.updateUser(userInfo);
-      print('Updating user with: ${userInfo.toJson()}');
+     // print('Updating user with: ${userInfo.toJson()}');
       _view.loadUpdateSuccess(user);
     } catch (e) {
-      print('Error : $e');
+     // print('Error : $e');
       _view.onLoadError('$e');
     }
   }

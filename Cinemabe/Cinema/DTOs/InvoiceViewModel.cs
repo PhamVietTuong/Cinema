@@ -26,5 +26,7 @@ namespace Cinema.DTOs
         public List<InvoiceFoodAndDrinkViewModel> FoodAndDrinks { get; set; }
         public string TheaterAddress { get; set; }
         public string TicketType { get; set; }
+        public DateTime CreationTime { get; set; }
+
     }
 }

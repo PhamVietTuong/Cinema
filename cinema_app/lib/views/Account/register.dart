@@ -314,6 +314,5 @@ class _RegisterContentState extends State<RegisterContent>
 
   @override
   void loadChangePassSuccess(bool res) {
-    // TODO: implement loadChangePassSuccess
   }
 }

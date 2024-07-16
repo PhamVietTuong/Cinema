@@ -23,9 +23,6 @@ class _HistoryInvoiceItemState extends State<HistoryInvoiceItem> {
                     color: Styles.boldTextColor[Config.themeMode],
                     fontSize: Styles.titleFontSize)),
           ),
-          const VerticalDivider(
-            width: 2,
-          ),
           Expanded(
             child: Text(widget.invoice.theaterName,
                 textAlign: TextAlign.center,
@@ -33,15 +30,23 @@ class _HistoryInvoiceItemState extends State<HistoryInvoiceItem> {
                     color: Styles.boldTextColor[Config.themeMode],
                     fontSize: Styles.titleFontSize)),
           ),
-          const VerticalDivider(
-            width: 2,
-          ),
           Expanded(
             child: Text(Styles.formatter.format(widget.invoice.totalPrice),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Styles.boldTextColor[Config.themeMode],
                     fontSize: Styles.titleFontSize)),
+          ),
+          Expanded(
+            child: Text(
+              (widget.invoice.totalPrice / 1000).toStringAsFixed(
+                  0),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Styles.boldTextColor[Config.themeMode],
+                fontSize: Styles.titleFontSize,
+              ),
+            ),
           ),
         ],
       ),

@@ -80,7 +80,7 @@ class _LoginContentState extends State<LoginContent>
 
   @override
   void loadLoginSuccess(User user) {
-    print(user);
+    //print(user);
 
     Config.saveInfoUser(user);
     //print(Config.userInfo!.birthday);
