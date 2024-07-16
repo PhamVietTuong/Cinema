@@ -27,12 +27,12 @@ const Footer = () => {
                                         <img src="/Images/logo.png" alt="" />
                                     </a>
                                     <div className="ft-group-btn">
-                                        <a className="btn dat-ve" href="/">
+                                        {/* <a className="btn dat-ve" href="/">
                                             <span className="txt">ĐẶT VÉ</span>
                                         </a>
                                         <a className="btn dat-bap-nuoc" href="/popcorn-drink">
                                             <span className="txt">ĐẶT BẮP NƯỚC</span>
-                                        </a>
+                                        </a> */}
                                     </div>
                                     <div className="ft-hotline-socials">
                                         <ul className="list">
@@ -157,7 +157,7 @@ const Footer = () => {
                                 </div>
                                 <div className="footer-item col col-2">
                                     <div className="text">
-                                        Hệ thống rạp
+                                        Hệ thống chi nhánh
                                     </div>
                                     <ul className="menu-list">
                                         {theaterList.map((item, index) => (

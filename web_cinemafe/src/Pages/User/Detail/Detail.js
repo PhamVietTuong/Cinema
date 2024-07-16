@@ -137,12 +137,11 @@ const Detail = () => {
                         <div className="container">
                             <div className="detail-wr">
                                 {
-
                                     <div className="detail-row row">
                                         <div className='detail-left col col-5'>
                                             <div class="web-movie-box">
                                                 <div className="web-movie-box">
-                                                    <div className="image">
+                                                    <div className="image imageDetail">
                                                         <img src={`${DOMAIN}/Images/${movieDetail?.image}`} alt=""></img>
                                                         <div className="attach">
                                                             <div className="type-movie">
