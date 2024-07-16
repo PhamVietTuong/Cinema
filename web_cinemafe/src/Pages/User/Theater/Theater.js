@@ -703,7 +703,7 @@ const Theater = (props) => {
                                     </div>
                                 </div>
                                 <div className="shtime-body">
-                                    <h2 className="heading">Danh sách Rạp</h2>
+                                    <h2 className="heading">Danh sách Chi nhánh</h2>
                                 </div>
                                 <Tab.Content>
                                     <Tab.Pane eventKey={`tab-${activeDateIndex}`}>
