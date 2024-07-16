@@ -11,6 +11,7 @@ using System.Text;
 using System.Security.Cryptography;
 using AutoMapper;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace Cinema.Repository
 {
@@ -326,8 +327,12 @@ namespace Cinema.Repository
 			var result = await provider.SendEmailAsync(email, "Mã xác nhận quên mật khẩu", $"<H1>Mã xác nhận của bạn là: {code}</H1>");
 			if (result)
 			{
-				resCode.IsSuccess = true;
-				resCode.Message = code;
+                var resultJson = JsonConvert.SerializeObject(code);
+                var bytes = Encoding.UTF8.GetBytes(resultJson);
+                var base64Result = Convert.ToBase64String(bytes);
+
+                resCode.IsSuccess = true;
+				resCode.Message = base64Result;
 			}
 			else
 			{
