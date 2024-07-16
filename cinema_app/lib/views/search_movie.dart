@@ -1,3 +1,4 @@
+import 'package:cinema_app/data/models/search_key.dart';
 import 'package:cinema_app/data/models/theater.dart';
 import 'package:flutter/material.dart';
 import 'package:cinema_app/config.dart';
@@ -20,19 +21,46 @@ class _SearchScreenState extends State<SearchScreen>
   final TextEditingController _controller = TextEditingController();
   MoviePresenter? _presenter;
   Map<String, dynamic>? _searchResults;
-  List<String> _searchHistory = [];
+  List<SearchKey> _searchHistory = [];
   bool isSearchByActor = false;
+
+  void translate() async {
+    List<String> textTranlate = await Future.wait([
+      Styles.translate(searchByActorLabel),
+      Styles.translate(placeholderSearchKeyword),
+      Styles.translate(searchHistoryTitle),
+      Styles.translate(titleAppBar),
+      Styles.translate(theaterListTitle),
+      Styles.translate(movieListTitle),
+    ]);
+    searchByActorLabel = textTranlate[0];
+    placeholderSearchKeyword = textTranlate[1];
+    searchHistoryTitle = textTranlate[2];
+    titleAppBar = textTranlate[3];
+    theaterListTitle = textTranlate[4];
+    movieListTitle = textTranlate[5];
+    setState(() {});
+  }
+
+  String searchByActorLabel = "Tìm phim theo diễn viên";
+  String placeholderSearchKeyword = "Nhập từ khóa";
+  String searchHistoryTitle = "Lịch sử tìm kiếm";
+  String titleAppBar = "Tìm kiếm";
+  String theaterListTitle = "Danh sách các rạp chiếu";
+  String movieListTitle = "Danh sách phim";
+
   @override
   void initState() {
     super.initState();
     _presenter = MoviePresenter(this);
     _loadSearchHistory();
+    translate();
   }
 
-  void _search() {
+  void _search({bool state = false}) {
     String name = _controller.text.trim();
     if (name.isNotEmpty) {
-      _presenter?.searchByName(name, isActor: isSearchByActor);
+      _presenter?.searchByName(name, isActor: state ? state : isSearchByActor);
     } else {
       setState(() {
         _searchResults = null;
@@ -41,14 +69,14 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Future<void> _loadSearchHistory() async {
-    List<String> history = await Config.loadSearchHistory();
+    List<SearchKey> history = await Config.loadSearchHistory();
     setState(() {
       _searchHistory = history;
     });
   }
 
-  Future<void> _saveSearchQuery(String query) async {
-    await Config.saveSearchQuery(query);
+  Future<void> _saveSearchQuery(String query, bool isSearchByActor) async {
+    await Config.saveSearchQuery(query, isSearchByActor);
     _loadSearchHistory();
   }
 
@@ -69,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen>
   void onSearchComplete(Map<String, dynamic> results) {
     setState(() {
       _searchResults = results;
-      print(_searchResults);
+      //print(_searchResults);
     });
   }
 
@@ -93,7 +121,7 @@ class _SearchScreenState extends State<SearchScreen>
             },
           ),
           title: Text(
-            "Tìm kiếm",
+           titleAppBar,
             style: TextStyle(
               fontSize: Styles.appbarFontSize,
               color: Styles.boldTextColor[Config.themeMode],
@@ -107,11 +135,9 @@ class _SearchScreenState extends State<SearchScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 Text(
-                  "Tìm phim theo diễn viên",
+                  searchByActorLabel,
                   style: TextStyle(
                     fontSize: Styles.textSize,
                     color: Styles.boldTextColor[Config.themeMode],
@@ -133,7 +159,7 @@ class _SearchScreenState extends State<SearchScreen>
                       onTapOutside: (event) {
                         FocusScope.of(context).unfocus();
                         if (_controller.text.isNotEmpty) {
-                          _saveSearchQuery(_controller.text);
+                          _saveSearchQuery(_controller.text, isSearchByActor);
                           _search();
                         }
                       },
@@ -141,13 +167,11 @@ class _SearchScreenState extends State<SearchScreen>
                       //
                       // },
                       style: TextStyle(
-                        color: _controller.text.isNotEmpty
-                            ? Styles.textColor[Config.themeMode]
-                            : Colors.white,
+                        color: Styles.textColor[Config.themeMode],
                         fontSize: Styles.textSize,
                       ),
                       decoration: InputDecoration(
-                        labelText: 'Nhập từ khóa',
+                        labelText: placeholderSearchKeyword,
                         labelStyle: TextStyle(
                             color: Styles.textColor[Config.themeMode]),
                         suffixIcon: _controller.text.isNotEmpty
@@ -200,7 +224,7 @@ class _SearchScreenState extends State<SearchScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Lịch sử tìm kiếm',
+                       searchHistoryTitle,
                         style: TextStyle(
                           fontSize: Styles.titleFontSize,
                           color: Styles.titleColor[Config.themeMode]!,
@@ -242,7 +266,7 @@ class _SearchScreenState extends State<SearchScreen>
     if (_searchResults!.containsKey('theaters')) {
       results.add(
         Text(
-          'Danh sách các rạp chiếu',
+          theaterListTitle,
           style: TextStyle(
             fontSize: Styles.titleFontSize,
             color: Styles.titleColor[Config.themeMode]!,
@@ -262,7 +286,7 @@ class _SearchScreenState extends State<SearchScreen>
                   ),
                 ),
               );
-              _saveSearchQuery(theater.name);
+              _saveSearchQuery(theater.name, isSearchByActor);
             },
             child: Container(
               padding: const EdgeInsets.all(10),
@@ -294,7 +318,7 @@ class _SearchScreenState extends State<SearchScreen>
         Container(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Text(
-            'Danh sách phim',
+            movieListTitle,
             style: TextStyle(
               fontSize: Styles.titleFontSize,
               color: Styles.titleColor[Config.themeMode]!,
@@ -315,7 +339,7 @@ class _SearchScreenState extends State<SearchScreen>
                   ),
                 ),
               );
-              _saveSearchQuery(movie['name']);
+              _saveSearchQuery(movie['name'], false);
             },
             child: Container(
               padding: const EdgeInsets.all(10),
@@ -353,13 +377,13 @@ class _SearchScreenState extends State<SearchScreen>
           Expanded(
             child: GestureDetector(
               onTap: () {
-                _controller.text = query;
+                _controller.text = query.searchkey;
                 setState(() {
-                  _search();
+                  _search(state: query.isActor);
                 });
               },
               child: Text(
-                query,
+                query.searchkey,
                 style: TextStyle(
                   fontSize: Styles.textSize,
                   color: Styles.boldTextColor[Config.themeMode]!,
@@ -370,7 +394,7 @@ class _SearchScreenState extends State<SearchScreen>
           IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () async {
-              await Config.removeSearchQuery(query);
+              await Config.removeSearchQuery(query.searchkey);
               await _loadSearchHistory();
             },
           ),

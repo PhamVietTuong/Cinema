@@ -200,14 +200,14 @@ class _ShowTimeSceenState extends State<ShowTimeSceen>
                       children: lstShowTimeMovie.isNotEmpty
                           ? lstShowTimeMovie
                           : [
-                            SizedBox(height: 5,),
+                            const SizedBox(height: 5,),
                               Text(
                                 textEmpty,
                                 style: TextStyle(
                                     color:
                                         Styles.boldTextColor[Config.themeMode]),
                               ),
-                                Container(
+                                SizedBox(
                                   width: MediaQuery.of(context).size.width * 0.5,
                                 child: Image.asset(
                                   'assets/img/${Config.themeMode!.contains("light")?'showtime_black':'showtime_white'}.png',

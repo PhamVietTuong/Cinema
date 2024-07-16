@@ -1,6 +1,7 @@
 import 'package:cinema_app/views/Account/user_screen.dart';
 import 'package:cinema_app/views/home_screen.dart';
 import 'package:cinema_app/views/1_threater_selection/theater_sceen.dart';
+import 'package:cinema_app/views/new/news_screen.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,7 @@ class _BottomNavState extends State<BottomNav> {
     pages = [
       const HomePage(),
       const TheaterScreen(),
-      const Center(
-        child: Text("News"),
-      ),
+      const NewsScreen(),
       UserScreen(
         refresh: refresh,
       )
