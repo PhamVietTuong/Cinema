@@ -37,6 +37,7 @@ VALUES
 (NEWID(), 'Phim Mới: Avengers: Secret Wars', 'Ra mắt vào ngày 20/07/2024, bộ phim hứa hẹn nhiều cảnh hành động mãn nhãn.', '2024-07-09T10:30:00', null, null, 1),
 (NEWID(), 'Sự Kiện Đặc Biệt: Đêm Hội Phim Kinh Dị', 'Tham gia đêm hội phim kinh dị vào ngày 31/10/2024, nhiều phần quà hấp dẫn đang chờ đón bạn.', '2024-07-09T11:00:00', null, null, 1),
 (NEWID(), 'Cập Nhật Rạp Chiếu Phim Mới', 'Chúng tôi đã mở thêm 3 rạp chiếu phim mới tại các thành phố lớn.', '2024-07-09T11:30:00', null, null, 1),
+(NEWID(), 'Khuyễn mãi 10h', 'Các suất chiếu trước 10h sáng hoặc sau 10h tối sẽ bán vé với giá khuyến mãi, không áp dụng với các ngày lễ tết', '2024-07-09T11:30:00', null, null, 1),
 (NEWID(), 'Chương Trình Ưu Đãi Thẻ Thành Viên', 'Nhận ưu đãi lên đến 50% khi sử dụng thẻ thành viên của chúng tôi.', '2024-07-09T12:00:00', null, null, 1);
 
 DECLARE @Guid_MemberShip1 UNIQUEIDENTIFIER;
