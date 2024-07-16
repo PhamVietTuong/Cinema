@@ -310,6 +310,10 @@ ul {
     font-size: 10px;
 }
 
+.web-movie-box .imageDetail {
+    height: 570px;
+}
+
 .detail-right ul {
     line-height: 24.8px;
 }

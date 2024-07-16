@@ -8,23 +8,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT } from '../../Redux/Actions/Type/UserType';
 import { useDebounce } from 'use-debounce';
 import { SearchByNameAction, TheaterListAction } from '../../Redux/Actions/CinemasAction';
-import { AddSearchHistoryAction } from '../../Redux/Actions/UsersAction';
+import { AddSearchHistoryAction, RemoveSearchHistoryAction } from '../../Redux/Actions/UsersAction';
 
 const Header = (props) => {
     const dispatch = useDispatch();
     const { loginInfo, searchHistory } = useSelector((state) => state.UserReducer);
 
     const [infoSearch, setInfoSearch] = useState('');
-    const [debouncedText] = useDebounce(infoSearch, 1000);
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const searchRef = useRef(null);
-
-    useEffect(() => {
-        if (debouncedText) {
-            dispatch(SearchByNameAction(debouncedText));
-            dispatch(AddSearchHistoryAction(debouncedText));
-        }
-    }, [debouncedText, dispatch]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -46,6 +38,17 @@ const Header = (props) => {
         setInfoSearch(term);
         setIsSearchVisible(false);
         dispatch(SearchByNameAction(term));
+    };
+
+    const handleSearch = () => {
+        if(infoSearch) {
+            dispatch(SearchByNameAction(infoSearch));
+            dispatch(AddSearchHistoryAction(infoSearch));
+        }
+    };
+
+    const handleRemoveSearchTerm = (term) => {
+        dispatch(RemoveSearchHistoryAction(term));
     };
 
     return (
@@ -108,7 +111,7 @@ const Header = (props) => {
                                                     <button
                                                         className="hd-search-form-btn"
                                                         aria-label="Button search"
-                                                        type="submit"
+                                                        onClick={handleSearch}
                                                     >
                                                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                                                     </button>
@@ -118,6 +121,8 @@ const Header = (props) => {
                                         {isSearchVisible && (
                                             <div className="search-history">
                                                 {searchHistory.map((term, index) => (
+                                                    <div key={index} className="search-term-container">
+
                                                     <div
                                                         key={index}
                                                         className="search-term"
@@ -125,6 +130,14 @@ const Header = (props) => {
                                                     >
                                                         {term}
                                                     </div>
+                                                    <button
+                                                            className="remove-search-term-btn"
+                                                            onClick={() => handleRemoveSearchTerm(term)}
+                                                        >
+                                                            &times;
+                                                        </button>
+                                                    </div>
+
                                                 ))}
                                             </div>
                                         )}
