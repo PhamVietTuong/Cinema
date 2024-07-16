@@ -61,6 +61,7 @@ namespace Cinema.Repository
             r.ShowTimeRooms = resultShowTimeRooms;
             return r;
         }
+
         public async Task<MovieDTO> CreateMovie(MovieDTO movie)
         {
             var m = _mapper.Map<Movie>(movie);
@@ -90,7 +91,6 @@ namespace Cinema.Repository
             await _context.SaveChangesAsync();
             return movie;
         }
-
 
         public async Task<List<MovieDetailViewModel>> GetMovieList()
         {

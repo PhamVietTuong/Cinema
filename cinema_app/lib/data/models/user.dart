@@ -9,8 +9,8 @@ import 'package:cinema_app/data/models/validation.dart';
 import 'package:cinema_app/services/base_url.dart';
 
 class User {
-  String fullname;
   String phone;
+  String fullname;
   String email;
   DateTime birthday;
   String image;
@@ -20,8 +20,8 @@ class User {
   DateTime expirationTime;
 
   User({
-    this.fullname = "",
     this.phone = "",
+    this.fullname = "",
     this.email = "",
     DateTime? birthday,
     this.image = "",
@@ -38,7 +38,7 @@ class User {
       phone: json["phone"] ?? "",
       email: json["email"] ?? "",
       birthday: json["birthDay"] != null
-          ? DateTime.tryParse(json["birthDay"]) 
+          ? DateTime.tryParse(json["birthDay"])
           : DateTime.now(),
       image: json["image"] ?? "",
       gender: json["gender"] ?? false,
@@ -154,14 +154,12 @@ class UserRepositoryIml implements UserRepository {
   Future<void> register(Register register) async {
     final url = '$serverUrl/api/Users/Register';
 
-    if (
-        register.fullName.trim().isEmpty ||
+    if (register.fullName.trim().isEmpty ||
         register.password.trim().isEmpty ||
         register.confirmPassword.trim().isEmpty ||
-        register.email.trim().isEmpty||
-        register.phone.trim().isEmpty||
-        register.birthDay.toString().isEmpty
-        ) {
+        register.email.trim().isEmpty ||
+        register.phone.trim().isEmpty ||
+        register.birthDay.toString().isEmpty) {
       throw ('Tên người dùng, họ và tên, email, số điện thoại, ngày sinh, mật khẩu không được để trống.');
     }
     if (register.password != register.confirmPassword) {

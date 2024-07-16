@@ -19,7 +19,7 @@ class InvoicePresenter {
     try {
       final List<Invoice> invoices = await _repository.invoice();
       _view.onLoadInvoiceComplete(invoices);
-     // print(invoices.first.movieName);
+      print(invoices.first.movieName);
     } catch (error) {
      // print('Error fetching invoices: $error');
       _view.onLoadError();

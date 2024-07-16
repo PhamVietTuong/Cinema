@@ -4,6 +4,7 @@ import { faFacebook, faTiktok, faYoutube } from '@fortawesome/free-brands-svg-ic
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { TheaterListAction } from '../../Redux/Actions/CinemasAction';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     const dispatch = useDispatch();
@@ -139,14 +140,14 @@ const Footer = () => {
                                     </div>
                                     <ul className="menu-list">
                                         <li className="menu-item">
-                                            <a className="menu-link" href="/about-us">
+                                            <a className="menu-link" href="/">
                                                 Giới thiệu
                                             </a>
                                         </li>
                                         <li className="menu-item">
-                                            <a className="menu-link" href="/news">
+                                            <Link to={"news"} className="menu-link">\
                                                 Tin tức
-                                            </a>
+                                            </Link>
                                         </li>
                                         {/* <li className="menu-item">
                                             <a className="menu-link" href="/movie">

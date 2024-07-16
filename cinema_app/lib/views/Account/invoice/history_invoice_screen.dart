@@ -16,12 +16,43 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
   List<Invoice> lstInvoi = [];
   late InvoicePresenter invoicePr;
   bool isLoadingData = true;
+  String appBarTitle = "Hóa đơn";
+  String loadingText = "Đang load";
+  String noInvoicesText = "Chưa có hóa đơn nào";
+  String invoiceLabel = "Hóa đơn";
+  String branchLabel = "Chi nhánh";
+  String totalLabel = "Tổng cộng";
+  String pointsLabel = "Điểm";
 
   @override
   void initState() {
     super.initState();
     invoicePr = InvoicePresenter(this);
     invoicePr.fetchInvoice();
+    translate(); // Dịch các chuỗi văn bản ngay khi khởi tạo
+  }
+
+  Future<void> translate() async {
+    List<String> translateTexts = await Future.wait([
+      Styles.translate(appBarTitle),
+      Styles.translate(loadingText),
+      Styles.translate(noInvoicesText),
+      Styles.translate(invoiceLabel),
+      Styles.translate(branchLabel),
+      Styles.translate(totalLabel),
+      Styles.translate(pointsLabel),
+    ]);
+
+    setState(() {
+      appBarTitle = translateTexts[0];
+      loadingText = translateTexts[1];
+      noInvoicesText = translateTexts[2];
+      invoiceLabel = translateTexts[3];
+      branchLabel = translateTexts[4];
+      totalLabel = translateTexts[5];
+      pointsLabel = translateTexts[6];
+      // Không đặt isLoadingData = false ở đây để tránh ảnh hưởng đến trạng thái tải dữ liệu
+    });
   }
 
   @override
@@ -30,18 +61,16 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          color: Styles.boldTextColor[
-              Config.themeMode], 
+          color: Styles.boldTextColor[Config.themeMode],
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text(
-          "Hóa đơn",
+          appBarTitle,
           style: TextStyle(
             fontSize: Styles.appbarFontSize,
-            color: Styles.boldTextColor[
-                Config.themeMode], 
+            color: Styles.boldTextColor[Config.themeMode],
           ),
         ),
         backgroundColor: Styles.backgroundContent[Config.themeMode],
@@ -58,7 +87,7 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    "Đang load",
+                    loadingText,
                     style: TextStyle(
                       fontSize: Styles.titleFontSize,
                       fontWeight: FontWeight.bold,
@@ -70,52 +99,63 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
             )
           : SingleChildScrollView(
               child: Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: Styles.defaultHorizontal, vertical: 15),
+                margin: const EdgeInsets.symmetric(vertical: 15),
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Expanded(
                           child: Text(
-                            "Mã hóa đơn",
+                            invoiceLabel,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color:
-                                  Styles.titleColor[Config.themeMode],
+                              color: Styles.titleColor[Config.themeMode],
                               fontSize: Styles.titleFontSize,
                             ),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            "Chi nhánh",
+                            branchLabel,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color:
-                                  Styles.titleColor[Config.themeMode],
+                              color: Styles.titleColor[Config.themeMode],
                               fontSize: Styles.titleFontSize,
                             ),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            "Tổng cộng",
+                            totalLabel,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color:
-                                  Styles.titleColor[Config.themeMode],
+                              color: Styles.titleColor[Config.themeMode],
+                              fontSize: Styles.titleFontSize,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            pointsLabel,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Styles.titleColor[Config.themeMode],
                               fontSize: Styles.titleFontSize,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    if(lstInvoi.isEmpty)
-                      Center(child: Text("Chưa có hóa đơn nào", style: TextStyle(
-                      color: Styles.boldTextColor[Config.themeMode],
-                      fontSize: Styles.titleFontSize,
-                    ),),),
+                    if (lstInvoi.isEmpty)
+                      Center(
+                        child: Text(
+                          noInvoicesText,
+                          style: TextStyle(
+                            color: Styles.boldTextColor[Config.themeMode],
+                            fontSize: Styles.titleFontSize,
+                          ),
+                        ),
+                      ),
                     Column(
                       children: lstInvoi
                           .map((e) => HistoryInvoiceItem(invoice: e))
@@ -145,8 +185,7 @@ class _HistoryInvoiceScreenState extends State<HistoryInvoiceScreen>
       setState(() {
         isLoadingData = false;
       });
-     // print("khongLuu");
-
+      // print("khongLuu");
     }
   }
 
