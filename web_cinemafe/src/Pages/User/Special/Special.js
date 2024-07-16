@@ -1,45 +1,45 @@
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import './Home.css'
-import Slide from "../../../Components/Slide/Slide";
-import { MovieListAction, TheaterListAction } from "../../../Redux/Actions/CinemasAction";
-import BookQuickTicket from "../BookQuickTicket/BookQuickTicket";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { MovieListAction } from "../../../Redux/Actions/CinemasAction";
+import { Box, CircularProgress, Grid, Pagination } from "@mui/material";
+import Film from "../../../Components/Film/Film";
 import TheaterComponent from "../../../Components/Theater/TheaterComponent";
-import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import moment from "moment";
-import { CSSTransition } from 'react-transition-group';
+import Slide from "../../../Components/Slide/Slide";
 
-const Home = () => {
+const Special = () => {
     const dispatch = useDispatch();
-    const { movieList, theaterList, resultInfoSearch } = useSelector((state) => state.CinemasReducer)
-
-    const [movieShowing, setMovieShowing] = useState([]);
-    const [movieCooming, setMovieCooming] = useState([]);
+    const { movieList } = useSelector((state) => state.CinemasReducer);
     const [movieSpecial, setMovieSpecial] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const itemsPerPage = 8;
 
     useEffect(() => {
         dispatch(MovieListAction()).then(() => setLoading(false));
-        dispatch(TheaterListAction()).then(() => setLoading(false));
     }, [dispatch]);
+
+    const {
+        resultInfoSearch,
+    } = useSelector((state) => state.CinemasReducer);
 
     useEffect(() => {
         if (movieList && movieList.length > 0) {
-            const today = moment();
-            const showing = movieList.filter(movie => moment(movie.releaseDate).isSameOrBefore(today));
-            const cooming = movieList.filter(movie => moment(movie.releaseDate).isAfter(today));
             const special = movieList.filter(movie => movie.isSpecial);
 
-            setMovieShowing(showing);
-            setMovieCooming(cooming);
-            setMovieSpecial(special)
+            setMovieSpecial(special);
         }
     }, [movieList]);
 
     const hasMovies = resultInfoSearch?.movies && resultInfoSearch.movies.length > 0;
     const hasTheaters = resultInfoSearch?.theaters && resultInfoSearch.theaters.length > 0;
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+
+    const paginatedMovies = movieSpecial.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const pageCount = Math.ceil(movieSpecial.length / itemsPerPage);
+
 
     if (loading) {
         return (
@@ -48,8 +48,7 @@ const Home = () => {
             </Box>
         );
     }
-    
-    return (
+    return ( 
         <>
             {
                 resultInfoSearch.length !== 0 ? (
@@ -88,50 +87,39 @@ const Home = () => {
                     </>
                 ) : (
                     <>
-                        <BookQuickTicket theaterList={theaterList}></BookQuickTicket >
                         <section className="web-movie-slide">
                             <div className="movie-showing ht">
                                 <div className="container">
                                     <h1 className="title">PHIM ĐANG CHIẾU</h1>
-                                    <Slide movieList={movieShowing} />
-                                    <div className="text-center">
-                                        <Link to="/showing">
-                                            <Button className="see-more">XEM THÊM</Button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-
-                                <div className="movie-showing ht">
-                                    <div className="container">
-                                        <h1 className="title">SUẤT CHIẾU ĐẶT BIỆT</h1>
-                                        <Slide movieList={movieSpecial} />
-                                        <div className="text-center">
-                                            <Link to="/special">
-                                                <Button className="see-more">XEM THÊM</Button>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            <div className="movie-cooming ht">
-                                <div className="container">
-                                    <h1 className="title">PHIM SẮP CHIẾU</h1>
-                                    <Slide movieList={movieCooming} />
-                                    <div className="text-center">
-                                        <Link to="/cooming">
-                                            <Button className="see-more">XEM THÊM</Button>
-                                        </Link>
-                                    </div>
+                                    <Grid container spacing={3}>
+                                        {
+                                            paginatedMovies.map((item, index) => (
+                                                <Grid item xs={6} sm={6} md={4} lg={3} key={`${item.id}-${index}`}>
+                                                    <Film movie={item} />
+                                                </Grid>
+                                            ))
+                                        }
+                                    </Grid>
+                                    <Box mt={4} display="flex" justifyContent="center">
+                                        <Pagination
+                                            count={pageCount}
+                                            page={currentPage}
+                                            onChange={handlePageChange}
+                                            variant="outlined"
+                                            size="large"
+                                            style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+                                            color="primary"
+                                            className="PaginationMovie"
+                                        />
+                                    </Box>
                                 </div>
                             </div>
                         </section>
                     </>
                 )
             }
-
         </>
-    );
+     );
 }
-
-export default Home;
+ 
+export default Special;

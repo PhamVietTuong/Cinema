@@ -28,6 +28,7 @@ import Invoice from "../Pages/Admin/Invoice/Invoice";
 import User from "../Pages/Admin/User/User";
 import ShowTime from "../Pages/Admin/ShowTime/ShowTime";
 import News from "../Pages/User/News/News";
+import Special from "../Pages/User/Special/Special";
 
 const Routers = () => {
     return (
@@ -43,6 +44,7 @@ const Routers = () => {
                         <Route path="movie/:movieId" element={<Detail />} />
                         <Route path="showing" element={<Showing />} />
                         <Route path="cooming" element={<Cooming />} />
+                        <Route path="special" element={<Special/>} />
                         <Route
                             path="login"
                             element={

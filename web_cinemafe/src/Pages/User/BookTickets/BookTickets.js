@@ -172,10 +172,10 @@ const BookTickets = () => {
                     <div className="hbooking ht custom-spacing">
                         <div className="container">
                             <div className="hbooking-new">
-                                <div className="hbooking-left" data-aos="fade-up">
+                                <div className="hbooking-left">
                                     <img src={`${DOMAIN}/Images/${theaterDetail?.image}`} alt={`${theaterDetail?.image}`}></img>
                                 </div>
-                                <div className="hbooking-right" data-aos="fade-up">
+                                <div className="hbooking-right">
                                     <div className="address-box">
                                         <h4 className="sub-tittle txt-upper">{theaterDetail?.name}</h4>
                                         <a className="link" href="#">

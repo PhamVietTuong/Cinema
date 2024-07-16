@@ -60,6 +60,7 @@
 .navigate-filter-btn .btn {
     height: 100%;
     border-radius: 8px;
+    width: 100%;
 }
 
 @media (max-width: 1024px) {
@@ -123,4 +124,17 @@
 
 .NotHasValue {
     pointer-events: none;
+}
+@media (max-width: 600px) {
+    .navigate-filter {
+        flex-direction: column;
+    }
+
+    .navigate-filter .navigate-filter-btn {
+        max-width: 100%;
+    }
+
+        .navigate-filter .navigate-filter-btn .btn {
+            justify-content: center;
+        }
 }

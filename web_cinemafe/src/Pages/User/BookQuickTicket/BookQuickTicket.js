@@ -46,6 +46,8 @@ const BookQuickTicket = (props) => {
     const dispatch = useDispatch();
     const { listMovieByTheaterIdBookQuickTicket, listShowTimeByMovieId } = useSelector((state) => state.CinemasReducer)
 
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
     useEffect(() => {
         if (theaterId) {
             dispatch(ListMovieByTheaterIdAction(theaterId))
@@ -143,10 +145,16 @@ const BookQuickTicket = (props) => {
         }
     };
 
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <>
             <div className="container">
-                <div className="navigate-wrap" data-aos="fade-up">
+                <div className="navigate-wrap">
                     <div className="heading">
                         <h1>Đặt vé nhanh</h1>
                     </div>
@@ -178,107 +186,114 @@ const BookQuickTicket = (props) => {
                                 }
                             </Select>
                         </FormControl>
-                        <FormControl fullWidth className={`${theaterId ? "" : "NotHasValue"}`}>
-                            <InputLabel className='BQTInputLabel'>2. Chọn phim</InputLabel>
-                            <Select
-                                value={Movie}
-                                label="2. Chọn phim"
-                                className={`${Movie ? "isActive" : ""} BQTSelect`}
-                                onChange={handleMovieChange}
-                            >
-                                {
-                                    listMovieByTheaterIdBookQuickTicket.length !== 0 ?
-                                        listMovieByTheaterIdBookQuickTicket.map((item) => (
-                                            <MenuItem
-                                                key={item.id}
-                                                value={`${item.id}|${item.projectionForm}`}
-                                                className='BQTMenuItem'
-                                            >
-                                                {item.name} {item.showTimeTypeName} {`(${item.ageRestrictionName})`}
-                                            </MenuItem>
-                                        ))
-                                        :
-                                        (
-                                            <MenuItem 
-                                                className='BQTMenuItem NotHasValue'
-                                            >
-                                                <div class="movies-rp-noti navigate-notfound">
-                                                    <div class="dark-image">
-                                                        <img src="/Images/movie-updating.png" alt="" />
-                                                    </div>Chưa có phim</div>
-                                            </MenuItem >
-                                        )
-                                }
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth className={`${Movie ? "" : "NotHasValue"}`}>
-                            <InputLabel className='BQTInputLabel'>3. Chọn ngày</InputLabel>
-                            <Select
-                                value={date}
-                                label="3. Chọn ngày"
-                                className={`${date ? "isActive" : ""} BQTSelect`}
-                                onChange={handleDateChange}
-                            >
-                                {
-                                    dates.length !== 0 ?
-                                        dates.map((date, index) => (
-                                            <MenuItem
-                                                key={moment(date).format("YYYY-MM-DDTHH:mm:ss")}
-                                                value={`${moment(date).format("YYYY-MM-DDTHH:mm:ss")}|${index}`}
-                                                className='BQTMenuItem'
-                                            >
-                                                {moment(date).format("dddd").replace(/^\w/, (c) => c.toUpperCase()) + ', '} {moment(date).format("DD/MM")}
-                                            </MenuItem>
-                                        ))
-                                        :
-                                        (
-                                            <MenuItem
-                                                className='BQTMenuItem NotHasValue'
-                                            >
-                                                <div class="movies-rp-noti navigate-notfound">
-                                                    <div class="dark-image">
-                                                        <img src="/Images/movie-updating.png" alt="" />
-                                                    </div>Chưa có ngày chiếu</div>
-                                            </MenuItem>
-                                        )
-                                }
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth className={`${date ? "" : "NotHasValue"}`}>
-                            <InputLabel className='BQTInputLabel'>4. Chọn suất</InputLabel>
-                            <Select
-                                value={showTime}
-                                label="4. Chọn suất"
-                                className={`${showTimeId ? "isActive" : ""} BQTSelect`}
-                                onChange={handleShowTimeChange}
-                            >
-                                {
-                                    filteredShowTimes.length !== 0 
-                                        ?
-                                        filteredShowTimes.map((item) => (
-                                            <MenuItem
-                                                key={item.showTimeId}
-                                                value={`${item.showTimeId}|${item.roomId}|${moment(new Date(item.startTime)).format("HH:mm")}`}
-                                                className='BQTMenuItem'
-                                                onClick={handleLinkClick()}
-                                            >
-                                                {moment(new Date(item.startTime)).format("HH:mm") + " - "} {item.showTimeType === ShowTimeType.Deluxe ? "Deluxe" : "Standard"}
-                                            </MenuItem>
-                                        ))
-                                        :
-                                        (
-                                            <MenuItem
-                                                className='BQTMenuItem NotHasValue'
-                                            >
-                                                <div class="movies-rp-noti navigate-notfound">
-                                                    <div class="dark-image">
-                                                        <img src="/Images/movie-updating.png" alt="" />
-                                                    </div>Chưa có suất chiếu</div>
-                                            </MenuItem>
-                                        )
-                                }
-                            </Select>
-                        </FormControl>
+                        {
+                            (screenWidth > 390 || theater) && (
+                                <FormControl fullWidth className={`${theaterId ? "" : "NotHasValue"}`}>
+                                    <InputLabel className='BQTInputLabel'>2. Chọn phim</InputLabel>
+                                    <Select
+                                        value={Movie}
+                                        label="2. Chọn phim"
+                                        className={`${Movie ? "isActive" : ""} BQTSelect`}
+                                        onChange={handleMovieChange}
+                                    >
+                                        {
+                                            listMovieByTheaterIdBookQuickTicket.length !== 0 ?
+                                                listMovieByTheaterIdBookQuickTicket.map((item) => (
+                                                    <MenuItem
+                                                        key={item.id}
+                                                        value={`${item.id}|${item.projectionForm}`}
+                                                        className='BQTMenuItem'
+                                                    >
+                                                        {item.name} {item.showTimeTypeName} {`(${item.ageRestrictionName})`}
+                                                    </MenuItem>
+                                                ))
+                                                :
+                                                (
+                                                    <MenuItem
+                                                        className='BQTMenuItem NotHasValue'
+                                                    >
+                                                        <div class="movies-rp-noti navigate-notfound">
+                                                            <div class="dark-image">
+                                                                <img src="/Images/movie-updating.png" alt="" />
+                                                            </div>Chưa có phim</div>
+                                                    </MenuItem >
+                                                )
+                                        }
+                                    </Select>
+                                </FormControl>
+                            )
+                        }
+                        {
+                            (screenWidth > 390 || Movie) && (<FormControl fullWidth className={`${Movie ? "" : "NotHasValue"}`}>
+                                <InputLabel className='BQTInputLabel'>3. Chọn ngày</InputLabel>
+                                <Select
+                                    value={date}
+                                    label="3. Chọn ngày"
+                                    className={`${date ? "isActive" : ""} BQTSelect`}
+                                    onChange={handleDateChange}
+                                >
+                                    {
+                                        dates.length !== 0 ?
+                                            dates.map((date, index) => (
+                                                <MenuItem
+                                                    key={moment(date).format("YYYY-MM-DDTHH:mm:ss")}
+                                                    value={`${moment(date).format("YYYY-MM-DDTHH:mm:ss")}|${index}`}
+                                                    className='BQTMenuItem'
+                                                >
+                                                    {moment(date).format("dddd").replace(/^\w/, (c) => c.toUpperCase()) + ', '} {moment(date).format("DD/MM")}
+                                                </MenuItem>
+                                            ))
+                                            :
+                                            (
+                                                <MenuItem
+                                                    className='BQTMenuItem NotHasValue'
+                                                >
+                                                    <div class="movies-rp-noti navigate-notfound">
+                                                        <div class="dark-image">
+                                                            <img src="/Images/movie-updating.png" alt="" />
+                                                        </div>Chưa có ngày chiếu</div>
+                                                </MenuItem>
+                                            )
+                                    }
+                                </Select>
+                            </FormControl>)}
+                        {
+                            (screenWidth > 390 || date) && (<FormControl fullWidth className={`${date ? "" : "NotHasValue"}`}>
+                                <InputLabel className='BQTInputLabel'>4. Chọn suất</InputLabel>
+                                <Select
+                                    value={showTime}
+                                    label="4. Chọn suất"
+                                    className={`${showTimeId ? "isActive" : ""} BQTSelect`}
+                                    onChange={handleShowTimeChange}
+                                >
+                                    {
+                                        filteredShowTimes.length !== 0
+                                            ?
+                                            filteredShowTimes.map((item) => (
+                                                <MenuItem
+                                                    key={item.showTimeId}
+                                                    value={`${item.showTimeId}|${item.roomId}|${moment(new Date(item.startTime)).format("HH:mm")}`}
+                                                    className='BQTMenuItem'
+                                                    onClick={handleLinkClick()}
+                                                >
+                                                    {moment(new Date(item.startTime)).format("HH:mm") + " - "} {item.showTimeType === ShowTimeType.Deluxe ? "Deluxe" : "Standard"}
+                                                </MenuItem>
+                                            ))
+                                            :
+                                            (
+                                                <MenuItem
+                                                    className='BQTMenuItem NotHasValue'
+                                                >
+                                                    <div class="movies-rp-noti navigate-notfound">
+                                                        <div class="dark-image">
+                                                            <img src="/Images/movie-updating.png" alt="" />
+                                                        </div>Chưa có suất chiếu</div>
+                                                </MenuItem>
+                                            )
+                                    }
+                                </Select>
+                            </FormControl>)}
+
                         <div className="navigate-filter-btn">
                             <Button variant="contained" className={`${theaterId ? "" : "preventClick"} btn btn--second`}>
                                 <Link to={route} state={routeState}>

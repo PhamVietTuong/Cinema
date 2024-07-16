@@ -231,3 +231,9 @@
         font-size: 27px;
     }
 }
+
+@media (max-width: 600px) {
+    .BTSTab {
+        font-size: 10px !important;
+    }
+}

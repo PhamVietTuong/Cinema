@@ -94,7 +94,7 @@ const Checkout = () => {
                                         :
                                         (
                                             <Grid container spacing={2}>
-                                                <Grid item xs={6}>
+                                                <Grid item xs={12} lg={6}>
                                                     <Typography sx={{ mt: 2, mb: 1 }}>
                                                         {
                                                             activeStep === 0 && (
@@ -133,7 +133,7 @@ const Checkout = () => {
                                                         }
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={6}>
+                                                <Grid item xs={12} lg={6}>
                                                     <div className="form-checkout-cus">
                                                         <div className="form-main">
                                                             <div className="inner-info">

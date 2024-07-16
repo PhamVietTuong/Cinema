@@ -79,7 +79,8 @@ width: 110px;
 
 @media (max-width: 700px) {
     .shtime-slider .nav-pills .nav-link {
-        width: 100px;
+        width: 80px;
+    height: 75px;
     }
 }
 
@@ -200,12 +201,6 @@ width: 110px;
 
 .shtime-ft .cinestar-item .cinestar-heading {
     padding: 24px;
-}
-
-@media screen and (max-width: 700px) {
-    .shtime-ft .cinestar-item .cinestar-heading {
-        padding: 10px;
-    }
 }
 
 .shtime-ft .cinestar-heading {
@@ -464,4 +459,14 @@ width: 110px;
     background: url(/public/Images/mobile-blur-6.webp) no-repeat;
     background-position: top left;
     filter: blur(100px);
+}
+
+@media (max-width: 600px) {
+    .shtime-ft .cinestar-item .cinestar-heading {
+        padding: 16px;
+    }
+
+        .shtime-ft .cinestar-item .addr {
+            font-size: 14px;
+        }
 }

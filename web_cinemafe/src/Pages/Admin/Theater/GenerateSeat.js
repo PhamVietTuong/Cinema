@@ -122,7 +122,8 @@ const GenerateSeats = (props) => {
                         } else {
                             acc.push({
                                 ...seat,
-                                seatTypeId: seatTypeId
+                                seatTypeId: seatTypeId,
+                                isSeat: false
                             });
                         }
                     } else if (cIdx !== colIndex) {
