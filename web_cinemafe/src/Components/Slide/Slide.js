@@ -9,8 +9,16 @@ import { useEffect, useState } from 'react';
 
 const Slide = (props) => {
     const [showTrailerPopup, setShowTrailerPopup] = useState({ status: false, id: null });
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
     const selectedMovie = props.movieList.find(movie => movie.id === showTrailerPopup.id);
+
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <>
             <div className='web-movie-content'>
@@ -22,11 +30,11 @@ const Slide = (props) => {
                             pagination={{
                                 clickable: true,
                             }}
-                            navigation={true}
+                            navigation={screenWidth > 390}
                             modules={[Pagination, Navigation]}
                             className="mySwiper"
                             breakpoints={{
-                                375: { 
+                                390: { 
                                     slidesPerView: 2,
                                     spaceBetween: 15
                                 },

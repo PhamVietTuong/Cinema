@@ -21,7 +21,7 @@ export const LoginUserAction = (loginInfo, rememberMe, callBack) => {
                 text: error.response.data,
                 padding: "15px",
                 width: "425px",
-                confirmButtonText: "Thử lại",
+                confirmButtonText: "Ok",
             });
             console.log("LoginUserAction: ", error);
         }
@@ -51,7 +51,7 @@ export const RegisterUserAction = (register, navigate) => {
                 text: error.response.data,
                 padding: "15px",
                 width: "425px",
-                confirmButtonText: "Thử lại",
+                confirmButtonText: "Ok",
             });
             console.log("LoginUserAction: ", error);
         }
@@ -74,7 +74,7 @@ export const ForgetPasswordAction = (email, navigate) => {
                 text: error.response.data,
                 padding: "15px",
                 width: "425px",
-                confirmButtonText: "Thử lại",
+                confirmButtonText: "Ok",
             });
             console.log("LoginUserAction: ", error);
         }
@@ -92,6 +92,7 @@ export const ChangePasswordNewAction = (changePassword, userName, navigate) => {
                     width: "400px",
                     title: "Đổi mật khẩu thành công, vui lòng đăng nhập lại!",
                     confirmButtonText: "OK",
+                    showCancelButton: false,
                 }).then(() => {
                     navigate("/login");
                 });
@@ -133,7 +134,7 @@ export const UpdateUserAction = (userDTO) => {
                 text: error.response.data,
                 padding: "15px",
                 width: "425px",
-                confirmButtonText: "Thử lại",
+                confirmButtonText: "Ok",
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log("UpdateUserAction: ", error);
@@ -221,7 +222,7 @@ export const CreateUserAction = (register) => {
                 text: error.response.data,
                 padding: "15px",
                 width: "425px",
-                confirmButtonText: "Thử lại",
+                confirmButtonText: "Ok",
             });
             console.log("CreateUserAction: ", error);
         }

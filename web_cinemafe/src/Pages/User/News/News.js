@@ -26,9 +26,9 @@ const News = () => {
                 {
                     news && (
                         news.map((item, index) => (
-                            <Grid key={index} container spacing={4} className="ci-rental-event-item opera-more-wr" >
+                            <Grid key={index}  spacing={4} className="ci-rental-event-item opera-more-wr" >
                                 <Grid item xs={12} md={6} className="opera-more-left" display="flex" justifyContent="space-between" alignItems="center">
-                                    <Box className="opera-more-head sec-heading" data-aos="fade-up">
+                                    <Box className="opera-more-head sec-heading">
                                         <Box className="heading">
                                             <Typography variant="h2">{item.title}</Typography>
                                         </Box>
@@ -40,7 +40,7 @@ const News = () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12} md={6} className="opera-more-right">
-                                    <Box className="image" data-aos="fade-up">
+                                    <Box className="image">
                                         <img
                                             src={`${DOMAIN}/Images/${item.image}`} 
                                             alt={`new${index}`}

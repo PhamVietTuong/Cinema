@@ -245,6 +245,7 @@ a {
         position: relative;
         text-transform: uppercase;
         top: 2px;
+        overflow: hidden;
 }
 
 .hd-regi-wr .hd-regi-list .dang-nhap:hover {
@@ -572,4 +573,15 @@ background-color: rgba(39, 39, 42, 0.12);
 
 .search-category-dropdown:hover .dropdown-menu {
     display: block;
+}
+
+@media (max-width: 600px) {
+    
+    .hd-search {
+        display: none;
+    }
+
+        .hd-regi-name {
+            max-width: 100px;
+        }
 }

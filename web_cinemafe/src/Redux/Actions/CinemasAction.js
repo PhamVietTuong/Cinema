@@ -161,15 +161,15 @@ export const SeatBeingSelected = (infoSeat, showTimeId, roomId) => {
             });
 
             const { seatYour } = getState().CinemasReducer;
-
-            if (!seatYour || seatYour.length === 0) {
-                return;
-            }
+            // if (!seatYour || seatYour.length === 0) {
+            //     return;
+            // }
 
             let infoTicketBooking = new InfoTicketBooking()
             infoTicketBooking.infoSeats = seatYour
             infoTicketBooking.showTimeId = showTimeId
             infoTicketBooking.roomId = roomId
+
             if (connection.state === 'Connected') {
                 await connection.invoke("SeatBeingSelected", infoTicketBooking)
             }
@@ -238,7 +238,7 @@ export const TicketBooking = (invoiceDTO, selectedPaymentMethod) => {
                             confirmButton: 'custom-ok-button'
                         },
                         showCancelButton: false,
-                        confirmButtonText: "Thử lại",
+                        confirmButtonText: "Ok",
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.reload();

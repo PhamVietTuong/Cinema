@@ -191,7 +191,6 @@ video {
     margin-bottom: 24px;
 }
 
-
 .movie-showing:after {
     content: "";
     display: block;
@@ -211,6 +210,39 @@ video {
 }
 
 .movie-showing:before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -3;
+    background: url(/public/Images/mobile-blur-6.webp) no-repeat;
+    background-position: top left;
+    filter: blur(100px);
+}
+
+.movie-cooming:after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: -3;
+}
+
+.movie-cooming:after {
+    background: url(/public/Images/mobile-blur-2.webp) no-repeat;
+    background-position: top right;
+    filter: blur(100px);
+}
+
+.movie-cooming:before {
     content: "";
     display: block;
     height: 100%;

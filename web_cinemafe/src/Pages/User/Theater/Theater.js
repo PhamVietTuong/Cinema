@@ -275,12 +275,12 @@ const Theater = (props) => {
         let infoSeat = new InfoSeat()
         infoSeat.rowName = rowName
         infoSeat.colIndex = colIndex
+        console.log(infoSeat);
+        dispatch(SeatBeingSelected(infoSeat, selectedShowTimeId, selectedRoomId));
 
         setTimerRunning(false);
         setCountdown(300);
         setTimerRunning(true);
-
-        dispatch(SeatBeingSelected(infoSeat, selectedShowTimeId, selectedRoomId));
     }
 
     const showTimeIdHandele = async (showTimeId, roomId, theaterId) => {
