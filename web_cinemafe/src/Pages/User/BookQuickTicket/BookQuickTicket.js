@@ -172,7 +172,7 @@ const BookQuickTicket = (props) => {
                                                 <div class="movies-rp-noti navigate-notfound">
                                                     <div class="dark-image">
                                                         <img src="/Images/movie-updating.png" alt="" />
-                                                    </div>Chưa có rạp</div>
+                                                    </div>Chưa có chi nhánh</div>
                                             </MenuItem>
                                         )
                                 }

@@ -1,0 +1,89 @@
+.opera-more-head.sec-heading {
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.ci-rental-event-item .sec-heading {
+    margin-bottom: 0;
+}
+
+.ci-rental-event-item .heading > h2 {
+    text-transform: unset;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Anton",
+        sans-serif !important;
+}
+
+@media (max-width: 700px) {
+    .ci-rental-event-item .heading>h2 {
+        font-size: 24px;
+    }
+}
+
+.opera-more-head .desc .txt {
+color: rgb(248, 250, 252);
+}
+
+.ci-rental-event-item.opera-more-wr {
+    justify-content: space-between;
+    margin: unset;
+}
+
+@media (max-width: 700px) {
+    .ci-rental-event-item.opera-more-wr {
+        flex-direction: column-reverse;
+            gap: 24px;
+    }
+}
+
+.ci-rental-event-content:after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: -3;
+}
+
+.ci-rental-event-content:after {
+    background: url(/public/Images/mobile-blur-2.webp) no-repeat;
+    background-position: top right;
+    filter: blur(100px);
+}
+
+.ci-rental-event-content:before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -3;
+    background: url(/public/Images/mobile-blur-6.webp) no-repeat;
+    background-position: top left;
+    filter: blur(100px);
+}
+
+.ci-rental-event-item:nth-child(2n) {
+    flex-direction: row-reverse;
+}
+
+.ci-rental-event-item .opera-more-right {
+    width: 50%;
+}
+
+@media screen and (min-width: 700) {
+    .ci-rental-event .opera-more-right {
+        width: 50.8333333333%;
+    }
+}
+
+.opera-more-right {
+    width: 54.1666666667%;
+}

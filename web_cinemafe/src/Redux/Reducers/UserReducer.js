@@ -60,8 +60,14 @@ export const UserReducer = (state = stateDefault, action) => {
         }
 
         case ADD_SEARCH_HISTORY: {
-            const updatedSearchHistory = [...new Set([...state.searchHistory, action.searchTerm])];
+            const filteredSearchHistory = state.searchHistory.filter(item => {
+                return !(item.searchKey === action.searchTerm.searchKey && item.isActor === action.searchTerm.isActor);
+            });
+
+            const updatedSearchHistory = [...filteredSearchHistory, action.searchTerm];
+
             localStorage.setItem(SEARCH_HISTORY, JSON.stringify(updatedSearchHistory));
+
             return {
                 ...state,
                 searchHistory: updatedSearchHistory
