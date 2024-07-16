@@ -147,8 +147,8 @@ class _ChangePassWordScreenState extends State<ChangePassWordScreen>
                     child: TextButton(
                       onPressed: () {
                         print("Xác nhận");
-                        _presenter.changePass(pass.text, confirmPass.text,
-                            "0949866367a@gmail.com");
+                        _presenter.changePass(
+                            pass.text, confirmPass.text, widget.username);
                       },
                       child: Text(
                         textConfirm,
@@ -199,6 +199,5 @@ class _ChangePassWordScreenState extends State<ChangePassWordScreen>
   void onRegisterSuccess(String message) {}
 
   @override
-  void loadUpdateSuccess(UpdateUser user) {
-  }
+  void loadUpdateSuccess(UpdateUser user) {}
 }
