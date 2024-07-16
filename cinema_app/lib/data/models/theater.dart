@@ -11,6 +11,8 @@ class Theater {
   String phone;
   String img;
   bool status;
+  int countRoom;
+  int countSeat;
 
   List<FoodAndDrink> combos = List.filled(0, FoodAndDrink(), growable: true);
 
@@ -20,6 +22,8 @@ class Theater {
       this.address = "",
       this.phone = "",
       this.img = "",
+      this.countRoom = 0,
+      this.countSeat = 0,
       this.status = false});
 
   Theater.fromJson(Map<String, dynamic> json)
@@ -28,6 +32,8 @@ class Theater {
         name = json['name'] ?? "",
         img = json['image'] ?? "",
         phone = json['phone'] ?? "",
+        countRoom = json['countRoom'] ?? 0,
+        countSeat = json['countSeat'] ?? 0,
         status = json['status'] ?? false;
 }
 
@@ -43,10 +49,11 @@ class TheaterRepositoryIml implements TheaterRepository {
     print("API fetch theates: $api");
 
     final response = await BaseUrl.get(api);
-    
+
     if (response.statusCode == 204) return [];
     if (response.statusCode == 200) {
       final List<dynamic> theaterJsonList = jsonDecode(response.body);
+      print(jsonDecode(response.body).toString());
       return theaterJsonList.map((json) => Theater.fromJson(json)).toList();
     } else {
       throw Exception('Failed to fetch theaters');

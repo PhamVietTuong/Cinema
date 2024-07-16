@@ -35,6 +35,8 @@ namespace Cinema.Repository
                     Address = theater.Address,
                     Image = theater.Image,
                     Phone = theater.Phone,
+                    CountRoom = _context.Room.Count(r => r.TheaterId == theater.Id && r.Status == RoomStatus.Active),
+                    CountSeat = _context.Seat.Count(s => s.Room.TheaterId == theater.Id && s.IsSeat == true)
                 });
             }
 
