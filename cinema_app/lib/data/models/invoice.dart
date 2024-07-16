@@ -92,7 +92,7 @@ class FoodAndDrink {
 
   FoodAndDrink.fromJson(Map<String, dynamic> json)
       : foodAndDrinkName = json["foodAndDrinkName"] ?? "",
-        quantity = json["quantity"] ?? 0; // Sửa kiểu dữ liệu của quantity
+        quantity = json["quantity"] ?? 0;
 
   Map<String, dynamic> toJson() {
     return {

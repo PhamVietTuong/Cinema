@@ -1,6 +1,5 @@
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/data/models/invoice.dart';
-import 'package:cinema_app/views/Account/invoice/invoice_detail.dart';
 import 'package:flutter/material.dart';
 
 class HistoryInvoiceItem extends StatefulWidget {
@@ -15,51 +14,41 @@ class _HistoryInvoiceItemState extends State<HistoryInvoiceItem> {
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Divider(),
-      GestureDetector(
-        onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => InvoiceDetail(
-                   invoice: widget.invoice,
-                  )),
-        );
-      },
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(widget.invoice.code,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Styles.boldTextColor[Config.themeMode],
-                      fontSize: Styles.titleFontSize)),
-            ),
-            Expanded(
-              child: Text(widget.invoice.theaterName,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Styles.boldTextColor[Config.themeMode],
-                      fontSize: Styles.titleFontSize)),
-            ),
-            Expanded(
-              child: Text(Styles.formatter.format(widget.invoice.totalPrice),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Styles.boldTextColor[Config.themeMode],
-                      fontSize: Styles.titleFontSize)),
-            ),
-            Expanded(
-              child: Text(
-                (widget.invoice.totalPrice / 1000).toStringAsFixed(0),
+      Row(
+        children: [
+          Expanded(
+            child: Text(widget.invoice.code,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Styles.boldTextColor[Config.themeMode],
-                  fontSize: Styles.titleFontSize,
-                ),
+                    color: Styles.boldTextColor[Config.themeMode],
+                    fontSize: Styles.titleFontSize)),
+          ),
+          Expanded(
+            child: Text(widget.invoice.theaterName,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Styles.boldTextColor[Config.themeMode],
+                    fontSize: Styles.titleFontSize)),
+          ),
+          Expanded(
+            child: Text(Styles.formatter.format(widget.invoice.totalPrice),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Styles.boldTextColor[Config.themeMode],
+                    fontSize: Styles.titleFontSize)),
+          ),
+          Expanded(
+            child: Text(
+              (widget.invoice.totalPrice / 1000).toStringAsFixed(
+                  0),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Styles.boldTextColor[Config.themeMode],
+                fontSize: Styles.titleFontSize,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     ]);
   }

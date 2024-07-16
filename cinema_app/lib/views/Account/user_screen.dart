@@ -1,3 +1,4 @@
+import 'package:cinema_app/components/text_policy.dart';
 import 'package:cinema_app/config.dart';
 import 'package:cinema_app/views/Account/account_screen.dart';
 import 'package:cinema_app/views/Account/invoice/history_invoice_screen.dart';
@@ -14,7 +15,7 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserState extends State<UserScreen> {
- String textAppBar = "Thành viên";
+  String textAppBar = "Thành viên";
   String textInfoUser = "Thông tin người dùng";
   String textTransactionHistory = "Lịch sử giao dịch";
   String textMovie = "Danh sách phim";
@@ -110,11 +111,9 @@ class _UserState extends State<UserScreen> {
                         Config.userInfo!.fullname,
                         softWrap: true,
                         style: TextStyle(
-                          color: Styles.boldTextColor[Config.themeMode],
-                          fontSize: Styles.appbarFontSize,
-                          fontWeight: FontWeight.bold
-                          
-                        ),
+                            color: Styles.boldTextColor[Config.themeMode],
+                            fontSize: Styles.appbarFontSize,
+                            fontWeight: FontWeight.bold),
                       ),
                       TextButton(
                         onPressed: () {
@@ -218,8 +217,8 @@ class _UserState extends State<UserScreen> {
                                 children: [
                                   Icon(
                                     Icons.movie_filter_outlined,
-                                    color: Styles
-                                        .boldTextColor[Config.themeMode],
+                                    color:
+                                        Styles.boldTextColor[Config.themeMode],
                                     size: Styles.iconSizeInTitle,
                                   ),
                                   Text(
@@ -236,7 +235,6 @@ class _UserState extends State<UserScreen> {
                           ),
                         ],
                       ),
-                   
                     ],
                   )
                 : Column(
@@ -277,87 +275,16 @@ class _UserState extends State<UserScreen> {
                       )
                     ],
                   ),
-            Container(
-              height: 2,
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-              color: const Color.fromARGB(255, 211, 211, 211),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Thông Tin Công Ty",
-                  ),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Colors.black54),
-                ],
-              ),
-            ),
-            Container(
-              height: 2,
-              color: const Color.fromARGB(255, 211, 211, 211),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Điều Khoản Sử Dụng",
-                  ),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Colors.black54),
-                ],
-              ),
-            ),
-            Container(
-              height: 2,
-              color: const Color.fromARGB(255, 211, 211, 211),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Chính Sách Thanh Toán",
-                  ),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Colors.black54),
-                ],
-              ),
-            ),
-            Container(
-              height: 2,
-              color: const Color.fromARGB(255, 211, 211, 211),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Chính Sách Bảo Mật",
-                  ),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Colors.black54),
-                ],
-              ),
-            ),
-            Container(
-              height: 2,
-              color: const Color.fromARGB(255, 211, 211, 211),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Hỏi Đáp",
-                  ),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Colors.black54),
-                ],
-              ),
-            ),
+            const Divider(),
+            TextPolicy(title: "Thông Tin Công Ty"),
+            const Divider(),
+            TextPolicy(title: "Điều Khoản Sử Dụng"),
+            const Divider(),
+            TextPolicy(title: "Chính Sách Thanh Toán"),
+            const Divider(),
+            TextPolicy(title: "Chính Sách Bảo Mật"),
+            const Divider(),
+            TextPolicy(title: "Hỏi đáp"),
           ],
         ),
       ),

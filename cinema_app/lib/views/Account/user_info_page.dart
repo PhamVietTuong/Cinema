@@ -42,7 +42,7 @@ class _UserInfoPageState extends State<UserInfoPage>
   @override
   void initState() {
     super.initState();
-    print(Config.userInfo!.birthday);
+   // print(Config.userInfo!.birthday);
     fullName = TextEditingController(text: Config.userInfo!.fullname);
     email = TextEditingController(text: Config.userInfo!.email);
     phone = TextEditingController(text: Config.userInfo!.phone);
@@ -110,8 +110,8 @@ class _UserInfoPageState extends State<UserInfoPage>
             ),
             TextButton(
               child: Text(textSignOut),
-              onPressed: () async {
-                await Config.logOut();
+              onPressed: ()  {
+                 Config.logOut();
                 Navigator.popUntil(context, (route) => route.isFirst);
                 Navigator.pushReplacement(
                   context,
@@ -313,6 +313,7 @@ class _UserInfoPageState extends State<UserInfoPage>
                       }).toList(),
                     )
                   : InfoTextField(
+                    lableText: 'Giới tính',
                       textController: gender,
                       readOnly: true,
                       icon: const Icon(Icons.date_range_outlined)),

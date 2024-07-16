@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:cinema_app/data/models/invoice.dart';
+import 'package:cinema_app/data/models/search_key.dart';
 import 'package:cinema_app/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:translator/translator.dart';
 
-var serverUrl = 'http://103.104.122.137:9000';
-//var serverUrl = 'https://10.0.2.2:7209';
+//var serverUrl = 'http://103.104.122.137:9000';
+var serverUrl = 'https://10.0.2.2:7209';
 
 class Styles {
   static const Map<String, Color> backgroundColor = {
@@ -18,7 +19,6 @@ class Styles {
     "light_blue": Color(0xFFDCEEFB),
     "dark_green": Color(0xFF1B5E20),
     "light_green": Color(0xFFE8F5E9),
-
   };
 
   static const Map<String, Color> backgroundContent = {
@@ -37,7 +37,6 @@ class Styles {
     "light_blue": Color(0xFF74C0FC),
     "dark_green": Color(0xFF4CAF50),
     "light_green": Color(0xFFA5D6A7),
- 
   };
 
   static const Map<String, Color> boldTextColor = {
@@ -47,7 +46,6 @@ class Styles {
     "light_blue": Color(0xFF003366),
     "dark_green": Color(0xFFFFFFFF),
     "light_green": Color(0xFF1B5E20),
-  
   };
 
   static const Map<String, Color> textColor = {
@@ -57,7 +55,6 @@ class Styles {
     "light_blue": Color(0xFF1C3D5A),
     "dark_green": Color(0xFFA5D6A7),
     "light_green": Color(0xFF2E7D32),
- 
   };
 
   static const Map<String, Color> gradientTop = {
@@ -67,7 +64,6 @@ class Styles {
     "light_blue": Color(0xFF1E90FF),
     "dark_green": Color(0xFF43A047),
     "light_green": Color(0xFF66BB6A),
-
   };
 
   static const Map<String, Color> gradientBot = {
@@ -77,7 +73,6 @@ class Styles {
     "light_blue": Color(0xFF4682B4),
     "dark_green": Color(0xFF388E3C),
     "light_green": Color(0xFF81C784),
-
   };
 
   static const Map<String, Color> titleColor = {
@@ -87,7 +82,6 @@ class Styles {
     "light_blue": Color(0xFF1C86EE),
     "dark_green": Color(0xFF2E7D32),
     "light_green": Color(0xFF388E3C),
-
   };
 
   static const Map<String, Color> textSelectionColor = {
@@ -198,27 +192,35 @@ class Config {
     String? userJson = _prefs.getString(Constants.userkey);
     if (userJson != null && userJson.isNotEmpty) {
       userInfo = User.fromJson(jsonDecode(userJson));
-      if (userInfo!.expirationTime.isBefore(DateTime.now())) {
-        await logOut();
-        return;
-      }
     }
   }
 
-  static Future<List<String>> loadSearchHistory() async {
+  static Future<List<SearchKey>> loadSearchHistory() async {
     List<String> searchHistory =
         _prefs.getStringList(Constants.searchHistory) ?? [];
-    return searchHistory;
+    List<SearchKey> search =
+        searchHistory.map((json) => SearchKey.fromJsonString(json)).toList();
+    return search;
   }
 
-  static Future<void> saveSearchQuery(String query) async {
-    List<String> searchHistory =
+  static Future<void> saveSearchQuery(
+      String query, bool isSearchByActor) async {
+    List<String> searchHistoryJson =
         _prefs.getStringList(Constants.searchHistory) ?? [];
-    if (!searchHistory.contains(query)) {
-      searchHistory.add(query);
-    }
-    await _prefs.setStringList(
-        Constants.searchHistory, searchHistory.toSet().toList());
+
+    List<SearchKey> searchHistory = searchHistoryJson
+        .map((json) => SearchKey.fromJsonString(json))
+        .toList();
+
+    searchHistory.removeWhere(
+        (item) => item.searchkey == query && item.isActor == isSearchByActor);
+
+    searchHistory.add(SearchKey(searchkey: query, isActor: isSearchByActor));
+
+    List<String> newSearchHistoryJson =
+        searchHistory.map((item) => item.toJsonString()).toList();
+
+    await _prefs.setStringList(Constants.searchHistory, newSearchHistoryJson);
   }
 
   static Future<void> clearSearchHistory() async {
@@ -226,10 +228,19 @@ class Config {
   }
 
   static Future<void> removeSearchQuery(String query) async {
-    List<String> searchHistory =
+    List<String> searchHistoryJson =
         _prefs.getStringList(Constants.searchHistory) ?? [];
-    searchHistory.remove(query);
-    await _prefs.setStringList(Constants.searchHistory, searchHistory);
+    List<SearchKey> searchHistory = searchHistoryJson
+        .map((json) => SearchKey.fromJsonString(json))
+        .toList();
+
+    searchHistory.removeWhere((item) =>
+        item.searchkey == query);
+
+    List<String> newSearchHistoryJson =
+        searchHistory.map((item) => item.toJsonString()).toList();
+
+    await _prefs.setStringList(Constants.searchHistory, newSearchHistoryJson);
   }
 
   static Future<void> saveInfoUser(User user) async {
