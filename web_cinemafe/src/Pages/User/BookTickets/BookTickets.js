@@ -40,6 +40,8 @@ const BookTickets = () => {
     }, [dispatch, id]);
 
     const isCurrentMovie = (movies) => {
+        if (!Array.isArray(movies)) return [];
+
         return movies
             .filter(movie => moment(movie.releaseDate).isSameOrBefore(today))
             .map(movie => {
@@ -71,8 +73,10 @@ const BookTickets = () => {
     };
 
     const isUpcomingMovie = (movies) => {
+        if (!Array.isArray(movies)) return [];
+
         return movies
-            .filter(movie => moment(movie.releaseDate).isAfter(today)).map(movie => {
+            .filter(movie => moment(movie.releaseDate).isAfter(today) && !movie.isSpecial).map(movie => {
                 const filteredSchedules = movie.schedules.filter(schedule =>
                     moment(schedule.date).isBetween(today, endDate, null, '[]')
                 ).map(schedule => {
@@ -100,6 +104,8 @@ const BookTickets = () => {
     };
 
     const isSpecialMovie = (movies) => {
+        if (!Array.isArray(movies)) return [];
+
         const today = moment().startOf('day');
 
         return movies.filter(movie => moment(movie.releaseDate).isAfter(today) && movie.isSpecial).map(movie => {
