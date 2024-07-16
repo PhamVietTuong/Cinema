@@ -9,7 +9,7 @@
 .navigate-wrap .heading {
     font-size: 30px;
     align-self: center;
-    color: rgb(70, 69, 69);
+    color: rgb(70, 69, 69) !important;
 }
 
 .navigate-wrap .preventClick {
