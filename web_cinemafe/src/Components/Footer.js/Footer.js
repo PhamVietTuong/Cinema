@@ -145,7 +145,7 @@ const Footer = () => {
                                             </a>
                                         </li>
                                         <li className="menu-item">
-                                            <Link to={"news"} className="menu-link">\
+                                            <Link to={"news"} className="menu-link">
                                                 Tin tức
                                             </Link>
                                         </li>
