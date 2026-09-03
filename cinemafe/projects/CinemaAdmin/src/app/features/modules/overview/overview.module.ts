@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'CinemaLib';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { ModalComponent } from '../../../shared/modal.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -25,6 +24,7 @@ import { TimeSlotDialog } from './theaters/time-slot.dialog';
 import { TheaterTicketPricesComponent } from './theaters/theater-ticket-prices.component';
 import { TicketPriceDialog } from './theaters/ticket-price.dialog';
 import { ShowTimesManagementComponent } from './show-times/show-times.component';
+import { ShowTimeDialog } from './show-times/show-time.dialog';
 import { UsersManagementComponent } from './users/users-management.component';
 import { UserDialog } from './users/user.dialog';
 
@@ -72,13 +72,13 @@ const routes: Routes = [
     TheaterTicketPricesComponent,
     TicketPriceDialog,
     ShowTimesManagementComponent,
+    ShowTimeDialog,
     UsersManagementComponent,
     UserDialog,
   ],
   imports: [
     SharedModule,
     NgxDatatableModule,
-    ModalComponent,
     RouterModule.forChild(routes),
   ],
 })

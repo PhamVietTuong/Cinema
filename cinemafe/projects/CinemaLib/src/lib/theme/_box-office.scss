@@ -533,53 +533,6 @@ textarea.ad-input { height: auto; padding: 10px 12px; line-height: var(--cx-lead
 }
 .form-card { margin-bottom: 20px; }
 
-// ── Admin modal popups (scrim + centered card) ───────────────────────────────
-// The only place elevation is allowed: a modal has to read as detached from the
-// page, and a hairline alone won't carry that.
-.modal-scrim {
-  position: fixed;
-  inset: 0;
-  background: rgba(16, 19, 23, 0.42);
-  z-index: 50;
-}
-.modal-card {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(560px, 94vw);
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bo-panel);
-  border: 1px solid var(--bo-rule-strong);
-  border-radius: var(--bo-r-lg);
-  box-shadow: 0 24px 60px -20px rgba(16, 19, 23, 0.35);
-  z-index: 51;
-}
-.modal-card--wide { width: min(720px, 94vw); }
-.modal-card--sm { width: min(420px, 94vw); }
-.modal-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--cx-space-4);
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--bo-rule);
-
-  .ad-card-title { margin: 0; display: flex; align-items: center; gap: var(--cx-space-2); }
-  .ad-card-title mat-icon.is-danger { color: var(--bo-danger); }
-}
-.modal-body { padding: 20px; overflow-y: auto; }
-.modal-msg { margin: 0 0 18px; color: var(--bo-ink-2); line-height: var(--cx-leading); }
-// Forms hosted inside a modal drop their own card chrome — the modal supplies it.
-.modal-card .ad-card {
-  background: transparent;
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-
 // Colour swatch used in the seat-type list
 .color-dot {
   display: inline-block;

@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
-import { CinemaServiceAgent, DialogService, ProjectionFormValues, ShowTimeTypeValues, apiErrorMessage } from 'CinemaLib';
+import { CinemaServiceAgent, ProjectionFormValues, ShowTimeTypeValues } from 'CinemaLib';
+import { ShowTimeDialog } from './show-time.dialog';
 
 type Dto = CinemaServiceAgent.ShowTimeDTO;
 
@@ -33,10 +33,8 @@ interface DayColumn {
 })
 export class ShowTimesManagementComponent implements OnInit, OnDestroy {
   private _svc = inject(CinemaServiceAgent.HttpService);
-  private _fb = inject(FormBuilder);
   private _cdr = inject(ChangeDetectorRef);
-  private _translate = inject(TranslateService);
-  private _dialogService = inject(DialogService);
+  private _dialog = inject(MatDialog);
   private _destroy$ = new Subject<void>();
 
   // ── Grid geometry ───────────────────────────────────────────────────────────
@@ -50,8 +48,8 @@ export class ShowTimesManagementComponent implements OnInit, OnDestroy {
   movies: CinemaServiceAgent.MovieDTO[] = [];
   rooms: CinemaServiceAgent.RoomDTO[] = [];
   theaters: CinemaServiceAgent.TheaterDTO[] = [];
-  readonly projectionForms = ProjectionFormValues;
   readonly showTimeTypes = ShowTimeTypeValues;
+  readonly projectionForms = ProjectionFormValues;
 
   // ── Week state ────────────────────────────────────────────────────────────────
   weekStart!: Date;               // Monday 00:00 of the visible week
@@ -59,57 +57,6 @@ export class ShowTimesManagementComponent implements OnInit, OnDestroy {
   filterMovieId = '';
 
   private _showtimes: Dto[] = [];
-
-  // ── Dialog / form ───────────────────────────────────────────────────────────
-  showForm = false;
-  editingId: string | null = null;
-
-  /**
-   * Why the API rejected the last save/delete. The error interceptor deliberately lets 400/404
-   * through untouched so the component can show them where the user can act on them — without
-   * this the request just failed silently and the dialog sat there looking idle.
-   */
-  formError: string | null = null;
-
-  /** Today as yyyy-MM-dd — the earliest date a new showtime may be scheduled on. */
-  get todayYmd(): string { return this._ymd(new Date()); }
-
-  /**
-   * Blocks scheduling a new showtime in the past. Editing stays unrestricted: an admin may be
-   * correcting the record of a screening that already ran, which is also what the API allows
-   * (ShowTimeManager only passes mustBeFuture on create).
-   */
-  private _notPastOnCreate = (control: AbstractControl): ValidationErrors | null => {
-    if (this.editingId || !control.value) { return null; }
-    return control.value < this.todayYmd ? { pastDate: true } : null;
-  };
-
-  form: FormGroup = this._fb.group({
-    movieId: ['', Validators.required],
-    date: ['', [Validators.required, this._notPastOnCreate]],
-    start: ['', Validators.required],
-    end: ['', Validators.required],
-    projectionForm: [CinemaServiceAgent.ProjectionForm.TwoD, Validators.required],
-    showTimeType: [CinemaServiceAgent.ShowTimeType.Normal, Validators.required],
-    theaterId: ['', Validators.required],
-    roomId: ['', Validators.required],
-    basePrice: [75000, [Validators.required, Validators.min(0)]],
-    isActive: [true],
-  });
-
-  /** Rooms of the picked theater. Empty until one is picked, so the two selects cascade. */
-  get roomsForTheater(): CinemaServiceAgent.RoomDTO[] {
-    const theaterId = this.form.value.theaterId;
-    return theaterId ? this.rooms.filter(r => r.theaterId === theaterId) : [];
-  }
-
-  /** A room belongs to exactly one theater, so switching theater invalidates the picked room. */
-  onTheaterChange(): void {
-    const roomId = this.form.value.roomId;
-    if (roomId && !this.roomsForTheater.some(r => r.id === roomId)) {
-      this.form.patchValue({ roomId: '' });
-    }
-  }
 
   ngOnInit(): void {
     this.weekStart = this._mondayOf(new Date());
@@ -201,116 +148,24 @@ export class ShowTimesManagementComponent implements OnInit, OnDestroy {
     return `${fmt(this.weekStart)} – ${fmt(end)}/${end.getFullYear()}`;
   }
 
-  // ── Create / edit / delete ──────────────────────────────────────────────────
+  // ── Create / edit ─────────────────────────────────────────────────────────────
   openCreate(): void {
-    this.editingId = null;
-    // Anchor on the visible week, but never before today — a new showtime cannot be scheduled
-    // in the past, so pre-filling a past date from a back-navigated week would open the dialog
-    // already invalid.
-    const today = new Date();
-    const anchor = this._isThisWeek(today) || this.weekStart < today ? today : this.weekStart;
-    this.form.reset({
-      movieId: '',
-      date: this._ymd(anchor),
-      start: '',
-      end: '',
-      projectionForm: CinemaServiceAgent.ProjectionForm.TwoD,
-      showTimeType: CinemaServiceAgent.ShowTimeType.Normal,
-      theaterId: '',
-      roomId: '',
-      basePrice: 75000,
-      isActive: true,
-    });
-    this.showForm = true;
+    this._dialog.open(ShowTimeDialog, {
+      width: '720px',
+      data: { showTime: null, weekStart: this.weekStart, movies: this.movies, theaters: this.theaters, rooms: this.rooms },
+    }).afterClosed().subscribe(changed => { if (changed) { this.load(); } });
   }
 
   edit(st: Dto): void {
-    if (!st.startTime || !st.endTime) { return; }
-    const start = new Date(st.startTime);
-    const end = new Date(st.endTime);
-    this.editingId = st.id ?? null;
-    this.form.reset({
-      movieId: st.movieId ?? '',
-      date: this._ymd(start),
-      start: this._hm(start),
-      end: this._hm(end),
-      projectionForm: st.projectionForm ?? CinemaServiceAgent.ProjectionForm.TwoD,
-      showTimeType: st.showTimeType ?? CinemaServiceAgent.ShowTimeType.Normal,
-      // A showtime stores only its room; the theater is implied by it and drives the cascade.
-      theaterId: this.rooms.find(r => r.id === st.roomId)?.theaterId ?? '',
-      roomId: st.roomId ?? '',
-      basePrice: st.basePrice ?? 75000,
-      isActive: st.isActive ?? true,
-    });
-    this.showForm = true;
-  }
-
-  save(): void {
-    if (!this.form.valid) { this.form.markAllAsTouched(); return; }
-    const v = this.form.value;
-    const payload = {
-      movieId: v.movieId,
-      // Append 'Z' so the picked wall-clock time is preserved end-to-end: the generated
-      // DTO serialises Date via toISOString(), so without this the value is shifted by the
-      // browser's UTC offset on save and again on read (e.g. 16:00 → 09:00).
-      startTime: `${v.date}T${v.start}:00Z`,
-      endTime: `${v.date}T${v.end}:00Z`,
-      projectionForm: v.projectionForm,
-      showTimeType: v.showTimeType,
-      // theaterId is a UI-only cascade field; the API derives the theater from the room.
-      roomId: v.roomId,
-      basePrice: Number(v.basePrice),
-      isActive: v.isActive,
-    };
-    const obs = this.editingId
-      ? this._svc.updateShowTime(CinemaServiceAgent.UpdateShowTimeRequest.fromJS({ ...payload, id: this.editingId }))
-      : this._svc.createShowTime(CinemaServiceAgent.CreateShowTimeRequest.fromJS(payload));
-    this.formError = null;
-    obs.pipe(takeUntil(this._destroy$)).subscribe({
-      next: () => { this.cancel(); this.load(); },
-      error: e => { this._showError(e, 'showTimes.saveFailed'); },
-    });
-  }
-
-  deleteCurrent(): void {
-    if (!this.editingId) { return; }
-    this._dialogService.openConfirmDialog({ message: 'showTimes.confirmDelete' })
-      .afterClosed().subscribe(confirmed => {
-        if (confirmed) {
-          this._deleteConfirmed();
-        }
-      });
-  }
-
-  private _deleteConfirmed(): void {
-    const id = this.editingId;
-    if (id) {
-      this.formError = null;
-      this._svc.deleteShowTime(id).pipe(takeUntil(this._destroy$)).subscribe({
-        next: () => { this.cancel(); this.load(); },
-        error: e => { this._showError(e, 'showTimes.deleteFailed'); },
-      });
-    }
-  }
-
-  cancel(): void {
-    this.showForm = false;
-    this.editingId = null;
-    this.formError = null;
-  }
-
-  /** Zoneless app: nothing re-renders off an rxjs error callback without markForCheck. */
-  private _showError(err: unknown, fallbackKey: string): void {
-    this.formError = apiErrorMessage(err, this._translate.instant(fallbackKey));
-    this._cdr.markForCheck();
+    this._dialog.open(ShowTimeDialog, {
+      width: '720px',
+      data: { showTime: st, weekStart: this.weekStart, movies: this.movies, theaters: this.theaters, rooms: this.rooms },
+    }).afterClosed().subscribe(changed => { if (changed) { this.load(); } });
   }
 
   // ── Labels ────────────────────────────────────────────────────────────────────
   movieTitle(id?: string): string { return this.movies.find(m => m.id === id)?.title ?? '—'; }
-  moviePoster(id?: string): string | undefined { return this.movies.find(m => m.id === id)?.posterUrl; }
   formLabel(v?: CinemaServiceAgent.ProjectionForm): string { return this.projectionForms.find(x => x.value === v)?.name ?? '—'; }
-  theaterName(id?: string): string { return this.theaters.find(t => t.id === id)?.name ?? '—'; }
-  roomLabel(r: CinemaServiceAgent.RoomDTO): string { return `${this.theaterName(r.theaterId)} · ${r.name}`; }
 
   // ── Date helpers ──────────────────────────────────────────────────────────────
   private _pad(n: number): string { return `${n}`.padStart(2, '0'); }
@@ -322,9 +177,6 @@ export class ShowTimesManagementComponent implements OnInit, OnDestroy {
   private _addDays(d: Date, n: number): Date { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
   private _sameDay(a: Date, b: Date): boolean {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-  }
-  private _isThisWeek(d: Date): boolean {
-    return d >= this.weekStart && d < this._addDays(this.weekStart, 7);
   }
   private _mondayOf(d: Date): Date {
     const r = new Date(d.getFullYear(), d.getMonth(), d.getDate());
