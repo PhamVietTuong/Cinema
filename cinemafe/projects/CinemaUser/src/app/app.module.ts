@@ -15,6 +15,7 @@ import {
   CinemaServiceAgent, IdentityServiceAgent, PaymentServiceAgent,
   provideCinemaTranslation,
   ThemeService, APP_DEFAULT_THEME,
+  provideCinemaSvgIcons,
 } from 'CinemaLib';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
@@ -36,6 +37,7 @@ import { ChatbotComponent } from './shared/chatbot/chatbot.component';
   providers: [
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideCinemaTranslation(),
+    ...provideCinemaSvgIcons(),
     provideAppInitializer(() => inject(ThemeService).init()),
     // "Night Screening" is a dark identity — dark is the default here, and the
     // navbar toggle switches to the "Lights Up" counterpart.
