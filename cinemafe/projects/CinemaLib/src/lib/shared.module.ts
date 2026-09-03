@@ -25,6 +25,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SvgIconComponent } from '@ngneat/svg-icon';
 import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { LanguageSwitcherComponent } from './i18n/language-switcher.component';
@@ -57,6 +59,8 @@ const SHARED = [
   MatSnackBarModule,
   MatTooltipModule,
   MatBadgeModule,
+  MatCheckboxModule,
+  MatButtonToggleModule,
   SvgIconComponent,
   TranslatePipe,
   TranslateDirective,

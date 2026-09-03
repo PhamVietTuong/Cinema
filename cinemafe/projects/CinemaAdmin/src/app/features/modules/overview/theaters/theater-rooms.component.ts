@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { CinemaServiceAgent, RoomStatusValues } from 'CinemaLib';
+import { CinemaServiceAgent, DialogService, RoomStatusValues } from 'CinemaLib';
 
 type Dto = CinemaServiceAgent.RoomDTO;
 
@@ -29,9 +29,6 @@ export class TheaterRoomsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private readonly _formDefaults: unknown;
 
-  confirmOpen = false;
-  private _pendingDeleteId: string | null = null;
-
   private readonly _filter$ = new Subject<void>();
   private readonly _destroy$ = new Subject<void>();
 
@@ -55,6 +52,7 @@ export class TheaterRoomsComponent implements OnInit, OnDestroy {
     private _svc: CinemaServiceAgent.HttpService,
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,
+    private _dialogService: DialogService,
   ) {
     this.form = this._fb.group({
       name: ['', Validators.required],
@@ -161,17 +159,16 @@ export class TheaterRoomsComponent implements OnInit, OnDestroy {
     if (!id) {
       return;
     }
-    this._pendingDeleteId = id;
-    this.confirmOpen = true;
+    this._dialogService.openConfirmDialog({ message: 'common.confirmDelete' })
+      .afterClosed().subscribe(confirmed => {
+        if (confirmed) {
+          this._deleteConfirmed(id);
+        }
+      });
   }
 
-  confirmDelete(): void {
-    const id = this._pendingDeleteId;
-    this.confirmOpen = false;
-    this._pendingDeleteId = null;
-    if (id) {
-      this._svc.deleteRoom(id).subscribe(() => this.load());
-    }
+  private _deleteConfirmed(id: string): void {
+    this._svc.deleteRoom(id).subscribe(() => this.load());
   }
 
   cancelEdit(): void {

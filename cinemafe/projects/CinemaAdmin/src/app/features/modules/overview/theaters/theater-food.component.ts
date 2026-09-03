@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CinemaServiceAgent } from 'CinemaLib';
+import { CinemaServiceAgent, DialogService } from 'CinemaLib';
 import { ImageUploadService } from '../../../../shared/image-upload.service';
 
 type Dto = CinemaServiceAgent.FoodAndDrinkDTO;
@@ -22,9 +22,6 @@ export class TheaterFoodComponent implements OnInit {
   form: FormGroup;
   private readonly _formDefaults: unknown;
 
-  confirmOpen = false;
-  private _pendingDeleteId: string | null = null;
-
   uploading = false;
   uploadError = '';
 
@@ -33,6 +30,7 @@ export class TheaterFoodComponent implements OnInit {
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,
     private _upload: ImageUploadService,
+    private _dialogService: DialogService,
   ) {
     this.form = this._fb.group({
       name: ['', Validators.required],
@@ -91,17 +89,16 @@ export class TheaterFoodComponent implements OnInit {
     if (!id) {
       return;
     }
-    this._pendingDeleteId = id;
-    this.confirmOpen = true;
+    this._dialogService.openConfirmDialog({ message: 'common.confirmDelete' })
+      .afterClosed().subscribe(confirmed => {
+        if (confirmed) {
+          this._deleteConfirmed(id);
+        }
+      });
   }
 
-  confirmDelete(): void {
-    const id = this._pendingDeleteId;
-    this.confirmOpen = false;
-    this._pendingDeleteId = null;
-    if (id) {
-      this._svc.deleteFoodAndDrink(id).subscribe(() => this.load());
-    }
+  private _deleteConfirmed(id: string): void {
+    this._svc.deleteFoodAndDrink(id).subscribe(() => this.load());
   }
 
   cancelEdit(): void {

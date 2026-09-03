@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CinemaServiceAgent } from 'CinemaLib';
+import { CinemaServiceAgent, DialogService } from 'CinemaLib';
 
 type Dto = CinemaServiceAgent.SeatTypeDTO;
 
@@ -21,13 +21,11 @@ export class TheaterSeatTypesComponent implements OnInit {
   form: FormGroup;
   private readonly _formDefaults: unknown;
 
-  confirmOpen = false;
-  private _pendingDeleteId: string | null = null;
-
   constructor(
     private _svc: CinemaServiceAgent.HttpService,
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,
+    private _dialogService: DialogService,
   ) {
     this.form = this._fb.group({
       name: ['', Validators.required],
@@ -83,17 +81,16 @@ export class TheaterSeatTypesComponent implements OnInit {
     if (!id) {
       return;
     }
-    this._pendingDeleteId = id;
-    this.confirmOpen = true;
+    this._dialogService.openConfirmDialog({ message: 'common.confirmDelete' })
+      .afterClosed().subscribe(confirmed => {
+        if (confirmed) {
+          this._deleteConfirmed(id);
+        }
+      });
   }
 
-  confirmDelete(): void {
-    const id = this._pendingDeleteId;
-    this.confirmOpen = false;
-    this._pendingDeleteId = null;
-    if (id) {
-      this._svc.deleteSeatType(id).subscribe(() => this.load());
-    }
+  private _deleteConfirmed(id: string): void {
+    this._svc.deleteSeatType(id).subscribe(() => this.load());
   }
 
   cancelEdit(): void {

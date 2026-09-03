@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angula
 import { TranslateService } from '@ngx-translate/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { CinemaServiceAgent, ProjectionFormValues, ShowTimeTypeValues, apiErrorMessage } from 'CinemaLib';
+import { CinemaServiceAgent, DialogService, ProjectionFormValues, ShowTimeTypeValues, apiErrorMessage } from 'CinemaLib';
 
 type Dto = CinemaServiceAgent.ShowTimeDTO;
 
@@ -36,9 +36,8 @@ export class ShowTimesManagementComponent implements OnInit, OnDestroy {
   private _fb = inject(FormBuilder);
   private _cdr = inject(ChangeDetectorRef);
   private _translate = inject(TranslateService);
+  private _dialogService = inject(DialogService);
   private _destroy$ = new Subject<void>();
-
-  confirmOpen = false;
 
   // ── Grid geometry ───────────────────────────────────────────────────────────
   readonly startHour = 8;          // first row label
@@ -275,12 +274,16 @@ export class ShowTimesManagementComponent implements OnInit, OnDestroy {
 
   deleteCurrent(): void {
     if (!this.editingId) { return; }
-    this.confirmOpen = true;
+    this._dialogService.openConfirmDialog({ message: 'showTimes.confirmDelete' })
+      .afterClosed().subscribe(confirmed => {
+        if (confirmed) {
+          this._deleteConfirmed();
+        }
+      });
   }
 
-  confirmDelete(): void {
+  private _deleteConfirmed(): void {
     const id = this.editingId;
-    this.confirmOpen = false;
     if (id) {
       this.formError = null;
       this._svc.deleteShowTime(id).pipe(takeUntil(this._destroy$)).subscribe({

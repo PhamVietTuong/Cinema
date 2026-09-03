@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'CinemaLib';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ModalComponent } from '../../../shared/modal.component';
-import { ConfirmModalComponent } from '../../../shared/confirm-modal.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -66,7 +65,6 @@ const routes: Routes = [
     SharedModule,
     NgxDatatableModule,
     ModalComponent,
-    ConfirmModalComponent,
     RouterModule.forChild(routes),
   ],
 })

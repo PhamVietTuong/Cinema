@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CinemaServiceAgent } from 'CinemaLib';
+import { CinemaServiceAgent, DialogService } from 'CinemaLib';
 
 type Dto = CinemaServiceAgent.TicketPriceDTO;
 
@@ -21,9 +21,6 @@ export class TheaterTicketPricesComponent implements OnInit {
   form: FormGroup;
   private readonly _formDefaults: unknown;
 
-  confirmOpen = false;
-  private _pendingDeleteId: string | null = null;
-
   roomTypes: CinemaServiceAgent.RoomTypeDTO[] = [];
   seatTypes: CinemaServiceAgent.SeatTypeDTO[] = [];
   timeSlots: CinemaServiceAgent.TimeSlotDTO[] = [];
@@ -32,6 +29,7 @@ export class TheaterTicketPricesComponent implements OnInit {
     private _svc: CinemaServiceAgent.HttpService,
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,
+    private _dialogService: DialogService,
   ) {
     this.form = this._fb.group({
       roomTypeId: ['', Validators.required],
@@ -92,17 +90,16 @@ export class TheaterTicketPricesComponent implements OnInit {
     if (!id) {
       return;
     }
-    this._pendingDeleteId = id;
-    this.confirmOpen = true;
+    this._dialogService.openConfirmDialog({ message: 'common.confirmDelete' })
+      .afterClosed().subscribe(confirmed => {
+        if (confirmed) {
+          this._deleteConfirmed(id);
+        }
+      });
   }
 
-  confirmDelete(): void {
-    const id = this._pendingDeleteId;
-    this.confirmOpen = false;
-    this._pendingDeleteId = null;
-    if (id) {
-      this._svc.deleteTicketPrice(id).subscribe(() => this.load());
-    }
+  private _deleteConfirmed(id: string): void {
+    this._svc.deleteTicketPrice(id).subscribe(() => this.load());
   }
 
   cancelEdit(): void {
