@@ -1,0 +1,56 @@
+<div mat-dialog-title class="dialog-title">{{ (editingId ? 'theaters.ticketPrices.editTitle' : 'theaters.ticketPrices.newTitle') | translate }}</div>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.roomTypeLabel' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="dialog-row-field">
+        <mat-select formControlName="roomTypeId">
+          <mat-option *ngFor="let rt of roomTypes" [value]="rt.id">{{ rt.name }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['roomTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.seatTypeLabel' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="dialog-row-field">
+        <mat-select formControlName="seatTypeId">
+          <mat-option *ngFor="let s of seatTypes" [value]="s.id">{{ s.name }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['seatTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.timeSlotLabel' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="dialog-row-field">
+        <mat-select formControlName="timeSlotId">
+          <mat-option *ngFor="let t of timeSlots" [value]="t.id">{{ t.name }} ({{ t.startTime }}–{{ t.endTime }})</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['timeSlotId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.priceLabel' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="dialog-row-field">
+        <input matInput type="number" formControlName="price" placeholder="70000">
+        <mat-error *ngIf="form.controls['price'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-row">
+      <mat-checkbox formControlName="isHoliday">{{ 'theaters.ticketPrices.applyHoliday' | translate }}</mat-checkbox>
+    </div>
+  </mat-dialog-content>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-raised-button type="button" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit">{{ 'common.save' | translate }}</button>
+  </div>
+</form>
+
+<button mat-icon-button type="button" class="dialog-close-btn" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>

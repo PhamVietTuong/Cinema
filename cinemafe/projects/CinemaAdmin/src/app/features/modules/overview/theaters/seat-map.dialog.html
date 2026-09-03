@@ -1,0 +1,76 @@
+<div mat-dialog-title class="dialog-title">
+  {{ 'theaters.rooms.seatMapHeading' | translate }} · {{ room.name }}
+  <p class="ad-sub">{{ room.totalRows }} × {{ room.totalColumns }} = {{ (room.totalRows ?? 0) * (room.totalColumns ?? 0) }} ghế</p>
+</div>
+
+<mat-dialog-content>
+  <div *ngIf="seatsLoading" class="ad-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'theaters.rooms.loadingSeatMap' | translate }}</p></div>
+
+  <ng-container *ngIf="!seatsLoading">
+    <!-- Grid size: add / remove rows and columns (existing seats are preserved) -->
+    <div class="grid-resize">
+      <span class="ad-sub">{{ 'theaters.rooms.gridSize' | translate:{ rows: room.totalRows, cols: room.totalColumns } }}</span>
+      <div class="grid-resize-btns">
+        <button type="button" mat-stroked-button [disabled]="resizing" (click)="addRow()"><mat-icon>add</mat-icon> {{ 'theaters.rooms.row' | translate }}</button>
+        <button type="button" mat-stroked-button [disabled]="resizing || (room.totalRows ?? 0) <= 1" (click)="removeRow()"><mat-icon>remove</mat-icon> {{ 'theaters.rooms.row' | translate }}</button>
+        <button type="button" mat-stroked-button [disabled]="resizing" (click)="addColumn()"><mat-icon>add</mat-icon> {{ 'theaters.rooms.column' | translate }}</button>
+        <button type="button" mat-stroked-button [disabled]="resizing || (room.totalColumns ?? 0) <= 1" (click)="removeColumn()"><mat-icon>remove</mat-icon> {{ 'theaters.rooms.column' | translate }}</button>
+      </div>
+    </div>
+
+    <!-- Toolbar: choose mode + (in paint mode) the seat type to apply -->
+    <div class="seatmap-toolbar">
+      <mat-button-toggle-group [value]="mode" (change)="setMode($event.value)">
+        <mat-button-toggle value="paint"><mat-icon>format_paint</mat-icon> {{ 'theaters.rooms.assignSeatType' | translate }}</mat-button-toggle>
+        <mat-button-toggle value="pair"><mat-icon>link</mat-icon> {{ 'theaters.rooms.doubleSeat' | translate }}</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <div class="palette" *ngIf="mode === 'paint'">
+        <button type="button" class="palette-chip" *ngFor="let t of allSeatTypes"
+                [class.is-active]="t.id === activeSeatTypeId"
+                [style.--sc]="t.color" (click)="activeSeatTypeId = t.id!">
+          <span class="palette-dot"></span>{{ t.name }} <small>×{{ t.priceMultiplier | number:'1.0-2' }}</small>
+        </button>
+      </div>
+      <p class="ad-sub" *ngIf="mode === 'pair'">{{ 'theaters.rooms.pairHint' | translate }}</p>
+    </div>
+
+    <div class="screen-wrap">
+      <div class="screen-arc"></div>
+      <span class="screen-label">{{ 'theaters.rooms.screen' | translate }}</span>
+    </div>
+
+    <div class="seat-grid" *ngIf="seats.length; else noSeats">
+      <div class="seat-row" *ngFor="let row of seatRows">
+        <div class="row-label">{{ row }}</div>
+        <div *ngFor="let s of seatsInRow(row)"
+             class="seat editable"
+             [style.--sc]="s.seatTypeColor || '#8fa3bf'"
+             [class.paired]="s.seatGroupId"
+             [class.pending]="isPairPending(s)"
+             (click)="onSeatClick(s)"
+             [title]="row + s.colIndex + ' · ' + s.seatTypeName + (s.seatGroupId ? ' · ' + ('theaters.rooms.coupleSeat' | translate) : '')">{{ s.colIndex }}<mat-icon *ngIf="s.seatGroupId" class="pair-badge">link</mat-icon></div>
+      </div>
+    </div>
+    <ng-template #noSeats>
+      <div class="ad-empty"><mat-icon>event_seat</mat-icon><p>{{ 'theaters.rooms.noSeats' | translate }}</p></div>
+    </ng-template>
+
+    <div class="legend" *ngIf="allSeatTypes.length">
+      <span class="legend-item" *ngFor="let t of allSeatTypes">
+        <span class="legend-dot" [style.background]="t.color"></span> {{ t.name }}
+      </span>
+    </div>
+  </ng-container>
+</mat-dialog-content>
+
+<div mat-dialog-actions class="dialog-actions">
+  <button mat-raised-button type="button" (click)="close()">{{ 'common.close' | translate }}</button>
+  <button mat-raised-button color="primary" type="button" [disabled]="saving || !seats.length" (click)="saveSeatMap()">
+    {{ saving ? ('theaters.rooms.saving' | translate) : ('theaters.rooms.saveSeatMap' | translate) }}
+  </button>
+</div>
+
+<button mat-icon-button type="button" class="dialog-close-btn" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>

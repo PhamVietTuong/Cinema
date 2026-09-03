@@ -12,11 +12,18 @@ import { TheatersManagementComponent } from './theaters/theaters-management.comp
 import { TheaterDialog } from './theaters/theater.dialog';
 import { TheaterDetailComponent } from './theaters/theater-detail.component';
 import { TheaterRoomsComponent } from './theaters/theater-rooms.component';
+import { RoomDialog } from './theaters/room.dialog';
+import { SeatMapDialog } from './theaters/seat-map.dialog';
 import { TheaterRoomTypesComponent } from './theaters/theater-room-types.component';
+import { RoomTypeDialog } from './theaters/room-type.dialog';
 import { TheaterSeatTypesComponent } from './theaters/theater-seat-types.component';
+import { SeatTypeDialog } from './theaters/seat-type.dialog';
 import { TheaterFoodComponent } from './theaters/theater-food.component';
+import { FoodAndDrinkDialog } from './theaters/food-and-drink.dialog';
 import { TheaterTimeSlotsComponent } from './theaters/theater-time-slots.component';
+import { TimeSlotDialog } from './theaters/time-slot.dialog';
 import { TheaterTicketPricesComponent } from './theaters/theater-ticket-prices.component';
+import { TicketPriceDialog } from './theaters/ticket-price.dialog';
 import { ShowTimesManagementComponent } from './show-times/show-times.component';
 import { UsersManagementComponent } from './users/users-management.component';
 import { UserDialog } from './users/user.dialog';
@@ -52,11 +59,18 @@ const routes: Routes = [
     TheaterDialog,
     TheaterDetailComponent,
     TheaterRoomsComponent,
+    RoomDialog,
+    SeatMapDialog,
     TheaterRoomTypesComponent,
+    RoomTypeDialog,
     TheaterSeatTypesComponent,
+    SeatTypeDialog,
     TheaterFoodComponent,
+    FoodAndDrinkDialog,
     TheaterTimeSlotsComponent,
+    TimeSlotDialog,
     TheaterTicketPricesComponent,
+    TicketPriceDialog,
     ShowTimesManagementComponent,
     UsersManagementComponent,
     UserDialog,
