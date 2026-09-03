@@ -5,15 +5,15 @@
     <div class="cinema-glow"></div>
     <div class="cinema-inner">
       <div class="cinema-brand">
-        <i class="fas fa-film"></i>
+        <svg-icon key="logo"></svg-icon>
         <span>Midnight Premium</span>
       </div>
       <h2 class="cinema-headline">{{ 'auth.login.heroTitle1' | translate }}<br>{{ 'auth.login.heroTitle2' | translate }}</h2>
       <p class="cinema-sub">{{ 'auth.login.heroSub' | translate }}</p>
       <div class="cinema-perks">
-        <div class="perk-item"><i class="fas fa-check-circle"></i> {{ 'auth.login.perk1' | translate }}</div>
-        <div class="perk-item"><i class="fas fa-check-circle"></i> {{ 'auth.login.perk2' | translate }}</div>
-        <div class="perk-item"><i class="fas fa-check-circle"></i> {{ 'auth.login.perk3' | translate }}</div>
+        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.login.perk1' | translate }}</div>
+        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.login.perk2' | translate }}</div>
+        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.login.perk3' | translate }}</div>
       </div>
     </div>
     <div class="cinema-film-strip">
@@ -37,20 +37,20 @@
       <form *ngIf="!(awaitingTwoFactor$ | async)" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <div class="field-group">
-          <label class="field-label">{{ 'auth.login.emailOrPhoneLabel' | translate }}</label>
-          <div class="field-wrap">
-            <i class="fas fa-envelope field-icon"></i>
-            <input class="field-input"
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'auth.login.emailOrPhoneLabel' | translate }}</mat-label>
+            <mat-icon matPrefix>mail</mat-icon>
+            <input matInput
                    type="text"
                    formControlName="emailOrPhone"
                    placeholder="email@example.com">
-          </div>
-          <div class="field-error" *ngIf="form.get('emailOrPhone')?.touched && form.get('emailOrPhone')?.hasError('required')">
-            {{ 'auth.errors.emailOrPhoneRequired' | translate }}
-          </div>
-          <div class="field-error" *ngIf="form.get('emailOrPhone')?.touched && form.get('emailOrPhone')?.hasError('emailOrPhone')">
-            {{ 'auth.errors.emailOrPhoneInvalid' | translate }}
-          </div>
+            <mat-error *ngIf="form.get('emailOrPhone')?.hasError('required')">
+              {{ 'auth.errors.emailOrPhoneRequired' | translate }}
+            </mat-error>
+            <mat-error *ngIf="form.get('emailOrPhone')?.hasError('emailOrPhone')">
+              {{ 'auth.errors.emailOrPhoneInvalid' | translate }}
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <div class="field-group">
@@ -58,41 +58,39 @@
             <label class="field-label">{{ 'auth.fields.password' | translate }}</label>
             <a routerLink="/auth/forgot-password" class="forgot-link">{{ 'auth.login.forgotLink' | translate }}</a>
           </div>
-          <div class="field-wrap">
-            <i class="fas fa-lock field-icon"></i>
-            <input class="field-input"
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'auth.fields.password' | translate }}</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput
                    [type]="hidePass ? 'password' : 'text'"
                    formControlName="password"
                    placeholder="••••••••"
                    (keyup)="onPasswordKey($event)"
                    (keydown)="onPasswordKey($event)">
-            <button type="button" class="toggle-pass" (click)="hidePass = !hidePass">
-              <i class="fas" [class.fa-eye]="hidePass" [class.fa-eye-slash]="!hidePass"></i>
+            <button type="button" mat-icon-button matSuffix (click)="hidePass = !hidePass">
+              <mat-icon>{{ hidePass ? 'visibility' : 'visibility_off' }}</mat-icon>
             </button>
-          </div>
+            <mat-error *ngIf="form.get('password')?.hasError('required')">
+              {{ 'auth.errors.passwordRequired' | translate }}
+            </mat-error>
+          </mat-form-field>
           <div class="caps-warning" *ngIf="capsLockOn">
-            <i class="fas fa-exclamation-triangle"></i> {{ 'auth.login.capsLock' | translate }}
-          </div>
-          <div class="field-error" *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
-            {{ 'auth.errors.passwordRequired' | translate }}
+            <mat-icon>warning</mat-icon> {{ 'auth.login.capsLock' | translate }}
           </div>
         </div>
 
         <div class="remember-row">
-          <label class="remember-label">
-            <input type="checkbox" formControlName="rememberMe">
-            {{ 'auth.login.rememberMe' | translate }}
-          </label>
+          <mat-checkbox formControlName="rememberMe">{{ 'auth.login.rememberMe' | translate }}</mat-checkbox>
         </div>
 
         <div class="api-error" *ngIf="error$ | async as err">
-          <i class="fas fa-exclamation-circle"></i> {{ err }}
+          <mat-icon>error</mat-icon> {{ err }}
         </div>
 
-        <button type="submit" class="btn-primary-cta submit-btn" [disabled]="(loading$ | async) || form.invalid">
+        <button type="submit" mat-raised-button class="btn-primary-cta submit-btn" [disabled]="(loading$ | async) || form.invalid">
           <mat-spinner diameter="18" *ngIf="loading$ | async"></mat-spinner>
           <ng-container *ngIf="!(loading$ | async)">
-            {{ 'auth.login.submit' | translate }} <i class="fas fa-arrow-right"></i>
+            {{ 'auth.login.submit' | translate }} <mat-icon>arrow_forward</mat-icon>
           </ng-container>
         </button>
       </form>
@@ -102,18 +100,18 @@
         <div class="divider"><span>{{ 'auth.login.or' | translate }}</span></div>
         <div #googleBtn class="google-btn-wrap"></div>
         <div class="api-error" *ngIf="googleError">
-          <i class="fas fa-exclamation-circle"></i> {{ googleError }}
+          <mat-icon>error</mat-icon> {{ googleError }}
         </div>
       </ng-container>
 
       <!-- Continue with Facebook (shown only when an app id is configured) -->
       <ng-container *ngIf="facebookEnabled && !(awaitingTwoFactor$ | async)">
         <div class="divider" *ngIf="!googleEnabled"><span>{{ 'auth.login.or' | translate }}</span></div>
-        <button type="button" class="fb-btn" (click)="loginWithFacebook()">
-          <i class="fab fa-facebook-f"></i> {{ 'auth.login.facebook' | translate }}
+        <button type="button" mat-stroked-button class="fb-btn" (click)="loginWithFacebook()">
+          <svg-icon key="facebook"></svg-icon> {{ 'auth.login.facebook' | translate }}
         </button>
         <div class="api-error" *ngIf="facebookError">
-          <i class="fas fa-exclamation-circle"></i> {{ facebookError }}
+          <mat-icon>error</mat-icon> {{ facebookError }}
         </div>
       </ng-container>
 
@@ -121,24 +119,24 @@
       <form *ngIf="awaitingTwoFactor$ | async" [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
         <p class="form-sub">{{ 'auth.login.otpSent' | translate }}</p>
         <div class="field-group">
-          <label class="field-label">{{ 'auth.login.otpLabel' | translate }}</label>
-          <div class="field-wrap">
-            <i class="fas fa-key field-icon"></i>
-            <input class="field-input" type="text" inputmode="numeric" maxlength="6"
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'auth.login.otpLabel' | translate }}</mat-label>
+            <mat-icon matPrefix>vpn_key</mat-icon>
+            <input matInput type="text" inputmode="numeric" maxlength="6"
                    formControlName="code" [placeholder]="'auth.login.otpPlaceholder' | translate">
-          </div>
-          <div class="field-error" *ngIf="otpForm.get('code')?.touched && otpForm.get('code')?.invalid">
-            {{ 'auth.login.otpInvalid' | translate }}
-          </div>
+            <mat-error *ngIf="otpForm.get('code')?.invalid">
+              {{ 'auth.login.otpInvalid' | translate }}
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <div class="api-error" *ngIf="otpError">
-          <i class="fas fa-exclamation-circle"></i> {{ otpError }}
+          <mat-icon>error</mat-icon> {{ otpError }}
         </div>
 
-        <button type="submit" class="btn-primary-cta submit-btn" [disabled]="verifying">
+        <button type="submit" mat-raised-button class="btn-primary-cta submit-btn" [disabled]="verifying">
           <mat-spinner diameter="18" *ngIf="verifying"></mat-spinner>
-          <ng-container *ngIf="!verifying">{{ 'auth.login.otpSubmit' | translate }} <i class="fas fa-arrow-right"></i></ng-container>
+          <ng-container *ngIf="!verifying">{{ 'auth.login.otpSubmit' | translate }} <mat-icon>arrow_forward</mat-icon></ng-container>
         </button>
       </form>
 

@@ -3,7 +3,7 @@
   <div class="page-header-inner">
     <nav class="breadcrumb">
       <a routerLink="/">{{ 'booking.breadcrumb.home' | translate }}</a>
-      <i class="fas fa-chevron-right"></i>
+      <mat-icon>chevron_right</mat-icon>
       <span>{{ 'booking.seats.title' | translate }}</span>
     </nav>
     <h1 class="page-title">{{ 'booking.seats.title' | translate }}</h1>
@@ -67,7 +67,7 @@
       <h3 class="sidebar-title">{{ 'booking.seats.selectedTitle' | translate }}</h3>
 
       <div *ngIf="selectedSeats.length === 0" class="empty-seats">
-        <i class="fas fa-chair"></i>
+        <mat-icon>chair</mat-icon>
         <p>{{ 'booking.seats.empty' | translate }}</p>
       </div>
 
@@ -96,7 +96,7 @@
           <span class="total-amount">{{ totalPrice | number:'1.0-0' }}đ</span>
         </div>
 
-        <button class="btn-primary-cta confirm-btn" (click)="proceedToCheckout()">
+        <button mat-raised-button class="btn-primary-cta confirm-btn" (click)="proceedToCheckout()">
           {{ 'booking.seats.confirmCta' | translate }}
         </button>
       </ng-container>

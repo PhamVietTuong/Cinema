@@ -16,20 +16,20 @@
 
     <div class="id-meta">
       <div class="id-meta-row">
-        <span><i class="fas fa-id-badge"></i> {{ 'profile.rank' | translate }}</span>
+        <span><mat-icon>badge</mat-icon> {{ 'profile.rank' | translate }}</span>
         <strong>{{ user?.memberShipName || user?.userTypeName || 'Thành viên' }}</strong>
       </div>
       <div class="id-meta-row">
-        <span><i class="fas fa-star"></i> {{ 'profile.points' | translate }}</span>
+        <span><mat-icon>star</mat-icon> {{ 'profile.points' | translate }}</span>
         <strong>{{ user?.points ?? 0 }}</strong>
       </div>
     </div>
 
-    <nav class="id-tabs">
-      <button [class.active]="tab === 'overview'" (click)="tab = 'overview'"><i class="fas fa-gauge"></i> {{ 'profile.tabOverview' | translate }}</button>
-      <button [class.active]="tab === 'bookings'" (click)="tab = 'bookings'"><i class="fas fa-ticket"></i> {{ 'profile.tabBookings' | translate }}</button>
-      <button [class.active]="tab === 'settings'" (click)="tab = 'settings'"><i class="fas fa-gear"></i> {{ 'profile.tabSettings' | translate }}</button>
-    </nav>
+    <mat-button-toggle-group class="id-tabs" [(ngModel)]="tab">
+      <mat-button-toggle value="overview"><mat-icon>dashboard</mat-icon> {{ 'profile.tabOverview' | translate }}</mat-button-toggle>
+      <mat-button-toggle value="bookings"><mat-icon>confirmation_number</mat-icon> {{ 'profile.tabBookings' | translate }}</mat-button-toggle>
+      <mat-button-toggle value="settings"><mat-icon>settings</mat-icon> {{ 'profile.tabSettings' | translate }}</mat-button-toggle>
+    </mat-button-toggle-group>
   </aside>
 
   <!-- Right: content -->
@@ -54,15 +54,15 @@
       </div>
 
       <div class="ov-grid">
-        <div class="ov-stat"><i class="fas fa-ticket"></i><span class="ov-stat-val">{{ ticketCount }}</span><span class="ov-stat-label">{{ 'profile.ticketsBooked' | translate }}</span></div>
-        <div class="ov-stat"><i class="fas fa-receipt"></i><span class="ov-stat-val">{{ bookingCount }}</span><span class="ov-stat-label">{{ 'profile.orders' | translate }}</span></div>
-        <div class="ov-stat"><i class="fas fa-star"></i><span class="ov-stat-val">{{ user?.points ?? 0 | number }}</span><span class="ov-stat-label">{{ 'profile.rewardPointsLabel' | translate }}</span></div>
+        <div class="ov-stat"><mat-icon>confirmation_number</mat-icon><span class="ov-stat-val">{{ ticketCount }}</span><span class="ov-stat-label">{{ 'profile.ticketsBooked' | translate }}</span></div>
+        <div class="ov-stat"><mat-icon>receipt</mat-icon><span class="ov-stat-val">{{ bookingCount }}</span><span class="ov-stat-label">{{ 'profile.orders' | translate }}</span></div>
+        <div class="ov-stat"><mat-icon>star</mat-icon><span class="ov-stat-val">{{ user?.points ?? 0 | number }}</span><span class="ov-stat-label">{{ 'profile.rewardPointsLabel' | translate }}</span></div>
       </div>
 
       <div class="ov-perks">
-        <h3 class="ov-perks-title"><i class="fas fa-crown"></i> {{ 'profile.memberPerks' | translate }}</h3>
+        <h3 class="ov-perks-title"><mat-icon>workspace_premium</mat-icon> {{ 'profile.memberPerks' | translate }}</h3>
         <ul>
-          <li *ngFor="let p of perks"><i class="fas" [ngClass]="p.icon"></i> {{ p.text | translate }}</li>
+          <li *ngFor="let p of perks"><mat-icon>{{ p.icon }}</mat-icon> {{ p.text | translate }}</li>
         </ul>
       </div>
 
@@ -79,7 +79,7 @@
         </div>
       </div>
       <ng-template #noOv>
-        <div class="empty"><i class="fas fa-ticket"></i><p>{{ 'profile.noTickets' | translate }}</p></div>
+        <div class="empty"><mat-icon>confirmation_number</mat-icon><p>{{ 'profile.noTickets' | translate }}</p></div>
       </ng-template>
     </ng-container>
 
@@ -109,9 +109,9 @@
             <span>{{ r.total | number:'1.0-0' }}đ</span>
             <span><span class="invoice-status" [class]="statusClass(r.status)">{{ statusLabel(r.status) }}</span></span>
             <span class="bk-actions">
-              <button *ngIf="r.status === InvoiceStatus.Pending" class="bk-cancel" (click)="$event.stopPropagation(); cancelById(r.id)" [title]="'profile.cancelBookingTooltip' | translate"><i class="fas fa-xmark"></i></button>
-              <button *ngIf="r.status === InvoiceStatus.Paid" class="bk-refund" (click)="$event.stopPropagation(); refundById(r.id)" [title]="'profile.requestRefundTooltip' | translate"><i class="fas fa-rotate-left"></i></button>
-              <i *ngIf="isPaid(r.status)" class="fas" [class.fa-chevron-down]="expandedId !== r.id" [class.fa-chevron-up]="expandedId === r.id"></i>
+              <button *ngIf="r.status === InvoiceStatus.Pending" mat-icon-button class="bk-cancel" (click)="$event.stopPropagation(); cancelById(r.id)" [title]="'profile.cancelBookingTooltip' | translate"><mat-icon>close</mat-icon></button>
+              <button *ngIf="r.status === InvoiceStatus.Paid" mat-icon-button class="bk-refund" (click)="$event.stopPropagation(); refundById(r.id)" [title]="'profile.requestRefundTooltip' | translate"><mat-icon>undo</mat-icon></button>
+              <mat-icon *ngIf="isPaid(r.status)">{{ expandedId === r.id ? 'expand_less' : 'expand_more' }}</mat-icon>
             </span>
           </div>
           <div class="eticket-panel" *ngIf="expandedId === r.id">
@@ -124,13 +124,13 @@
               </div>
               <div class="eticket-qr">
                 <img *ngIf="t.qrCode && qrMap[t.qrCode]" [src]="qrMap[t.qrCode]" [alt]="'profile.qrAlt' | translate" width="120" height="120">
-                <i *ngIf="!(t.qrCode && qrMap[t.qrCode])" class="fas fa-qrcode"></i>
+                <mat-icon *ngIf="!(t.qrCode && qrMap[t.qrCode])">qr_code_2</mat-icon>
               </div>
             </div>
           </div>
           </ng-container>
         </div>
-        <ng-template #noBk><div class="empty"><i class="fas fa-ticket"></i><p>{{ 'profile.noTickets' | translate }}</p></div></ng-template>
+        <ng-template #noBk><div class="empty"><mat-icon>confirmation_number</mat-icon><p>{{ 'profile.noTickets' | translate }}</p></div></ng-template>
       </ng-container>
     </ng-container>
 
@@ -139,67 +139,96 @@
       <h2 class="section-title">{{ 'profile.accountSettings' | translate }}</h2>
 
       <div class="set-card">
-        <h3 class="set-title"><i class="fas fa-user"></i> {{ 'profile.personalInfo' | translate }}</h3>
+        <h3 class="set-title"><mat-icon>person</mat-icon> {{ 'profile.personalInfo' | translate }}</h3>
         <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="form">
           <div class="set-row-2">
-            <label class="field"><span class="field-label">{{ 'profile.fullName' | translate }}</span><input type="text" formControlName="name" [placeholder]="'profile.fullNamePlaceholder' | translate"></label>
-            <label class="field"><span class="field-label">{{ 'profile.email' | translate }}</span><input type="text" [value]="user?.email || ''" disabled></label>
+            <div class="field">
+              <mat-label class="field-label">{{ 'profile.fullName' | translate }}</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="name" [placeholder]="'profile.fullNamePlaceholder' | translate">
+              </mat-form-field>
+            </div>
+            <div class="field">
+              <mat-label class="field-label">{{ 'profile.email' | translate }}</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="text" [value]="user?.email || ''" disabled>
+              </mat-form-field>
+            </div>
           </div>
           <div class="set-row-2">
-            <label class="field">
-              <span class="field-label">{{ 'profile.phone' | translate }}</span>
-              <input type="text" formControlName="phone" placeholder="0901234567">
-              <span class="msg err" *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.hasError('pattern')">{{ 'profile.phoneInvalid' | translate }}</span>
-            </label>
-            <label class="field">
-              <span class="field-label">{{ 'profile.avatar' | translate }}</span>
-              <input type="text" formControlName="avatar" [placeholder]="'profile.avatarPlaceholder' | translate">
+            <div class="field">
+              <mat-label class="field-label">{{ 'profile.phone' | translate }}</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="phone" placeholder="0901234567">
+                <mat-error *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.hasError('pattern')">{{ 'profile.phoneInvalid' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="field">
+              <mat-label class="field-label">{{ 'profile.avatar' | translate }}</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="avatar" [placeholder]="'profile.avatarPlaceholder' | translate">
+              </mat-form-field>
               <span class="avatar-upload">
-                <label class="btn-upload">
-                  <i class="fas fa-upload"></i> {{ 'profile.uploadImage' | translate }}
-                  <input type="file" accept="image/*" hidden (change)="onPickAvatar($event)">
-                </label>
+                <button mat-stroked-button type="button" (click)="fileInput.click()">
+                  <mat-icon>upload</mat-icon> {{ 'profile.uploadImage' | translate }}
+                </button>
+                <input #fileInput type="file" accept="image/*" hidden (change)="onPickAvatar($event)">
                 <img class="avatar-preview" *ngIf="profileForm.value.avatar" [src]="profileForm.value.avatar" alt="">
                 <span class="msg" *ngIf="avatarUploading">{{ 'profile.uploading' | translate }}</span>
                 <span class="msg err" *ngIf="avatarErr">{{ avatarErr }}</span>
               </span>
-            </label>
+            </div>
           </div>
           <p class="msg ok" *ngIf="profileMsg">{{ profileMsg }}</p>
           <p class="msg err" *ngIf="profileErr">{{ profileErr }}</p>
-          <button type="submit" class="btn-primary-cta" [disabled]="profileForm.invalid">{{ 'profile.saveChanges' | translate }}</button>
+          <button mat-raised-button type="submit" class="btn-primary-cta" [disabled]="profileForm.invalid">{{ 'profile.saveChanges' | translate }}</button>
         </form>
       </div>
 
       <div class="set-card">
-        <h3 class="set-title"><i class="fas fa-lock"></i> {{ 'profile.passwordSecurity' | translate }}</h3>
+        <h3 class="set-title"><mat-icon>lock</mat-icon> {{ 'profile.passwordSecurity' | translate }}</h3>
         <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="form">
           <div class="set-row-3">
-            <label class="field"><span class="field-label">{{ 'profile.currentPassword' | translate }}</span><input type="password" formControlName="currentPassword" autocomplete="current-password"></label>
-            <label class="field"><span class="field-label">{{ 'profile.newPassword' | translate }}</span><input type="password" formControlName="newPassword" autocomplete="new-password"></label>
-            <label class="field"><span class="field-label">{{ 'common.confirm' | translate }}</span><input type="password" formControlName="confirmNewPassword" autocomplete="new-password"></label>
+            <div class="field">
+              <mat-label class="field-label">{{ 'profile.currentPassword' | translate }}</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="password" formControlName="currentPassword" autocomplete="current-password">
+              </mat-form-field>
+            </div>
+            <div class="field">
+              <mat-label class="field-label">{{ 'profile.newPassword' | translate }}</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="password" formControlName="newPassword" autocomplete="new-password">
+              </mat-form-field>
+            </div>
+            <div class="field">
+              <mat-label class="field-label">{{ 'common.confirm' | translate }}</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="password" formControlName="confirmNewPassword" autocomplete="new-password">
+              </mat-form-field>
+            </div>
           </div>
           <p class="msg ok" *ngIf="passwordMsg">{{ passwordMsg }}</p>
           <p class="msg err" *ngIf="passwordErr">{{ passwordErr }}</p>
-          <button type="submit" class="btn-primary-cta" [disabled]="passwordForm.invalid">{{ 'profile.updatePassword' | translate }}</button>
+          <button mat-raised-button type="submit" class="btn-primary-cta" [disabled]="passwordForm.invalid">{{ 'profile.updatePassword' | translate }}</button>
         </form>
       </div>
 
       <div class="set-card">
-        <h3 class="set-title"><i class="fas fa-bell"></i> {{ 'profile.notificationSettings' | translate }}</h3>
-        <label class="toggle-row"><span>{{ 'profile.notifBooking' | translate }}</span>
-          <span class="switch"><input type="checkbox" [(ngModel)]="notif.booking"><span class="track"></span></span></label>
-        <label class="toggle-row"><span>{{ 'profile.notifPromos' | translate }}</span>
-          <span class="switch"><input type="checkbox" [(ngModel)]="notif.promos"><span class="track"></span></span></label>
-        <label class="toggle-row"><span>{{ 'profile.notifReminders' | translate }}</span>
-          <span class="switch"><input type="checkbox" [(ngModel)]="notif.reminders"><span class="track"></span></span></label>
-        <button type="button" class="btn-primary-cta" [disabled]="notifSaving" (click)="saveNotifications()">{{ 'profile.saveChanges' | translate }}</button>
+        <h3 class="set-title"><mat-icon>notifications</mat-icon> {{ 'profile.notificationSettings' | translate }}</h3>
+        <div class="toggle-row"><span>{{ 'profile.notifBooking' | translate }}</span>
+          <mat-slide-toggle [(ngModel)]="notif.booking"></mat-slide-toggle></div>
+        <div class="toggle-row"><span>{{ 'profile.notifPromos' | translate }}</span>
+          <mat-slide-toggle [(ngModel)]="notif.promos"></mat-slide-toggle></div>
+        <div class="toggle-row"><span>{{ 'profile.notifReminders' | translate }}</span>
+          <mat-slide-toggle [(ngModel)]="notif.reminders"></mat-slide-toggle></div>
+        <button mat-raised-button type="button" class="btn-primary-cta" [disabled]="notifSaving" (click)="saveNotifications()">{{ 'profile.saveChanges' | translate }}</button>
       </div>
 
       <div class="set-card danger">
-        <h3 class="set-title danger-title"><i class="fas fa-triangle-exclamation"></i> {{ 'profile.deleteAccount' | translate }}</h3>
+        <h3 class="set-title danger-title"><mat-icon>warning</mat-icon> {{ 'profile.deleteAccount' | translate }}</h3>
         <p class="set-desc">{{ 'profile.deleteAccountDesc' | translate }}</p>
-        <button class="danger-btn" type="button">{{ 'profile.deletePermanently' | translate }}</button>
+        <button mat-raised-button class="danger-btn" type="button">{{ 'profile.deletePermanently' | translate }}</button>
       </div>
     </ng-container>
   </section>

@@ -36,9 +36,9 @@ export class ProfileComponent implements OnInit {
   notifSaving = false;
 
   readonly perks = [
-    { icon: 'fa-ticket', text: 'profile.perkDiscount' },
-    { icon: 'fa-bowl-food', text: 'profile.perkFreePopcorn' },
-    { icon: 'fa-star', text: 'profile.perkEarnPoints' },
+    { icon: 'confirmation_number', text: 'profile.perkDiscount' },
+    { icon: 'fastfood', text: 'profile.perkFreePopcorn' },
+    { icon: 'star', text: 'profile.perkEarnPoints' },
   ];
 
   user: IdentityServiceAgent.UserDTO | null = null;

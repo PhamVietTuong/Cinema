@@ -9,7 +9,7 @@
         </div>
         <h1 class="hero-title">{{ f.title }}</h1>
         <div class="hero-meta">
-          <span class="meta-rating"><i class="fas fa-star"></i> {{ f.averageRating | number:'1.1-1' }}</span>
+          <span class="meta-rating"><mat-icon>star</mat-icon> {{ f.averageRating | number:'1.1-1' }}</span>
           <span class="meta-dot">·</span>
           <span class="meta-duration">{{ 'home.movie.minutes' | translate:{ n: f.duration } }}</span>
           <ng-container *ngIf="f.genres?.length">
@@ -23,11 +23,11 @@
         </div>
         <p class="hero-desc">{{ f.description }}</p>
         <div class="hero-actions">
-          <a class="btn-primary-cta" [routerLink]="['/movies', f.id]">
-            <i class="fas fa-ticket"></i> {{ 'home.hero.bookNow' | translate }}
+          <a mat-raised-button [routerLink]="['/movies', f.id]">
+            <mat-icon>confirmation_number</mat-icon> {{ 'home.hero.bookNow' | translate }}
           </a>
-          <button class="btn-ghost-cta">
-            <i class="fas fa-play"></i> {{ 'home.hero.watchTrailer' | translate }}
+          <button mat-stroked-button type="button">
+            <mat-icon>play_arrow</mat-icon> {{ 'home.hero.watchTrailer' | translate }}
           </button>
         </div>
       </div>
@@ -35,7 +35,7 @@
         <div class="poster-wrap">
           <img [src]="f.posterUrl || 'assets/no-poster.jpg'" [alt]="f.title" class="poster-img" (error)="onImgError($event)">
           <div class="poster-rating">
-            <i class="fas fa-star"></i>
+            <mat-icon>star</mat-icon>
             <span>{{ f.averageRating | number:'1.1-1' }}</span>
           </div>
         </div>
@@ -51,8 +51,8 @@
         <h1 class="hero-title">Midnight Premium</h1>
         <p class="hero-desc">{{ 'home.hero.defaultDesc' | translate }}</p>
         <div class="hero-actions">
-          <a class="btn-primary-cta" routerLink="/movies">
-            <i class="fas fa-film"></i> {{ 'home.hero.explore' | translate }}
+          <a mat-raised-button routerLink="/movies">
+            <mat-icon>movie</mat-icon> {{ 'home.hero.explore' | translate }}
           </a>
         </div>
       </div>
@@ -73,9 +73,9 @@
       <div class="card-poster">
         <img [src]="movie.posterUrl || 'assets/no-poster.jpg'" [alt]="movie.title" (error)="onImgError($event)">
         <div class="card-hover-overlay">
-          <span class="btn-book-small"><i class="fas fa-ticket"></i> {{ 'home.card.book' | translate }}</span>
+          <span class="btn-book-small"><mat-icon>confirmation_number</mat-icon> {{ 'home.card.book' | translate }}</span>
         </div>
-        <div class="card-rating"><i class="fas fa-star"></i> {{ movie.averageRating | number:'1.1-1' }}</div>
+        <div class="card-rating"><mat-icon>star</mat-icon> {{ movie.averageRating | number:'1.1-1' }}</div>
         <span class="card-age">{{ movie.ageRestrictionCode }}</span>
       </div>
       <div class="card-info">
@@ -83,7 +83,7 @@
         <div class="card-genres">
           <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
         </div>
-        <p class="card-duration"><i class="fas fa-clock"></i> {{ 'home.movie.minutes' | translate:{ n: movie.duration } }}</p>
+        <p class="card-duration"><mat-icon>schedule</mat-icon> {{ 'home.movie.minutes' | translate:{ n: movie.duration } }}</p>
       </div>
     </div>
   </div>
@@ -96,7 +96,7 @@
       <span class="marquee-rule"><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i></span>
       <h2 class="section-title">{{ 'home.sections.nowShowing' | translate }}</h2>
     </div>
-    <a routerLink="/movies" class="section-more">{{ 'home.sections.viewAll' | translate }} <i class="fas fa-chevron-right"></i></a>
+    <a routerLink="/movies" class="section-more">{{ 'home.sections.viewAll' | translate }} <mat-icon>chevron_right</mat-icon></a>
   </div>
   <div *ngIf="loading$ | async" class="spinner-wrap">
     <mat-spinner diameter="36"></mat-spinner>
@@ -108,9 +108,9 @@
       <div class="card-poster">
         <img [src]="movie.posterUrl || 'assets/no-poster.jpg'" [alt]="movie.title" (error)="onImgError($event)">
         <div class="card-hover-overlay">
-          <span class="btn-book-small"><i class="fas fa-ticket"></i> {{ 'home.card.book' | translate }}</span>
+          <span class="btn-book-small"><mat-icon>confirmation_number</mat-icon> {{ 'home.card.book' | translate }}</span>
         </div>
-        <div class="card-rating"><i class="fas fa-star"></i> {{ movie.averageRating | number:'1.1-1' }}</div>
+        <div class="card-rating"><mat-icon>star</mat-icon> {{ movie.averageRating | number:'1.1-1' }}</div>
         <span class="card-age">{{ movie.ageRestrictionCode }}</span>
       </div>
       <div class="card-info">
@@ -118,7 +118,7 @@
         <div class="card-genres">
           <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
         </div>
-        <p class="card-duration"><i class="fas fa-clock"></i> {{ 'home.movie.minutes' | translate:{ n: movie.duration } }}</p>
+        <p class="card-duration"><mat-icon>schedule</mat-icon> {{ 'home.movie.minutes' | translate:{ n: movie.duration } }}</p>
       </div>
     </div>
   </div>
@@ -131,7 +131,7 @@
       <span class="marquee-rule"><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i></span>
       <h2 class="section-title">{{ 'home.sections.comingSoon' | translate }}</h2>
     </div>
-    <a routerLink="/movies" class="section-more">{{ 'home.sections.viewAll' | translate }} <i class="fas fa-chevron-right"></i></a>
+    <a routerLink="/movies" class="section-more">{{ 'home.sections.viewAll' | translate }} <mat-icon>chevron_right</mat-icon></a>
   </div>
   <div class="movie-grid">
     <div class="movie-card coming-card" *ngFor="let movie of comingSoon$ | async">
@@ -144,7 +144,7 @@
         <div class="card-genres">
           <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
         </div>
-        <p class="card-date"><i class="fas fa-calendar-days"></i> {{ movie.releaseDate | date:'dd/MM/yyyy' }}</p>
+        <p class="card-date"><mat-icon>event</mat-icon> {{ movie.releaseDate | date:'dd/MM/yyyy' }}</p>
       </div>
     </div>
   </div>
@@ -160,18 +160,18 @@
         {{ 'home.membership.desc' | translate }}
       </p>
       <ul class="membership-perks">
-        <li><i class="fas fa-check-circle"></i> {{ 'home.membership.perk1' | translate }}</li>
-        <li><i class="fas fa-check-circle"></i> {{ 'home.membership.perk2' | translate }}</li>
-        <li><i class="fas fa-check-circle"></i> {{ 'home.membership.perk3' | translate }}</li>
-        <li><i class="fas fa-check-circle"></i> {{ 'home.membership.perk4' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'home.membership.perk1' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'home.membership.perk2' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'home.membership.perk3' | translate }}</li>
+        <li><mat-icon>check_circle</mat-icon> {{ 'home.membership.perk4' | translate }}</li>
       </ul>
-      <a routerLink="/auth/register" class="btn-primary-cta">
-        <i class="fas fa-crown"></i> {{ 'home.membership.join' | translate }}
+      <a mat-raised-button routerLink="/auth/register">
+        <mat-icon>workspace_premium</mat-icon> {{ 'home.membership.join' | translate }}
       </a>
     </div>
     <div class="membership-visual">
       <div class="glass-card-member">
-        <i class="fas fa-crown"></i>
+        <mat-icon>workspace_premium</mat-icon>
         <p>GOLD MEMBER</p>
         <span>Midnight Premium</span>
       </div>
@@ -184,15 +184,15 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <a routerLink="/" class="footer-logo">
-        <i class="fas fa-film"></i>
+        <svg-icon key="logo"></svg-icon>
         <strong>Midnight Premium</strong>
       </a>
       <p>{{ 'home.footer.tagline' | translate }}</p>
       <div class="social-row">
-        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+        <a mat-icon-button href="#"><svg-icon key="facebook"></svg-icon></a>
+        <a mat-icon-button href="#"><svg-icon key="instagram"></svg-icon></a>
+        <a mat-icon-button href="#"><svg-icon key="youtube"></svg-icon></a>
+        <a mat-icon-button href="#"><svg-icon key="tiktok"></svg-icon></a>
       </div>
     </div>
     <div class="footer-col">

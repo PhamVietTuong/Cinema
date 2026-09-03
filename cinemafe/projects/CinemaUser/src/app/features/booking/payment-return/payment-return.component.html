@@ -10,14 +10,14 @@
   <!-- ── SUCCESS ───────────────────────────────────────────────────────────── -->
   <div class="return-state" *ngIf="state === 'success'">
     <div class="success-icon-wrap">
-      <div class="success-icon"><i class="fas fa-check"></i></div>
+      <div class="success-icon"><mat-icon>check</mat-icon></div>
     </div>
     <h2 class="return-title">{{ 'booking.success.title' | translate }}</h2>
     <p class="return-sub">{{ 'booking.success.subtitle' | translate }}</p>
 
     <div class="ticket-card">
       <div class="ticket-top">
-        <div class="ticket-brand"><i class="fas fa-film"></i><span>Midnight Premium</span></div>
+        <div class="ticket-brand"><mat-icon>movie</mat-icon><span>Midnight Premium</span></div>
         <div class="ticket-code">{{ bookingCode }}</div>
       </div>
 
@@ -31,33 +31,33 @@
       <div class="ticket-qr-section">
         <div class="qr-box">
           <img *ngIf="qrDataUrl" [src]="qrDataUrl" alt="E-ticket QR" width="160" height="160">
-          <i *ngIf="!qrDataUrl" class="fas fa-qrcode"></i>
+          <mat-icon *ngIf="!qrDataUrl">qr_code_2</mat-icon>
         </div>
         <p class="qr-instruction">{{ 'booking.success.qrInstruction' | translate }}</p>
       </div>
     </div>
 
     <div class="return-actions">
-      <button class="btn-primary-cta" (click)="goProfile()">
-        <i class="fas fa-ticket-alt"></i> {{ 'booking.success.viewTickets' | translate }}
+      <button mat-raised-button class="btn-primary-cta" (click)="goProfile()">
+        <mat-icon>confirmation_number</mat-icon> {{ 'booking.success.viewTickets' | translate }}
       </button>
-      <button class="btn-ghost-cta" (click)="goHome()">
-        <i class="fas fa-home"></i> {{ 'booking.success.backHome' | translate }}
+      <button mat-stroked-button class="btn-ghost-cta" (click)="goHome()">
+        <mat-icon>home</mat-icon> {{ 'booking.success.backHome' | translate }}
       </button>
     </div>
   </div>
 
   <!-- ── PENDING / FAILED ──────────────────────────────────────────────────── -->
   <div class="return-state" *ngIf="state === 'pending'">
-    <div class="pending-icon"><i class="fas fa-clock"></i></div>
+    <div class="pending-icon"><mat-icon>schedule</mat-icon></div>
     <h2 class="return-title">{{ 'booking.return.pendingTitle' | translate }}</h2>
     <p class="return-sub">{{ 'booking.return.pendingSub' | translate }}</p>
     <div class="return-actions">
-      <button class="btn-primary-cta" (click)="goProfile()">
-        <i class="fas fa-ticket-alt"></i> {{ 'booking.return.checkBookings' | translate }}
+      <button mat-raised-button class="btn-primary-cta" (click)="goProfile()">
+        <mat-icon>confirmation_number</mat-icon> {{ 'booking.return.checkBookings' | translate }}
       </button>
-      <button class="btn-ghost-cta" (click)="goHome()">
-        <i class="fas fa-home"></i> {{ 'booking.success.backHome' | translate }}
+      <button mat-stroked-button class="btn-ghost-cta" (click)="goHome()">
+        <mat-icon>home</mat-icon> {{ 'booking.success.backHome' | translate }}
       </button>
     </div>
   </div>

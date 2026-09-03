@@ -5,15 +5,15 @@
     <div class="cinema-glow"></div>
     <div class="cinema-inner">
       <div class="cinema-brand">
-        <i class="fas fa-film"></i>
+        <svg-icon key="logo"></svg-icon>
         <span>Midnight Premium</span>
       </div>
       <h2 class="cinema-headline">{{ 'auth.register.heroTitle1' | translate }}<br>{{ 'auth.register.heroTitle2' | translate }}</h2>
       <p class="cinema-sub">{{ 'auth.register.heroSub' | translate }}</p>
       <div class="cinema-perks">
-        <div class="perk-item"><i class="fas fa-check-circle"></i> {{ 'auth.register.perk1' | translate }}</div>
-        <div class="perk-item"><i class="fas fa-check-circle"></i> {{ 'auth.register.perk2' | translate }}</div>
-        <div class="perk-item"><i class="fas fa-check-circle"></i> {{ 'auth.register.perk3' | translate }}</div>
+        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.register.perk1' | translate }}</div>
+        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.register.perk2' | translate }}</div>
+        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.register.perk3' | translate }}</div>
       </div>
     </div>
     <div class="cinema-film-strip">
@@ -38,80 +38,80 @@
 
         <div class="field-row-2">
           <div class="field-group">
-            <label class="field-label">{{ 'auth.fields.name' | translate }}</label>
-            <div class="field-wrap">
-              <i class="fas fa-user field-icon"></i>
-              <input class="field-input" type="text" formControlName="name" [placeholder]="'auth.register.namePlaceholder' | translate">
-            </div>
-            <div class="field-error" *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">
-              {{ 'auth.errors.nameRequired' | translate }}
-            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'auth.fields.name' | translate }}</mat-label>
+              <mat-icon matPrefix>person</mat-icon>
+              <input matInput type="text" formControlName="name" [placeholder]="'auth.register.namePlaceholder' | translate">
+              <mat-error *ngIf="form.get('name')?.hasError('required')">
+                {{ 'auth.errors.nameRequired' | translate }}
+              </mat-error>
+            </mat-form-field>
           </div>
           <div class="field-group">
-            <label class="field-label">{{ 'auth.fields.phone' | translate }}</label>
-            <div class="field-wrap">
-              <i class="fas fa-phone field-icon"></i>
-              <input class="field-input" type="tel" formControlName="phone" placeholder="0901234567">
-            </div>
-            <div class="field-error" *ngIf="form.get('phone')?.touched && form.get('phone')?.hasError('required')">
-              {{ 'auth.errors.phoneRequired' | translate }}
-            </div>
-            <div class="field-error" *ngIf="form.get('phone')?.touched && form.get('phone')?.hasError('pattern')">
-              {{ 'auth.errors.phoneInvalid' | translate }}
-            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'auth.fields.phone' | translate }}</mat-label>
+              <mat-icon matPrefix>phone</mat-icon>
+              <input matInput type="tel" formControlName="phone" placeholder="0901234567">
+              <mat-error *ngIf="form.get('phone')?.hasError('required')">
+                {{ 'auth.errors.phoneRequired' | translate }}
+              </mat-error>
+              <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+                {{ 'auth.errors.phoneInvalid' | translate }}
+              </mat-error>
+            </mat-form-field>
           </div>
         </div>
 
         <div class="field-group">
-          <label class="field-label">{{ 'auth.fields.email' | translate }}</label>
-          <div class="field-wrap">
-            <i class="fas fa-envelope field-icon"></i>
-            <input class="field-input" type="email" formControlName="email" placeholder="email@example.com">
-          </div>
-          <div class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">
-            {{ 'auth.errors.emailRequired' | translate }}
-          </div>
-          <div class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">
-            {{ 'auth.errors.emailInvalid' | translate }}
-          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'auth.fields.email' | translate }}</mat-label>
+            <mat-icon matPrefix>mail</mat-icon>
+            <input matInput type="email" formControlName="email" placeholder="email@example.com">
+            <mat-error *ngIf="form.get('email')?.hasError('required')">
+              {{ 'auth.errors.emailRequired' | translate }}
+            </mat-error>
+            <mat-error *ngIf="form.get('email')?.hasError('email')">
+              {{ 'auth.errors.emailInvalid' | translate }}
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <div class="field-group">
-          <label class="field-label">{{ 'auth.fields.password' | translate }}</label>
-          <div class="field-wrap">
-            <i class="fas fa-lock field-icon"></i>
-            <input class="field-input" type="password" formControlName="password" [placeholder]="'auth.fields.passwordPlaceholder' | translate">
-          </div>
-          <div class="field-error" *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
-            {{ 'auth.errors.passwordRequired' | translate }}
-          </div>
-          <div class="field-error" *ngIf="form.get('password')?.touched && form.get('password')?.hasError('minlength')">
-            {{ 'auth.errors.passwordMinLength' | translate }}
-          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'auth.fields.password' | translate }}</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput type="password" formControlName="password" [placeholder]="'auth.fields.passwordPlaceholder' | translate">
+            <mat-error *ngIf="form.get('password')?.hasError('required')">
+              {{ 'auth.errors.passwordRequired' | translate }}
+            </mat-error>
+            <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+              {{ 'auth.errors.passwordMinLength' | translate }}
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <div class="field-group">
-          <label class="field-label">{{ 'auth.fields.confirmPassword' | translate }}</label>
-          <div class="field-wrap">
-            <i class="fas fa-lock field-icon"></i>
-            <input class="field-input" type="password" formControlName="confirmPassword" [placeholder]="'auth.fields.confirmPasswordPlaceholder' | translate">
-          </div>
-          <div class="field-error" *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.hasError('required')">
-            {{ 'auth.errors.confirmPasswordRequired' | translate }}
-          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'auth.fields.confirmPassword' | translate }}</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput type="password" formControlName="confirmPassword" [placeholder]="'auth.fields.confirmPasswordPlaceholder' | translate">
+            <mat-error *ngIf="form.get('confirmPassword')?.hasError('required')">
+              {{ 'auth.errors.confirmPasswordRequired' | translate }}
+            </mat-error>
+          </mat-form-field>
           <div class="field-error" *ngIf="form.get('confirmPassword')?.touched && form.hasError('passwordMismatch')">
             {{ 'auth.errors.passwordMismatch' | translate }}
           </div>
         </div>
 
         <div class="api-error" *ngIf="error$ | async as err">
-          <i class="fas fa-exclamation-circle"></i> {{ err }}
+          <mat-icon>error</mat-icon> {{ err }}
         </div>
 
-        <button type="submit" class="btn-primary-cta submit-btn" [disabled]="loading$ | async">
+        <button type="submit" mat-raised-button class="btn-primary-cta submit-btn" [disabled]="loading$ | async">
           <mat-spinner diameter="18" *ngIf="loading$ | async"></mat-spinner>
           <ng-container *ngIf="!(loading$ | async)">
-            {{ 'auth.register.submit' | translate }} <i class="fas fa-arrow-right"></i>
+            {{ 'auth.register.submit' | translate }} <mat-icon>arrow_forward</mat-icon>
           </ng-container>
         </button>
       </form>

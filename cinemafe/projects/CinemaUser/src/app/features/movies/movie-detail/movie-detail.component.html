@@ -20,7 +20,7 @@
         <h1 class="hero-title">{{ movie.title }}</h1>
 
         <div class="hero-meta">
-          <span class="meta-star"><i class="fas fa-star"></i> {{ movie.averageRating | number:'1.1-1' }}</span>
+          <span class="meta-star"><mat-icon>star</mat-icon> {{ movie.averageRating | number:'1.1-1' }}</span>
           <span class="sep">·</span>
           <span>{{ movie.duration }} phút</span>
           <span class="sep">·</span>
@@ -32,8 +32,8 @@
         </div>
 
         <div class="hero-actions">
-          <button class="btn-primary-cta" (click)="scrollToShowtimes()"><i class="fas fa-ticket"></i> {{ 'movies.detail.bookNow' | translate }}</button>
-          <a class="btn-ghost-cta" *ngIf="movie.trailerUrl" [href]="movie.trailerUrl" target="_blank"><i class="fas fa-play"></i> {{ 'movies.detail.watchTrailer' | translate }}</a>
+          <button mat-raised-button type="button" (click)="scrollToShowtimes()"><mat-icon>confirmation_number</mat-icon> {{ 'movies.detail.bookNow' | translate }}</button>
+          <a mat-stroked-button *ngIf="movie.trailerUrl" [href]="movie.trailerUrl" target="_blank"><mat-icon>play_arrow</mat-icon> {{ 'movies.detail.watchTrailer' | translate }}</a>
         </div>
       </div>
 
@@ -43,7 +43,7 @@
           <span class="score-label">Audience<br>Score</span>
         </div>
         <div class="score-stars">
-          <i *ngFor="let i of [1,2,3,4,5]" class="fas fa-star" [class.lit]="i <= (movie.averageRating / 2)"></i>
+          <mat-icon *ngFor="let i of [1,2,3,4,5]" [class.lit]="i <= (movie.averageRating / 2)">star</mat-icon>
         </div>
         <span class="score-count">{{ 'movies.detail.ratingCount' | translate:{ count: (movie.ratingCount | number) } }}</span>
       </div>
@@ -139,13 +139,17 @@
                     [class.on]="s <= myScore" (click)="setScore(s)" [title]="s + '/10'">★</button>
             <span class="rate-score" *ngIf="myScore">{{ myScore }}/10</span>
           </div>
-          <textarea class="rate-input" [(ngModel)]="myReview" rows="2" [placeholder]="'movies.detail.reviewPlaceholder' | translate"></textarea>
-          <button class="btn-primary-cta" type="button" [disabled]="myScore < 1" (click)="submitRating()">{{ 'movies.detail.submitRating' | translate }}</button>
+          <mat-form-field appearance="outline">
+            <textarea matInput [(ngModel)]="myReview" rows="2" [placeholder]="'movies.detail.reviewPlaceholder' | translate"></textarea>
+          </mat-form-field>
+          <button mat-raised-button type="button" [disabled]="myScore < 1" (click)="submitRating()">{{ 'movies.detail.submitRating' | translate }}</button>
         </div>
 
         <div class="rate-box">
-          <textarea class="rate-input" [(ngModel)]="newComment" rows="2" [placeholder]="'movies.detail.commentPlaceholder' | translate"></textarea>
-          <button class="btn-primary-cta" type="button" [disabled]="!newComment.trim()" (click)="submitComment()">{{ 'movies.detail.submitComment' | translate }}</button>
+          <mat-form-field appearance="outline">
+            <textarea matInput [(ngModel)]="newComment" rows="2" [placeholder]="'movies.detail.commentPlaceholder' | translate"></textarea>
+          </mat-form-field>
+          <button mat-raised-button type="button" [disabled]="!newComment.trim()" (click)="submitComment()">{{ 'movies.detail.submitComment' | translate }}</button>
         </div>
       </ng-container>
 

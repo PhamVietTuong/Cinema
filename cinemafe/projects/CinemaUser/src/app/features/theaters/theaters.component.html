@@ -3,16 +3,18 @@
     <h1 class="page-title">{{ 'theaters.pageTitle' | translate }}</h1>
     <p class="page-sub">{{ 'theaters.pageSub' | translate }}</p>
     <div class="filter-row" *ngIf="cities.length">
-      <select class="city-select" [(ngModel)]="city">
-        <option value="">{{ 'theaters.allCities' | translate }}</option>
-        <option *ngFor="let c of cities" [value]="c">{{ c }}</option>
-      </select>
-      <button type="button" class="near-btn" (click)="findNearest()" [disabled]="locating">
-        <i class="fas fa-location-crosshairs"></i>
+      <mat-form-field appearance="outline">
+        <mat-select [(ngModel)]="city">
+          <mat-option value="">{{ 'theaters.allCities' | translate }}</mat-option>
+          <mat-option *ngFor="let c of cities" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button type="button" class="near-btn" (click)="findNearest()" [disabled]="locating">
+        <mat-icon>my_location</mat-icon>
         {{ locating ? ('theaters.locating' | translate) : (hasLocation ? ('theaters.sortByDistance' | translate) : ('theaters.findNearest' | translate)) }}
       </button>
     </div>
-    <p class="geo-error" *ngIf="geoError"><i class="fas fa-triangle-exclamation"></i> {{ geoError }}</p>
+    <p class="geo-error" *ngIf="geoError"><mat-icon>warning</mat-icon> {{ geoError }}</p>
   </div>
 </div>
 
@@ -20,7 +22,7 @@
   <div *ngIf="loading" class="spinner-wrap"><mat-spinner diameter="40"></mat-spinner></div>
 
   <div *ngIf="!loading && !filtered.length" class="empty">
-    <i class="fas fa-film"></i>
+    <mat-icon>movie</mat-icon>
     <p>{{ 'theaters.empty' | translate }}</p>
   </div>
 
@@ -29,17 +31,17 @@
       <div class="theater-photo">
         <img [src]="t.imageUrl || 'assets/no-poster.jpg'" [alt]="t.name">
         <span class="city-chip" *ngIf="t.city">{{ t.city }}</span>
-        <span class="dist-chip" *ngIf="distanceKm(t) as d"><i class="fas fa-location-arrow"></i> {{ d | number:'1.0-1' }} km</span>
+        <span class="dist-chip" *ngIf="distanceKm(t) as d"><mat-icon>near_me</mat-icon> {{ d | number:'1.0-1' }} km</span>
       </div>
       <div class="theater-body">
         <h3 class="theater-name">{{ t.name }}</h3>
-        <p class="theater-addr"><i class="fas fa-location-dot"></i> {{ t.address }}</p>
+        <p class="theater-addr"><mat-icon>place</mat-icon> {{ t.address }}</p>
         <div class="theater-meta">
-          <span><i class="fas fa-door-open"></i> {{ 'theaters.roomCount' | translate:{ n: (t.roomCount || 0) } }}</span>
-          <span *ngIf="t.phone"><i class="fas fa-phone"></i> {{ t.phone }}</span>
+          <span><mat-icon>meeting_room</mat-icon> {{ 'theaters.roomCount' | translate:{ n: (t.roomCount || 0) } }}</span>
+          <span *ngIf="t.phone"><mat-icon>phone</mat-icon> {{ t.phone }}</span>
         </div>
-        <a class="btn-primary-cta theater-cta" routerLink="/movies">
-          <i class="fas fa-ticket"></i> {{ 'theaters.viewShowtimes' | translate }}
+        <a mat-raised-button class="btn-primary-cta theater-cta" routerLink="/movies">
+          <mat-icon>local_activity</mat-icon> {{ 'theaters.viewShowtimes' | translate }}
         </a>
       </div>
     </div>
