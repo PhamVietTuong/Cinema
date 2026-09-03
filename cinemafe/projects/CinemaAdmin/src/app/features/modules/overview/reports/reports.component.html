@@ -5,9 +5,15 @@
       <p class="ad-sub">{{ 'reports.subtitle' | translate }}</p>
     </div>
     <div class="ad-toolbar rp-range">
-      <span class="ad-field"><label class="ad-label">{{ 'reports.from' | translate }}</label><input class="ad-input" type="date" [(ngModel)]="from"></span>
-      <span class="ad-field"><label class="ad-label">{{ 'reports.to' | translate }}</label><input class="ad-input" type="date" [(ngModel)]="to"></span>
-      <button class="ad-btn ad-btn--primary" (click)="load()" [disabled]="loading"><mat-icon>refresh</mat-icon> {{ 'common.update' | translate }}</button>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'reports.from' | translate }}</mat-label>
+        <input matInput type="date" [(ngModel)]="from">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'reports.to' | translate }}</mat-label>
+        <input matInput type="date" [(ngModel)]="to">
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="load()" [disabled]="loading"><mat-icon>refresh</mat-icon> {{ 'common.update' | translate }}</button>
     </div>
   </div>
 

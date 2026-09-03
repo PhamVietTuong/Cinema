@@ -16,6 +16,7 @@ interface RevenueDay { date?: string; total?: number; }
 export class DashboardComponent implements OnInit {
   stats = { movies: 0, theaters: 0, invoicesToday: 0, revenueToday: 0 };
   invoices: PaymentServiceAgent.InvoiceDTO[] = [];
+  readonly invoiceColumns = ['code', 'customer', 'amount', 'status', 'date'];
   topMovies: CinemaServiceAgent.MovieDTO[] = [];
 
   // Revenue trend; bar height is each day's revenue as a % of the period's peak.
