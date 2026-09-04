@@ -46,8 +46,11 @@
     </button>
   </div>
 
-  <!-- Mobile menu panel -->
-  <div class="mobile-menu" [class.is-open]="menuOpen">
+</nav>
+
+<mat-sidenav-container class="app-shell">
+  <!-- Mobile menu drawer -->
+  <mat-sidenav class="mobile-menu" position="end" mode="over" [opened]="menuOpen" (openedChange)="onSidenavOpenedChange($event)">
     <a routerLink="/movies" routerLinkActive="active-link" (click)="closeMenu()">{{ 'nav.movies' | translate }}</a>
     <a routerLink="/theaters" routerLinkActive="active-link" (click)="closeMenu()">{{ 'nav.theaters' | translate }}</a>
     <a routerLink="/promotions" routerLinkActive="active-link" (click)="closeMenu()">{{ 'nav.promotions' | translate }}</a>
@@ -69,10 +72,10 @@
       <a routerLink="/auth/login" (click)="closeMenu()">{{ 'nav.login' | translate }}</a>
       <a routerLink="/auth/register" (click)="closeMenu()">{{ 'nav.register' | translate }}</a>
     </ng-template>
-  </div>
-</nav>
-<div class="mobile-menu-scrim" *ngIf="menuOpen" (click)="closeMenu()"></div>
+  </mat-sidenav>
 
-<router-outlet></router-outlet>
-
-<app-chatbot></app-chatbot>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+    <app-chatbot></app-chatbot>
+  </mat-sidenav-content>
+</mat-sidenav-container>

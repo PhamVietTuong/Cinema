@@ -35,6 +35,9 @@ export class App implements OnInit {
   toggleMenu(): void { this.menuOpen = !this.menuOpen; }
   closeMenu(): void { this.menuOpen = false; }
 
+  /** mat-sidenav emits this on any open/close (backdrop click, escape key, or our own toggle). */
+  onSidenavOpenedChange(opened: boolean): void { this.menuOpen = opened; }
+
   toggleTheme(): void { this.theme.toggle(); }
 
   doLogout(): void {

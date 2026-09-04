@@ -1,18 +1,14 @@
 :host { display: block; }
 
 .admin-shell {
-  display: flex;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 // ── Sidebar ─────────────────────────────────────────────────────────────────
+// Positioning (static side rail vs. off-canvas 'over' drawer + backdrop) is handled by
+// mat-sidenav itself based on its [mode] input — only visual styling lives here.
 .sidebar {
-  position: sticky;
-  top: 0;
-  align-self: flex-start;
-  height: 100vh;
   width: var(--ad-sidebar-w);
-  flex: none;
   display: flex;
   flex-direction: column;
   padding: 22px 16px;
@@ -102,7 +98,7 @@
 }
 
 // ── Main column ─────────────────────────────────────────────────────────────
-.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.main { display: flex; flex-direction: column; min-height: 100%; }
 
 .topbar {
   position: sticky;
@@ -121,9 +117,8 @@
 
 .content { flex: 1; min-width: 0; }
 
-// Hamburger + drawer scrim are desktop-hidden; revealed at the mobile breakpoint.
+// Hamburger is desktop-hidden; revealed at the mobile breakpoint.
 .menu-toggle { display: none; margin-right: 12px; }
-.sidebar-scrim { display: none; }
 
 // ── Responsive ──────────────────────────────────────────────────────────────
 // Tablet: collapse the sidebar to an icon rail.
@@ -135,31 +130,13 @@
   .profile { justify-content: center; }
 }
 
-// Mobile: sidebar becomes an off-canvas drawer toggled by the hamburger.
+// Mobile: sidebar becomes an off-canvas mat-sidenav drawer (mode="over") toggled by the
+// hamburger; the drawer's own slide-in animation and backdrop replace what used to be
+// hand-rolled here.
 @media (max-width: 768px) {
   .menu-toggle { display: inline-flex; }
 
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: min(280px, 84vw);
-    z-index: 60;
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-    overflow-y: auto;
-  }
-  .sidebar.is-open { transform: translateX(0); }
-
-  .admin-shell.menu-open .sidebar-scrim {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 55;
-    background: rgba(21, 23, 29, 0.4);
-    backdrop-filter: blur(2px);
-  }
+  .sidebar { width: min(280px, 84vw); }
 
   .topbar { padding: 0 16px; }
   .topbar-title { font-size: 16px; }
