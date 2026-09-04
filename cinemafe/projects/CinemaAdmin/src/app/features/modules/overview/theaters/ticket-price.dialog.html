@@ -33,10 +33,11 @@
     </div>
 
     <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.priceLabel' | translate }}</mat-label>
+      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.multiplierLabel' | translate }}</mat-label>
       <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" formControlName="price" placeholder="70000">
-        <mat-error *ngIf="form.controls['price'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+        <input matInput type="number" step="0.05" min="0.01" formControlName="priceMultiplier" placeholder="1.2">
+        <mat-error *ngIf="form.controls['priceMultiplier'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+        <mat-hint>{{ 'theaters.ticketPrices.multiplierHint' | translate }}</mat-hint>
       </mat-form-field>
     </div>
 

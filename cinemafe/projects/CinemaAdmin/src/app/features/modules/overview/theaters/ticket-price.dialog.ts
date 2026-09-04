@@ -43,7 +43,7 @@ export class TicketPriceDialog {
       seatTypeId: [_data.ticketPrice?.seatTypeId ?? '', Validators.required],
       timeSlotId: [_data.ticketPrice?.timeSlotId ?? '', Validators.required],
       isHoliday: [_data.ticketPrice?.isHoliday ?? false],
-      price: [_data.ticketPrice?.price ?? 0, [Validators.required, Validators.min(0)]],
+      priceMultiplier: [_data.ticketPrice?.priceMultiplier ?? 1, [Validators.required, Validators.min(0.01)]],
     });
   }
 

@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthManager, AuthManager>();
         services.AddSingleton<INotificationService, DevLogNotificationService>();
         services.AddSingleton<ISmsNotificationService, DevLogSmsNotificationService>();
+        services.AddSingleton<ISeatNotificationService, NoOpSeatNotificationService>();
         services.AddSingleton<IGoogleTokenValidator, GoogleTokenValidator>();
         services.AddSingleton<IFacebookTokenValidator, FacebookTokenValidator>();
         services.AddScoped<IMovieManager, MovieManager>();
@@ -29,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IDiscountTypeManager, DiscountTypeManager>();
         services.AddScoped<IMovieTypeManager, MovieTypeManager>();
         services.AddScoped<ISeatTypeManager, SeatTypeManager>();
+        services.AddScoped<IPatronCategoryManager, PatronCategoryManager>();
         services.AddScoped<IUserTypeManager, UserTypeManager>();
         services.AddScoped<IMemberShipManager, MemberShipManager>();
         services.AddScoped<IHolidayManager, HolidayManager>();

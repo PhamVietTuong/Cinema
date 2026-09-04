@@ -48,8 +48,8 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column [name]="'common.price' | translate" prop="price" [sortable]="false">
-        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.price | number:'1.0-0' }}đ</ng-template>
+      <ngx-datatable-column [name]="'theaters.ticketPrices.multiplierLabel' | translate" prop="priceMultiplier" [sortable]="false">
+        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.priceMultiplier | number:'1.1-2' }}×</ng-template>
       </ngx-datatable-column>
 
       <ngx-datatable-column [name]="'common.actions' | translate" [sortable]="false" [width]="150" [canAutoResize]="false">
@@ -76,7 +76,7 @@
             {{ row.isHoliday ? ('theaters.ticketPrices.holiday' | translate) : ('theaters.ticketPrices.regularDay' | translate) }}
           </span>
         </div>
-        <div class="ad-mobile-card-row"><span>{{ 'common.price' | translate }}</span><span>{{ row.price | number:'1.0-0' }}đ</span></div>
+        <div class="ad-mobile-card-row"><span>{{ 'theaters.ticketPrices.multiplierLabel' | translate }}</span><span>{{ row.priceMultiplier | number:'1.1-2' }}×</span></div>
         <div class="ad-mobile-card-actions">
           <button mat-icon-button (click)="edit(row)" [matTooltip]="'common.edit' | translate"><mat-icon>edit</mat-icon></button>
           <button mat-icon-button (click)="delete(row.id)" [matTooltip]="'common.delete' | translate"><mat-icon>delete</mat-icon></button>

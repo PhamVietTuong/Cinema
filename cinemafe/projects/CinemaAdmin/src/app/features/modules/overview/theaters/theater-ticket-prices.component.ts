@@ -14,7 +14,10 @@ import { TicketPriceDialog } from './ticket-price.dialog';
 
 type Dto = CinemaServiceAgent.TicketPriceDTO;
 
-/** Ticket-price management scoped to a single theater: explicit price per seat type × time slot × holiday. */
+/**
+ * Ticket-price management scoped to a single theater: a pricing multiplier per seat type ×
+ * time slot × holiday, applied to the showtime's own base price (not an absolute amount).
+ */
 @Component({
   selector: 'app-theater-ticket-prices',
   standalone: false,

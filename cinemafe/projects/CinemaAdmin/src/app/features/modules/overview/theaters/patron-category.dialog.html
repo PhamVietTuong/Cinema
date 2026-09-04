@@ -1,0 +1,41 @@
+<div mat-dialog-title class="dialog-title">{{ (editingId ? 'theaters.patronCategories.editTitle' : 'theaters.patronCategories.newTitle') | translate }}</div>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'theaters.patronCategories.nameLabel' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="dialog-row-field">
+        <input matInput formControlName="name" [placeholder]="'theaters.patronCategories.namePlaceholder' | translate">
+        <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'theaters.patronCategories.discountLabel' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="dialog-row-field">
+        <input matInput type="number" step="1" min="0" max="100" formControlName="discountPercent" placeholder="0">
+        <mat-error *ngIf="form.controls['discountPercent'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-row">
+      <mat-checkbox formControlName="isActive">{{ 'theaters.patronCategories.activeLabel' | translate }}</mat-checkbox>
+    </div>
+
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'common.description' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="dialog-row-field">
+        <input matInput formControlName="description" [placeholder]="'theaters.patronCategories.descPlaceholder' | translate">
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-raised-button type="button" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit">{{ 'common.save' | translate }}</button>
+  </div>
+</form>
+
+<button mat-icon-button type="button" class="dialog-close-btn" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>

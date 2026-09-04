@@ -237,7 +237,7 @@ BEGIN
         [SeatTypeId] uniqueidentifier NOT NULL,
         [TimeSlotId] uniqueidentifier NOT NULL,
         [IsHoliday] bit NOT NULL,
-        [Price] float NOT NULL,
+        [PriceMultiplier] float NOT NULL DEFAULT 1,
         [CreationTime] datetime NOT NULL,
         [LastUpdatedTime] datetime NULL,
         CONSTRAINT [PK_TicketPrice] PRIMARY KEY ([Id]),
@@ -538,6 +538,82 @@ EXEC('UPDATE [RoomType]
       WHERE  [Name] IN (N''3D'', N''IMAX'', N''4DX'')
         AND  [SupportsThreeD] = 0
         AND  [ThreeDSurcharge] = 0');
+
+-- ── TicketPrice.Price becomes a multiplier ──────────────────────────────────
+-- TicketPrice used to hold an absolute VND amount that fully replaced ShowTimeRoom.BasePrice
+-- whenever a matching row existed — which let a generic time-slot row silently undercut a
+-- movie-specific price (e.g. a premiere's bumped-up BasePrice). It now holds a factor applied
+-- to BasePrice instead, mirroring SeatType.PriceMultiplier / Holiday.PriceMultiplier.
+PRINT 'upgrade: converting TicketPrice.Price to PriceMultiplier...';
+
+IF COL_LENGTH('TicketPrice', 'Price') IS NOT NULL AND COL_LENGTH('TicketPrice', 'PriceMultiplier') IS NULL
+BEGIN
+    EXEC sp_rename 'TicketPrice.Price', 'PriceMultiplier', 'COLUMN';
+END
+
+-- Rows created before this change hold absolute VND amounts (e.g. 22222, 80000) — not valid
+-- multipliers, and no multiplier can be inferred from an absolute price. Reset any such leftover
+-- row to its seat type's own multiplier (reproducing what the fallback pricing branch already
+-- charged); an operator must re-enter the intended time-slot premium for these afterward. A
+-- plausible multiplier (<=10) is left untouched.
+IF COL_LENGTH('TicketPrice', 'PriceMultiplier') IS NOT NULL
+BEGIN
+    EXEC('UPDATE p SET p.[PriceMultiplier] = st.[PriceMultiplier]
+          FROM   [TicketPrice] p
+          JOIN   [SeatType] st ON st.[Id] = p.[SeatTypeId]
+          WHERE  p.[PriceMultiplier] > 10');
+END
+
+-- ── per-ticket patron category pricing (Adult/Student/Senior/Child) ─────────
+-- A per-theater lookup, chosen per seat at checkout, mirroring how SeatType/TicketPrice already
+-- scale a showtime's BasePrice. InvoiceTicket keeps a name+percent snapshot (no FK, like
+-- Invoice.GiftCardId) so historical tickets stay truthful if a category is later renamed/deleted.
+PRINT 'upgrade: adding PatronCategory...';
+
+IF OBJECT_ID('PatronCategory', 'U') IS NULL
+BEGIN
+    CREATE TABLE [PatronCategory] (
+        [Id] uniqueidentifier NOT NULL DEFAULT NEWID(),
+        [TheaterId] uniqueidentifier NOT NULL,
+        [Name] nvarchar(100) NOT NULL,
+        [Description] nvarchar(max) NULL,
+        [DiscountPercent] float NOT NULL DEFAULT 0,
+        [IsActive] bit NOT NULL DEFAULT 1,
+        [CreationTime] datetime NOT NULL,
+        [LastUpdatedTime] datetime NULL,
+        CONSTRAINT [PK_PatronCategory] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_PatronCategory_Theater_TheaterId] FOREIGN KEY ([TheaterId]) REFERENCES [Theater] ([Id]) ON DELETE CASCADE
+    );
+    CREATE INDEX [IX_PatronCategory_TheaterId] ON [PatronCategory] ([TheaterId]);
+    PRINT 'Created [PatronCategory].';
+END
+
+IF COL_LENGTH('[InvoiceTicket]', 'PatronCategoryId') IS NULL
+BEGIN
+    ALTER TABLE [InvoiceTicket] ADD [PatronCategoryId] uniqueidentifier NULL;
+    PRINT 'Added [InvoiceTicket].[PatronCategoryId].';
+END
+IF COL_LENGTH('[InvoiceTicket]', 'PatronCategoryName') IS NULL
+BEGIN
+    ALTER TABLE [InvoiceTicket] ADD [PatronCategoryName] nvarchar(100) NULL;
+    PRINT 'Added [InvoiceTicket].[PatronCategoryName].';
+END
+IF COL_LENGTH('[InvoiceTicket]', 'PatronDiscountPercent') IS NULL
+BEGIN
+    ALTER TABLE [InvoiceTicket] ADD [PatronDiscountPercent] float NOT NULL CONSTRAINT [DF_InvoiceTicket_PatronDiscountPercent] DEFAULT 0;
+    PRINT 'Added [InvoiceTicket].[PatronDiscountPercent].';
+END
+
+-- Seed the four default categories for every theater that has none yet (idempotent: a theater
+-- that already has at least one row — including one an admin has since customised — is skipped).
+IF OBJECT_ID('PatronCategory', 'U') IS NOT NULL
+BEGIN
+    INSERT INTO [PatronCategory] ([Id], [TheaterId], [Name], [DiscountPercent], [IsActive], [CreationTime])
+    SELECT NEWID(), t.[Id], v.[Name], v.[DiscountPercent], 1, GETUTCDATE()
+    FROM   [Theater] t
+    CROSS JOIN (VALUES (N'Adult', 0), (N'Student', 25), (N'Senior', 30), (N'Child', 40)) AS v([Name], [DiscountPercent])
+    WHERE  NOT EXISTS (SELECT 1 FROM [PatronCategory] pc WHERE pc.[TheaterId] = t.[Id]);
+END
 
 PRINT 'upgrade_db.sql: completed.';
 
