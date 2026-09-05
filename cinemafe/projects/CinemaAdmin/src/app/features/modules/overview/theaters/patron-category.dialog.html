@@ -28,6 +28,17 @@
         <input matInput formControlName="description" [placeholder]="'theaters.patronCategories.descPlaceholder' | translate">
       </mat-form-field>
     </div>
+
+    <div class="dialog-row">
+      <mat-label class="dialog-row-label">{{ 'theaters.patronCategories.allowedSeatTypesLabel' | translate }}</mat-label>
+      <p class="ad-sub">{{ 'theaters.patronCategories.allowedSeatTypesHint' | translate }}</p>
+      <div class="ad-checkbox-list">
+        <label class="ad-label" *ngFor="let st of seatTypes">
+          <input type="checkbox" [checked]="isSeatTypeSelected(st.id)" (change)="toggleSeatType(st.id)">
+          {{ st.name }}
+        </label>
+      </div>
+    </div>
   </mat-dialog-content>
 
   <div mat-dialog-actions class="dialog-actions">

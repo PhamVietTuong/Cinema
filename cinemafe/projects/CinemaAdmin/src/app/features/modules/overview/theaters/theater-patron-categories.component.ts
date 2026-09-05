@@ -24,6 +24,8 @@ type Dto = CinemaServiceAgent.PatronCategoryDTO;
 export class TheaterPatronCategoriesComponent extends BaseTableComponent<Dto> {
   @Input({ required: true }) theaterId!: string;
 
+  seatTypes: CinemaServiceAgent.SeatTypeDTO[] = [];
+
   constructor(
     cd: ChangeDetectorRef,
     fb: FormBuilder,
@@ -34,6 +36,16 @@ export class TheaterPatronCategoriesComponent extends BaseTableComponent<Dto> {
     private _dialogService: DialogService,
   ) {
     super(cd, fb, router, store);
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this._svc.getSeatTypes(CinemaServiceAgent.PagingSearchDTO.fromJS({
+      pageIndex: 1, pageSize: 100, filters: { theaterId: this.theaterId },
+    })).subscribe(r => {
+      this.seatTypes = r.results ?? [];
+      this._cd.markForCheck();
+    });
   }
 
   protected override _createSearchForm(): void {
@@ -55,12 +67,12 @@ export class TheaterPatronCategoriesComponent extends BaseTableComponent<Dto> {
   }
 
   openCreate(): void {
-    this._dialog.open(PatronCategoryDialog, { width: '480px', data: { theaterId: this.theaterId, patronCategory: null } })
+    this._dialog.open(PatronCategoryDialog, { width: '480px', data: { theaterId: this.theaterId, patronCategory: null, seatTypes: this.seatTypes } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(item: Dto): void {
-    this._dialog.open(PatronCategoryDialog, { width: '480px', data: { theaterId: this.theaterId, patronCategory: item } })
+    this._dialog.open(PatronCategoryDialog, { width: '480px', data: { theaterId: this.theaterId, patronCategory: item, seatTypes: this.seatTypes } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
@@ -85,5 +97,16 @@ export class TheaterPatronCategoriesComponent extends BaseTableComponent<Dto> {
       },
       error: error => this._store.dispatch(showException({ error })),
     }).add(() => this._store.dispatch(hideLoading()));
+  }
+
+  /** Null means unrestricted (all seat types) — the template renders a translated "All" label. */
+  allowedSeatTypeNames(item: Dto): string | null {
+    if (!item.allowedSeatTypeIds?.length) {
+      return null;
+    }
+    return this.seatTypes
+      .filter(st => item.allowedSeatTypeIds!.includes(st.id!))
+      .map(st => st.name)
+      .join(', ');
   }
 }
