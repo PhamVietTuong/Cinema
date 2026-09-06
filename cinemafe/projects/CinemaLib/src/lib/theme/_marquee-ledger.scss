@@ -732,6 +732,11 @@ select.ad-filter-input { appearance: none; cursor: pointer; }
       color: var(--ml-ink-2);
       border-bottom: 1px solid var(--ml-rule-soft);
     }
+    // The vendor also paints its own hardcoded #eee hover fill on this nested
+    // wrapper (not the row), on top of and independent from the row's own
+    // background — so overriding .datatable-body-row:hover alone leaves this
+    // light-gray fill showing right through. Neutralize it explicitly.
+    .datatable-row-group { background: transparent; }
     &:hover, &.active { background: var(--ml-hover); }
   }
   .datatable-body-cell-label { font-family: var(--ml-font-data); }
