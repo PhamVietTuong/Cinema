@@ -1,0 +1,125 @@
+// The "Marquee Ledger" custom-property table, factored out of _marquee-ledger.scss
+// so a component outside CinemaAdmin can scope the same palette to its own host
+// element (see CinemaUser's profile.component.scss) without pulling in Admin's
+// global reset/.ad-* helper classes. Mixins only — @use'ing this file emits nothing.
+
+@mixin ml-light-tokens {
+  // ── Surfaces ─────────────────────────────────────────────────────────────
+  --ml-paper:    #f7f3ec;   // page ground — warm ticket-paper, not cream+serif cream
+  --ml-paper-2:  #f2ece1;   // inset / recessed
+  --ml-panel:    #ffffff;   // cards, inputs, tables
+  --ml-panel-2:  #f2ece1;   // hover / raised
+  --ml-panel-3:  #ece4d5;   // inert fills, avatars, chips, neutral KPI icon
+  --ml-panel-4:  #ddd2bd;   // scrollbar thumb, strong fill
+
+  // ── Ink ──────────────────────────────────────────────────────────────────
+  --ml-ink:    #211a12;
+  --ml-ink-2:  #4a3f30;
+  --ml-muted:  #8a7a63;
+  --ml-faint:  #b0a48d;
+
+  // ── Rules. The primary structural device — this direction has no shadows. ─
+  --ml-rule:        rgba(33, 26, 18, 0.16);
+  --ml-rule-strong: rgba(33, 26, 18, 0.28);
+  --ml-rule-soft:   rgba(33, 26, 18, 0.09);
+  --ml-hover:       rgba(33, 26, 18, 0.035);
+
+  // ── Action. One colour — marquee gold — one job. ─────────────────────────
+  --ml-action:        #e3a53a;
+  --ml-action-strong: #c98a2b;  // deepened for legible text/small-numeral use on a light ground
+  --ml-action-soft:   rgba(227, 165, 58, 0.14);
+  --ml-action-ring:   rgba(227, 165, 58, 0.30);
+  --ml-on-action:     #1b1610;  // gold is a light fill — text on it is dark ink, never white
+  // Secondary emphasis — informational, never competing with the action.
+  --ml-second:        #2f8f7e;
+
+  // ── Semantic. Legibility first: these sit on a ~12% tint of themselves. ───
+  --ml-success:      #2f8f7e;
+  --ml-success-soft: rgba(47, 143, 126, 0.12);
+  --ml-success-ink:  #1f6657;
+  --ml-warn:         #a8571f;
+  --ml-warn-soft:    rgba(168, 87, 31, 0.12);
+  --ml-warn-ink:     #7c4014;
+  --ml-danger:       #b23a33;
+  --ml-danger-soft:  rgba(178, 58, 51, 0.10);
+  --ml-danger-ink:   #8c231d;
+  --ml-info:         #2f6a9e;
+
+  // ── Radius — a ticket stub's corner, not a pill. ─────────────────────────
+  --ml-r-sm:   4px;
+  --ml-r-md:   6px;
+  --ml-r-lg:   8px;
+  --ml-r-xl:   10px;
+  --ml-r-full: 9999px;
+
+  // ── Layout ───────────────────────────────────────────────────────────────
+  --ml-sidebar-w: 252px;
+  --ml-topbar-h:  60px;
+
+  // ── The fixed dark "marquee chrome" — sidebar + topbar. Deliberately NOT   ─
+  // part of the light/dark switch: the frame reads the same in both modes,   ─
+  // like a cinema's own marquee board stays lit regardless of the house      ─
+  // lights inside. Defined once, never overridden per theme.                 ─
+  --ml-chrome:        #1c1712;
+  --ml-chrome-2:      #14110d;
+  --ml-chrome-ink:    #f4ead9;
+  --ml-chrome-ink-2:  #cbbba0;
+  --ml-chrome-muted:  #9c8b73;
+  --ml-chrome-rule:      rgba(244, 222, 178, 0.14);
+  --ml-chrome-rule-soft: rgba(244, 222, 178, 0.08);
+  --ml-chrome-hover:     #221c15;
+
+  // ── Type ─────────────────────────────────────────────────────────────────
+  // Oswald sets headings (Vietnamese-safe); Bebas Neue is reserved for
+  // ASCII-only display surfaces (KPI numerals, chart figures, the wordmark);
+  // Work Sans reads; IBM Plex Mono aligns money, IDs and timestamps.
+  --ml-font-head:    'Oswald', 'Inter Tight', 'Segoe UI', system-ui, sans-serif;
+  --ml-font-display: 'Bebas Neue', 'Oswald', cursive;
+  --ml-font-body:    'Work Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --ml-font-data:    'IBM Plex Mono', 'JetBrains Mono', Consolas, ui-monospace, monospace;
+
+  color-scheme: light;
+}
+
+// ── "After hours" — the designed dark counterpart ───────────────────────────
+// Not an inversion: the ground picks up the same warm bias as the fixed
+// chrome so the whole app reads as one place at night, and semantic hues
+// brighten because they'd disappear against a near-black ground otherwise.
+@mixin ml-dark-tokens {
+  --ml-paper:    #14110d;
+  --ml-paper-2:  #191510;
+  --ml-panel:    #1c1712;
+  --ml-panel-2:  #221c15;
+  --ml-panel-3:  #2a221a;
+  --ml-panel-4:  #3a3024;
+
+  --ml-ink:    #f4ead9;
+  --ml-ink-2:  #cbbba0;
+  --ml-muted:  #9c8b73;
+  --ml-faint:  #6b5d49;
+
+  --ml-rule:        rgba(244, 222, 178, 0.14);
+  --ml-rule-strong: rgba(244, 222, 178, 0.24);
+  --ml-rule-soft:   rgba(244, 222, 178, 0.08);
+  --ml-hover:       rgba(244, 222, 178, 0.035);
+
+  --ml-action:        #e3a53a;
+  --ml-action-strong: #f0bc5e;
+  --ml-action-soft:   rgba(227, 165, 58, 0.14);
+  --ml-action-ring:   rgba(227, 165, 58, 0.30);
+  --ml-on-action:     #1b1610;
+  --ml-second:        #3f9c88;
+
+  --ml-success:      #3f9c88;
+  --ml-success-soft: rgba(63, 156, 136, 0.14);
+  --ml-success-ink:  #7fd9c4;
+  --ml-warn:         #c2603a;
+  --ml-warn-soft:    rgba(194, 96, 58, 0.14);
+  --ml-warn-ink:     #e0916f;
+  --ml-danger:       #cf4a44;
+  --ml-danger-soft:  rgba(207, 74, 68, 0.14);
+  --ml-danger-ink:   #f0918c;
+  --ml-info:         #5b9bd6;
+
+  color-scheme: dark;
+}

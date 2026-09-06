@@ -18,7 +18,13 @@
   padding: 22px 16px;
   background: linear-gradient(180deg, var(--ml-chrome), var(--ml-chrome-2) 70%);
   border-right: 1px solid var(--ml-chrome-rule);
-  position: relative;
+  // No `position` here — mat-sidenav's own structural CSS already sets
+  // `position: absolute` on this element (its off-canvas slide mechanism
+  // depends on it), which already establishes the positioning context the
+  // ::after pseudo-element below needs. Redeclaring `position: relative` at
+  // the same specificity would win the cascade and turn the sidenav into a
+  // normal in-flow block, pushing the content area down by the sidebar's
+  // height instead of laying out beside it.
 
   // The sprocket rail — a marquee letter-board's own pin row, run down the
   // sidebar's inner edge. Decorative, but a fixed structural detail of this
