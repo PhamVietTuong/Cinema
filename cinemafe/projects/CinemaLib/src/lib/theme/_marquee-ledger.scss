@@ -711,16 +711,26 @@ select.ad-filter-input { appearance: none; cursor: pointer; }
     background: var(--ml-panel-2);
     border-bottom: 1px solid var(--ml-rule);
   }
+  // Match .ad-table's thead th exactly (11px 16px, text-xs) — the vendor's
+  // own 0.9rem/1.2rem block/inline padding and 12px font-size run noticeably
+  // roomier, so a ngx-datatable grid and a plain .ad-table read as two
+  // different systems side by side otherwise.
   .datatable-header-cell {
     color: var(--ml-muted);
     font-size: var(--cx-text-xs);
     font-weight: var(--cx-weight-semibold);
     letter-spacing: var(--cx-track-caps);
     text-transform: uppercase;
+    padding-block: 11px;
+    padding-inline: 16px;
   }
   .datatable-body { background: var(--ml-panel); }
   .datatable-body-row {
     background: transparent;
+    // The vendor also draws its own hardcoded #d9d8d9 border directly on the
+    // row (not the cell) — neutralize it so the cell's own --ml-rule-soft
+    // border (below) is the only divider, instead of the two overlapping.
+    border-block-end: none;
 
     // The vendor sets `color` directly on the cell, not the row — an explicit
     // declaration on a child always beats an inherited value regardless of
@@ -728,9 +738,14 @@ select.ad-filter-input { appearance: none; cursor: pointer; }
     // text. Coincidentally close to legible in the light palette (near-black
     // text on a light ground) but nearly invisible in dark mode, which is how
     // this stayed hidden — override the cell directly.
+    // Padding/font-size matched to .ad-table's tbody td for the same reason
+    // as the header cell above.
     .datatable-body-cell {
       color: var(--ml-ink-2);
       border-bottom: 1px solid var(--ml-rule-soft);
+      padding-block: 11px;
+      padding-inline: 16px;
+      font-size: var(--cx-text-sm);
     }
     // The vendor's own hover/focus fill on this nested wrapper is not a
     // lower-specificity rule that a bare `.datatable-row-group {}` beats by
