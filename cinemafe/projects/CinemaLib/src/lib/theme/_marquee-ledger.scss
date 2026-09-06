@@ -732,12 +732,26 @@ select.ad-filter-input { appearance: none; cursor: pointer; }
       color: var(--ml-ink-2);
       border-bottom: 1px solid var(--ml-rule-soft);
     }
-    // The vendor also paints its own hardcoded #eee hover fill on this nested
-    // wrapper (not the row), on top of and independent from the row's own
-    // background — so overriding .datatable-body-row:hover alone leaves this
-    // light-gray fill showing right through. Neutralize it explicitly.
-    .datatable-row-group { background: transparent; }
-    &:hover, &.active { background: var(--ml-hover); }
+    // The vendor's own hover/focus fill on this nested wrapper is not a
+    // lower-specificity rule that a bare `.datatable-row-group {}` beats by
+    // being more specific — its selector is
+    // `.material:not(.cell-selection) .datatable-body-row:hover .datatable-row-group`
+    // (6 class-level selectors, counting :not()'s argument and :hover), which
+    // outranks a plain nested override (5). Match that exact shape (:hover,
+    // :focus, and the .active variants below) so ours wins on specificity,
+    // not source order alone.
+    // --ml-panel-2 (the system's own "hover / raised" surface step) reads as
+    // a clean, on-tone lift rather than a translucent wash — the earlier
+    // rgba(...,0.035) tint was too faint to register as a hover cue at all.
+    transition: background var(--cx-dur-fast) var(--cx-ease);
+    &:hover, &.active {
+      background: var(--ml-panel-2);
+      .datatable-row-group { background: var(--ml-panel-2); }
+    }
+    &:focus {
+      background: var(--ml-panel-2);
+      .datatable-row-group { background: var(--ml-panel-2); }
+    }
   }
   .datatable-body-cell-label { font-family: var(--ml-font-data); }
   .empty-row, .datatable-body .empty-row { color: var(--ml-muted); text-align: center; padding: 24px; }
