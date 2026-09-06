@@ -1,9 +1,9 @@
 // Showtime Scheduler — weekly timetable
-// Colour-coded by showtime type: Normal = violet, Premiere = sunset orange, Special = teal.
+// Colour-coded by showtime type: Normal = marquee gold, Premiere = teal, Special = rust.
 :host {
   --st-normal:   var(--ad-primary);
   --st-premiere: var(--ad-secondary);
-  --st-special:  #2dd4bf;
+  --st-special:  var(--ml-warn);
   --st-axis-w:   64px;
 }
 
@@ -83,7 +83,7 @@
   position: relative;
   border-right: 1px solid var(--ad-glass-border);
 
-  &.is-today { background: var(--bo-action-soft); }
+  &.is-today { background: var(--ml-action-soft); }
 }
 .st-line { border-bottom: 1px solid var(--ad-line-soft); }
 
@@ -106,7 +106,7 @@
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.15s ease;
 
-  &:hover { background: var(--ad-surface-3); box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.6); z-index: 2; }
+  &:hover { background: var(--ad-surface-3); box-shadow: 0 0 0 1px var(--ml-rule-strong); z-index: 2; }
 
   .st-block-title { font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .st-block-time  { font-size: 11px; color: var(--ad-muted); font-variant-numeric: tabular-nums; }

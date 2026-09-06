@@ -1,14 +1,9 @@
-// "Box Office" — Dashboard
-//
-// This is the screen an operator leaves open all day, so it is built to be
-// scanned rather than admired: figures first, fixed-width digits so columns of
-// money line up, hairlines instead of shadows, and colour spent only where it
-// carries meaning. The four KPI icons used to be four different hues, which
-// encoded nothing — they are one neutral treatment now, and the numbers do the
-// talking.
-//
-// Written against the --bo-* tokens directly rather than the --ad-* compat
-// aliases in styles.scss; new and reworked pages should do the same.
+// "Marquee Ledger" — Dashboard. Figures first, hairlines instead of shadows,
+// colour spent only where it carries meaning. KPI icons share one neutral
+// treatment — colouring them per-KPI would encode nothing. KPI cards read as
+// ticket stubs (notched edges); KPI values and rank numerals use Bebas Neue
+// (ASCII-only display face); card titles use Oswald via .ad-card-title.
+// Written against --ml-* tokens directly, not the --ad-* compat aliases.
 
 :host { display: block; }
 
@@ -19,7 +14,30 @@
   gap: var(--cx-space-3);
   margin-bottom: var(--cx-space-5);
 }
-.kpi { display: flex; flex-direction: column; gap: var(--cx-space-3); }
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cx-space-3);
+  position: relative;
+  overflow: visible;
+
+  // The ticket-stub notches — cut-outs matching the page ground, not the card,
+  // so they read as punched through rather than painted on.
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--ml-paper);
+    border: 1px solid var(--ml-rule);
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  &::before { left: -8px; }
+  &::after { right: -8px; }
+}
 .kpi-head { display: flex; align-items: center; justify-content: space-between; gap: var(--cx-space-3); }
 
 // One neutral treatment for all four. The icon labels the row; it does not
@@ -27,16 +45,16 @@
 .kpi-icon {
   display: inline-flex; align-items: center; justify-content: center;
   width: 32px; height: 32px;
-  border-radius: var(--bo-r-sm);
-  background: var(--bo-panel-3);
-  color: var(--bo-muted);
+  border-radius: var(--ml-r-sm);
+  background: var(--ml-panel-3);
+  color: var(--ml-muted);
   flex: none;
 
   mat-icon { font-size: 18px; width: 18px; height: 18px; }
 
   &.i-violet, &.i-blue, &.i-orange, &.i-green {
-    background: var(--bo-panel-3);
-    color: var(--bo-muted);
+    background: var(--ml-panel-3);
+    color: var(--ml-muted);
   }
 }
 .kpi-label {
@@ -44,14 +62,14 @@
   font-weight: var(--cx-weight-semibold);
   letter-spacing: var(--cx-track-caps);
   text-transform: uppercase;
-  color: var(--bo-muted);
+  color: var(--ml-muted);
 }
 .kpi-value {
-  font-family: var(--bo-font-head);
-  font-size: 27px;
-  font-weight: var(--cx-weight-semibold);
-  letter-spacing: var(--cx-track-tight);
-  color: var(--bo-ink);
+  font-family: var(--ml-font-display);
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--ml-ink);
   line-height: var(--cx-leading-tight);
   font-variant-numeric: tabular-nums;
 }
@@ -72,24 +90,25 @@
 
 // ── Bar chart ───────────────────────────────────────────────────────────────
 // A faint baseline is enough structure to read heights against; the bars are a
-// flat fill because a gradient would imply a second variable that isn't there.
+// flat gold fill because a gradient would imply a second variable that isn't
+// there.
 .chart {
   display: flex; align-items: flex-end; gap: var(--cx-space-3);
   height: 200px; padding-top: var(--cx-space-3);
-  border-bottom: 1px solid var(--bo-rule);
+  border-bottom: 1px solid var(--ml-rule);
 }
 .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--cx-space-2); height: 100%; justify-content: flex-end; }
 .bar {
   width: 100%;
   max-width: 34px;
-  border-radius: var(--bo-r-sm) var(--bo-r-sm) 0 0;
-  background: var(--bo-action);
+  border-radius: var(--ml-r-sm) var(--ml-r-sm) 0 0;
+  background: var(--ml-action);
   transition: height var(--cx-dur-slow) var(--cx-ease);
 }
 .bar-day {
-  font-family: var(--bo-font-data);
+  font-family: var(--ml-font-data);
   font-size: var(--cx-text-xs);
-  color: var(--bo-muted);
+  color: var(--ml-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -98,41 +117,42 @@
 .top-list li {
   display: flex; align-items: center; gap: var(--cx-space-3);
   padding: var(--cx-space-2);
-  border-bottom: 1px solid var(--bo-rule-soft);
+  border-bottom: 1px solid var(--ml-rule-soft);
 
   &:last-child { border-bottom: none; }
-  &:hover { background: var(--bo-hover); }
+  &:hover { background: var(--ml-hover); }
 }
 .rank {
-  width: 20px; text-align: center;
-  font-family: var(--bo-font-data);
-  font-weight: var(--cx-weight-medium);
-  color: var(--bo-faint);
-  font-size: var(--cx-text-sm);
-  font-variant-numeric: tabular-nums;
+  width: 22px; text-align: center;
+  font-family: var(--ml-font-display);
+  color: var(--ml-action);
+  font-size: 17px;
 }
 .poster {
-  width: 36px; height: 50px; border-radius: var(--bo-r-sm); flex: none;
-  background: var(--bo-panel-3) center/cover no-repeat;
-  border: 1px solid var(--bo-rule-soft);
+  width: 36px; height: 50px; border-radius: var(--ml-r-sm); flex: none;
+  background: var(--ml-panel-3) center/cover no-repeat;
+  border: 1px solid var(--ml-rule-soft);
   display: inline-flex; align-items: center; justify-content: center;
-  mat-icon { color: var(--bo-faint); font-size: 19px; width: 19px; height: 19px; }
+  mat-icon { color: var(--ml-faint); font-size: 19px; width: 19px; height: 19px; }
 }
 .top-meta { display: flex; flex-direction: column; min-width: 0; flex: 1; }
 .top-title {
-  font-weight: var(--cx-weight-semibold); font-size: var(--cx-text-sm); color: var(--bo-ink);
+  font-weight: var(--cx-weight-semibold); font-size: var(--cx-text-sm); color: var(--ml-ink);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.top-sub { font-size: var(--cx-text-xs); color: var(--bo-muted); font-variant-numeric: tabular-nums; }
+.top-sub { font-size: var(--cx-text-xs); color: var(--ml-muted); font-variant-numeric: tabular-nums; }
 .top-rating {
   display: inline-flex; align-items: center; gap: 3px;
-  color: var(--bo-ink-2);
+  color: var(--ml-second);
+  font-family: var(--ml-font-data);
   font-weight: var(--cx-weight-semibold);
   font-size: var(--cx-text-sm);
   font-variant-numeric: tabular-nums;
 
-  // A star is conventionally amber — that's a rating reading as a rating, not decoration.
-  mat-icon { color: var(--bo-warn); font-size: 15px; width: 15px; height: 15px; }
+  // The star shares the rating's teal rather than the gold accent — gold is
+  // reserved for the one action colour, and a gold star here would read as
+  // competing with it instead of just labelling a rating.
+  mat-icon { color: var(--ml-second); font-size: 15px; width: 15px; height: 15px; }
 }
 
 // ── Card header (chart + invoices): title left, control/link right ───────────
@@ -140,7 +160,7 @@
 .period-select { width: auto; height: 32px; padding: 0 30px 0 10px; font-size: var(--cx-text-xs); }
 .see-all {
   font-size: var(--cx-text-sm); font-weight: var(--cx-weight-semibold);
-  color: var(--bo-action); text-decoration: none;
+  color: var(--ml-action-strong); text-decoration: none;
   &:hover { text-decoration: underline; }
 }
 
