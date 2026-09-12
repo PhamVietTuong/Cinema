@@ -107,7 +107,7 @@
     "createdAt": "Created At",
     "none": "None",
     "filters": "Filters",
-    "totalEntries": "Total entries",
+    "totalEntries": "in total",
     "required": "This field is required."
   },
   "login": {

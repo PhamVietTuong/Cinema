@@ -23,7 +23,6 @@
           <input matInput formControlName="percent" (input)="onFilterChange()">
         </mat-form-field>
       </form>
-      <p class="ad-filter-total">{{ 'common.totalEntries' | translate }}: {{ total }}</p>
     </mat-card-content>
   </mat-card>
 
@@ -43,7 +42,7 @@
         [offset]="pageOffset"
         [limit]="pageSize"
         [loadingIndicator]="loadingIndicator"
-        [messages]="{ emptyMessage: 'discounts.empty' | translate, totalMessage: '', selectedMessage: '' }"
+        [messages]="{ emptyMessage: 'discounts.empty' | translate, selectedMessage: '' }"
         (page)="onChangePage($event)">
 
         <ngx-datatable-column [name]="'common.code' | translate" prop="code" [sortable]="false">
@@ -82,6 +81,13 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+          <ng-template ngx-datatable-footer-template>
+            <div class="page-count">{{ 'common.totalEntries' | translate }} {{ total }}</div>
+            <ngx-datatable-pager *ngIf="total > pageSize"></ngx-datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
       </ngx-datatable>
     </div>
 

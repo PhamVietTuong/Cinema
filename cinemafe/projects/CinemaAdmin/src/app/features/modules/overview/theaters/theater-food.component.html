@@ -19,7 +19,7 @@
       [offset]="pageOffset"
       [limit]="pageSize"
       [loadingIndicator]="loadingIndicator"
-      [messages]="{ emptyMessage: 'theaters.food.empty' | translate, totalMessage: '', selectedMessage: '' }"
+      [messages]="{ emptyMessage: 'theaters.food.empty' | translate, selectedMessage: '' }"
       (page)="onChangePage($event)">
 
       <ngx-datatable-column [name]="'theaters.food.imageLabel' | translate" prop="imageUrl" [sortable]="false" [width]="80" [canAutoResize]="false">
@@ -52,6 +52,13 @@
           </div>
         </ng-template>
       </ngx-datatable-column>
+
+      <ngx-datatable-footer>
+        <ng-template ngx-datatable-footer-template>
+          <div class="page-count">{{ 'common.totalEntries' | translate }} {{ total }}</div>
+          <ngx-datatable-pager *ngIf="total > pageSize"></ngx-datatable-pager>
+        </ng-template>
+      </ngx-datatable-footer>
     </ngx-datatable>
   </div>
 

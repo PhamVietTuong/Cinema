@@ -15,6 +15,14 @@
 // close to the previous prebuilt look.
 @use '@angular/material' as mat;
 
+// mat.theme() only emits colour tokens — it does not include the structural/
+// reset CSS (ripple mechanics, CDK overlay base styles, and critically the
+// flex layout mat-sidenav-container needs to lay the sidenav and content out
+// side by side) that used to ship bundled inside the prebuilt theme CSS.
+// Without this, mat-sidenav-container falls back to plain block flow and
+// stacks the sidenav and content vertically instead of side by side.
+@include mat.core();
+
 :root {
   @include mat.theme((
     color: (

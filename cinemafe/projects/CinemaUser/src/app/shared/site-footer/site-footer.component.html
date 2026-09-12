@@ -1,0 +1,41 @@
+<footer class="sf-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a routerLink="/" class="sf-logo">
+        <svg-icon key="logo"></svg-icon>
+        <strong>Midnight Premium</strong>
+      </a>
+      <p>{{ 'home.footer.tagline' | translate }}</p>
+      <div class="sf-social">
+        <a mat-icon-button href="#"><svg-icon key="facebook"></svg-icon></a>
+        <a mat-icon-button href="#"><svg-icon key="instagram"></svg-icon></a>
+        <a mat-icon-button href="#"><svg-icon key="youtube"></svg-icon></a>
+        <a mat-icon-button href="#"><svg-icon key="tiktok"></svg-icon></a>
+      </div>
+    </div>
+    <div class="sf-col">
+      <h4>{{ 'home.footer.explore.title' | translate }}</h4>
+      <a routerLink="/movies">{{ 'home.footer.explore.nowShowing' | translate }}</a>
+      <a routerLink="/movies">{{ 'home.footer.explore.comingSoon' | translate }}</a>
+      <a routerLink="/theaters">{{ 'home.footer.explore.theaters' | translate }}</a>
+      <a routerLink="/promotions">{{ 'home.footer.explore.promotions' | translate }}</a>
+    </div>
+    <div class="sf-col">
+      <h4>{{ 'home.footer.members.title' | translate }}</h4>
+      <a routerLink="/membership">{{ 'home.footer.members.program' | translate }}</a>
+      <a routerLink="/promotions">{{ 'home.footer.members.offers' | translate }}</a>
+      <a routerLink="/auth/login">{{ 'home.footer.members.login' | translate }}</a>
+      <a routerLink="/auth/register">{{ 'home.footer.members.register' | translate }}</a>
+    </div>
+    <div class="sf-col">
+      <h4>{{ 'home.footer.support.title' | translate }}</h4>
+      <a href="#">{{ 'home.footer.support.center' | translate }}</a>
+      <a href="#">{{ 'home.footer.support.contact' | translate }}</a>
+      <a href="#">{{ 'home.footer.support.privacy' | translate }}</a>
+      <a href="#">{{ 'home.footer.support.terms' | translate }}</a>
+    </div>
+  </div>
+  <div class="sf-bottom">
+    <p>© 2026 Midnight Premium Cinema. All rights reserved.</p>
+  </div>
+</footer>

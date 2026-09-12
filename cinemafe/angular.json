@@ -223,7 +223,6 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/CinemaUser/src/styles.scss"
             ]
           },

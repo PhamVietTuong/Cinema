@@ -7,11 +7,13 @@ import {
   loadNowShowing, loadComingSoon,
   selectNowShowing, selectComingSoon, selectMoviesLoading,
 } from 'CinemaLib';
+import { MovieCardComponent } from '../../shared/movie-card/movie-card.component';
+import { SiteFooterComponent } from '../../shared/site-footer/site-footer.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, MovieCardComponent, SiteFooterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

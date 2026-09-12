@@ -69,23 +69,7 @@
     </div>
   </div>
   <div class="scroll-row">
-    <div class="movie-card" *ngFor="let movie of recommended" [routerLink]="['/movies', movie.id]">
-      <div class="card-poster">
-        <img [src]="movie.posterUrl || 'assets/no-poster.jpg'" [alt]="movie.title" (error)="onImgError($event)">
-        <div class="card-hover-overlay">
-          <span class="btn-book-small"><mat-icon>confirmation_number</mat-icon> {{ 'home.card.book' | translate }}</span>
-        </div>
-        <div class="card-rating"><mat-icon>star</mat-icon> {{ movie.averageRating | number:'1.1-1' }}</div>
-        <span class="card-age">{{ movie.ageRestrictionCode }}</span>
-      </div>
-      <div class="card-info">
-        <h3 class="card-title">{{ movie.title }}</h3>
-        <div class="card-genres">
-          <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
-        </div>
-        <p class="card-duration"><mat-icon>schedule</mat-icon> {{ 'home.movie.minutes' | translate:{ n: movie.duration } }}</p>
-      </div>
-    </div>
+    <app-movie-card *ngFor="let movie of recommended" [movie]="movie" [fixedWidth]="true"></app-movie-card>
   </div>
 </section>
 
@@ -102,25 +86,7 @@
     <mat-spinner diameter="36"></mat-spinner>
   </div>
   <div class="scroll-row">
-    <div class="movie-card"
-         *ngFor="let movie of nowShowing$ | async"
-         [routerLink]="['/movies', movie.id]">
-      <div class="card-poster">
-        <img [src]="movie.posterUrl || 'assets/no-poster.jpg'" [alt]="movie.title" (error)="onImgError($event)">
-        <div class="card-hover-overlay">
-          <span class="btn-book-small"><mat-icon>confirmation_number</mat-icon> {{ 'home.card.book' | translate }}</span>
-        </div>
-        <div class="card-rating"><mat-icon>star</mat-icon> {{ movie.averageRating | number:'1.1-1' }}</div>
-        <span class="card-age">{{ movie.ageRestrictionCode }}</span>
-      </div>
-      <div class="card-info">
-        <h3 class="card-title">{{ movie.title }}</h3>
-        <div class="card-genres">
-          <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
-        </div>
-        <p class="card-duration"><mat-icon>schedule</mat-icon> {{ 'home.movie.minutes' | translate:{ n: movie.duration } }}</p>
-      </div>
-    </div>
+    <app-movie-card *ngFor="let movie of nowShowing$ | async" [movie]="movie" [fixedWidth]="true"></app-movie-card>
   </div>
 </section>
 
@@ -134,19 +100,7 @@
     <a routerLink="/movies" class="section-more">{{ 'home.sections.viewAll' | translate }} <mat-icon>chevron_right</mat-icon></a>
   </div>
   <div class="movie-grid">
-    <div class="movie-card coming-card" *ngFor="let movie of comingSoon$ | async">
-      <div class="card-poster">
-        <img [src]="movie.posterUrl || 'assets/no-poster.jpg'" [alt]="movie.title" (error)="onImgError($event)">
-        <div class="coming-badge">{{ 'home.card.comingSoonBadge' | translate }}</div>
-      </div>
-      <div class="card-info">
-        <h3 class="card-title">{{ movie.title }}</h3>
-        <div class="card-genres">
-          <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
-        </div>
-        <p class="card-date"><mat-icon>event</mat-icon> {{ movie.releaseDate | date:'dd/MM/yyyy' }}</p>
-      </div>
-    </div>
+    <app-movie-card *ngFor="let movie of comingSoon$ | async" [movie]="movie" variant="coming"></app-movie-card>
   </div>
 </section>
 
@@ -179,45 +133,4 @@
   </div>
 </section>
 
-<!-- ── FOOTER ──────────────────────────────────────────────────────────────── -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <a routerLink="/" class="footer-logo">
-        <svg-icon key="logo"></svg-icon>
-        <strong>Midnight Premium</strong>
-      </a>
-      <p>{{ 'home.footer.tagline' | translate }}</p>
-      <div class="social-row">
-        <a mat-icon-button href="#"><svg-icon key="facebook"></svg-icon></a>
-        <a mat-icon-button href="#"><svg-icon key="instagram"></svg-icon></a>
-        <a mat-icon-button href="#"><svg-icon key="youtube"></svg-icon></a>
-        <a mat-icon-button href="#"><svg-icon key="tiktok"></svg-icon></a>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h4>{{ 'home.footer.explore.title' | translate }}</h4>
-      <a routerLink="/movies">{{ 'home.footer.explore.nowShowing' | translate }}</a>
-      <a href="#">{{ 'home.footer.explore.comingSoon' | translate }}</a>
-      <a href="#">{{ 'home.footer.explore.theaters' | translate }}</a>
-      <a href="#">{{ 'home.footer.explore.promotions' | translate }}</a>
-    </div>
-    <div class="footer-col">
-      <h4>{{ 'home.footer.members.title' | translate }}</h4>
-      <a href="#">{{ 'home.footer.members.program' | translate }}</a>
-      <a href="#">{{ 'home.footer.members.offers' | translate }}</a>
-      <a routerLink="/auth/login">{{ 'home.footer.members.login' | translate }}</a>
-      <a routerLink="/auth/register">{{ 'home.footer.members.register' | translate }}</a>
-    </div>
-    <div class="footer-col">
-      <h4>{{ 'home.footer.support.title' | translate }}</h4>
-      <a href="#">{{ 'home.footer.support.center' | translate }}</a>
-      <a href="#">{{ 'home.footer.support.contact' | translate }}</a>
-      <a href="#">{{ 'home.footer.support.privacy' | translate }}</a>
-      <a href="#">{{ 'home.footer.support.terms' | translate }}</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2024 Midnight Premium Cinema. All rights reserved.</p>
-  </div>
-</footer>
+<app-site-footer></app-site-footer>

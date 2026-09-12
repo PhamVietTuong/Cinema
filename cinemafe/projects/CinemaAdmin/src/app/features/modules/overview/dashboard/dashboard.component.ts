@@ -1,11 +1,17 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CinemaServiceAgent, PaymentServiceAgent } from 'CinemaLib';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { CinemaServiceAgent, PaymentServiceAgent, BaseTableComponent, TablePage, TableSearchCriteria } from 'CinemaLib';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../../../environments/environment';
 
 /** One day of RevenueByDayDTO from GET /api/Payment/GetRevenueByDay. */
 interface RevenueDay { date?: string; total?: number; }
+
+type Dto = PaymentServiceAgent.InvoiceDTO;
 
 @Component({
   selector: 'app-dashboard',
@@ -13,10 +19,10 @@ interface RevenueDay { date?: string; total?: number; }
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent extends BaseTableComponent {
+  override pageSize = 8;
+
   stats = { movies: 0, theaters: 0, invoicesToday: 0, revenueToday: 0 };
-  invoices: PaymentServiceAgent.InvoiceDTO[] = [];
-  readonly invoiceColumns = ['code', 'customer', 'amount', 'status', 'date'];
   topMovies: CinemaServiceAgent.MovieDTO[] = [];
 
   // Revenue trend; bar height is each day's revenue as a % of the period's peak.
@@ -24,29 +30,35 @@ export class DashboardComponent implements OnInit {
   revenueTrend: { day: string; value: number }[] = [];
 
   constructor(
+    cd: ChangeDetectorRef,
+    fb: FormBuilder,
+    router: Router,
+    store: Store<any>,
     private _cinema: CinemaServiceAgent.HttpService,
     private _payment: PaymentServiceAgent.HttpService,
     private _http: HttpClient,
-    private _cdr: ChangeDetectorRef,
     private _translate: TranslateService,
-  ) {}
+  ) {
+    super(cd, fb, router, store);
+  }
 
-  ngOnInit(): void {
+  protected _search(criteria: TableSearchCriteria): Observable<TablePage<Dto>> {
+    return this._payment.getInvoices(PaymentServiceAgent.PagingSearchDTO.fromJS({
+      pageIndex: criteria.pageIndex, pageSize: criteria.pageSize, filters: criteria.filters,
+    }));
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+
     this._cinema.getMovies(CinemaServiceAgent.PagingSearchDTO.fromJS({ pageIndex: 1, pageSize: 1 }))
-      .subscribe(r => { this.stats.movies = r.totalCount ?? 0; this._cdr.markForCheck(); });
+      .subscribe(r => { this.stats.movies = r.totalCount ?? 0; this._cd.markForCheck(); });
 
     this._cinema.getTheaters(CinemaServiceAgent.PagingSearchDTO.fromJS({ pageIndex: 1, pageSize: 1 }))
-      .subscribe(r => { this.stats.theaters = r.totalCount ?? 0; this._cdr.markForCheck(); });
+      .subscribe(r => { this.stats.theaters = r.totalCount ?? 0; this._cd.markForCheck(); });
 
     this._cinema.getNowShowingMovies(CinemaServiceAgent.PagingSearchDTO.fromJS({ pageIndex: 1, pageSize: 5 }))
-      .subscribe(r => { this.topMovies = r.results ?? []; this._cdr.markForCheck(); });
-
-    // Recent orders list — most recent regardless of date.
-    this._payment.getInvoices(PaymentServiceAgent.PagingSearchDTO.fromJS({ pageIndex: 1, pageSize: 8 }))
-      .subscribe(r => {
-        this.invoices = r.results ?? [];
-        this._cdr.markForCheck();
-      });
+      .subscribe(r => { this.topMovies = r.results ?? []; this._cd.markForCheck(); });
 
     // "Orders today" needs its own date-filtered count. Reading totalCount off the list above
     // reported every invoice ever created, and summing that page's Paid rows meant "revenue today"
@@ -58,7 +70,7 @@ export class DashboardComponent implements OnInit {
       pageSize: 1,
       filters: { from: this._isoLocal(midnight), to: this._isoLocal(now) },
     }))
-      .subscribe(r => { this.stats.invoicesToday = r.totalCount ?? 0; this._cdr.markForCheck(); });
+      .subscribe(r => { this.stats.invoicesToday = r.totalCount ?? 0; this._cd.markForCheck(); });
 
     this.loadRevenue();
   }
@@ -78,9 +90,9 @@ export class DashboardComponent implements OnInit {
           // The series always ends on today, so today's revenue comes from the server's own
           // Paid-invoice totals rather than being re-derived from a page of the invoice list.
           this.stats.revenueToday = series.length ? (series[series.length - 1].total ?? 0) : 0;
-          this._cdr.markForCheck();
+          this._cd.markForCheck();
         },
-        error: () => { this.revenueTrend = []; this._cdr.markForCheck(); },
+        error: () => { this.revenueTrend = []; this._cd.markForCheck(); },
       });
   }
 

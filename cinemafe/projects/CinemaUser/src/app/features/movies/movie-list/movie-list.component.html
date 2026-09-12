@@ -37,23 +37,7 @@
   </div>
 
   <div class="movie-grid">
-    <div class="movie-card" *ngFor="let movie of displayed" [routerLink]="['/movies', movie.id]">
-      <div class="card-poster">
-        <img [src]="movie.posterUrl || 'assets/no-poster.jpg'" [alt]="movie.title">
-        <div class="card-hover-overlay">
-          <span class="btn-book-small"><mat-icon>confirmation_number</mat-icon> {{ 'movies.list.book' | translate }}</span>
-        </div>
-        <div class="card-rating" *ngIf="movie.averageRating"><mat-icon>star</mat-icon> {{ movie.averageRating | number:'1.1-1' }}</div>
-        <span class="card-age" *ngIf="movie.ageRestrictionCode">{{ movie.ageRestrictionCode }}</span>
-      </div>
-      <div class="card-info">
-        <h3 class="card-title">{{ movie.title }}</h3>
-        <div class="card-genres">
-          <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
-        </div>
-        <p class="card-duration"><mat-icon>schedule</mat-icon> {{ 'movies.durationMinutes' | translate:{ count: movie.duration } }}</p>
-      </div>
-    </div>
+    <app-movie-card *ngFor="let movie of displayed" [movie]="movie"></app-movie-card>
   </div>
 
   <div *ngIf="displayed.length === 0 && !(loading$ | async)" class="empty">
@@ -66,26 +50,4 @@
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="ml-footer">
-  <div class="ml-footer-inner">
-    <div class="foot-brand">
-      <a class="foot-logo"><svg-icon key="logo"></svg-icon> <strong>Midnight Premium</strong></a>
-      <p>{{ 'movies.footer.tagline' | translate }}</p>
-    </div>
-    <div class="foot-col">
-      <h4>{{ 'movies.footer.links' | translate }}</h4>
-      <a routerLink="/movies">{{ 'movies.footer.linkMovies' | translate }}</a>
-      <a routerLink="/theaters">{{ 'movies.footer.linkTheaters' | translate }}</a>
-      <a routerLink="/promotions">{{ 'movies.footer.linkPromotions' | translate }}</a>
-      <a routerLink="/membership">{{ 'movies.footer.linkMembership' | translate }}</a>
-    </div>
-    <div class="foot-col">
-      <h4>{{ 'movies.footer.support' | translate }}</h4>
-      <a href="#">{{ 'movies.footer.terms' | translate }}</a>
-      <a href="#">{{ 'movies.footer.privacy' | translate }}</a>
-      <a href="#">{{ 'movies.footer.contact' | translate }}</a>
-    </div>
-  </div>
-  <p class="foot-copy">© 2026 Midnight Premium Cinema. All rights reserved.</p>
-</footer>
+<app-site-footer></app-site-footer>

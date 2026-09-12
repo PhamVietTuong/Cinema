@@ -1,7 +1,11 @@
-// "Night Screening" — ticket quantities → seats → snacks. Shared by the routed /booking/seats page
+// "Marquee Ledger" — ticket quantities → seats → snacks. Shared by the routed /booking/seats page
 // (BookingPageComponent, which supplies its own .page-header) and the inline panel embedded on the
 // movie-detail page (this file's .panel-header, shown only when [embedded]="true").
-// Written against the --ns-* tokens directly (see seat-selection's original header comment).
+//
+// CSS-only reskin — the [ngClass] seat-state map in the template (available / selected / occupied /
+// locked / vip / unavailable-category / not-selectable) is untouched; only how each state looks
+// changes here. VIP can no longer use gold (gold now means "selected" everywhere in this direction),
+// so it gets the secondary teal instead — see the .vip rules below.
 
 // ── Embedded panel header (movie-detail inline booking only) ──────────────────
 .panel-header {
@@ -9,14 +13,14 @@
   max-width: 1280px; margin: 0 auto; padding: var(--cx-space-4) 40px 0;
 }
 .panel-title {
-  font-family: var(--ns-font-display); font-size: var(--cx-text-lg);
-  font-weight: var(--cx-weight-bold); color: var(--ns-ink);
+  font-family: var(--ml-font-head); font-size: var(--cx-text-lg);
+  font-weight: var(--cx-weight-semibold); color: var(--ml-ink);
 }
 .panel-close {
   display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-  background: none; border: 1px solid var(--ns-line); color: var(--ns-muted);
-  &:hover { border-color: var(--ns-beam); color: var(--ns-beam); }
+  width: 32px; height: 32px; border-radius: var(--ml-r-sm); cursor: pointer;
+  background: var(--ml-panel); border: 1px solid var(--ml-rule); color: var(--ml-muted);
+  &:hover { border-color: var(--ml-action-ring); color: var(--ml-action-strong); }
   mat-icon { font-size: 18px; width: 18px; height: 18px; }
 }
 
@@ -24,19 +28,18 @@
 .hold-banner {
   display: flex; align-items: center; gap: var(--cx-space-2);
   max-width: 1280px; margin: var(--cx-space-4) auto 0; padding: 10px 40px;
-  font-size: var(--cx-text-sm); font-weight: var(--cx-weight-medium); color: var(--ns-ink);
-  mat-icon { font-size: 20px; width: 20px; height: 20px; color: var(--ns-warn); }
-  &.expired { color: var(--ns-danger, #e25c5c); mat-icon { color: var(--ns-danger, #e25c5c); } }
+  font-size: var(--cx-text-sm); font-weight: var(--cx-weight-medium); color: var(--ml-ink);
+  mat-icon { font-size: 20px; width: 20px; height: 20px; color: var(--ml-warn); }
+  &.expired { color: var(--ml-danger); mat-icon { color: var(--ml-danger); } }
 }
 
 // ── Ticket-type section ───────────────────────────────────────────────────────
 .section-wrap { max-width: 1280px; margin: 0 auto; padding: 24px 40px 0; }
-.card-hint { font-size: var(--cx-text-xs); color: var(--ns-muted); margin: 0 0 16px; }
-.category-discount { opacity: 0.75; font-weight: 500; }
+.card-hint { font-size: var(--cx-text-xs); color: var(--ml-muted); margin: 0 0 16px; }
 .category-warning {
-  margin: 12px 0 0; padding: 10px 14px; border-radius: 10px;
-  background: rgba(245, 184, 67, 0.14); border: 1px solid rgba(245, 184, 67, 0.42);
-  color: var(--ns-warn); font-size: var(--cx-text-xs);
+  margin: 12px 0 0; padding: 10px 14px; border-radius: var(--ml-r-sm);
+  background: var(--ml-warn-soft); border: 1px solid color-mix(in srgb, var(--ml-warn) 40%, transparent);
+  color: var(--ml-warn-ink); font-size: var(--cx-text-xs);
 }
 
 // ── Layout ────────────────────────────────────────────────────────────────────
@@ -47,28 +50,24 @@
 
 .seat-area { min-width: 0; }
 
-.spinner-wrap {
-  display: flex; justify-content: center; padding: 80px;
-  ::ng-deep circle { stroke: var(--ns-beam) !important; }
-}
+.spinner-wrap { display: flex; justify-content: center; padding: 80px; }
 
-// ── The screen — the light source ─────────────────────────────────────────────
+// ── The screen — a gold/ink hairline arc, not a projector glow ────────────────
 .screen-wrap {
   display: flex; flex-direction: column; align-items: center; margin-bottom: var(--cx-space-6);
 }
 .screen-arc {
   width: 70%; max-width: 480px; height: 30px;
-  border-top: 2px solid var(--ns-beam);
+  border-top: 2px solid var(--ml-action);
   border-radius: 50% 50% 0 0;
-  background: linear-gradient(180deg, rgba(89, 217, 210, 0.18), rgba(89, 217, 210, 0));
-  box-shadow: 0 -10px 34px rgba(89, 217, 210, 0.30);
+  background: linear-gradient(180deg, var(--ml-action-soft), transparent);
 }
 .screen-label {
   margin-top: var(--cx-space-2);
-  font-family: var(--ns-font-data);
+  font-family: var(--ml-font-data);
   font-size: 0.68rem;
   letter-spacing: 0.3em;
-  color: var(--ns-muted);
+  color: var(--ml-muted);
   text-transform: uppercase;
 }
 
@@ -80,7 +79,6 @@
   gap: 7px;
   padding: var(--cx-space-5) var(--cx-space-4) var(--cx-space-6);
   margin-bottom: var(--cx-space-5);
-  background: radial-gradient(120% 76% at 50% -8%, rgba(89, 217, 210, 0.075) 0%, rgba(7, 8, 11, 0) 62%);
   transition: opacity var(--cx-dur) var(--cx-ease);
 
   // Not selectable yet: no ticket type chosen. Still visible (not hidden) so the layout doesn't jump.
@@ -96,21 +94,20 @@
 .row-label {
   width: 34px; flex: none;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--ns-font-data);
-  font-size: 0.72rem; font-weight: var(--cx-weight-medium); color: var(--ns-faint);
+  font-family: var(--ml-font-data);
+  font-size: 0.72rem; font-weight: var(--cx-weight-medium); color: var(--ml-faint);
 }
 
 .seat {
   width: 34px; height: 34px;
-  border-radius: 7px 7px 3px 3px;
+  border-radius: var(--ml-r-sm) var(--ml-r-sm) 3px 3px;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--ns-font-data);
+  font-family: var(--ml-font-data);
   font-size: 0.55rem; font-weight: var(--cx-weight-medium);
-  color: var(--ns-muted);
+  color: var(--ml-muted);
   cursor: pointer;
   border: 1px solid transparent;
-  background: var(--ns-seat-empty);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  background: var(--ml-seat-empty);
   transition: transform var(--cx-dur-fast) var(--cx-ease),
               background var(--cx-dur-fast) var(--cx-ease),
               border-color var(--cx-dur-fast) var(--cx-ease);
@@ -119,34 +116,34 @@
 
   &.available {
     &:hover {
-      border-color: var(--ns-beam);
-      background: var(--ns-beam-soft);
-      color: var(--ns-beam);
+      border-color: var(--ml-action);
+      background: var(--ml-action-soft);
+      color: var(--ml-action-strong);
     }
   }
 
   &.selected {
-    background: var(--ns-beam);
-    border-color: var(--ns-beam);
-    color: var(--ns-beam-ink);
+    background: var(--ml-action);
+    border-color: var(--ml-action);
+    color: var(--ml-on-action);
     font-weight: var(--cx-weight-semibold);
-    box-shadow: 0 0 0 3px var(--ns-beam-soft), 0 0 16px rgba(89, 217, 210, 0.55);
+    box-shadow: 0 0 0 3px var(--ml-action-soft);
   }
 
   &.occupied {
-    background: var(--ns-seat-taken);
+    background: var(--ml-seat-taken);
     border-color: transparent;
-    color: var(--ns-faint);
+    color: var(--ml-faint);
     cursor: not-allowed;
-    box-shadow: none;
   }
 
+  // Held by another user (SignalR) or server-side Reserved — must read as unmistakably
+  // distinct from both "sold" (occupied) and "mine" (selected): warn tint, not gold or grey.
   &.locked {
-    background: rgba(245, 184, 67, 0.14);
-    border-color: rgba(245, 184, 67, 0.42);
-    color: var(--ns-warn);
+    background: var(--ml-warn-soft);
+    border-color: var(--ml-warn);
+    color: var(--ml-warn-ink);
     cursor: not-allowed;
-    box-shadow: none;
   }
 
   // Seat type this ticket category may not book — visually distinct from "sold" (still light, just
@@ -164,85 +161,89 @@
     cursor: not-allowed;
   }
 
+  // VIP — the secondary teal, not gold (gold already means "selected" in this direction).
   &.vip.available {
-    background: var(--ns-gel-soft);
-    border-color: rgba(255, 78, 138, 0.42);
-    color: var(--ns-gel);
+    background: var(--ml-success-soft);
+    border-color: var(--ml-second);
+    color: var(--ml-second);
 
-    &:hover { background: var(--ns-gel-hover); border-color: var(--ns-gel); }
+    &:hover { background: color-mix(in srgb, var(--ml-second) 22%, transparent); border-color: var(--ml-second); }
   }
   &.vip.selected {
-    background: var(--ns-gel);
-    border-color: var(--ns-gel);
-    color: #fff;
-    box-shadow: 0 0 0 3px var(--ns-gel-soft), 0 0 16px rgba(255, 78, 138, 0.5);
+    background: var(--ml-second);
+    // A gold border/ring — the same cue every other selected seat gets — keeps "selected"
+    // instantly readable regardless of seat type; teal fill still says "this one's VIP".
+    border-color: var(--ml-action);
+    // var(--ml-paper) flips light/dark opposite to --ml-second's own lightness, so it stays
+    // legible on the solid fill in both themes without a dedicated "on-second" token.
+    color: var(--ml-paper);
+    box-shadow: 0 0 0 3px var(--ml-action-soft);
   }
 }
 
 // ── Legend ────────────────────────────────────────────────────────────────────
 .legend {
   display: flex; gap: var(--cx-space-5); flex-wrap: wrap; justify-content: center;
-  padding: var(--cx-space-4); border-top: 1px solid var(--ns-line-2);
+  padding: var(--cx-space-4); border-top: 1px dashed var(--ml-rule);
 }
-.legend-item { display: flex; align-items: center; gap: var(--cx-space-2); font-size: var(--cx-text-xs); color: var(--ns-muted); }
+.legend-item { display: flex; align-items: center; gap: var(--cx-space-2); font-size: var(--cx-text-xs); color: var(--ml-muted); }
 .legend-dot {
   width: 16px; height: 16px; border-radius: 4px 4px 2px 2px; flex: none;
-  &.available { background: var(--ns-seat-empty); }
-  &.selected  { background: var(--ns-beam); box-shadow: 0 0 10px rgba(89, 217, 210, 0.5); }
-  &.occupied  { background: var(--ns-seat-taken); }
-  &.vip.available { background: var(--ns-gel-soft); border: 1px solid rgba(255, 78, 138, 0.42); }
-  &.unavailable-category { background: var(--ns-seat-empty); opacity: 0.35; }
+  &.available { background: var(--ml-seat-empty); }
+  &.selected  { background: var(--ml-action); }
+  &.occupied  { background: var(--ml-seat-taken); }
+  &.vip.available { background: var(--ml-success-soft); border: 1px solid var(--ml-second); }
+  &.unavailable-category { background: var(--ml-seat-empty); opacity: 0.35; }
 }
 
 // ── Sidebar (running seat total) ───────────────────────────────────────────────
 .sidebar-card {
-  background: var(--ns-panel);
-  border: 1px solid var(--ns-line);
-  border-radius: var(--ns-r-lg);
+  background: var(--ml-panel);
+  border: 1px solid var(--ml-rule);
+  border-radius: var(--ml-r-lg);
   padding: var(--cx-space-5);
   position: sticky;
   top: 80px;
-  box-shadow: var(--ns-shadow-md);
 }
 .sidebar-title {
-  font-family: var(--ns-font-display); font-size: var(--cx-text-lg);
-  font-weight: var(--cx-weight-bold); color: var(--ns-ink); margin: 0 0 var(--cx-space-5);
-  letter-spacing: var(--cx-track-tight);
+  font-family: var(--ml-font-head); font-size: var(--cx-text-lg);
+  font-weight: var(--cx-weight-semibold); color: var(--ml-ink); margin: 0 0 var(--cx-space-5);
 }
 .empty-seats {
-  text-align: center; padding: var(--cx-space-5) 0; color: var(--ns-muted);
-  i { font-size: 1.9rem; margin-bottom: var(--cx-space-2); display: block; color: var(--ns-faint); }
+  text-align: center; padding: var(--cx-space-5) 0; color: var(--ml-muted);
+  i { font-size: 1.9rem; margin-bottom: var(--cx-space-2); display: block; color: var(--ml-faint); }
   p { font-size: var(--cx-text-sm); margin: 0; }
 }
 .selected-list { display: flex; flex-direction: column; gap: var(--cx-space-2); }
 .selected-item {
   display: flex; align-items: center; justify-content: space-between;
-  background: var(--ns-beam-soft);
-  border: 1px solid rgba(89, 217, 210, 0.22);
-  border-radius: var(--ns-r-sm); padding: 10px 13px;
+  background: var(--ml-action-soft);
+  border: 1px solid var(--ml-action-ring);
+  border-radius: var(--ml-r-sm); padding: 10px 13px;
 }
 .selected-seat-name { display: flex; flex-direction: column; gap: 2px; }
 .seat-code {
-  font-family: var(--ns-font-data); font-size: var(--cx-text-md);
-  font-weight: var(--cx-weight-medium); color: var(--ns-beam);
+  font-family: var(--ml-font-data); font-size: var(--cx-text-md);
+  font-weight: var(--cx-weight-medium); color: var(--ml-action-strong);
   font-variant-numeric: tabular-nums;
 }
-.seat-type { font-size: var(--cx-text-xs); color: var(--ns-muted); }
+.seat-type { font-size: var(--cx-text-xs); color: var(--ml-muted); }
 .seat-price {
-  font-family: var(--ns-font-data); font-size: var(--cx-text-sm);
-  color: var(--ns-ink); font-variant-numeric: tabular-nums;
+  font-family: var(--ml-font-data); font-size: var(--cx-text-sm);
+  color: var(--ml-ink); font-variant-numeric: tabular-nums;
 }
+.seat-entry-price-strike { text-decoration: line-through; color: var(--ml-faint); margin-right: 6px; }
 
-.price-divider { border: none; border-top: 1px solid var(--ns-line-2); margin: var(--cx-space-4) 0; }
+.price-divider { border: none; border-top: 1px dashed var(--ml-rule); margin: var(--cx-space-4) 0; }
 .price-row {
   display: flex; justify-content: space-between; align-items: center;
-  font-size: var(--cx-text-sm); color: var(--ns-ink-2); margin-bottom: var(--cx-space-2);
+  font-size: var(--cx-text-sm); color: var(--ml-ink-2); margin-bottom: var(--cx-space-2);
   font-variant-numeric: tabular-nums;
 }
-.total-row { color: var(--ns-ink); font-weight: var(--cx-weight-semibold); margin-top: var(--cx-space-1); }
+.total-row { color: var(--ml-ink); font-weight: var(--cx-weight-semibold); margin-top: var(--cx-space-1); }
 .total-amount {
-  font-family: var(--ns-font-data); font-size: var(--cx-text-lg);
-  font-weight: var(--cx-weight-medium); color: var(--ns-beam);
+  font-family: var(--ml-font-data); font-size: var(--cx-text-lg);
+  font-weight: var(--cx-weight-medium); color: var(--ml-action-strong);
   font-variant-numeric: tabular-nums;
 }
 
@@ -254,77 +255,74 @@
 
 // ── Ticket-quantity / food steppers ────────────────────────────────────────────
 .form-card {
-  background: var(--ns-panel);
-  border: 1px solid var(--ns-line);
-  border-radius: var(--ns-r-lg);
+  background: var(--ml-panel);
+  border: 1px solid var(--ml-rule);
+  border-radius: var(--ml-r-lg);
   padding: var(--cx-space-5);
   margin-bottom: var(--cx-space-4);
 }
 .card-title {
-  font-family: var(--ns-font-display); font-size: var(--cx-text-md);
-  font-weight: var(--cx-weight-bold); color: var(--ns-ink); margin: 0 0 var(--cx-space-2);
-  i { margin-right: var(--cx-space-2); color: var(--ns-beam); }
+  font-family: var(--ml-font-head); font-size: var(--cx-text-md);
+  font-weight: var(--cx-weight-semibold); color: var(--ml-ink); margin: 0 0 var(--cx-space-2);
+  i { margin-right: var(--cx-space-2); color: var(--ml-action-strong); }
 }
-// Ticket-type and combo options, both rendered as "magnetic card" tiles — a dark gradient body,
-// a mag-stripe band near the top and a chip glyph below it, evoking a physical membership/gift
+// Ticket-type and combo options, both rendered as "magnetic card" tiles — a ticket-paper body, a
+// mag-stripe band near the top and a gold chip glyph below it, evoking a physical membership/gift
 // card rather than a plain list row. Purely decorative; the stepper still drives the same
-// inc/decTicket / inc/decFood methods as the old list rows did.
+// inc/decTicket / inc/decFood methods as the plain list rows did before this.
 .option-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--cx-space-3);
 }
 .option-card {
   position: relative; overflow: hidden;
   display: flex; flex-direction: column; justify-content: space-between; gap: var(--cx-space-4);
-  min-height: 128px; padding: 14px 14px 12px; border-radius: 14px;
-  background: linear-gradient(155deg, #1b1e29 0%, #101219 55%, #0a0b10 100%);
-  border: 1px solid var(--ns-line-2);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  min-height: 128px; padding: 14px 14px 12px; border-radius: var(--ml-r-lg);
+  background: var(--ml-panel);
+  border: 1px solid var(--ml-rule);
   transition: border-color var(--cx-dur-fast) var(--cx-ease), box-shadow var(--cx-dur-fast) var(--cx-ease);
 
   &.active {
-    border-color: var(--ns-beam);
-    box-shadow: 0 0 0 2px var(--ns-beam-soft), 0 6px 16px rgba(0, 0, 0, 0.35);
+    border-color: var(--ml-action);
+    box-shadow: 0 0 0 2px var(--ml-action-soft);
   }
 }
 .mag-card-stripe {
   position: absolute; top: 22px; left: 0; right: 0; height: 16px;
-  background: repeating-linear-gradient(180deg, #05060a 0px, #05060a 3px, #14151c 3px, #14151c 4px);
-  opacity: 0.9;
+  background: repeating-linear-gradient(180deg, var(--ml-panel-4) 0px, var(--ml-panel-4) 3px, var(--ml-panel-2) 3px, var(--ml-panel-2) 4px);
 }
 .mag-card-chip {
   width: 26px; height: 19px; border-radius: 4px; margin-top: 30px;
-  background: linear-gradient(135deg, #d8c48a, #a9884a);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, var(--ml-action), var(--ml-action-strong));
   position: relative;
   &::before, &::after {
-    content: ''; position: absolute; background: rgba(0, 0, 0, 0.25);
+    content: ''; position: absolute; background: color-mix(in srgb, var(--ml-on-action) 40%, transparent);
   }
   &::before { top: 50%; left: 3px; right: 3px; height: 1px; transform: translateY(-50%); }
   &::after { left: 50%; top: 3px; bottom: 3px; width: 1px; transform: translateX(-50%); }
 }
 .option-info { display: flex; flex-direction: column; gap: 2px; }
-.option-name { font-weight: 600; color: var(--ns-ink); font-size: var(--cx-text-sm); }
-.option-price { font-size: 0.85rem; opacity: 0.75; color: var(--ns-muted); }
+.option-name { font-weight: 600; color: var(--ml-ink); font-size: var(--cx-text-sm); }
+.option-price { font-size: 0.85rem; opacity: 0.75; color: var(--ml-muted); }
 .category-discount {
-  align-self: flex-start; margin-top: 2px; padding: 1px 7px; border-radius: 6px;
+  align-self: flex-start; margin-top: 2px; padding: 1px 7px; border-radius: var(--ml-r-sm);
   font-size: 0.68rem; font-weight: 700; letter-spacing: 0.02em;
-  background: var(--ns-gel-soft); color: var(--ns-gel);
+  background: var(--ml-success-soft); color: var(--ml-success-ink);
 }
 .option-qty { display: inline-flex; align-items: center; gap: 10px; }
 .option-qty button {
-  width: 28px; height: 28px; border-radius: 8px; cursor: pointer;
-  border: 1px solid var(--ns-line-2); background: rgba(255, 255, 255, 0.06);
-  color: var(--ns-ink); font-size: 1.05rem; line-height: 1;
+  width: 28px; height: 28px; border-radius: var(--ml-r-sm); cursor: pointer;
+  border: 1px solid var(--ml-rule); background: var(--ml-panel-2);
+  color: var(--ml-ink); font-size: 1.05rem; line-height: 1;
 }
 .option-qty button:disabled { opacity: 0.4; cursor: default; }
-.option-qty span { min-width: 16px; text-align: center; font-weight: 700; color: var(--ns-ink); }
-.ticket-progress { font-size: var(--cx-text-xs); color: var(--ns-muted); margin: var(--cx-space-3) 0 0; }
+.option-qty span { min-width: 16px; text-align: center; font-weight: 700; color: var(--ml-ink); }
+.ticket-progress { font-size: var(--cx-text-xs); color: var(--ml-muted); margin: var(--cx-space-3) 0 0; }
 
 .confirm-btn {
   width: 100%; justify-content: center; margin-top: var(--cx-space-5);
   font-size: var(--cx-text-sm); letter-spacing: 0.03em;
 }
 .select-more-hint {
-  text-align: center; font-size: var(--cx-text-xs); color: var(--ns-muted);
+  text-align: center; font-size: var(--cx-text-xs); color: var(--ml-muted);
   margin: var(--cx-space-2) 0 0;
 }

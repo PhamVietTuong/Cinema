@@ -18,6 +18,11 @@
   padding: 22px 16px;
   background: linear-gradient(180deg, var(--ml-chrome), var(--ml-chrome-2) 70%);
   border-right: 1px solid var(--ml-chrome-rule);
+  // mat-drawer's own default styles round the top/bottom-right corners
+  // (--mat-sys-corner-large), which clips this gradient and lets the light
+  // mat-sidenav-container's background show through behind the curve. This
+  // chrome rail is meant to be a flush rectangular edge, not a rounded card.
+  border-radius: 0;
   // No `position` here — mat-sidenav's own structural CSS already sets
   // `position: absolute` on this element (its off-canvas slide mechanism
   // depends on it), which already establishes the positioning context the
@@ -128,6 +133,7 @@
   top: 0;
   z-index: 20;
   height: var(--ml-topbar-h);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;

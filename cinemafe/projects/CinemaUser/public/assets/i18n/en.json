@@ -296,7 +296,6 @@
     "list": {
       "subtitle": "Discover the latest cinematic masterpieces with top-tier sound and picture quality.",
       "searchPlaceholder": "Search movies, directors...",
-      "book": "Book",
       "empty": "No movies available.",
       "titleAll": "Movie List",
       "titleNow": "Now Showing",
@@ -310,19 +309,6 @@
     "filters": {
       "genre": "Genre",
       "language": "Language"
-    },
-    "durationMinutes": "{{count}} min",
-    "footer": {
-      "tagline": "The most premium cinema experience in Vietnam.",
-      "links": "Links",
-      "linkMovies": "Movies",
-      "linkTheaters": "Theaters",
-      "linkPromotions": "Promotions",
-      "linkMembership": "Membership",
-      "support": "Support",
-      "terms": "Terms",
-      "privacy": "Privacy",
-      "contact": "Contact"
     },
     "detail": {
       "bookNow": "Book Now",
@@ -354,7 +340,6 @@
     }
   },
   "profile": {
-    "pageTitle": "My Account",
     "rank": "Tier",
     "points": "Points",
     "tabOverview": "Dashboard",

@@ -9,13 +9,15 @@ import {
   SharedModule, loadMovies, loadNowShowing, loadComingSoon,
   selectPagedMovies, selectNowShowing, selectComingSoon, selectMoviesLoading,
 } from 'CinemaLib';
+import { MovieCardComponent } from '../../../shared/movie-card/movie-card.component';
+import { SiteFooterComponent } from '../../../shared/site-footer/site-footer.component';
 
 type Mode = 'all' | 'now' | 'coming';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, MovieCardComponent, SiteFooterComponent],
   templateUrl: './movie-list.component.html',
   styleUrl: './movie-list.component.scss',
 })

@@ -39,9 +39,9 @@ import { ChatbotComponent } from './shared/chatbot/chatbot.component';
     provideCinemaTranslation(),
     ...provideCinemaSvgIcons(),
     provideAppInitializer(() => inject(ThemeService).init()),
-    // "Night Screening" is a dark identity — dark is the default here, and the
-    // navbar toggle switches to the "Lights Up" counterpart.
-    { provide: APP_DEFAULT_THEME, useValue: 'dark' },
+    // "Marquee Ledger" is a light-first identity — light is the default here,
+    // and the navbar toggle switches to the "After Hours" counterpart.
+    { provide: APP_DEFAULT_THEME, useValue: 'light' },
     { provide: API_BASE_URL, useValue: environment.apiUrl },
     { provide: HUB_BASE_URL, useValue: environment.hubUrl },
     { provide: CinemaServiceAgent.CINEMA_BASE_URL, useValue: environment.apiUrl },

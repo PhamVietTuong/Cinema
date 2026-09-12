@@ -1,0 +1,105 @@
+// The footer bookends the page in the same fixed dark "marquee chrome" as the
+// topbar, so a page is framed by chrome top and bottom regardless of theme.
+:host { display: contents; }
+
+.sf-footer {
+  background: var(--ml-chrome);
+  color: var(--ml-chrome-ink-2);
+}
+
+.sf-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 40px 44px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 44px;
+}
+
+.sf-brand {
+  .sf-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ml-chrome-ink);
+    font-family: var(--ml-font-head);
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+
+    &:hover { text-decoration: none; }
+    svg-icon { color: var(--ml-action); font-size: 1.2rem; }
+  }
+
+  p {
+    color: var(--ml-chrome-muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin: 0 0 20px;
+    max-width: 34ch;
+  }
+}
+
+.sf-social { display: flex; gap: 10px; }
+.sf-social a {
+  width: 38px;
+  height: 38px;
+  background: var(--ml-chrome-hover);
+  border-radius: var(--ml-r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ml-chrome-ink);
+  text-decoration: none;
+  transition: background 0.16s ease;
+
+  &:hover { background: var(--ml-action); color: var(--ml-on-action); text-decoration: none; }
+}
+
+.sf-col {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+
+  h4 {
+    font-family: var(--ml-font-head);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--ml-chrome-ink);
+    margin: 0 0 5px;
+  }
+
+  a {
+    color: var(--ml-chrome-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.16s ease;
+
+    &:hover { color: var(--ml-action); text-decoration: none; }
+  }
+}
+
+.sf-bottom {
+  border-top: 1px dashed var(--ml-chrome-rule);
+
+  p {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    color: var(--ml-chrome-muted);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sf-inner { grid-template-columns: 1fr 1fr; gap: 32px; padding: 40px 24px 36px; }
+}
+@media (max-width: 768px) {
+  .sf-inner { grid-template-columns: 1fr; gap: 24px; padding: 36px 20px 28px; }
+  .sf-bottom p { padding: 16px 20px; }
+}

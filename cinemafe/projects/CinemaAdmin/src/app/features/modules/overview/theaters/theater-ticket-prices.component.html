@@ -25,7 +25,7 @@
       [offset]="pageOffset"
       [limit]="pageSize"
       [loadingIndicator]="loadingIndicator"
-      [messages]="{ emptyMessage: 'theaters.ticketPrices.empty' | translate, totalMessage: '', selectedMessage: '' }"
+      [messages]="{ emptyMessage: 'theaters.ticketPrices.empty' | translate, selectedMessage: '' }"
       (page)="onChangePage($event)">
 
       <ngx-datatable-column [name]="'theaters.ticketPrices.roomTypeLabel' | translate" prop="roomTypeId" [sortable]="false">
@@ -60,6 +60,13 @@
           </div>
         </ng-template>
       </ngx-datatable-column>
+
+      <ngx-datatable-footer>
+        <ng-template ngx-datatable-footer-template>
+          <div class="page-count">{{ 'common.totalEntries' | translate }} {{ total }}</div>
+          <ngx-datatable-pager *ngIf="total > pageSize"></ngx-datatable-pager>
+        </ng-template>
+      </ngx-datatable-footer>
     </ngx-datatable>
   </div>
 

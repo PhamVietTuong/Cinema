@@ -507,20 +507,108 @@ textarea.ad-input { height: auto; padding: 10px 12px; line-height: var(--cx-lead
   color: var(--ml-chrome-muted);
 }
 
-// ── MatDialog chrome (centered title, floating close button, dark actions) ──
-// Dialogs go dark in both app themes: a light modal punching out of this
-// palette (day or night) would read as broken, not as a deliberate contrast.
-.mat-mdc-dialog-container { position: relative; }
-.dialog-title { text-align: center; }
+// ── MatDialog chrome ─────────────────────────────────────────────────────────
+// A mat-dialog is the same object as .modal-card (above), seen through the
+// CDK overlay instead of a hand-rolled scrim: same surface, border, radius,
+// shadow and backdrop, plus the one gold top edge as its accent. Keep the
+// two in visual sync when either changes. This block is CinemaAdmin-scoped
+// by construction — CinemaUser doesn't @use this file.
+//
+// Material 21's dialog stylesheet only reads `--mat-dialog-*` custom
+// properties (the older `--mdc-dialog-*` names are gone) and is injected
+// after this stylesheet, so any plain CSS declaration here that collides
+// with one of its own rules on the *same* selector loses on cascade order
+// regardless of specificity — go through the token where one exists
+// (surface colour/shape/elevation, subhead, supporting text, paddings,
+// actions border) and only fall back to a raw, ancestor-qualified rule for
+// the handful of properties Material exposes no token for (border, the
+// gold top edge).
+.cdk-overlay-container .cdk-overlay-dark-backdrop {
+  background: rgba(20, 16, 10, 0.5);
+}
+
+.mat-mdc-dialog-container {
+  position: relative;
+
+  --mat-dialog-container-color: var(--ml-panel);
+  --mat-dialog-container-shape: var(--ml-r-lg);
+  --mat-dialog-container-elevation-shadow: 0 24px 60px -20px rgba(20, 16, 10, 0.4);
+  --mat-dialog-subhead-color: var(--ml-ink);
+  --mat-dialog-subhead-font: var(--ml-font-head);
+  --mat-dialog-subhead-size: 15px;
+  --mat-dialog-subhead-weight: var(--cx-weight-semibold);
+  --mat-dialog-subhead-tracking: var(--cx-track-tight);
+  --mat-dialog-subhead-line-height: 1.3;
+  --mat-dialog-supporting-text-color: var(--ml-ink-2);
+  --mat-dialog-supporting-text-font: var(--ml-font-body);
+  --mat-dialog-supporting-text-line-height: var(--cx-leading);
+  --mat-dialog-headline-padding: 16px 44px 16px 20px;
+  --mat-dialog-content-padding: 20px;
+  --mat-dialog-with-actions-content-padding: 20px;
+  --mat-dialog-actions-padding: var(--cx-space-3) var(--cx-space-5) var(--cx-space-4);
+}
+
+// Border has no M3 token and Material sets none on the surface, so a plain
+// declaration is uncontested here.
+.mat-mdc-dialog-surface {
+  border: 1px solid var(--ml-rule-strong);
+  border-top: 3px solid var(--ml-action);
+}
+
+// Uppercase Oswald title with the same dashed "ticket stub" tear used under
+// .ad-page-header, separating the header from the form below it. Targets
+// both Material's own class and the .dialog-title helper so every dialog is
+// covered regardless of which one its template uses. Material sets no
+// text-align/text-transform/border here (only an [dir=rtl] text-align), so
+// this is uncontested too.
+.mat-mdc-dialog-title,
+.dialog-title {
+  text-align: left;
+  text-transform: uppercase;
+  border-bottom: 1px dashed var(--ml-rule);
+
+  // MDC's own inline-block spacer before the title text fights the padding
+  // above — remove it rather than fight its box model.
+  &::before { content: none; }
+}
+
+// Material sets no background on dialog content, so this is uncontested;
+// colour/line-height are driven by the supporting-text tokens above instead
+// of a raw declaration, since Material's own rule targets the same
+// `.mat-mdc-dialog-container .mat-mdc-dialog-content` selector and would
+// otherwise win the tie by injection order.
+.mat-mdc-dialog-content {
+  background: var(--ml-panel);
+}
+
+// Material's own `.mat-mdc-dialog-actions` rule sets `border-top: 1px solid
+// transparent` and `min-height: 52px` at the same specificity as a bare
+// `.mat-mdc-dialog-actions`/`.dialog-actions` class selector and is injected
+// after this stylesheet, so it wins ties — qualify with the ancestor
+// `.mat-mdc-dialog-container` (one level higher) to out-specify it instead
+// of `!important`. `.dialog-actions` is kept as an alias so no per-dialog
+// template needs to change.
+.mat-mdc-dialog-container .mat-mdc-dialog-actions,
+.mat-mdc-dialog-container .dialog-actions {
+  background: var(--ml-panel-2);
+  border-top: 1px solid var(--ml-rule);
+  min-height: 0;
+}
+
 // mat-icon-button's own MDC styles set `position: relative` on the same
 // specificity level and are injected after this stylesheet, so a bare
 // `.dialog-close-btn` rule loses the cascade — qualify with the element and
-// an ancestor class to win without `!important`.
-.mat-mdc-dialog-container button.dialog-close-btn {
+// an ancestor class to win without `!important`. Anchored to the surface
+// (which carries the radius), not the container.
+.mat-mdc-dialog-surface button.dialog-close-btn {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 8px;
+  right: 8px;
   z-index: 1;
+  color: var(--ml-muted);
+  --mat-icon-button-state-layer-color: var(--ml-action-soft);
+
+  &:hover { color: var(--ml-action); }
 }
 
 // Label-beside-field row shape: a fixed-width label column beside the form
@@ -537,14 +625,12 @@ textarea.ad-input { height: auto; padding: 10px 12px; line-height: var(--cx-lead
   color: var(--ml-muted);
 }
 .dialog-row-field { flex: 1 1 auto; }
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--cx-space-3);
-  padding: var(--cx-space-3) var(--cx-space-5) var(--cx-space-4);
-  background: var(--ml-panel-2);
-  border-top: 1px solid var(--ml-rule);
-}
+// display/justify-content/gap/padding for .dialog-actions come from
+// Material's own .mat-mdc-dialog-actions rule (default flex row,
+// flex-end alignment, 8px sibling margin, and the --mat-dialog-actions-padding
+// token set above); background/border-top are set in the "MatDialog chrome"
+// block above, on the ancestor-qualified selector needed to beat Material's
+// own tie-breaking rule — see that block, don't duplicate here.
 
 // ── Filter card (above the grid) ────────────────────────────────────────────
 .ad-filter-card { margin-bottom: var(--cx-space-5); }

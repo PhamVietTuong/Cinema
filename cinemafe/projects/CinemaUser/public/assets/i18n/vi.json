@@ -296,7 +296,6 @@
     "list": {
       "subtitle": "Khám phá những siêu phẩm điện ảnh mới nhất với chất lượng âm thanh và hình ảnh đỉnh cao.",
       "searchPlaceholder": "Tìm phim, đạo diễn...",
-      "book": "Đặt Vé",
       "empty": "Không có phim nào.",
       "titleAll": "Danh Sách Phim",
       "titleNow": "Phim Đang Chiếu",
@@ -310,19 +309,6 @@
     "filters": {
       "genre": "Thể loại",
       "language": "Ngôn ngữ"
-    },
-    "durationMinutes": "{{count}} phút",
-    "footer": {
-      "tagline": "Trải nghiệm điện ảnh đẳng cấp nhất Việt Nam.",
-      "links": "Liên Kết",
-      "linkMovies": "Phim",
-      "linkTheaters": "Rạp Chiếu",
-      "linkPromotions": "Khuyến Mãi",
-      "linkMembership": "Thành Viên",
-      "support": "Hỗ Trợ",
-      "terms": "Điều Khoản",
-      "privacy": "Bảo Mật",
-      "contact": "Liên Hệ"
     },
     "detail": {
       "bookNow": "Đặt Vé Ngay",
@@ -354,7 +340,6 @@
     }
   },
   "profile": {
-    "pageTitle": "Tài Khoản Của Tôi",
     "rank": "Hạng",
     "points": "Điểm",
     "tabOverview": "Bảng Điều Khiển",

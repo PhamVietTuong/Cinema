@@ -12,6 +12,12 @@
   --ml-panel-3:  #ece4d5;   // inert fills, avatars, chips, neutral KPI icon
   --ml-panel-4:  #ddd2bd;   // scrollbar thumb, strong fill
 
+  // ── Seat map (CinemaUser booking). Neutral fills only — a seat's state is  ─
+  // carried by the .seat/.locked/.vip/.selected classes layered on top of    ─
+  // these, not by these two tokens alone.                                    ─
+  --ml-seat-empty: #ece4d5;
+  --ml-seat-taken: #ddd2bd;
+
   // ── Ink ──────────────────────────────────────────────────────────────────
   --ml-ink:    #211a12;
   --ml-ink-2:  #4a3f30;
@@ -92,6 +98,9 @@
   --ml-panel-2:  #221c15;
   --ml-panel-3:  #2a221a;
   --ml-panel-4:  #3a3024;
+
+  --ml-seat-empty: #2a221a;
+  --ml-seat-taken: #3a3024;
 
   --ml-ink:    #f4ead9;
   --ml-ink-2:  #cbbba0;

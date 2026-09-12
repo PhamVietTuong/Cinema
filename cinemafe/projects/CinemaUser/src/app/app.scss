@@ -2,14 +2,15 @@
   display: block;
 }
 
+// The topbar is the fixed dark "marquee chrome" — like CinemaAdmin's sidebar,
+// deliberately NOT part of the light/dark switch, so the frame reads the same
+// regardless of which mode the page content is in.
 .topbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--mp-topbar);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--mp-line);
+  background: var(--ml-chrome);
+  border-bottom: 1px solid var(--ml-chrome-rule);
 }
 
 .topbar-inner {
@@ -27,21 +28,22 @@
   flex-direction: column;
   gap: 5px;
   text-decoration: none;
-  color: var(--mp-ink);
-  font-family: var(--mp-font-display);
-  font-weight: 800;
+  color: var(--ml-chrome-ink);
+  font-family: var(--ml-font-head);
+  font-weight: 600;
   font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   flex-shrink: 0;
-  letter-spacing: -0.02em;
 
   &:hover { text-decoration: none; }
 
-  // logo icon + wordmark sit on one row; the marquee bulbs tuck underneath
+  // logo icon + wordmark sit on one row; the perforation rule tucks underneath
   .logo-row { display: flex; align-items: center; gap: 9px; }
-  i { color: var(--mp-red); font-size: 1.2rem; }
+  i { color: var(--ml-action); font-size: 1.2rem; }
 
-  .marquee-rule { padding-left: 30px; }
+  .marquee-rule { padding-left: 30px; .bulb { background: var(--ml-chrome-rule); } }
 }
 
 .nav-links {
@@ -54,7 +56,7 @@
   flex: 1;
 
   a {
-    color: var(--mp-ink-2);
+    color: var(--ml-chrome-ink-2);
     text-decoration: none;
     font-size: 0.94rem;
     font-weight: 500;
@@ -62,10 +64,10 @@
     position: relative;
     transition: color 0.18s ease;
 
-    &:hover { color: var(--mp-ink); }
+    &:hover { color: var(--ml-chrome-ink); }
 
     &.active-link {
-      color: var(--mp-ink);
+      color: var(--ml-chrome-ink);
       font-weight: 600;
 
       &::after {
@@ -75,7 +77,7 @@
         right: 0;
         bottom: -2px;
         height: 2px;
-        background: var(--mp-red);
+        background: var(--ml-action);
         border-radius: 2px;
       }
     }
@@ -90,32 +92,30 @@
 }
 
 .nav-link-text {
-  color: var(--mp-ink-2);
+  color: var(--ml-chrome-ink-2);
   text-decoration: none;
   font-size: 0.94rem;
   font-weight: 500;
   transition: color 0.18s ease;
 
   &:hover {
-    color: var(--mp-ink);
+    color: var(--ml-chrome-ink);
     text-decoration: none;
   }
 }
 
 .btn-nav-primary {
-  background: var(--mp-ink);
-  // Label tracks the page ground so the "ink" button inverts cleanly in dark.
-  color: var(--mp-paper);
+  background: var(--ml-action);
+  color: var(--ml-on-action);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
   padding: 9px 20px;
-  border-radius: var(--mp-r-sm);
-  transition: transform 0.16s ease, box-shadow 0.2s ease;
+  border-radius: var(--ml-r-sm);
+  transition: background 0.16s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--mp-shadow-md);
+    background: var(--ml-action-strong);
     text-decoration: none;
   }
 }
@@ -124,22 +124,21 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--mp-card);
-  border: 1px solid var(--mp-line);
-  color: var(--mp-ink);
+  background: var(--ml-chrome-hover);
+  border: 1px solid var(--ml-chrome-rule);
+  color: var(--ml-chrome-ink);
   font-size: 0.9rem;
   font-weight: 500;
-  font-family: var(--mp-font-body);
+  font-family: var(--ml-font-body);
   padding: 8px 16px;
-  border-radius: var(--mp-r-sm);
+  border-radius: var(--ml-r-sm);
   cursor: pointer;
-  box-shadow: var(--mp-shadow-sm);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  transition: border-color 0.18s ease;
 
-  &:hover { border-color: var(--mp-line-3); box-shadow: var(--mp-shadow-md); }
+  &:hover { border-color: var(--ml-action-ring); }
 
-  i:first-child { color: var(--mp-red); font-size: 1rem; }
-  .small-icon { font-size: 0.65rem; opacity: 0.5; }
+  i:first-child { color: var(--ml-action); font-size: 1rem; }
+  .small-icon { font-size: 0.65rem; opacity: 0.6; }
 }
 
 .nav-theme-btn {
@@ -149,40 +148,41 @@
   width: 36px;
   height: 36px;
   flex: none;
-  background: var(--mp-card);
-  border: 1px solid var(--mp-line);
-  border-radius: var(--mp-r-sm);
-  color: var(--mp-ink-2);
+  background: var(--ml-chrome-hover);
+  border: 1px solid var(--ml-chrome-rule);
+  border-radius: var(--ml-r-sm);
+  color: var(--ml-chrome-ink-2);
   font-size: 0.9rem;
   cursor: pointer;
   transition: color 0.18s ease, border-color 0.18s ease;
 
-  &:hover { color: var(--mp-gold); border-color: var(--mp-line-3); }
+  &:hover { color: var(--ml-action); border-color: var(--ml-action-ring); }
 }
 
 // ── Mobile nav (hamburger + slide-down panel) ─────────────────────────────────
 .nav-burger {
   display: none;
   margin-left: auto;
-  background: var(--mp-card);
-  border: 1px solid var(--mp-line);
-  color: var(--mp-ink);
+  background: var(--ml-chrome-hover);
+  border: 1px solid var(--ml-chrome-rule);
+  color: var(--ml-chrome-ink);
   width: 40px;
   height: 40px;
-  border-radius: var(--mp-r-sm);
+  border-radius: var(--ml-r-sm);
   cursor: pointer;
   font-size: 1.1rem;
 }
 
 // Positioning (edge-sliding drawer + backdrop) is handled by mat-sidenav itself based on
-// its [mode]/position inputs — only visual styling lives here.
+// its [mode]/position inputs — only visual styling lives here. The drawer stays part of
+// the fixed dark chrome, like an extension of the topbar it slides out from.
 .mobile-menu {
   display: flex;
   flex-direction: column;
   width: min(280px, 84vw);
   height: 100%;
   padding: 8px 20px 16px;
-  background: var(--mp-card);
+  background: var(--ml-chrome);
 
   // The switcher renders a Material button; align it with the plain rows around it.
   .mobile-menu-lang { display: block; padding: 4px 0; }
@@ -192,22 +192,26 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--mp-ink-2);
+    color: var(--ml-chrome-ink-2);
     font-size: 0.95rem;
     font-weight: 500;
-    font-family: var(--mp-font-body);
+    font-family: var(--ml-font-body);
     padding: 12px 8px;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: var(--ml-r-sm);
 
-    &:hover, &.active-link { color: var(--mp-red); background: var(--mp-red-soft); }
+    &:hover, &.active-link { color: var(--ml-action); background: var(--ml-chrome-hover); }
   }
 }
-.mobile-menu-divider { height: 1px; background: var(--mp-line); margin: 6px 0; }
+.mobile-menu-divider { height: 1px; background: var(--ml-chrome-rule); margin: 6px 0; }
 
 // The sidenav container just needs a bounded height so its 'over' drawer can span full
 // height; the app's real page scrolling still happens inside mat-sidenav-content.
-.app-shell { min-height: calc(100vh - 68px); }
+// Material's own default (an opaque rgb(250,250,250) "surface") sits between <body>'s
+// themed ground and every page's content — transparent panels (e.g. .membership-inner's
+// gold tint) would composite against that hardcoded white instead of the real dark-mode
+// ground, so it must be overridden explicitly rather than left to inherit.
+.app-shell { min-height: calc(100vh - 68px); background: transparent; }
 
 @media (max-width: 768px) {
   .nav-links { display: none; }
