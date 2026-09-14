@@ -1,0 +1,315 @@
+// "Admit One" — shared shell for CinemaUser's login/register pages: a single
+// ticket card (dark stub + form body) on the Marquee Ledger palette. Mixin
+// only — @use'ing this file emits nothing; each page calls auth-ledger-shell
+// once and adds its own page-specific rules alongside it.
+
+@mixin auth-ledger-shell {
+
+  // ── Page ────────────────────────────────────────────────────────────────
+  // Full-screen: the ticket fills the viewport itself, no floating card.
+  .auth-page {
+    min-height: calc(100vh - 68px);
+    display: grid;
+    background: var(--ml-paper);
+  }
+
+  // ── Ticket ──────────────────────────────────────────────────────────────
+  .auth-ticket {
+    width: 100%;
+    min-width: 0;
+    min-height: calc(100vh - 68px);
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    background: var(--ml-panel);
+    animation: auth-ticket-in var(--cx-dur-slow) var(--cx-ease);
+  }
+
+  @keyframes auth-ticket-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  // ── Stub (left) ─────────────────────────────────────────────────────────
+  .auth-stub {
+    position: relative;
+    min-width: 0;
+    background: var(--ml-chrome);
+    color: var(--ml-chrome-ink-2);
+    border-right: 1px dashed var(--ml-chrome-rule);
+    padding: var(--cx-space-7) var(--cx-space-6);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--cx-space-6);
+
+    // Perforation notches, cut from the page ground, sitting on the seam.
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--ml-paper);
+    }
+    &::before { top: -6px; }
+    &::after { bottom: -6px; }
+  }
+
+  .auth-stub-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--ml-font-head);
+    font-size: var(--cx-text-lg);
+    font-weight: var(--cx-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--cx-track-caps);
+    color: var(--ml-chrome-ink);
+
+    svg-icon { color: var(--ml-action); font-size: 1.3rem; }
+  }
+
+  .auth-stub-headline {
+    font-family: var(--ml-font-head);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: var(--cx-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--cx-track-tight);
+    line-height: var(--cx-leading-tight);
+    color: var(--ml-chrome-ink);
+    margin: 0 0 var(--cx-space-3);
+  }
+  .auth-stub-sub {
+    font-size: var(--cx-text-md);
+    color: var(--ml-chrome-ink-2);
+    line-height: var(--cx-leading);
+    max-width: 34ch;
+    margin: 0;
+  }
+
+  .auth-stub-perks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cx-space-3);
+    margin-top: var(--cx-space-5);
+  }
+  .auth-stub-perk {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--cx-text-sm);
+    color: var(--ml-chrome-ink-2);
+
+    svg-icon { color: var(--ml-action); flex-shrink: 0; }
+  }
+
+  .auth-stub-foot {
+    border-top: 1px dashed var(--ml-chrome-rule);
+    padding-top: var(--cx-space-4);
+
+    .marquee-rule { opacity: 0.7; .bulb { background: var(--ml-chrome-rule); } }
+  }
+
+  // ── Body (right) ────────────────────────────────────────────────────────
+  .auth-body {
+    min-width: 0;
+    background: var(--ml-panel);
+    padding: var(--cx-space-6) var(--cx-space-6) var(--cx-space-5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .auth-body-inner { width: 100%; max-width: 400px; min-width: 0; }
+
+  // ── Segmented switch ────────────────────────────────────────────────────
+  .auth-switch {
+    display: flex;
+    gap: 4px;
+    padding: 3px;
+    height: 40px;
+    background: var(--ml-paper-2);
+    border: 1px solid var(--ml-rule);
+    border-radius: var(--ml-r-md);
+    margin-bottom: var(--cx-space-6);
+  }
+  .auth-seg {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    border-radius: var(--ml-r-sm);
+    background: transparent;
+    color: var(--ml-muted);
+    font-family: var(--ml-font-body);
+    font-size: var(--cx-text-sm);
+    font-weight: var(--cx-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--cx-track-caps);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--cx-dur) var(--cx-ease), color var(--cx-dur) var(--cx-ease);
+
+    &:hover:not(.is-active) { color: var(--ml-ink); text-decoration: none; }
+    &.is-active { background: var(--ml-action); color: var(--ml-on-action); }
+  }
+
+  // ── Head ────────────────────────────────────────────────────────────────
+  .auth-head-title {
+    font-family: var(--ml-font-head);
+    font-size: var(--cx-text-xl);
+    font-weight: var(--cx-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--cx-track-tight);
+    color: var(--ml-ink);
+    margin: 0 0 4px;
+  }
+  .auth-head-sub {
+    font-size: var(--cx-text-sm);
+    color: var(--ml-muted);
+    margin: 0 0 var(--cx-space-5);
+  }
+
+  // ── Fields ──────────────────────────────────────────────────────────────
+  .auth-body-inner mat-form-field {
+    width: 100%;
+    margin-bottom: var(--cx-space-3);
+    --mdc-outlined-text-field-outline-color: var(--ml-rule);
+    --mdc-outlined-text-field-hover-outline-color: var(--ml-rule-strong);
+    --mdc-outlined-text-field-focus-outline-color: var(--ml-action);
+    --mdc-outlined-text-field-label-text-color: var(--ml-muted);
+    --mdc-outlined-text-field-focus-label-text-color: var(--ml-action-strong);
+    --mdc-outlined-text-field-input-text-color: var(--ml-ink);
+    --mdc-outlined-text-field-container-shape: var(--ml-r-sm);
+    --mdc-outlined-text-field-error-outline-color: var(--ml-danger);
+    --mdc-outlined-text-field-error-focus-outline-color: var(--ml-danger);
+    --mdc-outlined-text-field-error-label-text-color: var(--ml-danger);
+    --mdc-outlined-text-field-error-hover-label-text-color: var(--ml-danger);
+    --mat-form-field-container-text-size: var(--cx-text-md);
+    --mat-form-field-error-text-color: var(--ml-danger);
+  }
+  // Material's own spacing for a prefix icon is `padding: 0 12px` on the
+  // `.mat-icon` CHILD itself (form-field's own styles target `> .mat-icon`
+  // specifically) — svg-icon isn't a `.mat-icon`, so it never received that
+  // padding and sat flush against the box's left border. Restore the same
+  // padding Material gives a real mat-icon in this slot.
+  //
+  // Selector shape matters here: Angular's view-encapsulation compiler
+  // stamps its scoping attribute onto EVERY compound in a selector, not just
+  // the last one. `.mat-mdc-form-field-icon-prefix` belongs to MatFormField's
+  // own template, not this component's, so it never carries this
+  // component's attribute — a selector that names it as a middle segment
+  // (`.auth-body-inner .mat-mdc-form-field-icon-prefix svg-icon`, `>` or not)
+  // can never match anything. Only a 2-segment selector (ancestor + target,
+  // skipping the div entirely) works, same as the color rule below.
+  .auth-body-inner svg-icon[matPrefix] {
+    color: var(--ml-faint);
+    padding: 0 12px;
+    box-sizing: content-box;
+  }
+  .auth-body-inner .mat-focused svg-icon[matPrefix] { color: var(--ml-action-strong); }
+
+  .auth-body-inner mat-checkbox {
+    --mdc-checkbox-selected-icon-color: var(--ml-action);
+    --mdc-checkbox-selected-hover-icon-color: var(--ml-action-strong);
+    --mdc-checkbox-selected-focus-icon-color: var(--ml-action-strong);
+    --mdc-checkbox-selected-checkmark-color: var(--ml-on-action);
+    --mat-checkbox-label-text-color: var(--ml-ink-2);
+    font-size: var(--cx-text-sm);
+  }
+
+  // ── Alerts ──────────────────────────────────────────────────────────────
+  .auth-alert {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--ml-r-sm);
+    padding: 10px 14px;
+    font-size: var(--cx-text-sm);
+    margin-bottom: var(--cx-space-4);
+
+    svg-icon { flex-shrink: 0; }
+
+    &.auth-alert--error {
+      background: var(--ml-danger-soft);
+      border: 1px solid var(--ml-danger);
+      color: var(--ml-danger-ink);
+    }
+    &.auth-alert--success {
+      background: var(--ml-success-soft);
+      border: 1px solid var(--ml-success);
+      color: var(--ml-success-ink);
+    }
+  }
+
+  // ── Submit ──────────────────────────────────────────────────────────────
+  .auth-submit {
+    width: 100%;
+    justify-content: center;
+    --mdc-circular-progress-active-indicator-color: var(--ml-on-action);
+  }
+
+  // ── Divider ─────────────────────────────────────────────────────────────
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: var(--cx-space-5) 0;
+
+    &::before, &::after { content: ''; flex: 1; height: 1px; background: var(--ml-rule); }
+    span { font-size: var(--cx-text-xs); color: var(--ml-muted); white-space: nowrap; }
+  }
+
+  .google-btn-wrap { display: flex; justify-content: center; max-width: 100%; overflow: hidden; margin-bottom: 8px; }
+
+  .auth-fb-btn {
+    width: 100%;
+    justify-content: center;
+    background: #1877f2 !important;
+    color: #fff !important;
+    border: none !important;
+
+    svg-icon { font-size: 1.05rem; }
+    &:hover { background: #166fe0 !important; }
+  }
+
+  // ── Foot ────────────────────────────────────────────────────────────────
+  .auth-foot {
+    margin-top: var(--cx-space-5);
+    padding-top: var(--cx-space-4);
+    border-top: 1px dashed var(--ml-rule);
+    text-align: center;
+
+    p { font-size: var(--cx-text-sm); color: var(--ml-muted); margin: 0 0 6px;
+      &:last-child { margin-bottom: 0; }
+    }
+    a { color: var(--ml-action-strong); font-weight: var(--cx-weight-semibold);
+      &:hover { text-decoration: underline; }
+    }
+  }
+
+  // ── Responsive ──────────────────────────────────────────────────────────
+  @media (max-width: 900px) {
+    .auth-ticket { grid-template-columns: 1fr; min-height: auto; }
+
+    .auth-stub {
+      border-right: none;
+      border-bottom: 1px dashed var(--ml-chrome-rule);
+      padding: var(--cx-space-5) var(--cx-space-5);
+      gap: var(--cx-space-3);
+
+      &::before, &::after { top: auto; right: auto; bottom: -6px; }
+      &::before { left: -6px; }
+      &::after { right: -6px; }
+    }
+    .auth-stub-sub, .auth-stub-perks, .auth-stub-foot { display: none; }
+    .auth-stub-headline { font-size: 1.3rem; margin: 0; }
+
+    .auth-body {
+      padding: var(--cx-space-6) var(--cx-space-4);
+    }
+  }
+}

@@ -2,47 +2,53 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.rooms.nameLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="name" [placeholder]="'theaters.rooms.namePlaceholder' | translate">
-        <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+    <div class="dlg-grid">
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="rm-name">{{ 'theaters.rooms.nameLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="rm-name" formControlName="name" [placeholder]="'theaters.rooms.namePlaceholder' | translate">
+            <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.rooms.roomTypeLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="roomTypeId" [placeholder]="'theaters.rooms.selectRoomType' | translate">
-          <mat-option *ngFor="let t of data.roomTypes" [value]="t.id">{{ t.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.controls['roomTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" id="rm-roomTypeId-lbl">{{ 'theaters.rooms.roomTypeLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="roomTypeId" panelClass="dlg-select-panel" aria-labelledby="rm-roomTypeId-lbl" [placeholder]="'theaters.rooms.selectRoomType' | translate">
+              <mat-option *ngFor="let t of data.roomTypes" [value]="t.id">{{ t.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['roomTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="rm-status-lbl">{{ 'common.status' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="status" panelClass="dlg-select-panel" aria-labelledby="rm-status-lbl">
+              <mat-option *ngFor="let s of statuses" [value]="s.value">{{ s.name | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.rooms.rowsLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" formControlName="totalRows" placeholder="10">
-        <mat-error *ngIf="form.controls['totalRows'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.rooms.columnsLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" formControlName="totalColumns" placeholder="12">
-        <mat-error *ngIf="form.controls['totalColumns'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'common.status' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="status">
-          <mat-option *ngFor="let s of statuses" [value]="s.value">{{ s.name | translate }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="rm-totalRows">{{ 'theaters.rooms.rowsLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="rm-totalRows" type="number" formControlName="totalRows" placeholder="10">
+            <mat-error *ngIf="form.controls['totalRows'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="rm-totalColumns">{{ 'theaters.rooms.columnsLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="rm-totalColumns" type="number" formControlName="totalColumns" placeholder="12">
+            <mat-error *ngIf="form.controls['totalColumns'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </mat-dialog-content>
 

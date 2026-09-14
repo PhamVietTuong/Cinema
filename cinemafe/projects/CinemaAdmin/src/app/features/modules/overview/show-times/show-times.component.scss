@@ -12,7 +12,16 @@
 // ── Week navigation in the header ─────────────────────────────────────────────
 .st-week-nav { display: inline-flex; align-items: center; gap: 8px; }
 .st-week-label { min-width: 168px; }
-.st-movie-filter { width: 200px; }
+.st-movie-filter {
+  width: 200px;
+  align-self: center;
+
+  // This select never shows a hint/error, so the app-wide reserved
+  // subscript space (_dialog-ledger.scss) just adds dead height below
+  // it, throwing off vertical centering against the plain buttons
+  // beside it in .ad-toolbar.
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
+}
 
 // ── Legend ────────────────────────────────────────────────────────────────────
 .st-legend {

@@ -2,31 +2,40 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.roomTypes.nameLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="name" [placeholder]="'theaters.roomTypes.namePlaceholder' | translate">
-        <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+    <div class="dlg-grid">
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="rt-name">{{ 'theaters.roomTypes.nameLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="rt-name" formControlName="name" [placeholder]="'theaters.roomTypes.namePlaceholder' | translate">
+            <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.roomTypes.descLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="description" [placeholder]="'theaters.roomTypes.descPlaceholder' | translate">
-      </mat-form-field>
-    </div>
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="rt-description">{{ 'theaters.roomTypes.descLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="rt-description" formControlName="description" [placeholder]="'theaters.roomTypes.descPlaceholder' | translate">
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-checkbox formControlName="supportsThreeD">{{ 'theaters.roomTypes.supportsThreeD' | translate }}</mat-checkbox>
-    </div>
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="rt-threeDSurcharge">{{ 'theaters.roomTypes.threeDSurcharge' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="rt-threeDSurcharge" type="number" min="0" formControlName="threeDSurcharge" placeholder="0">
+            <mat-error *ngIf="form.controls['threeDSurcharge'].hasError('min')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.roomTypes.threeDSurcharge' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" min="0" formControlName="threeDSurcharge" placeholder="0">
-        <mat-error *ngIf="form.controls['threeDSurcharge'].hasError('min')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
+      <div class="dlg-switch">
+        <span class="dlg-switch-label" id="rt-supportsThreeD-lbl">{{ 'theaters.roomTypes.supportsThreeD' | translate }}</span>
+        <mat-slide-toggle formControlName="supportsThreeD" aria-labelledby="rt-supportsThreeD-lbl"></mat-slide-toggle>
+      </div>
     </div>
   </mat-dialog-content>
 

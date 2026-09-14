@@ -2,41 +2,49 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.patronCategories.nameLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="name" [placeholder]="'theaters.patronCategories.namePlaceholder' | translate">
-        <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+    <div class="dlg-grid">
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="pc-name">{{ 'theaters.patronCategories.nameLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="pc-name" formControlName="name" [placeholder]="'theaters.patronCategories.namePlaceholder' | translate">
+            <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="pc-discountPercent">{{ 'theaters.patronCategories.discountLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="pc-discountPercent" type="number" step="1" min="0" max="100" formControlName="discountPercent" placeholder="0">
+            <mat-error *ngIf="form.controls['discountPercent'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.patronCategories.discountLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" step="1" min="0" max="100" formControlName="discountPercent" placeholder="0">
-        <mat-error *ngIf="form.controls['discountPercent'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+      <div class="dlg-switch">
+        <span class="dlg-switch-label" id="pc-isActive-lbl">{{ 'theaters.patronCategories.activeLabel' | translate }}</span>
+        <mat-slide-toggle formControlName="isActive" aria-labelledby="pc-isActive-lbl"></mat-slide-toggle>
+      </div>
 
-    <div class="dialog-row">
-      <mat-checkbox formControlName="isActive">{{ 'theaters.patronCategories.activeLabel' | translate }}</mat-checkbox>
-    </div>
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="pc-description">{{ 'common.description' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="pc-description" formControlName="description" [placeholder]="'theaters.patronCategories.descPlaceholder' | translate">
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'common.description' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="description" [placeholder]="'theaters.patronCategories.descPlaceholder' | translate">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.patronCategories.allowedSeatTypesLabel' | translate }}</mat-label>
-      <p class="ad-sub">{{ 'theaters.patronCategories.allowedSeatTypesHint' | translate }}</p>
-      <div class="ad-checkbox-list">
-        <label class="ad-label" *ngFor="let st of seatTypes">
-          <input type="checkbox" [checked]="isSeatTypeSelected(st.id)" (change)="toggleSeatType(st.id)">
-          {{ st.name }}
-        </label>
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label">{{ 'theaters.patronCategories.allowedSeatTypesLabel' | translate }}</label>
+          <p class="ad-sub">{{ 'theaters.patronCategories.allowedSeatTypesHint' | translate }}</p>
+          <div class="ad-checkbox-list">
+            <label class="ad-label" *ngFor="let st of seatTypes">
+              <input type="checkbox" [checked]="isSeatTypeSelected(st.id)" (change)="toggleSeatType(st.id)">
+              {{ st.name }}
+            </label>
+          </div>
+        </div>
       </div>
     </div>
   </mat-dialog-content>

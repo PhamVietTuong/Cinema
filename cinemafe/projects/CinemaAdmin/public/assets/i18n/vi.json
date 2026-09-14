@@ -108,7 +108,8 @@
     "none": "Không có",
     "filters": "Bộ Lọc",
     "totalEntries": "Tổng cộng",
-    "required": "Trường này là bắt buộc."
+    "required": "Trường này là bắt buộc.",
+    "remove": "Xóa"
   },
   "login": {
     "heroTitleLine1": "Bảng Điều Khiển",

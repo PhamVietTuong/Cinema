@@ -67,12 +67,12 @@ export class TheaterPatronCategoriesComponent extends BaseTableComponent<Dto> {
   }
 
   openCreate(): void {
-    this._dialog.open(PatronCategoryDialog, { width: '480px', data: { theaterId: this.theaterId, patronCategory: null, seatTypes: this.seatTypes } })
+    this._dialog.open(PatronCategoryDialog, { width: '560px', data: { theaterId: this.theaterId, patronCategory: null, seatTypes: this.seatTypes } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(item: Dto): void {
-    this._dialog.open(PatronCategoryDialog, { width: '480px', data: { theaterId: this.theaterId, patronCategory: item, seatTypes: this.seatTypes } })
+    this._dialog.open(PatronCategoryDialog, { width: '560px', data: { theaterId: this.theaterId, patronCategory: item, seatTypes: this.seatTypes } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 

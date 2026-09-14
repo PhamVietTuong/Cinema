@@ -1,4 +1,7 @@
-﻿export interface Movie {
+﻿/** Default page size for public movie lists (All / Now Showing / Coming Soon) before "load more" appears. */
+export const MOVIE_PAGE_SIZE = 15;
+
+export interface Movie {
   id: number;
   title: string;
   description: string;

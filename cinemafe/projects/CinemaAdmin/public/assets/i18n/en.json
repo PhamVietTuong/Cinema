@@ -108,7 +108,8 @@
     "none": "None",
     "filters": "Filters",
     "totalEntries": "in total",
-    "required": "This field is required."
+    "required": "This field is required.",
+    "remove": "Remove"
   },
   "login": {
     "heroTitleLine1": "Admin",

@@ -1,5 +1,6 @@
 @use './tokens';
 @use './ledger-tokens' as ledger;
+@use './dialog-ledger' as dialog;
 
 // ╔══════════════════════════════════════════════════════════════════════════╗
 // ║  "Marquee Ledger" — CinemaAdmin's design system (replaces "Box Office").   ║
@@ -527,6 +528,18 @@ textarea.ad-input { height: auto; padding: 10px 12px; line-height: var(--cx-lead
   background: rgba(20, 16, 10, 0.5);
 }
 
+// Material's own `.mat-mdc-dialog-panel` (the CDK overlay-pane class Material
+// adds, an ANCESTOR of .mat-mdc-dialog-container below — custom properties
+// only cascade to descendants, so this has to be set here, not down on the
+// container) caps every dialog at
+// `max-width: var(--mat-dialog-container-max-width, 560px)` regardless of
+// the `width` passed to `MatDialogConfig` — a wider `width` only "wins" up
+// to this ceiling, so every dialog silently topped out at 560px until this
+// was set, no matter what `width` value a component asked for.
+.mat-mdc-dialog-panel {
+  --mat-dialog-container-max-width: 90vw;
+}
+
 .mat-mdc-dialog-container {
   position: relative;
 
@@ -611,20 +624,8 @@ textarea.ad-input { height: auto; padding: 10px 12px; line-height: var(--cx-lead
   &:hover { color: var(--ml-action); }
 }
 
-// Label-beside-field row shape: a fixed-width label column beside the form
-// field, not Material's own floating-label-inside-the-field idiom.
-.dialog-row {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--cx-space-4);
-  margin-bottom: var(--cx-space-2);
-}
-.dialog-row-label {
-  flex: 0 0 140px;
-  padding-top: 16px;
-  color: var(--ml-muted);
-}
-.dialog-row-field { flex: 1 1 auto; }
+@include dialog.ledger-dialog-forms;
+
 // display/justify-content/gap/padding for .dialog-actions come from
 // Material's own .mat-mdc-dialog-actions rule (default flex row,
 // flex-end alignment, 8px sibling margin, and the --mat-dialog-actions-padding

@@ -151,14 +151,14 @@ export class ShowTimesManagementComponent implements OnInit, OnDestroy {
   // ── Create / edit ─────────────────────────────────────────────────────────────
   openCreate(): void {
     this._dialog.open(ShowTimeDialog, {
-      width: '720px',
+      width: '800px',
       data: { showTime: null, weekStart: this.weekStart, movies: this.movies, theaters: this.theaters, rooms: this.rooms },
     }).afterClosed().subscribe(changed => { if (changed) { this.load(); } });
   }
 
   edit(st: Dto): void {
     this._dialog.open(ShowTimeDialog, {
-      width: '720px',
+      width: '800px',
       data: { showTime: st, weekStart: this.weekStart, movies: this.movies, theaters: this.theaters, rooms: this.rooms },
     }).afterClosed().subscribe(changed => { if (changed) { this.load(); } });
   }

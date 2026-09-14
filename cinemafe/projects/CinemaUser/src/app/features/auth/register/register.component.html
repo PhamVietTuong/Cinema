@@ -1,56 +1,56 @@
-<div class="auth-split">
+<div class="auth-page">
+  <div class="auth-ticket">
 
-  <!-- Left: Cinematic Panel -->
-  <div class="auth-cinema">
-    <div class="cinema-glow"></div>
-    <div class="cinema-inner">
-      <div class="cinema-brand">
+    <!-- Left: Cinematic stub -->
+    <div class="auth-stub">
+      <div class="auth-stub-brand">
         <svg-icon key="logo"></svg-icon>
         <span>Midnight Premium</span>
       </div>
-      <h2 class="cinema-headline">{{ 'auth.register.heroTitle1' | translate }}<br>{{ 'auth.register.heroTitle2' | translate }}</h2>
-      <p class="cinema-sub">{{ 'auth.register.heroSub' | translate }}</p>
-      <div class="cinema-perks">
-        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.register.perk1' | translate }}</div>
-        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.register.perk2' | translate }}</div>
-        <div class="perk-item"><mat-icon>check_circle</mat-icon> {{ 'auth.register.perk3' | translate }}</div>
+      <div>
+        <h2 class="auth-stub-headline">{{ 'auth.register.heroTitle1' | translate }}<br>{{ 'auth.register.heroTitle2' | translate }}</h2>
+        <p class="auth-stub-sub">{{ 'auth.register.heroSub' | translate }}</p>
+        <div class="auth-stub-perks">
+          <div class="auth-stub-perk"><svg-icon key="check-circle" fontSize="18px"></svg-icon> {{ 'auth.register.perk1' | translate }}</div>
+          <div class="auth-stub-perk"><svg-icon key="check-circle" fontSize="18px"></svg-icon> {{ 'auth.register.perk2' | translate }}</div>
+          <div class="auth-stub-perk"><svg-icon key="check-circle" fontSize="18px"></svg-icon> {{ 'auth.register.perk3' | translate }}</div>
+        </div>
+      </div>
+      <div class="auth-stub-foot">
+        <span class="marquee-rule">
+          <i class="bulb" *ngFor="let f of [1,2,3,4,5,6,7,8,9]"></i>
+        </span>
       </div>
     </div>
-    <div class="cinema-film-strip">
-      <div *ngFor="let f of [1,2,3,4,5,6,7,8]" class="strip-frame"></div>
-    </div>
-  </div>
 
-  <!-- Right: Register Form -->
-  <div class="auth-panel">
-    <div class="auth-form-wrap">
+    <!-- Right: Register Form -->
+    <div class="auth-body">
+      <div class="auth-body-inner">
 
-      <!-- Tab toggle -->
-      <div class="auth-tabs">
-        <a routerLink="/auth/login" class="auth-tab">{{ 'auth.login.tab' | translate }}</a>
-        <button class="auth-tab active">{{ 'auth.register.tab' | translate }}</button>
-      </div>
+        <!-- Tab toggle -->
+        <div class="auth-switch">
+          <a routerLink="/auth/login" class="auth-seg">{{ 'auth.login.tab' | translate }}</a>
+          <button type="button" class="auth-seg is-active">{{ 'auth.register.tab' | translate }}</button>
+        </div>
 
-      <h3 class="form-title">{{ 'auth.register.title' | translate }}</h3>
-      <p class="form-sub">{{ 'auth.register.subtitle' | translate }}</p>
+        <h3 class="auth-head-title">{{ 'auth.register.title' | translate }}</h3>
+        <p class="auth-head-sub">{{ 'auth.register.subtitle' | translate }}</p>
 
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-        <div class="field-row-2">
-          <div class="field-group">
+          <div class="auth-row-2">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'auth.fields.name' | translate }}</mat-label>
-              <mat-icon matPrefix>person</mat-icon>
+              <svg-icon key="person" matPrefix fontSize="20px"></svg-icon>
               <input matInput type="text" formControlName="name" [placeholder]="'auth.register.namePlaceholder' | translate">
               <mat-error *ngIf="form.get('name')?.hasError('required')">
                 {{ 'auth.errors.nameRequired' | translate }}
               </mat-error>
             </mat-form-field>
-          </div>
-          <div class="field-group">
+
             <mat-form-field appearance="outline">
               <mat-label>{{ 'auth.fields.phone' | translate }}</mat-label>
-              <mat-icon matPrefix>phone</mat-icon>
+              <svg-icon key="phone" matPrefix fontSize="20px"></svg-icon>
               <input matInput type="tel" formControlName="phone" placeholder="0901234567">
               <mat-error *ngIf="form.get('phone')?.hasError('required')">
                 {{ 'auth.errors.phoneRequired' | translate }}
@@ -60,12 +60,10 @@
               </mat-error>
             </mat-form-field>
           </div>
-        </div>
 
-        <div class="field-group">
           <mat-form-field appearance="outline">
             <mat-label>{{ 'auth.fields.email' | translate }}</mat-label>
-            <mat-icon matPrefix>mail</mat-icon>
+            <svg-icon key="mail" matPrefix fontSize="20px"></svg-icon>
             <input matInput type="email" formControlName="email" placeholder="email@example.com">
             <mat-error *ngIf="form.get('email')?.hasError('required')">
               {{ 'auth.errors.emailRequired' | translate }}
@@ -74,12 +72,10 @@
               {{ 'auth.errors.emailInvalid' | translate }}
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <div class="field-group">
           <mat-form-field appearance="outline">
             <mat-label>{{ 'auth.fields.password' | translate }}</mat-label>
-            <mat-icon matPrefix>lock</mat-icon>
+            <svg-icon key="lock" matPrefix fontSize="20px"></svg-icon>
             <input matInput type="password" formControlName="password" [placeholder]="'auth.fields.passwordPlaceholder' | translate">
             <mat-error *ngIf="form.get('password')?.hasError('required')">
               {{ 'auth.errors.passwordRequired' | translate }}
@@ -88,38 +84,36 @@
               {{ 'auth.errors.passwordMinLength' | translate }}
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <div class="field-group">
           <mat-form-field appearance="outline">
             <mat-label>{{ 'auth.fields.confirmPassword' | translate }}</mat-label>
-            <mat-icon matPrefix>lock</mat-icon>
+            <svg-icon key="lock" matPrefix fontSize="20px"></svg-icon>
             <input matInput type="password" formControlName="confirmPassword" [placeholder]="'auth.fields.confirmPasswordPlaceholder' | translate">
             <mat-error *ngIf="form.get('confirmPassword')?.hasError('required')">
               {{ 'auth.errors.confirmPasswordRequired' | translate }}
             </mat-error>
           </mat-form-field>
-          <div class="field-error" *ngIf="form.get('confirmPassword')?.touched && form.hasError('passwordMismatch')">
+          <div class="auth-field-error" *ngIf="form.get('confirmPassword')?.touched && form.hasError('passwordMismatch')">
             {{ 'auth.errors.passwordMismatch' | translate }}
           </div>
+
+          <div class="auth-alert auth-alert--error" *ngIf="error$ | async as err" role="alert">
+<svg-icon key="alert-circle" fontSize="18px"></svg-icon> {{ err }}
+          </div>
+
+          <button type="submit" mat-raised-button class="btn-primary-cta auth-submit" [disabled]="loading$ | async">
+            <mat-spinner diameter="18" *ngIf="loading$ | async"></mat-spinner>
+            <ng-container *ngIf="!(loading$ | async)">
+              {{ 'auth.register.submit' | translate }} <svg-icon key="arrow-right" fontSize="18px"></svg-icon>
+            </ng-container>
+          </button>
+        </form>
+
+        <div class="auth-foot">
+          <p>{{ 'auth.register.hasAccount' | translate }} <a routerLink="/auth/login">{{ 'auth.register.loginLink' | translate }}</a></p>
         </div>
-
-        <div class="api-error" *ngIf="error$ | async as err">
-          <mat-icon>error</mat-icon> {{ err }}
-        </div>
-
-        <button type="submit" mat-raised-button class="btn-primary-cta submit-btn" [disabled]="loading$ | async">
-          <mat-spinner diameter="18" *ngIf="loading$ | async"></mat-spinner>
-          <ng-container *ngIf="!(loading$ | async)">
-            {{ 'auth.register.submit' | translate }} <mat-icon>arrow_forward</mat-icon>
-          </ng-container>
-        </button>
-      </form>
-
-      <p class="switch-link">
-        {{ 'auth.register.hasAccount' | translate }} <a routerLink="/auth/login">{{ 'auth.register.loginLink' | translate }}</a>
-      </p>
+      </div>
     </div>
-  </div>
 
+  </div>
 </div>

@@ -46,6 +46,25 @@
   .marquee-rule { padding-left: 30px; .bulb { background: var(--ml-chrome-rule); } }
 }
 
+// Chase the logo's bulb strip like real marquee lights — skipped entirely
+// under prefers-reduced-motion, and scoped to the topbar logo only (the
+// same .bulb markup elsewhere — login/register/home — stays static).
+@media (prefers-reduced-motion: no-preference) {
+  .logo-link .marquee-rule .bulb {
+    animation: bulb-chase 1.6s ease-in-out infinite;
+  }
+  .logo-link .marquee-rule .bulb:nth-child(1) { animation-delay: 0s; }
+  .logo-link .marquee-rule .bulb:nth-child(2) { animation-delay: 0.1s; }
+  .logo-link .marquee-rule .bulb:nth-child(3) { animation-delay: 0.2s; }
+  .logo-link .marquee-rule .bulb:nth-child(4) { animation-delay: 0.3s; }
+  .logo-link .marquee-rule .bulb:nth-child(5) { animation-delay: 0.4s; }
+  .logo-link .marquee-rule .bulb:nth-child(6) { animation-delay: 0.5s; }
+}
+@keyframes bulb-chase {
+  0%, 60%, 100% { background: var(--ml-chrome-rule); box-shadow: none; }
+  20% { background: var(--ml-action); box-shadow: 0 0 6px 1px var(--ml-action-ring); }
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -105,17 +124,26 @@
 }
 
 .btn-nav-primary {
-  background: var(--ml-action);
-  color: var(--ml-on-action);
+  // mat-raised-button carries its own M3 theme colors (container/label,
+  // plus a state-layer tint on hover) that otherwise win over a plain
+  // background/color declaration here — override the tokens themselves so
+  // the button reliably stays gold instead of washing out to the theme's
+  // default pale "unthemed" surface on hover.
+  --mdc-protected-button-container-color: var(--ml-action);
+  --mdc-protected-button-label-text-color: var(--ml-on-action);
+  --mat-protected-button-state-layer-color: var(--ml-on-action);
+  background-color: var(--ml-action) !important;
+  color: var(--ml-on-action) !important;
+  box-shadow: none !important;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
   padding: 9px 20px;
   border-radius: var(--ml-r-sm);
-  transition: background 0.16s ease;
+  transition: background-color 0.16s ease;
 
   &:hover {
-    background: var(--ml-action-strong);
+    background-color: var(--ml-action-strong) !important;
     text-decoration: none;
   }
 }
@@ -123,22 +151,55 @@
 .nav-user-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: var(--ml-chrome-hover);
-  border: 1px solid var(--ml-chrome-rule);
+  gap: 10px;
+  background: none;
+  border: 1px solid transparent;
   color: var(--ml-chrome-ink);
   font-size: 0.9rem;
   font-weight: 500;
   font-family: var(--ml-font-body);
-  padding: 8px 16px;
-  border-radius: var(--ml-r-sm);
+  padding: 4px 12px 4px 4px;
+  border-radius: var(--ml-r-full);
   cursor: pointer;
-  transition: border-color 0.18s ease;
+  transition: background 0.18s ease, border-color 0.18s ease;
 
-  &:hover { border-color: var(--ml-action-ring); }
+  &:hover { background: var(--ml-chrome-hover); border-color: var(--ml-chrome-rule); }
 
-  i:first-child { color: var(--ml-action); font-size: 1rem; }
-  .small-icon { font-size: 0.65rem; opacity: 0.6; }
+  // mat-button wraps all projected content in one .mdc-button__label span —
+  // the avatar and name both land inside that single child, so the button's
+  // own flex/gap (which only spaces its direct children) never reached
+  // between them; they need their own flex context. Material injects its
+  // own .mdc-button__label rule into <head> at runtime, after this
+  // stylesheet — on a specificity tie it wins by load order alone, so
+  // !important is needed here too (same reasoning as .btn-nav-primary above).
+  .mdc-button__label {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ml-action);
+    color: var(--ml-on-action);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .user-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .small-icon { font-size: 0.9rem; opacity: 0.55; }
 }
 
 .nav-theme-btn {
@@ -158,6 +219,33 @@
 
   &:hover { color: var(--ml-action); border-color: var(--ml-action-ring); }
 }
+
+// Theme toggle, language switcher and (when signed in) the user trigger
+// shared one pill instead of three separately-bordered buttons — one
+// border/shadow to keep instead of three.
+.nav-cluster {
+  display: flex;
+  align-items: center;
+  background: var(--ml-chrome-hover);
+  border: 1px solid var(--ml-chrome-rule);
+  border-radius: var(--ml-r-full);
+  padding: 4px;
+
+  .nav-theme-btn,
+  .nav-user-btn,
+  .cl-language-switcher {
+    background: none;
+    border-color: transparent;
+    border-radius: var(--ml-r-full);
+  }
+  .nav-theme-btn:hover,
+  .nav-user-btn:hover,
+  .cl-language-switcher:hover {
+    background: var(--ml-chrome-rule);
+    border-color: transparent;
+  }
+}
+.nav-cluster-div { width: 1px; height: 20px; background: var(--ml-chrome-rule); flex: none; margin: 0 2px; }
 
 // ── Mobile nav (hamburger + slide-down panel) ─────────────────────────────────
 .nav-burger {

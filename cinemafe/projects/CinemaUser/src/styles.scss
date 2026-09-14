@@ -34,6 +34,19 @@
   @include ledger.ml-dark-tokens;
 }
 
+// ── svg-icon sizing ──────────────────────────────────────────────────────────
+// Material's own `.mat-mdc-icon-button svg { width: var(--mat-icon-button-
+// icon-size, 24px); ... }` targets ANY svg inside a mat-icon-button — a tie
+// in specificity against a same-weight svg-icon rule, resolved in Material's
+// favor by injection order. That's why only the login password-visibility
+// toggle (the one svg-icon that sits inside a mat-icon-button) rendered
+// oversized at a fixed 24px instead of its own intended size: !important is
+// needed to reliably win regardless of where the icon is hosted.
+svg-icon svg {
+  width: 1em !important;
+  height: 1em !important;
+}
+
 // ── Angular Material's colour system ─────────────────────────────────────────
 // So every Material surface — selects, form fields, sidenav, menus, spinner,
 // paginator — follows the same light/dark switch as the rest of the app, the
@@ -276,11 +289,22 @@ a {
 
 // ── Shared buttons ──────────────────────────────────────────────────────────
 .btn-primary-cta {
+  // Most uses of this class are mat-raised-button — Material carries its own
+  // M3 theme container/label colors (plus a state-layer tint on hover) that
+  // otherwise win over a plain background/color here, washing the button out
+  // to the theme's pale "unthemed" default instead of staying gold. Same fix
+  // as .btn-nav-primary in app.scss.
+  --mdc-protected-button-container-color: var(--ml-action);
+  --mdc-protected-button-label-text-color: var(--ml-on-action);
+  --mdc-protected-button-disabled-container-color: var(--ml-action);
+  --mdc-protected-button-disabled-label-text-color: var(--ml-on-action);
+  --mat-protected-button-state-layer-color: var(--ml-on-action);
   display: inline-flex;
   align-items: center;
   gap: var(--cx-space-2);
-  background: var(--ml-action);
-  color: var(--ml-on-action);
+  background-color: var(--ml-action) !important;
+  color: var(--ml-on-action) !important;
+  box-shadow: none !important;
   font-family: var(--ml-font-body);
   font-size: var(--cx-text-md);
   font-weight: var(--cx-weight-semibold);
@@ -289,10 +313,10 @@ a {
   border: none;
   cursor: pointer;
   text-decoration: none;
-  transition: background var(--cx-dur) var(--cx-ease);
+  transition: background-color var(--cx-dur) var(--cx-ease);
 
   &:hover {
-    background: var(--ml-action-strong);
+    background-color: var(--ml-action-strong) !important;
     text-decoration: none;
     color: var(--ml-on-action);
   }
@@ -300,6 +324,18 @@ a {
   &:disabled, &[disabled] {
     opacity: 0.45;
     cursor: not-allowed;
+  }
+
+  // mat-raised-button wraps all projected content (text + any icon) in one
+  // .mdc-button__label span that is `display: block` — this button's own
+  // flex/align-items/gap never reach the icon inside it, so it sits on the
+  // text's baseline instead of centered (same root cause as .nav-user-btn in
+  // CinemaUser's app.scss). !important since Material's own rule for this
+  // element carries the same specificity and loads after this stylesheet.
+  .mdc-button__label {
+    display: flex !important;
+    align-items: center;
+    gap: var(--cx-space-2);
   }
 }
 
@@ -369,6 +405,68 @@ a {
   &.cdk-keyboard-focused:not([disabled]) {
     background: var(--ml-action-soft) !important;
   }
+}
+
+// ── Account menu (app.html #userMenu) — identity header + quick links ───────
+// above the plain Account/Logout list. Only this menu uses these classes.
+.user-account-menu {
+  .menu-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px 12px;
+
+    .user-avatar { width: 40px; height: 40px; font-size: 1rem; flex: none; }
+
+    .menu-who {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      b { color: var(--ml-ink); font-size: 0.94rem; font-weight: 600; }
+      > span:not(.tier-badge) { color: var(--ml-muted); font-size: 0.78rem; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+  }
+
+  .tier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 3px 9px 3px 7px;
+    border-radius: var(--ml-r-full);
+    background: var(--ml-action-soft);
+    color: var(--ml-action-strong);
+    font-size: 0.72rem;
+    font-weight: 600;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  }
+
+  .menu-quick-row {
+    display: flex;
+    gap: 4px;
+    padding: 0 6px 6px;
+
+    a.mat-mdc-menu-item {
+      flex: 1;
+      min-height: auto;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 4px 8px;
+      font-size: 0.72rem;
+      text-align: center;
+
+      .menu-icon, mat-icon { margin-right: 0; }
+    }
+  }
+
+  .menu-div { height: 1px; background: var(--ml-rule); margin: 4px 8px 6px; }
+
+  // Logout is no longer the only "other" action once quick links exist —
+  // demote it to a quiet row instead of the same gold icon tone as Account.
+  .menu-item-quiet .menu-icon { color: var(--ml-muted); }
 }
 
 .mat-mdc-progress-spinner {

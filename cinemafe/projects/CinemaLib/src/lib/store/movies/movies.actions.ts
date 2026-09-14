@@ -1,12 +1,13 @@
 ﻿import { createAction, props } from '@ngrx/store';
 import { Movie, MovieDetail, PagedResult } from '../../models/movie.models';
 
-export const loadNowShowing = createAction('[Movies] Load Now Showing');
-export const loadNowShowingSuccess = createAction('[Movies] Load Now Showing Success', props<{ movies: Movie[] }>());
+export const loadNowShowing = createAction('[Movies] Load Now Showing', props<{ page: number; pageSize: number }>());
+export const loadNowShowingSuccess = createAction('[Movies] Load Now Showing Success', props<{ movies: Movie[]; total: number; page: number }>());
 export const loadNowShowingFailure = createAction('[Movies] Load Now Showing Failure', props<{ error: string }>());
 
-export const loadComingSoon = createAction('[Movies] Load Coming Soon');
-export const loadComingSoonSuccess = createAction('[Movies] Load Coming Soon Success', props<{ movies: Movie[] }>());
+export const loadComingSoon = createAction('[Movies] Load Coming Soon', props<{ page: number; pageSize: number }>());
+export const loadComingSoonSuccess = createAction('[Movies] Load Coming Soon Success', props<{ movies: Movie[]; total: number; page: number }>());
+export const loadComingSoonFailure = createAction('[Movies] Load Coming Soon Failure', props<{ error: string }>());
 
 export const loadMovies = createAction('[Movies] Load Movies', props<{ search?: string; genreId?: number; page: number; pageSize: number }>());
 export const loadMoviesSuccess = createAction('[Movies] Load Movies Success', props<{ result: PagedResult<Movie> }>());

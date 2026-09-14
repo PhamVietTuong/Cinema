@@ -2,47 +2,52 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.roomTypeLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="roomTypeId">
-          <mat-option *ngFor="let rt of roomTypes" [value]="rt.id">{{ rt.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.controls['roomTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+    <div class="dlg-grid">
+      <div class="dlg-row dlg-row--3">
+        <div class="dlg-field">
+          <label class="dlg-label" id="tp-roomTypeId-lbl">{{ 'theaters.ticketPrices.roomTypeLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="roomTypeId" panelClass="dlg-select-panel" aria-labelledby="tp-roomTypeId-lbl">
+              <mat-option *ngFor="let rt of roomTypes" [value]="rt.id">{{ rt.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['roomTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="tp-seatTypeId-lbl">{{ 'theaters.ticketPrices.seatTypeLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="seatTypeId" panelClass="dlg-select-panel" aria-labelledby="tp-seatTypeId-lbl">
+              <mat-option *ngFor="let s of seatTypes" [value]="s.id">{{ s.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['seatTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="tp-timeSlotId-lbl">{{ 'theaters.ticketPrices.timeSlotLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="timeSlotId" panelClass="dlg-select-panel" aria-labelledby="tp-timeSlotId-lbl">
+              <mat-option *ngFor="let t of timeSlots" [value]="t.id">{{ t.name }} ({{ t.startTime }}–{{ t.endTime }})</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['timeSlotId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.seatTypeLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="seatTypeId">
-          <mat-option *ngFor="let s of seatTypes" [value]="s.id">{{ s.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.controls['seatTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="tp-priceMultiplier">{{ 'theaters.ticketPrices.multiplierLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="tp-priceMultiplier" type="number" step="0.05" min="0.01" formControlName="priceMultiplier" placeholder="1.2">
+            <mat-error *ngIf="form.controls['priceMultiplier'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+            <mat-hint>{{ 'theaters.ticketPrices.multiplierHint' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.timeSlotLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="timeSlotId">
-          <mat-option *ngFor="let t of timeSlots" [value]="t.id">{{ t.name }} ({{ t.startTime }}–{{ t.endTime }})</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.controls['timeSlotId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'theaters.ticketPrices.multiplierLabel' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" step="0.05" min="0.01" formControlName="priceMultiplier" placeholder="1.2">
-        <mat-error *ngIf="form.controls['priceMultiplier'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-        <mat-hint>{{ 'theaters.ticketPrices.multiplierHint' | translate }}</mat-hint>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-checkbox formControlName="isHoliday">{{ 'theaters.ticketPrices.applyHoliday' | translate }}</mat-checkbox>
+      <div class="dlg-switch">
+        <span class="dlg-switch-label" id="tp-isHoliday-lbl">{{ 'theaters.ticketPrices.applyHoliday' | translate }}</span>
+        <mat-slide-toggle formControlName="isHoliday" aria-labelledby="tp-isHoliday-lbl"></mat-slide-toggle>
+      </div>
     </div>
   </mat-dialog-content>
 

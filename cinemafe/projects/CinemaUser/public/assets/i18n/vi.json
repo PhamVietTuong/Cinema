@@ -4,6 +4,7 @@
     "theaters": "Rạp Chiếu",
     "promotions": "Khuyến Mãi",
     "membership": "Thành Viên",
+    "myTickets": "Vé Của Tôi",
     "account": "Tài Khoản",
     "logout": "Đăng Xuất",
     "login": "Đăng Nhập",
@@ -299,7 +300,9 @@
       "empty": "Không có phim nào.",
       "titleAll": "Danh Sách Phim",
       "titleNow": "Phim Đang Chiếu",
-      "titleComing": "Phim Sắp Chiếu"
+      "titleComing": "Phim Sắp Chiếu",
+      "shownCount": "Đã hiển thị {{shown}} / {{total}}",
+      "loadMore": "Xem thêm phim"
     },
     "tabs": {
       "all": "Tất Cả",

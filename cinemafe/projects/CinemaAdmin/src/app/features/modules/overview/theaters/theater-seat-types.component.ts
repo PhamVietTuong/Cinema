@@ -55,12 +55,12 @@ export class TheaterSeatTypesComponent extends BaseTableComponent {
   }
 
   openCreate(): void {
-    this._dialog.open(SeatTypeDialog, { width: '480px', data: { theaterId: this.theaterId, seatType: null } })
+    this._dialog.open(SeatTypeDialog, { width: '560px', data: { theaterId: this.theaterId, seatType: null } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(item: Dto): void {
-    this._dialog.open(SeatTypeDialog, { width: '480px', data: { theaterId: this.theaterId, seatType: item } })
+    this._dialog.open(SeatTypeDialog, { width: '560px', data: { theaterId: this.theaterId, seatType: item } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 

@@ -1,8 +1,38 @@
 // @ts-nocheck
 /* eslint-disable */
+export const alertCircleIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>`,
+    name: 'alert-circle' as const
+};
+
+export const alertTriangleIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3 2 20h20zM12 10v4M12 17h.01"/></svg>`,
+    name: 'alert-triangle' as const
+};
+
 export const appleIcon = {
     data: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.6 2.1-3.8 2.2-3.9-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.3-.9-1.7 0-3.2.9-4.1 2.4-1.8 3-.5 7.5 1.2 9.9.8 1.2 1.8 2.5 3.1 2.5 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8 2.2-1.2 3-2.4c.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.5-1-2.5-3.7m-2.3-7.5c.6-.8 1.1-1.9.9-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.6 2.8-1.3"/></svg>`,
     name: 'apple' as const
+};
+
+export const arrowRightIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`,
+    name: 'arrow-right' as const
+};
+
+export const checkCircleIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.5 2.5L16 9"/></svg>`,
+    name: 'check-circle' as const
+};
+
+export const eyeOffIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="m3 3 18 18M10.6 10.6a3 3 0 0 0 4.24 4.24M9.17 5.24A10.3 10.3 0 0 1 12 5c6 0 10 7 10 7a13.5 13.5 0 0 1-3.09 3.71"/><path d="M6.6 6.6C4.4 8 3 10.5 2 12c0 0 4 7 10 7 1.09 0 2.12-.18 3.06-.5"/></svg>`,
+    name: 'eye-off' as const
+};
+
+export const eyeIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7"/><circle cx="12" cy="12" r="3"/></svg>`,
+    name: 'eye' as const
 };
 
 export const facebookIcon = {
@@ -20,9 +50,34 @@ export const instagramIcon = {
     name: 'instagram' as const
 };
 
+export const lockIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect width="16" height="10" x="4" y="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>`,
+    name: 'lock' as const
+};
+
 export const logoIcon = {
     data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M2 9h20M7 4 5 9m7-5-2 5m7-5-2 5"/></svg>`,
     name: 'logo' as const
+};
+
+export const mailCheckIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><rect width="16" height="12" x="2" y="4" rx="2"/><path d="m2 6 8 5 8-5"/><circle cx="18" cy="17" r="5"/><path stroke-width="2" d="m16 17 1.3 1.3 2.7-2.8"/></svg>`,
+    name: 'mail-check' as const
+};
+
+export const mailIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="m3 7 9 6 9-6"/></svg>`,
+    name: 'mail' as const
+};
+
+export const personIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`,
+    name: 'person' as const
+};
+
+export const phoneIcon = {
+    data: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92"/></svg>`,
+    name: 'phone' as const
 };
 
 export const popcornIcon = {

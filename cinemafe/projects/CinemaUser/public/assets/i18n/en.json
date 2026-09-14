@@ -4,6 +4,7 @@
     "theaters": "Theaters",
     "promotions": "Promotions",
     "membership": "Membership",
+    "myTickets": "My Tickets",
     "account": "Account",
     "logout": "Log Out",
     "login": "Log In",
@@ -299,7 +300,9 @@
       "empty": "No movies available.",
       "titleAll": "Movie List",
       "titleNow": "Now Showing",
-      "titleComing": "Coming Soon"
+      "titleComing": "Coming Soon",
+      "shownCount": "{{shown}} / {{total}} shown",
+      "loadMore": "Load more movies"
     },
     "tabs": {
       "all": "All",

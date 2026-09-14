@@ -13,32 +13,58 @@
       <li><a routerLink="/membership" routerLinkActive="active-link">{{ 'nav.membership' | translate }}</a></li>
     </ul>
     <div class="nav-actions">
-      <button mat-icon-button type="button" class="nav-theme-btn" (click)="toggleTheme()"
-              [attr.aria-label]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate"
-              [title]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate">
-        <mat-icon>{{ theme.isDark() ? 'wb_sunny' : 'brightness_3' }}</mat-icon>
-      </button>
-      <cl-language-switcher></cl-language-switcher>
-      <ng-container *ngIf="isAuth$ | async; else guestNav">
-        <button mat-button class="nav-user-btn" [matMenuTriggerFor]="userMenu">
-          <mat-icon>person</mat-icon>
-          <span>{{ (user$ | async)?.name }}</span>
-          <mat-icon class="small-icon">expand_more</mat-icon>
+      <div class="nav-cluster">
+        <button mat-icon-button type="button" class="nav-theme-btn" (click)="toggleTheme()"
+                [attr.aria-label]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate"
+                [title]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate">
+          <mat-icon>{{ theme.isDark() ? 'wb_sunny' : 'brightness_3' }}</mat-icon>
         </button>
-        <mat-menu #userMenu="matMenu">
-          <a mat-menu-item routerLink="/profile">
-            <mat-icon class="menu-icon">person</mat-icon> {{ 'nav.account' | translate }}
-          </a>
-          <button mat-menu-item (click)="doLogout()">
-            <mat-icon class="menu-icon">logout</mat-icon> {{ 'nav.logout' | translate }}
+        <span class="nav-cluster-div"></span>
+        <cl-language-switcher></cl-language-switcher>
+        <ng-container *ngIf="isAuth$ | async">
+          <span class="nav-cluster-div"></span>
+          <button mat-button class="nav-user-btn" [matMenuTriggerFor]="userMenu">
+            <span class="user-avatar">{{ (user$ | async)?.name?.charAt(0)?.toUpperCase() }}</span>
+            <span class="user-name">{{ (user$ | async)?.name }}</span>
+            <mat-icon class="small-icon">expand_more</mat-icon>
           </button>
-        </mat-menu>
-      </ng-container>
-      <ng-template #guestNav>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="!(isAuth$ | async)">
         <a routerLink="/auth/login" class="nav-link-text">{{ 'nav.login' | translate }}</a>
         <a mat-raised-button routerLink="/auth/register" class="btn-nav-primary">{{ 'nav.register' | translate }}</a>
-      </ng-template>
+      </ng-container>
     </div>
+
+    <mat-menu #userMenu="matMenu" class="user-account-menu">
+      <ng-container *ngIf="user$ | async as user">
+        <div class="menu-header">
+          <span class="user-avatar">{{ user.name?.charAt(0)?.toUpperCase() }}</span>
+          <span class="menu-who">
+            <b>{{ user.name }}</b>
+            <span>{{ user.email }}</span>
+            <span class="tier-badge" *ngIf="user.memberShipName">
+              <mat-icon>military_tech</mat-icon> {{ user.memberShipName }}
+            </span>
+          </span>
+        </div>
+        <div class="menu-quick-row">
+          <a mat-menu-item routerLink="/profile">
+            <mat-icon>confirmation_number</mat-icon> {{ 'nav.myTickets' | translate }}
+          </a>
+          <a mat-menu-item routerLink="/membership">
+            <mat-icon>military_tech</mat-icon> {{ 'nav.membership' | translate }}
+          </a>
+        </div>
+        <div class="menu-div"></div>
+        <a mat-menu-item routerLink="/profile">
+          <mat-icon class="menu-icon">person</mat-icon> {{ 'nav.account' | translate }}
+        </a>
+        <button mat-menu-item class="menu-item-quiet" (click)="doLogout()">
+          <mat-icon class="menu-icon">logout</mat-icon> {{ 'nav.logout' | translate }}
+        </button>
+      </ng-container>
+    </mat-menu>
 
     <!-- Mobile hamburger -->
     <button mat-icon-button class="nav-burger" type="button" (click)="toggleMenu()" aria-label="Menu">

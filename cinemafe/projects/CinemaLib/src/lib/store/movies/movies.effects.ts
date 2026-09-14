@@ -13,11 +13,11 @@ export class MoviesEffects {
   loadNowShowing$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadNowShowing),
-      switchMap(() =>
+      switchMap(({ page, pageSize }) =>
         this._cinemaService.getNowShowingMovies(
-          CinemaServiceAgent.PagingSearchDTO.fromJS({ pageIndex: 1, pageSize: 50 })
+          CinemaServiceAgent.PagingSearchDTO.fromJS({ pageIndex: page, pageSize })
         ).pipe(
-          map(r => MoviesActions.loadNowShowingSuccess({ movies: (r.results ?? []) as any })),
+          map(r => MoviesActions.loadNowShowingSuccess({ movies: (r.results ?? []) as any, total: r.totalCount ?? 0, page })),
           catchError(err => of(MoviesActions.loadNowShowingFailure({ error: err.message })))
         )
       )
@@ -27,12 +27,12 @@ export class MoviesEffects {
   loadComingSoon$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadComingSoon),
-      switchMap(() =>
+      switchMap(({ page, pageSize }) =>
         this._cinemaService.getComingSoonMovies(
-          CinemaServiceAgent.PagingSearchDTO.fromJS({ pageIndex: 1, pageSize: 50 })
+          CinemaServiceAgent.PagingSearchDTO.fromJS({ pageIndex: page, pageSize })
         ).pipe(
-          map(r => MoviesActions.loadComingSoonSuccess({ movies: (r.results ?? []) as any })),
-          catchError(() => of(MoviesActions.loadComingSoonSuccess({ movies: [] })))
+          map(r => MoviesActions.loadComingSoonSuccess({ movies: (r.results ?? []) as any, total: r.totalCount ?? 0, page })),
+          catchError(err => of(MoviesActions.loadComingSoonFailure({ error: err.message })))
         )
       )
     )

@@ -60,12 +60,12 @@ export class DiscountsManagementComponent extends BaseTableComponent {
   }
 
   openCreate(): void {
-    this._dialog.open(DiscountDialog, { width: '640px', data: { discount: null } })
+    this._dialog.open(DiscountDialog, { width: '800px', data: { discount: null } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(item: Dto): void {
-    this._dialog.open(DiscountDialog, { width: '640px', data: { discount: item } })
+    this._dialog.open(DiscountDialog, { width: '800px', data: { discount: item } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 

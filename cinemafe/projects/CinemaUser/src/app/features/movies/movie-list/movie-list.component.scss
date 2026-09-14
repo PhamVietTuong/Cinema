@@ -24,16 +24,14 @@
 }
 
 .search-box {
-  position: relative; display: inline-flex; align-items: center;
-  mat-icon { position: absolute; left: 16px; color: var(--ml-muted); font-size: 18px; width: 18px; height: 18px; }
+  width: 380px; max-width: 70vw;
+  mat-icon { color: var(--ml-muted); font-size: 18px; width: 18px; height: 18px; }
   input {
-    width: 320px; max-width: 70vw; height: 46px;
-    padding: 0 16px 0 42px; border-radius: var(--ml-r-sm);
-    background: var(--ml-panel); border: 1px solid var(--ml-rule); color: var(--ml-ink); font-size: 0.9rem; outline: none;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    color: var(--ml-ink); font-size: 0.9rem;
     &::placeholder { color: var(--ml-faint); }
-    &:focus { border-color: var(--ml-action); box-shadow: 0 0 0 3px var(--ml-action-soft); }
   }
+  ::ng-deep .mat-mdc-form-field-infix { width: auto; min-width: 0; }
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
 }
 
 .movies-page { max-width: 1280px; margin: 0 auto; padding: 36px 40px 64px; }
@@ -46,8 +44,26 @@
   gap: 24px;
 }
 
-.pager { margin-top: 32px; display: flex; justify-content: center;
-  ::ng-deep .mat-mdc-paginator { background: transparent; color: var(--ml-ink); } }
+// ── Load more ─────────────────────────────────────────────────────────────
+.pager-loadmore {
+  margin-top: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  width: 100%; max-width: 340px; margin-left: auto; margin-right: auto;
+}
+.lm-track { width: 100%; height: 3px; border-radius: var(--ml-r-full); background: var(--ml-rule-soft); overflow: hidden; }
+.lm-fill { height: 100%; background: var(--ml-action); border-radius: var(--ml-r-full); transition: width 0.25s ease; }
+.lm-count { font-family: var(--ml-font-data); font-size: 0.75rem; color: var(--ml-muted); }
+.lm-btn {
+  border: 1px solid var(--ml-rule-strong); background: var(--ml-panel); color: var(--ml-ink); font-weight: 600;
+  font-size: 0.85rem; padding: 11px 28px; border-radius: var(--ml-r-sm);
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &:hover:not(:disabled) { background: var(--ml-action-soft); border-color: var(--ml-action); color: var(--ml-action-strong); }
+  &:disabled { cursor: not-allowed; opacity: 0.75; }
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  ::ng-deep .mat-mdc-progress-spinner circle { stroke: var(--ml-ink); }
+}
 
 @media (max-width: 1100px) { .movie-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 860px) {

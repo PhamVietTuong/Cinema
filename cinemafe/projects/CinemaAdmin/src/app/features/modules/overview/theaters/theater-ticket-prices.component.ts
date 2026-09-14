@@ -71,14 +71,14 @@ export class TheaterTicketPricesComponent extends BaseTableComponent<Dto> {
 
   openCreate(): void {
     this._dialog.open(TicketPriceDialog, {
-      width: '520px',
+      width: '600px',
       data: { theaterId: this.theaterId, ticketPrice: null, roomTypes: this.roomTypes, seatTypes: this.seatTypes, timeSlots: this.timeSlots },
     }).afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(item: Dto): void {
     this._dialog.open(TicketPriceDialog, {
-      width: '520px',
+      width: '600px',
       data: { theaterId: this.theaterId, ticketPrice: item, roomTypes: this.roomTypes, seatTypes: this.seatTypes, timeSlots: this.timeSlots },
     }).afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }

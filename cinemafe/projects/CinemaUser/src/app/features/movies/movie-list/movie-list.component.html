@@ -15,13 +15,13 @@
       <mat-button-toggle-group class="tabs" [value]="mode" (change)="setMode($event.value)">
         <mat-button-toggle *ngFor="let t of tabs" class="tab" [value]="t.mode">{{ t.label | translate }}</mat-button-toggle>
       </mat-button-toggle-group>
-      <mat-form-field appearance="outline" *ngIf="!isPaged && genres.length">
+      <mat-form-field appearance="outline" *ngIf="hasClientFilters && genres.length">
         <mat-select [(ngModel)]="selectedGenre">
           <mat-option value="">{{ 'movies.filters.genre' | translate }}</mat-option>
           <mat-option *ngFor="let g of genres" [value]="g">{{ g }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="outline" *ngIf="!isPaged && languages.length">
+      <mat-form-field appearance="outline" *ngIf="hasClientFilters && languages.length">
         <mat-select [(ngModel)]="selectedLanguage">
           <mat-option value="">{{ 'movies.filters.language' | translate }}</mat-option>
           <mat-option *ngFor="let l of languages" [value]="l">{{ l }}</mat-option>
@@ -32,7 +32,7 @@
 </div>
 
 <div class="movies-page">
-  <div *ngIf="loading$ | async" class="spinner-wrap">
+  <div *ngIf="(loading$ | async) && displayed.length === 0" class="spinner-wrap">
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 
@@ -45,8 +45,15 @@
     <p>{{ 'movies.list.empty' | translate }}</p>
   </div>
 
-  <div class="pager" *ngIf="isPaged && total > pageSize">
-    <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
+  <div class="pager-loadmore" *ngIf="canLoadMore">
+    <div class="lm-track"><div class="lm-fill" [style.width.%]="loadProgressPct"></div></div>
+    <span class="lm-count">{{ 'movies.list.shownCount' | translate: { shown: loadedCount, total: total } }}</span>
+    <button type="button" class="lm-btn" (click)="loadMore()" [disabled]="loading$ | async">
+      <mat-spinner diameter="16" *ngIf="loading$ | async"></mat-spinner>
+      <ng-container *ngIf="!(loading$ | async)">
+        {{ 'movies.list.loadMore' | translate }} <mat-icon>expand_more</mat-icon>
+      </ng-container>
+    </button>
   </div>
 </div>
 

@@ -76,6 +76,18 @@ export class MovieDialog implements OnInit {
     return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
   }
 
+  movieTypeName(id: string): string {
+    return this.movieTypes.find(t => t.id === id)?.name ?? '';
+  }
+
+  removeMovieType(id: string, event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    const control = this.form.controls['movieTypeIds'];
+    control.setValue((control.value as string[]).filter(t => t !== id));
+    control.markAsDirty();
+  }
+
   onPickImage(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) {
