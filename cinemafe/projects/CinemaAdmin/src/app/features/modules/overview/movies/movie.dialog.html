@@ -2,119 +2,139 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.title' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="title" [placeholder]="'movies.form.titlePlaceholder' | translate">
-        <mat-error *ngIf="form.controls['title'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.description' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <textarea matInput formControlName="description" rows="3" [placeholder]="'movies.form.descriptionPlaceholder' | translate"></textarea>
-        <mat-error *ngIf="form.controls['description'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.duration' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" formControlName="duration">
-        <mat-error *ngIf="form.controls['duration'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.releaseDate' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="date" formControlName="releaseDate">
-        <mat-error *ngIf="form.controls['releaseDate'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.endDate' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="date" formControlName="endDate">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.director' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="director" [placeholder]="'movies.form.directorPlaceholder' | translate">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.cast' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="cast" [placeholder]="'movies.form.castPlaceholder' | translate">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.language' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="language" [placeholder]="'movies.form.languagePlaceholder' | translate">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.subtitle' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="subtitle" [placeholder]="'movies.form.subtitlePlaceholder' | translate">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.trailer' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="trailerUrl" placeholder="https://...">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.poster' | translate }}</mat-label>
-      <div class="dialog-row-field">
-        <mat-form-field appearance="outline" class="dialog-row-field">
-          <input matInput formControlName="posterUrl" [placeholder]="'movies.form.posterPlaceholder' | translate">
-        </mat-form-field>
-        <div class="img-upload-row">
-          <label class="ad-btn ad-btn--ghost">
-            <mat-icon>upload</mat-icon> {{ 'movies.form.uploadImage' | translate }}
-            <input type="file" accept="image/*" hidden (change)="onPickImage($event)">
-          </label>
-          <span class="img-upload-status" *ngIf="uploading">{{ 'movies.form.uploading' | translate }}</span>
-          <span class="img-upload-status err" *ngIf="uploadError">{{ uploadError }}</span>
-        </div>
-        <div class="img-preview" *ngIf="form.value.posterUrl">
-          <img [src]="form.value.posterUrl" alt="">
+    <div class="dlg-grid">
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-title">{{ 'movies.form.title' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-title" formControlName="title" [placeholder]="'movies.form.titlePlaceholder' | translate">
+            <mat-error *ngIf="form.controls['title'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
         </div>
       </div>
-    </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.ageRestriction' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="ageRestrictionId">
-          <mat-option value="">{{ 'movies.form.selectOption' | translate }}</mat-option>
-          <mat-option *ngFor="let a of ageRestrictions" [value]="a.id">{{ a.code }} — {{ a.description }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.controls['ageRestrictionId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-description">{{ 'movies.form.description' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <textarea matInput id="mv-description" formControlName="description" rows="3" [placeholder]="'movies.form.descriptionPlaceholder' | translate"></textarea>
+            <mat-error *ngIf="form.controls['description'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'movies.form.genres' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="movieTypeIds" multiple>
-          <mat-option *ngFor="let t of movieTypes" [value]="t.id">{{ t.name }}</mat-option>
-        </mat-select>
-        <mat-hint>{{ 'movies.form.genresHint' | translate }}</mat-hint>
-      </mat-form-field>
+      <div class="dlg-row dlg-row--3">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-duration">{{ 'movies.form.duration' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-duration" type="number" formControlName="duration">
+            <mat-error *ngIf="form.controls['duration'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-releaseDate">{{ 'movies.form.releaseDate' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-releaseDate" type="date" formControlName="releaseDate">
+            <mat-error *ngIf="form.controls['releaseDate'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-endDate">{{ 'movies.form.endDate' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-endDate" type="date" formControlName="endDate">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-director">{{ 'movies.form.director' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-director" formControlName="director" [placeholder]="'movies.form.directorPlaceholder' | translate">
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-language">{{ 'movies.form.language' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-language" formControlName="language" [placeholder]="'movies.form.languagePlaceholder' | translate">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-cast">{{ 'movies.form.cast' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-cast" formControlName="cast" [placeholder]="'movies.form.castPlaceholder' | translate">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-subtitle">{{ 'movies.form.subtitle' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-subtitle" formControlName="subtitle" [placeholder]="'movies.form.subtitlePlaceholder' | translate">
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="mv-ageRestrictionId-lbl">{{ 'movies.form.ageRestriction' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="ageRestrictionId" panelClass="dlg-select-panel" aria-labelledby="mv-ageRestrictionId-lbl">
+              <mat-option value="">{{ 'movies.form.selectOption' | translate }}</mat-option>
+              <mat-option *ngFor="let a of ageRestrictions" [value]="a.id">{{ a.code }} — {{ a.description }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['ageRestrictionId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-trailerUrl">{{ 'movies.form.trailer' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-trailerUrl" formControlName="trailerUrl" placeholder="https://...">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="mv-posterUrl">{{ 'movies.form.poster' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="mv-posterUrl" formControlName="posterUrl" [placeholder]="'movies.form.posterPlaceholder' | translate">
+          </mat-form-field>
+          <div class="img-upload-row">
+            <label class="ad-btn ad-btn--ghost">
+              <mat-icon>upload</mat-icon> {{ 'movies.form.uploadImage' | translate }}
+              <input type="file" accept="image/*" hidden (change)="onPickImage($event)">
+            </label>
+            <span class="img-upload-status" *ngIf="uploading">{{ 'movies.form.uploading' | translate }}</span>
+            <span class="img-upload-status err" *ngIf="uploadError">{{ uploadError }}</span>
+          </div>
+          <div class="img-preview" *ngIf="form.value.posterUrl">
+            <img [src]="form.value.posterUrl" alt="">
+          </div>
+        </div>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" id="mv-movieTypeIds-lbl">{{ 'movies.form.genres' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="movieTypeIds" multiple panelClass="dlg-select-panel" aria-labelledby="mv-movieTypeIds-lbl">
+              <mat-select-trigger>
+                <span class="dlg-chip" *ngFor="let id of form.value.movieTypeIds">
+                  {{ movieTypeName(id) }}
+                  <button type="button" class="dlg-chip-x" (click)="removeMovieType(id, $event)" (keydown.enter)="removeMovieType(id, $event)" (keydown.space)="removeMovieType(id, $event)" [attr.aria-label]="'common.remove' | translate">&times;</button>
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let t of movieTypes" [value]="t.id">{{ t.name }}</mat-option>
+            </mat-select>
+            <mat-hint>{{ 'movies.form.genresHint' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </mat-dialog-content>
 

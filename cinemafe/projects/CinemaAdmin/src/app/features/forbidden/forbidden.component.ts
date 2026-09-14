@@ -15,25 +15,22 @@ import { SharedModule, logout } from 'CinemaLib';
   imports: [SharedModule],
   template: `
     <div class="fb-wrap">
-      <div class="fb-card">
-        <span class="material-icons fb-icon">block</span>
+      <div class="ad-card fb-card">
+        <mat-icon class="fb-icon">block</mat-icon>
         <h1>{{ 'forbidden.title' | translate }}</h1>
         <p>{{ 'forbidden.message' | translate }}</p>
-        <button type="button" class="fb-btn" (click)="signOut()">
+        <button type="button" class="ad-btn ad-btn--primary" (click)="signOut()">
           {{ 'forbidden.switchAccount' | translate }}
         </button>
       </div>
     </div>
   `,
   styles: [`
-    .fb-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
-    .fb-card { max-width: 420px; text-align: center; padding: 40px 32px; border-radius: 16px;
-               background: var(--ad-card, #fff); border: 1px solid var(--ad-line, #e5e7eb); }
-    .fb-icon { font-size: 48px; color: #dc2626; }
-    h1 { font-size: 1.35rem; margin: 16px 0 8px; }
-    p { color: var(--ad-muted, #6b7280); margin: 0 0 24px; }
-    .fb-btn { padding: 10px 20px; border-radius: 8px; border: 0; cursor: pointer;
-              background: #2563eb; color: #fff; font-weight: 600; }
+    .fb-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--ml-paper); }
+    .fb-card { max-width: 420px; text-align: center; padding: 40px 32px; }
+    .fb-icon { font-size: 48px; width: 48px; height: 48px; color: var(--ml-danger); }
+    h1 { font-family: var(--ml-font-head); text-transform: uppercase; font-size: 1.35rem; margin: 16px 0 8px; color: var(--ml-ink); }
+    p { color: var(--ml-muted); margin: 0 0 24px; }
   `],
 })
 export class ForbiddenComponent {

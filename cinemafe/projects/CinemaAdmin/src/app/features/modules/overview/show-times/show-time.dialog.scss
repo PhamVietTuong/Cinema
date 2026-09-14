@@ -1,0 +1,22 @@
+.st-poster {
+  margin-top: 10px;
+  img { width: 72px; border-radius: var(--ad-r-sm); border: 1px solid var(--ad-glass-border); display: block; }
+}
+
+.st-form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--ml-danger);
+  border-radius: var(--ad-r-sm);
+  background: color-mix(in srgb, var(--ml-danger) 12%, transparent);
+  color: var(--ml-danger);
+  font-size: 13px;
+  line-height: 1.45;
+  margin-top: 8px;
+
+  mat-icon { flex: none; width: 18px; height: 18px; font-size: 18px; }
+}
+
+.st-spacer { flex: 1; }

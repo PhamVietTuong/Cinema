@@ -1,73 +1,94 @@
 <div class="tab-toolbar">
   <p class="ad-sub">{{ 'theaters.food.subtitle' | translate }}</p>
-  <button class="ad-btn ad-btn--primary" (click)="openCreate()"><mat-icon>add</mat-icon> {{ 'theaters.food.add' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="openCreate()"><mat-icon>add</mat-icon> {{ 'theaters.food.add' | translate }}</button>
 </div>
 
-<app-modal [open]="showForm" (closed)="cancelEdit()">
-<div class="ad-card form-card">
-  <h3 class="ad-card-title">{{ editingId ? ('theaters.food.editTitle' | translate) : ('theaters.food.newTitle' | translate) }}</h3>
-  <form [formGroup]="form" (ngSubmit)="save()" class="catalog-form">
-    <div class="ad-field">
-      <label class="ad-label">{{ 'theaters.food.nameLabel' | translate }}</label>
-      <input class="ad-input" formControlName="name" [placeholder]="'theaters.food.namePlaceholder' | translate">
-    </div>
-    <div class="ad-field">
-      <label class="ad-label">{{ 'theaters.food.priceLabel' | translate }}</label>
-      <input class="ad-input" type="number" formControlName="price" placeholder="45000">
-    </div>
-    <div class="ad-field full-span">
-      <label class="ad-label">{{ 'theaters.food.imageLabel' | translate }}</label>
-      <input class="ad-input" formControlName="imageUrl" [placeholder]="'theaters.food.imagePlaceholder' | translate">
-      <div class="img-upload-row">
-        <label class="ad-btn ad-btn--ghost">
-          <mat-icon>upload</mat-icon> {{ 'theaters.food.upload' | translate }}
-          <input type="file" accept="image/*" hidden (change)="onPickImage($event, 'imageUrl')">
-        </label>
-        <span class="img-upload-status" *ngIf="uploading">{{ 'theaters.food.uploading' | translate }}</span>
-        <span class="img-upload-status err" *ngIf="uploadError">{{ uploadError }}</span>
-      </div>
-      <div class="img-preview" *ngIf="form.value.imageUrl">
-        <img [src]="form.value.imageUrl" alt="">
-      </div>
-    </div>
-    <div class="ad-field full-span">
-      <label class="ad-label">{{ 'common.description' | translate }}</label>
-      <input class="ad-input" formControlName="description" [placeholder]="'theaters.food.descPlaceholder' | translate">
-    </div>
-    <div class="ad-field full-span">
-      <label class="ad-check"><input type="checkbox" formControlName="isAvailable"> {{ 'theaters.food.available' | translate }}</label>
-    </div>
-    <div class="form-actions full-span">
-      <button class="ad-btn ad-btn--primary" type="submit">{{ 'common.save' | translate }}</button>
-      <button class="ad-btn ad-btn--ghost" type="button" (click)="cancelEdit()">{{ 'common.cancel' | translate }}</button>
-    </div>
-  </form>
-</div>
-</app-modal>
-<app-confirm-modal [open]="confirmOpen" [message]="'common.confirmDelete' | translate" (confirmed)="confirmDelete()" (closed)="confirmOpen = false"></app-confirm-modal>
+<mat-card class="ad-card--pad-0">
+  <!-- Desktop / tablet: ngx-datatable grid. -->
+  <div class="ad-table-wrap ad-desktop-only">
+    <ngx-datatable
+      class="material ad-datatable"
+      [rows]="pageRows"
+      [columnMode]="'force'"
+      [headerHeight]="44"
+      [footerHeight]="50"
+      [rowHeight]="'auto'"
+      [externalPaging]="true"
+      [externalSorting]="true"
+      [count]="total"
+      [offset]="pageOffset"
+      [limit]="pageSize"
+      [loadingIndicator]="loadingIndicator"
+      [messages]="{ emptyMessage: 'theaters.food.empty' | translate, selectedMessage: '' }"
+      (page)="onChangePage($event)">
 
-<div class="ad-card ad-card--pad-0">
-  <div class="ad-table-wrap">
-    <table class="ad-table">
-      <thead>
-        <tr><th>{{ 'theaters.food.nameLabel' | translate }}</th><th>{{ 'common.price' | translate }}</th><th>{{ 'common.status' | translate }}</th><th class="ad-td-actions">{{ 'common.actions' | translate }}</th></tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let x of items">
-          <td><strong>{{ x.name }}</strong></td>
-          <td>{{ x.price | number:'1.0-0' }}đ</td>
-          <td>
-            <span class="ad-pill" [class.ad-pill--success]="x.isAvailable" [class.ad-pill--neutral]="!x.isAvailable">
-              {{ x.isAvailable ? ('theaters.food.onSale' | translate) : ('theaters.food.offSale' | translate) }}
-            </span>
-          </td>
-          <td class="ad-td-actions">
-            <button class="ad-icon-btn is-primary" (click)="edit(x)" [title]="'common.edit' | translate"><mat-icon>edit</mat-icon></button>
-            <button class="ad-icon-btn" (click)="delete(x.id)" [title]="'common.delete' | translate"><mat-icon>delete</mat-icon></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="!items.length" class="ad-empty"><mat-icon>fastfood</mat-icon><p>{{ 'theaters.food.empty' | translate }}</p></div>
+      <ngx-datatable-column [name]="'theaters.food.imageLabel' | translate" prop="imageUrl" [sortable]="false" [width]="80" [canAutoResize]="false">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <img *ngIf="row.imageUrl" [src]="row.imageUrl" alt="" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px;">
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [name]="'theaters.food.nameLabel' | translate" prop="name" [sortable]="false">
+        <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.name }}</strong></ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [name]="'common.price' | translate" prop="price" [sortable]="false">
+        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.price | number:'1.0-0' }}đ</ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [name]="'common.status' | translate" prop="isAvailable" [sortable]="false">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <span class="ad-pill" [class.ad-pill--success]="row.isAvailable" [class.ad-pill--neutral]="!row.isAvailable">
+            {{ row.isAvailable ? ('theaters.food.onSale' | translate) : ('theaters.food.offSale' | translate) }}
+          </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [name]="'common.actions' | translate" [sortable]="false" [width]="150" [canAutoResize]="false">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div class="ad-td-actions ad-td-actions--mat">
+            <button mat-icon-button (click)="edit(row)" [matTooltip]="'common.edit' | translate"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button (click)="delete(row.id)" [matTooltip]="'common.delete' | translate"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-footer>
+        <ng-template ngx-datatable-footer-template>
+          <div class="page-count">{{ 'common.totalEntries' | translate }} {{ total }}</div>
+          <ngx-datatable-pager *ngIf="total > pageSize"></ngx-datatable-pager>
+        </ng-template>
+      </ngx-datatable-footer>
+    </ngx-datatable>
   </div>
-</div>
+
+  <!-- Phones: a table doesn't fit legibly, so each row becomes its own Material card. -->
+  <div class="ad-mobile-only">
+    <mat-card class="ad-mobile-card" *ngFor="let row of pageRows" appearance="outlined">
+      <mat-card-content>
+        <div class="ad-mobile-card-title"><strong>{{ row.name }}</strong></div>
+        <div class="ad-mobile-card-row"><span>{{ 'common.price' | translate }}</span><span>{{ row.price | number:'1.0-0' }}đ</span></div>
+        <div class="ad-mobile-card-row">
+          <span>{{ 'common.status' | translate }}</span>
+          <span class="ad-pill" [class.ad-pill--success]="row.isAvailable" [class.ad-pill--neutral]="!row.isAvailable">
+            {{ row.isAvailable ? ('theaters.food.onSale' | translate) : ('theaters.food.offSale' | translate) }}
+          </span>
+        </div>
+        <div class="ad-mobile-card-actions">
+          <button mat-icon-button (click)="edit(row)" [matTooltip]="'common.edit' | translate"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button (click)="delete(row.id)" [matTooltip]="'common.delete' | translate"><mat-icon>delete</mat-icon></button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <div *ngIf="!pageRows.length" class="ad-empty"><mat-icon>fastfood</mat-icon><p>{{ 'theaters.food.empty' | translate }}</p></div>
+
+    <mat-paginator
+      *ngIf="total > 0"
+      [length]="total"
+      [pageSize]="pageSize"
+      [pageIndex]="pageOffset"
+      [hidePageSize]="true"
+      (page)="onChangePage({ pageSize: $event.pageSize, offset: $event.pageIndex })">
+    </mat-paginator>
+  </div>
+</mat-card>

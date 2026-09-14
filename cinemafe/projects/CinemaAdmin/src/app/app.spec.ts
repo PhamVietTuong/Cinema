@@ -76,7 +76,7 @@ describe('App', () => {
       expect(app.menuOpen).toBe(false);
       app.toggleMenu();
       expect(app.menuOpen).toBe(true);
-      app.closeMenu();
+      app.toggleMenu();
       expect(app.menuOpen).toBe(false);
     });
   });

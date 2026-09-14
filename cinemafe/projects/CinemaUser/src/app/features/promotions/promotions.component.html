@@ -9,7 +9,7 @@
   <div *ngIf="loading" class="spinner-wrap"><mat-spinner diameter="40"></mat-spinner></div>
 
   <div *ngIf="!loading && !promos.length" class="empty">
-    <i class="fas fa-tags"></i>
+    <mat-icon>local_offer</mat-icon>
     <p>{{ 'promotions.empty' | translate }}</p>
   </div>
 
@@ -23,13 +23,13 @@
       <div class="promo-right">
         <h3 class="promo-desc">{{ p.description || ('promotions.specialOffer' | translate) }}</h3>
         <p class="promo-detail" *ngIf="p.maxDiscountAmount">{{ 'promotions.maxDiscount' | translate:{ amount: (p.maxDiscountAmount | number:'1.0-0') } }}</p>
-        <p class="promo-validity"><i class="fas fa-calendar-days"></i> {{ 'promotions.expiry' | translate:{ date: (p.endDate | date:'dd/MM/yyyy') } }}</p>
+        <p class="promo-validity"><mat-icon>event</mat-icon> {{ 'promotions.expiry' | translate:{ date: (p.endDate | date:'dd/MM/yyyy') } }}</p>
         <div class="promo-bottom">
           <div class="promo-code">
             <span class="code-label">{{ 'promotions.codeLabel' | translate }}</span>
             <span class="code-val">{{ p.code }}</span>
           </div>
-          <button class="dungngay-btn">{{ 'promotions.useNow' | translate }}</button>
+          <button mat-raised-button type="button">{{ 'promotions.useNow' | translate }}</button>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
       <span class="feature-badge">{{ 'promotions.featureBadge' | translate }}</span>
       <h2 class="feature-title">{{ 'promotions.featureTitle' | translate }}</h2>
       <p class="feature-desc">{{ 'promotions.featureDesc' | translate }}</p>
-      <button class="btn-ghost-cta feature-btn">{{ 'promotions.featureCta' | translate }}</button>
+      <button mat-stroked-button type="button">{{ 'promotions.featureCta' | translate }}</button>
     </div>
   </div>
 </div>

@@ -7,11 +7,13 @@ import {
   loadNowShowing, loadComingSoon,
   selectNowShowing, selectComingSoon, selectMoviesLoading,
 } from 'CinemaLib';
+import { MovieCardComponent } from '../../shared/movie-card/movie-card.component';
+import { SiteFooterComponent } from '../../shared/site-footer/site-footer.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, MovieCardComponent, SiteFooterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -35,8 +37,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._store.dispatch(loadNowShowing());
-    this._store.dispatch(loadComingSoon());
+    this._store.dispatch(loadNowShowing({ page: 1, pageSize: 50 }));
+    this._store.dispatch(loadComingSoon({ page: 1, pageSize: 50 }));
     this._cinema.getRecommendedMovies(8).subscribe({
       next: r => { this.recommended = r ?? []; this._cdr.markForCheck(); },
       error: () => this._cdr.markForCheck(),

@@ -50,7 +50,7 @@ export class InvoicesManagementComponent extends BaseTableComponent {
   }
 
   edit(item: Dto): void {
-    this._dialog.open(InvoiceStatusDialog, { width: '480px', data: { invoice: item } })
+    this._dialog.open(InvoiceStatusDialog, { width: '560px', data: { invoice: item } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 

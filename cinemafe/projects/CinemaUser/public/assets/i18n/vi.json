@@ -4,6 +4,7 @@
     "theaters": "Rạp Chiếu",
     "promotions": "Khuyến Mãi",
     "membership": "Thành Viên",
+    "myTickets": "Vé Của Tôi",
     "account": "Tài Khoản",
     "logout": "Đăng Xuất",
     "login": "Đăng Nhập",
@@ -138,8 +139,27 @@
       "home": "Trang Chủ",
       "movies": "Phim"
     },
+    "page": {
+      "title": "Đặt Vé Xem Phim"
+    },
+    "tickets": {
+      "title": "Loại Vé",
+      "hint": "Chọn số lượng cho từng loại vé — số lượng này quyết định số ghế bạn có thể chọn.",
+      "progress": "Đã chọn {{selected}}/{{total}} ghế",
+      "continueCta": "Tiếp Tục Thanh Toán",
+      "selectMore": "Chọn thêm {{count}} ghế để tiếp tục",
+      "capReached": "Bạn đã chọn đủ số vé — tăng số lượng để chọn thêm",
+      "notEnoughForDouble": "Không đủ vé cho ghế đôi — tăng số lượng để chọn ghế này",
+      "removedByQuantityChange": "Đã bỏ chọn (bạn đã giảm số lượng): {{seats}}"
+    },
+    "checkout": {
+      "backToSeats": "Quay lại chọn ghế"
+    },
+    "panel": {
+      "title": "Đặt vé",
+      "close": "Đóng"
+    },
     "seats": {
-      "title": "Chọn Chỗ Ngồi",
       "screen": "MÀN HÌNH",
       "legendAvailable": "Ghế Trống",
       "legendSelected": "Đang Chọn",
@@ -147,12 +167,10 @@
       "legendVip": "Ghế VIP",
       "selectedTitle": "Ghế Đã Chọn",
       "empty": "Chưa chọn ghế",
-      "confirmCta": "XÁC NHẬN ĐẶT VÉ"
+      "notAvailableForCategory": "Không khả dụng cho loại vé này"
     },
     "summary": {
       "subtotal": "Tạm tính ({{count}} ghế)",
-      "onlineFee": "Phí đặt vé online",
-      "total": "Tổng cộng",
       "orderTitle": "Tóm Tắt Đơn Hàng",
       "tickets": "Vé ({{count}} ghế)",
       "discountCode": "Mã Giảm Giá",
@@ -279,11 +297,12 @@
     "list": {
       "subtitle": "Khám phá những siêu phẩm điện ảnh mới nhất với chất lượng âm thanh và hình ảnh đỉnh cao.",
       "searchPlaceholder": "Tìm phim, đạo diễn...",
-      "book": "Đặt Vé",
       "empty": "Không có phim nào.",
       "titleAll": "Danh Sách Phim",
       "titleNow": "Phim Đang Chiếu",
-      "titleComing": "Phim Sắp Chiếu"
+      "titleComing": "Phim Sắp Chiếu",
+      "shownCount": "Đã hiển thị {{shown}} / {{total}}",
+      "loadMore": "Xem thêm phim"
     },
     "tabs": {
       "all": "Tất Cả",
@@ -293,19 +312,6 @@
     "filters": {
       "genre": "Thể loại",
       "language": "Ngôn ngữ"
-    },
-    "durationMinutes": "{{count}} phút",
-    "footer": {
-      "tagline": "Trải nghiệm điện ảnh đẳng cấp nhất Việt Nam.",
-      "links": "Liên Kết",
-      "linkMovies": "Phim",
-      "linkTheaters": "Rạp Chiếu",
-      "linkPromotions": "Khuyến Mãi",
-      "linkMembership": "Thành Viên",
-      "support": "Hỗ Trợ",
-      "terms": "Điều Khoản",
-      "privacy": "Bảo Mật",
-      "contact": "Liên Hệ"
     },
     "detail": {
       "bookNow": "Đặt Vé Ngay",
@@ -329,11 +335,14 @@
     },
     "showtimes": {
       "seats": "{{count}} ghế",
-      "empty": "Hiện chưa có lịch chiếu cho phim này. Vui lòng quay lại sau."
+      "empty": "Hiện chưa có lịch chiếu cho phim này. Vui lòng quay lại sau.",
+      "emptyForDate": "Không có suất chiếu trong ngày này. Vui lòng chọn ngày khác.",
+      "today": "Hôm nay",
+      "tomorrow": "Ngày mai",
+      "showtimeCount": "{{count}} suất chiếu"
     }
   },
   "profile": {
-    "pageTitle": "Tài Khoản Của Tôi",
     "rank": "Hạng",
     "points": "Điểm",
     "tabOverview": "Bảng Điều Khiển",

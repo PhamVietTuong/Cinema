@@ -1,173 +1,159 @@
 @use 'lib/theme/base';
 @use 'lib/theme/tokens';
+@use 'lib/theme/ledger-tokens' as ledger;
+// Angular Material's colour system — generated once from SCSS (see the usage
+// site below) instead of the hardcoded indigo-pink prebuilt CSS.
+@use '@angular/material' as mat;
 
 // ╔══════════════════════════════════════════════════════════════════════════╗
-// ║  CinemaUser — global theme: "Night Screening"                             ║
+// ║  CinemaUser — global theme: "Marquee Ledger" (replaces "Night Screening")  ║
 // ║                                                                          ║
-// ║  The room with the lights down. Chrome recedes to near-black, posters and  ║
-// ║  the screen supply the light, and the interface glows only where you have  ║
-// ║  acted. Projector cyan is the working colour; a magenta gel marks premium  ║
-// ║  seating and nothing else. Red is handed back to its real job — errors.    ║
+// ║  CinemaUser now shares CinemaAdmin's warm ticket-paper identity: a light  ║
+// ║  ground by day, an after-hours near-black by night, one accent colour     ║
+// ║  (marquee gold) that does every job an accent can be asked to do, and a   ║
+// ║  dashed ticket-perforation rule as the one recurring ornament. There are  ║
+// ║  no shadows or glows in this direction — structure comes from rules and   ║
+// ║  flat tinted panels instead.                                              ║
 // ║                                                                          ║
-// ║  Dark is the identity and the default. [data-theme="light"] is a designed  ║
-// ║  counterpart ("Lights Up"), not an inversion: the beam darkens so it still ║
-// ║  passes contrast as a button fill, and the projector spill is dropped      ║
-// ║  rather than recoloured.                                                  ║
+// ║  Light is the default (this direction is light-first, unlike the old      ║
+// ║  dark-first "Night Screening"); [data-theme="dark"] is the designed       ║
+// ║  "After Hours" counterpart.                                              ║
 // ║                                                                          ║
-// ║  --ns-* is the token API. The --mp-* block near the bottom is a compat     ║
-// ║  layer for component SCSS still written against the previous "Marquee"     ║
-// ║  system; retire it page by page and do not add to it.                     ║
+// ║  --ml-* is the token API (shared with CinemaAdmin via CinemaLib). The     ║
+// ║  --ns-*/--mp-* blocks below are a compat layer for component stylesheets  ║
+// ║  still written against the previous "Night Screening"/"Marquee" systems — ║
+// ║  retire a file's use of them page by page as each is redesigned; do not   ║
+// ║  add new --ns-*/--mp-* references to a file that doesn't already have     ║
+// ║  them.                                                                    ║
 // ╚══════════════════════════════════════════════════════════════════════════╝
 
 :root {
-  // ── Ground & panels ──────────────────────────────────────────────────────
-  --ns-ground:      #07080b;   // page ground — the dark room
-  --ns-ground-2:    #0b0e13;   // alternate section band
-  --ns-panel:       #101319;   // cards
-  --ns-panel-2:     #161a22;   // raised / hover
-  --ns-panel-3:     #1d222c;   // input wells, inert fills
-  --ns-panel-glass: rgba(16, 19, 25, 0.92);   // panels floating over artwork
-  --ns-chrome:      rgba(7, 8, 11, 0.78);     // translucent sticky nav
-
-  // Projector spill — a soft cone of light from off-screen. Dark theme only.
-  --ns-spill:
-    radial-gradient(120% 90% at 18% -20%, rgba(89, 217, 210, 0.10) 0%, rgba(7, 8, 11, 0) 58%),
-    radial-gradient(90% 70% at 100% 100%, rgba(255, 78, 138, 0.06) 0%, rgba(7, 8, 11, 0) 60%);
-
-  // ── Ink ──────────────────────────────────────────────────────────────────
-  --ns-ink:    #e9edf3;
-  --ns-ink-2:  #aeb8c6;
-  --ns-muted:  #77828f;
-  --ns-faint:  #5a6472;
-
-  // ── Lines & washes ───────────────────────────────────────────────────────
-  --ns-line:   rgba(255, 255, 255, 0.13);
-  --ns-line-2: rgba(255, 255, 255, 0.07);
-  --ns-line-3: rgba(255, 255, 255, 0.26);   // hover / emphasis border
-  --ns-wash:   rgba(255, 255, 255, 0.05);
-  --ns-wash-2: rgba(255, 255, 255, 0.025);
-
-  // ── Beam — projector cyan. The action colour, and the only thing that glows.
-  --ns-beam:        #59d9d2;
-  --ns-beam-strong: #7fe9e3;   // hover: on a dark ground, brighter reads as nearer
-  --ns-beam-deep:   #2fb3ac;
-  --ns-beam-soft:   rgba(89, 217, 210, 0.14);
-  --ns-beam-line:   rgba(89, 217, 210, 0.26);   // border on a beam-soft surface
-  --ns-beam-ink:    #04141a;   // text sitting ON the beam
-
-  // ── Gel — magenta. Premium seating and premium tiers. Never an action. ────
-  --ns-gel:        #ff4e8a;
-  --ns-gel-deep:   #d92e69;
-  --ns-gel-soft:   rgba(255, 78, 138, 0.14);
-  --ns-gel-hover:  rgba(255, 78, 138, 0.22);
-  --ns-gel-card-1: rgba(255, 78, 138, 0.10);   // premium card gradient stops
-  --ns-gel-card-2: rgba(120, 30, 70, 0.24);
-
-  // ── Status. Red means error again, now the brand has released it. ─────────
-  --ns-success:     #4ade80;
-  --ns-success-ink: #6ee7a0;
-  --ns-warn:        #f5b843;
-  --ns-danger:      #f87171;
-  --ns-danger-ink:  #fca5a5;
-
-  // ── Seat map ─────────────────────────────────────────────────────────────
-  --ns-seat-empty: #232a34;
-  --ns-seat-taken: #3a434f;
-
-  // ── Elevation. Dark grounds take depth from shadow; presence from glow. ───
-  --ns-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.34);
-  --ns-shadow-md: 0 14px 34px -16px rgba(0, 0, 0, 0.76);
-  --ns-shadow-lg: 0 34px 70px -26px rgba(0, 0, 0, 0.86);
-  --ns-glow-beam: 0 10px 30px -12px rgba(89, 217, 210, 0.55);
-  --ns-glow-gel:  0 10px 30px -12px rgba(255, 78, 138, 0.50);
-
-  // ── Radius — generous, to match a soft dark room ─────────────────────────
-  --ns-r-sm: 8px;
-  --ns-r-md: 11px;
-  --ns-r-lg: 16px;
-  --ns-r-xl: 24px;
-
-  // ── Type ─────────────────────────────────────────────────────────────────
-  // Archivo carries the headings (tight, slightly condensed grotesque); Inter
-  // does the reading; IBM Plex Mono handles times, seat codes and money.
-  --ns-font-display: 'Archivo', 'Segoe UI', system-ui, sans-serif;
-  --ns-font-body:    'Inter', system-ui, -apple-system, sans-serif;
-  --ns-font-data:    'IBM Plex Mono', Consolas, ui-monospace, monospace;
-
-  // Native widgets (scrollbars, date pickers, form controls) follow the theme.
-  color-scheme: dark;
+  @include ledger.ml-light-tokens;
+}
+:root[data-theme="dark"] {
+  @include ledger.ml-dark-tokens;
 }
 
-// ── "Lights Up" — the designed light counterpart ────────────────────────────
-// Toggled via [data-theme="light"] on <html> by CinemaLib's ThemeService. Note
-// this is not an inversion: the beam and gel both darken so they hold contrast
-// against white, and the spill gradients are removed rather than lightened —
-// a light room has no visible projector beam.
-:root[data-theme="light"] {
-  --ns-ground:      #eef0f3;
-  --ns-ground-2:    #f7f8fa;
-  --ns-panel:       #ffffff;
-  --ns-panel-2:     #f2f4f7;
-  --ns-panel-3:     #e8ebf0;
-  --ns-panel-glass: rgba(255, 255, 255, 0.94);
-  --ns-chrome:      rgba(255, 255, 255, 0.82);
+// ── svg-icon sizing ──────────────────────────────────────────────────────────
+// Material's own `.mat-mdc-icon-button svg { width: var(--mat-icon-button-
+// icon-size, 24px); ... }` targets ANY svg inside a mat-icon-button — a tie
+// in specificity against a same-weight svg-icon rule, resolved in Material's
+// favor by injection order. That's why only the login password-visibility
+// toggle (the one svg-icon that sits inside a mat-icon-button) rendered
+// oversized at a fixed 24px instead of its own intended size: !important is
+// needed to reliably win regardless of where the icon is hosted.
+svg-icon svg {
+  width: 1em !important;
+  height: 1em !important;
+}
 
-  --ns-spill: none;
+// ── Angular Material's colour system ─────────────────────────────────────────
+// So every Material surface — selects, form fields, sidenav, menus, spinner,
+// paginator — follows the same light/dark switch as the rest of the app, the
+// same approach CinemaAdmin uses. `mat.core()` is required, not optional:
+// beyond colour, it carries the structural/reset CSS (ripple mechanics, CDK
+// overlay base styles, and the flex layout `mat-sidenav-container` needs to
+// lay the drawer and content out side by side) that used to ship bundled
+// inside the prebuilt theme.
+@include mat.core();
 
-  --ns-ink:    #10141a;
-  --ns-ink-2:  #384252;
-  --ns-muted:  #616c7c;
-  --ns-faint:  #8d97a5;
-
-  --ns-line:   rgba(16, 20, 26, 0.12);
-  --ns-line-2: rgba(16, 20, 26, 0.06);
-  --ns-line-3: rgba(16, 20, 26, 0.22);
-  --ns-wash:   rgba(16, 20, 26, 0.04);
-  --ns-wash-2: rgba(16, 20, 26, 0.02);
-
-  // A cyan bright enough to glow on black fails as a button fill on white, so
-  // the beam becomes a deep teal here and hover goes darker instead of brighter.
-  --ns-beam:        #0f7d78;
-  --ns-beam-strong: #0b6460;
-  --ns-beam-deep:   #094f4c;
-  --ns-beam-soft:   rgba(15, 125, 120, 0.10);
-  --ns-beam-line:   rgba(15, 125, 120, 0.24);
-  --ns-beam-ink:    #ffffff;
-
-  --ns-gel:        #c3175d;
-  --ns-gel-deep:   #9d1149;
-  --ns-gel-soft:   rgba(195, 23, 93, 0.09);
-  --ns-gel-hover:  rgba(195, 23, 93, 0.16);
-  --ns-gel-card-1: #fdeff4;
-  --ns-gel-card-2: #f9e2ec;
-
-  --ns-success:     #15803d;
-  --ns-success-ink: #15803d;
-  --ns-warn:        #b45309;
-  --ns-danger:      #dc2626;
-  --ns-danger-ink:  #b91c1c;
-
-  --ns-seat-empty: #e4e8ee;
-  --ns-seat-taken: #c0c8d2;
-
-  --ns-shadow-sm: 0 1px 2px rgba(20, 25, 45, 0.06), 0 2px 6px rgba(20, 25, 45, 0.05);
-  --ns-shadow-md: 0 12px 30px -14px rgba(20, 25, 45, 0.28);
-  --ns-shadow-lg: 0 30px 60px -24px rgba(20, 25, 45, 0.32);
-  --ns-glow-beam: 0 8px 22px -10px rgba(15, 125, 120, 0.45);
-  --ns-glow-gel:  0 8px 22px -10px rgba(195, 23, 93, 0.40);
-
-  color-scheme: light;
+:root {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$orange-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+  ));
+}
+:root[data-theme="dark"] {
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: mat.$orange-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+  ));
 }
 
 // ── Compatibility layer ─────────────────────────────────────────────────────
-// ~30 component stylesheets are written against the previous "Marquee" token
-// names. Aliasing them onto --ns-* restyles every page at once and keeps this
-// change reviewable. The names below are historical, so a few now read oddly
-// (--mp-red resolves to cyan, --mp-gold to magenta) — that is exactly why they
-// are quarantined here rather than left scattered through the components.
+// Every --ns-* name a not-yet-redesigned component stylesheet references,
+// aliased onto --ml-*. Because these are CSS custom properties (not Sass
+// variables), they re-resolve automatically under [data-theme="dark"] without
+// a second block — no need to redefine --ns-* per theme, only --ml-* changes.
 //
-// --mp-surface-2 / --mp-surface-3 were referenced by components but never
-// actually defined by the old theme; they resolved to nothing. Defined now.
+// Two deliberate departures from a literal renaming:
+//  - --ns-gel-* (premium/VIP, "magenta gel") does NOT alias to --ml-action:
+//    gold is already the one action colour in this direction, so aliasing gel
+//    to it would make "selected" and "premium/VIP" the same colour wherever
+//    both appear together (e.g. the seat map). It aliases to --ml-second
+//    (teal) instead.
+//  - This direction has no shadows or glows — --ns-shadow-*/--ns-glow-* alias
+//    to a minimal, still-valid box-shadow value rather than `none`, since some
+//    components layer them in a comma-separated shadow list where the bare
+//    keyword `none` would be invalid and drop the whole declaration.
+:root {
+  --ns-ground:      var(--ml-paper);
+  --ns-ground-2:    var(--ml-paper-2);
+  --ns-panel:       var(--ml-panel);
+  --ns-panel-2:     var(--ml-panel-2);
+  --ns-panel-3:     var(--ml-panel-3);
+  --ns-panel-glass: var(--ml-panel);
+  --ns-chrome:      var(--ml-chrome);
+  --ns-spill:       none;
+
+  --ns-ink:    var(--ml-ink);
+  --ns-ink-2:  var(--ml-ink-2);
+  --ns-muted:  var(--ml-muted);
+  --ns-faint:  var(--ml-faint);
+
+  --ns-line:   var(--ml-rule);
+  --ns-line-2: var(--ml-rule-soft);
+  --ns-line-3: var(--ml-rule-strong);
+  --ns-wash:   var(--ml-hover);
+  --ns-wash-2: var(--ml-hover);
+
+  --ns-beam:        var(--ml-action);
+  --ns-beam-strong: var(--ml-action-strong);
+  --ns-beam-deep:   var(--ml-action-strong);
+  --ns-beam-soft:   var(--ml-action-soft);
+  --ns-beam-line:   var(--ml-action-ring);
+  --ns-beam-ink:    var(--ml-on-action);
+
+  --ns-gel:        var(--ml-second);
+  --ns-gel-deep:   var(--ml-second);
+  --ns-gel-soft:   var(--ml-success-soft);
+  --ns-gel-hover:  color-mix(in srgb, var(--ml-second) 22%, transparent);
+  --ns-gel-card-1: var(--ml-action-soft);
+  --ns-gel-card-2: var(--ml-panel-2);
+
+  --ns-success:     var(--ml-success);
+  --ns-success-ink: var(--ml-success-ink);
+  --ns-warn:        var(--ml-warn);
+  --ns-danger:      var(--ml-danger);
+  --ns-danger-ink:  var(--ml-danger-ink);
+
+  --ns-seat-empty: var(--ml-seat-empty);
+  --ns-seat-taken: var(--ml-seat-taken);
+
+  --ns-shadow-sm: 0 0 0 1px var(--ml-rule-soft);
+  --ns-shadow-md: 0 0 0 1px var(--ml-rule-soft);
+  --ns-shadow-lg: 0 0 0 1px var(--ml-rule-soft);
+  --ns-glow-beam: 0 0 0 transparent;
+  --ns-glow-gel:  0 0 0 transparent;
+
+  --ns-r-sm: var(--ml-r-sm);
+  --ns-r-md: var(--ml-r-md);
+  --ns-r-lg: var(--ml-r-lg);
+  --ns-r-xl: var(--ml-r-xl);
+
+  --ns-font-display: var(--ml-font-head);
+  --ns-font-body:    var(--ml-font-body);
+  --ns-font-data:    var(--ml-font-data);
+}
+
+// ~10 component stylesheets are written against the older "Marquee" (--mp-*)
+// names one layer further back — keep pointing them at --ns-*, unchanged.
 :root {
   --mp-paper:      var(--ns-ground);
   --mp-paper-2:    var(--ns-ground-2);
@@ -188,12 +174,10 @@
   --mp-ink-wash:   var(--ns-wash);
   --mp-ink-wash-2: var(--ns-wash-2);
 
-  // Action (was ticket red, now the projector beam)
   --mp-red:        var(--ns-beam);
   --mp-red-strong: var(--ns-beam-strong);
   --mp-red-soft:   var(--ns-beam-soft);
 
-  // Premium (was marquee gold, now the magenta gel)
   --mp-gold:        var(--ns-gel);
   --mp-gold-deep:   var(--ns-gel-deep);
   --mp-gold-soft:   var(--ns-gel-soft);
@@ -225,18 +209,16 @@
 
 // ── Base ────────────────────────────────────────────────────────────────────
 body {
-  background-color: var(--ns-ground);
-  background-image: var(--ns-spill);
-  background-attachment: fixed;
-  color: var(--ns-ink);
-  font-family: var(--ns-font-body);
+  background: var(--ml-paper);
+  color: var(--ml-ink);
+  font-family: var(--ml-font-body);
   line-height: var(--cx-leading);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--ns-font-display);
+  font-family: var(--ml-font-head);
   letter-spacing: var(--cx-track-tight);
   line-height: var(--cx-leading-tight);
 }
@@ -250,94 +232,110 @@ a {
 
 // Times, seat codes and money line up in columns — never let them wobble.
 .mono, time, .seat-code, .total-amount {
-  font-family: var(--ns-font-data);
+  font-family: var(--ml-font-data);
   font-variant-numeric: tabular-nums;
 }
 
 ::selection {
-  background: var(--ns-beam-soft);
-  color: var(--ns-ink);
+  background: var(--ml-action-soft);
+  color: var(--ml-ink);
 }
 
 :focus-visible {
-  outline: var(--cx-focus-width) solid var(--ns-beam);
+  outline: var(--cx-focus-width) solid var(--ml-action);
   outline-offset: var(--cx-focus-offset);
 }
 
-// Scrollbars belong to the room too — a bright track on a dark page is a seam.
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--ns-panel-3) transparent;
+  scrollbar-color: var(--ml-panel-4) transparent;
 }
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-track { background: transparent; }
 *::-webkit-scrollbar-thumb {
-  background: var(--ns-panel-3);
+  background: var(--ml-panel-4);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 
-  &:hover { background: var(--ns-faint); }
+  &:hover { background: var(--ml-faint); }
 }
 
-// ── Beam rule — the signature ───────────────────────────────────────────────
-// Replaces Marquee's row of gold bulbs. Same markup (five `.bulb` children),
-// different idea: light spilling out of the projector and falling off. Length
-// and opacity both decay, so it reads as one gesture rather than five dots.
+// ── Marquee rule — the signature ─────────────────────────────────────────────
+// A row of perforation dots, the way a real ticket is torn from its stub.
+// Same markup as before (five `.bulb` children) — only the rendering changed,
+// from a decaying row of projector bulbs to an even row of ticket holes.
 .marquee-rule {
   display: inline-flex;
   align-items: center;
   gap: 5px;
 
   .bulb {
-    height: 2px;
-    border-radius: 1px;
-    background: var(--ns-beam);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ml-rule-strong);
     flex: none;
-
-    &:nth-child(1) { width: 16px; opacity: 1; }
-    &:nth-child(2) { width: 13px; opacity: 0.68; }
-    &:nth-child(3) { width: 10px; opacity: 0.44; }
-    &:nth-child(4) { width: 7px;  opacity: 0.26; }
-    &:nth-child(5) { width: 4px;  opacity: 0.13; }
   }
 
-  &.marquee-rule--sm .bulb { height: 1.5px; }
+  &.marquee-rule--sm .bulb { width: 3px; height: 3px; }
+}
+
+// A block-level dashed divider for section headers that don't carry the
+// bulb markup (the ticket-stub tear, same idea as CinemaAdmin's page header).
+.ml-rule--dashed {
+  border-top: 1px dashed var(--ml-rule);
 }
 
 // ── Shared buttons ──────────────────────────────────────────────────────────
 .btn-primary-cta {
+  // Most uses of this class are mat-raised-button — Material carries its own
+  // M3 theme container/label colors (plus a state-layer tint on hover) that
+  // otherwise win over a plain background/color here, washing the button out
+  // to the theme's pale "unthemed" default instead of staying gold. Same fix
+  // as .btn-nav-primary in app.scss.
+  --mdc-protected-button-container-color: var(--ml-action);
+  --mdc-protected-button-label-text-color: var(--ml-on-action);
+  --mdc-protected-button-disabled-container-color: var(--ml-action);
+  --mdc-protected-button-disabled-label-text-color: var(--ml-on-action);
+  --mat-protected-button-state-layer-color: var(--ml-on-action);
   display: inline-flex;
   align-items: center;
   gap: var(--cx-space-2);
-  background: var(--ns-beam);
-  color: var(--ns-beam-ink);
-  font-family: var(--ns-font-body);
+  background-color: var(--ml-action) !important;
+  color: var(--ml-on-action) !important;
+  box-shadow: none !important;
+  font-family: var(--ml-font-body);
   font-size: var(--cx-text-md);
   font-weight: var(--cx-weight-semibold);
   padding: 12px 26px;
-  border-radius: var(--ns-r-md);
+  border-radius: var(--ml-r-sm);
   border: none;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: var(--ns-glow-beam);
-  transition: background var(--cx-dur) var(--cx-ease),
-              box-shadow var(--cx-dur) var(--cx-ease),
-              transform var(--cx-dur-fast) var(--cx-ease);
+  transition: background-color var(--cx-dur) var(--cx-ease);
 
   &:hover {
-    background: var(--ns-beam-strong);
-    box-shadow: 0 16px 38px -12px rgba(89, 217, 210, 0.6);
-    transform: translateY(-2px);
+    background-color: var(--ml-action-strong) !important;
     text-decoration: none;
-    color: var(--ns-beam-ink);
+    color: var(--ml-on-action);
   }
 
   &:disabled, &[disabled] {
     opacity: 0.45;
     cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
+  }
+
+  // mat-raised-button wraps all projected content (text + any icon) in one
+  // .mdc-button__label span that is `display: block` — this button's own
+  // flex/align-items/gap never reach the icon inside it, so it sits on the
+  // text's baseline instead of centered (same root cause as .nav-user-btn in
+  // CinemaUser's app.scss). !important since Material's own rule for this
+  // element carries the same specificity and loads after this stylesheet.
+  .mdc-button__label {
+    display: flex !important;
+    align-items: center;
+    gap: var(--cx-space-2);
   }
 }
 
@@ -345,85 +343,141 @@ a {
   display: inline-flex;
   align-items: center;
   gap: var(--cx-space-2);
-  background: var(--ns-panel);
-  color: var(--ns-ink);
-  font-family: var(--ns-font-body);
+  background: var(--ml-panel);
+  color: var(--ml-ink);
+  font-family: var(--ml-font-body);
   font-size: var(--cx-text-md);
   font-weight: var(--cx-weight-semibold);
   padding: 12px 24px;
-  border-radius: var(--ns-r-md);
-  border: 1px solid var(--ns-line);
+  border-radius: var(--ml-r-sm);
+  border: 1px solid var(--ml-rule);
   cursor: pointer;
-  box-shadow: var(--ns-shadow-sm);
   text-decoration: none;
   transition: border-color var(--cx-dur) var(--cx-ease),
-              background var(--cx-dur) var(--cx-ease),
-              transform var(--cx-dur-fast) var(--cx-ease);
+              background var(--cx-dur) var(--cx-ease);
 
   &:hover {
-    background: var(--ns-panel-2);
-    border-color: var(--ns-line-3);
-    transform: translateY(-2px);
+    background: var(--ml-panel-2);
+    border-color: var(--ml-rule-strong);
     text-decoration: none;
-    color: var(--ns-ink);
+    color: var(--ml-ink);
   }
 }
 
-// An age rating is information, not an action — so it does not get the beam.
+// An age rating is information, not an action — so it does not get the gold.
 .age-badge {
   display: inline-block;
   padding: 2px 8px;
-  border-radius: 4px;
-  background: var(--ns-wash);
-  border: 1px solid var(--ns-line);
-  color: var(--ns-ink-2);
-  font-family: var(--ns-font-data);
+  border-radius: var(--ml-r-sm);
+  background: var(--ml-panel-3);
+  border: 1px solid var(--ml-rule);
+  color: var(--ml-ink-2);
+  font-family: var(--ml-font-data);
   font-size: var(--cx-text-xs);
   font-weight: var(--cx-weight-semibold);
   line-height: 1.5;
 }
 
 // ── Angular Material ────────────────────────────────────────────────────────
-// CinemaUser only uses the spinner, menu, icon and paginator — everything else
-// is native markup styled through the tokens above.
+// CinemaUser only hand-styles the spinner, menu, icon and paginator — form
+// fields/selects/sidenav/button-toggle now follow mat.theme() above.
 .mat-mdc-menu-panel {
-  --mat-menu-container-color: var(--ns-panel);
-  background: var(--ns-panel) !important;
-  border: 1px solid var(--ns-line);
-  border-radius: var(--ns-r-md) !important;
-  box-shadow: var(--ns-shadow-md) !important;
+  --mat-menu-container-color: var(--ml-panel);
+  background: var(--ml-panel) !important;
+  border: 1px solid var(--ml-rule);
+  border-radius: var(--ml-r-md) !important;
 }
 .mat-mdc-menu-content {
   padding: 6px !important;
   background: transparent;
 }
 .mat-mdc-menu-item {
-  --mat-menu-item-label-text-color: var(--ns-ink);
-  color: var(--ns-ink) !important;
+  --mat-menu-item-label-text-color: var(--ml-ink);
+  color: var(--ml-ink) !important;
   min-height: 42px;
-  border-radius: var(--ns-r-sm);
+  border-radius: var(--ml-r-sm);
 
-  .mdc-list-item__primary-text { color: var(--ns-ink) !important; }
-  .menu-icon { color: var(--ns-beam); margin-right: 10px; width: 16px; text-align: center; }
+  .mdc-list-item__primary-text { color: var(--ml-ink) !important; }
+  .menu-icon { color: var(--ml-action-strong); margin-right: 10px; width: 16px; text-align: center; }
 
   &:hover:not([disabled]),
   &.cdk-program-focused:not([disabled]),
   &.cdk-keyboard-focused:not([disabled]) {
-    background: var(--ns-beam-soft) !important;
+    background: var(--ml-action-soft) !important;
   }
 }
 
-.mat-mdc-progress-spinner {
-  --mdc-circular-progress-active-indicator-color: var(--ns-beam);
+// ── Account menu (app.html #userMenu) — identity header + quick links ───────
+// above the plain Account/Logout list. Only this menu uses these classes.
+.user-account-menu {
+  .menu-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px 12px;
+
+    .user-avatar { width: 40px; height: 40px; font-size: 1rem; flex: none; }
+
+    .menu-who {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      b { color: var(--ml-ink); font-size: 0.94rem; font-weight: 600; }
+      > span:not(.tier-badge) { color: var(--ml-muted); font-size: 0.78rem; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+  }
+
+  .tier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 3px 9px 3px 7px;
+    border-radius: var(--ml-r-full);
+    background: var(--ml-action-soft);
+    color: var(--ml-action-strong);
+    font-size: 0.72rem;
+    font-weight: 600;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  }
+
+  .menu-quick-row {
+    display: flex;
+    gap: 4px;
+    padding: 0 6px 6px;
+
+    a.mat-mdc-menu-item {
+      flex: 1;
+      min-height: auto;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 4px 8px;
+      font-size: 0.72rem;
+      text-align: center;
+
+      .menu-icon, mat-icon { margin-right: 0; }
+    }
+  }
+
+  .menu-div { height: 1px; background: var(--ml-rule); margin: 4px 8px 6px; }
+
+  // Logout is no longer the only "other" action once quick links exist —
+  // demote it to a quiet row instead of the same gold icon tone as Account.
+  .menu-item-quiet .menu-icon { color: var(--ml-muted); }
 }
 
-// The paginator ships with light-theme defaults that would sit as a white slab
-// on the dark ground.
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--ml-action);
+}
+
 .mat-mdc-paginator {
   --mat-paginator-container-background-color: transparent;
-  --mat-paginator-container-text-color: var(--ns-muted);
-  --mat-paginator-enabled-icon-color: var(--ns-ink-2);
-  --mat-paginator-disabled-icon-color: var(--ns-faint);
+  --mat-paginator-container-text-color: var(--ml-muted);
+  --mat-paginator-enabled-icon-color: var(--ml-ink-2);
+  --mat-paginator-disabled-icon-color: var(--ml-faint);
   background: transparent !important;
-  color: var(--ns-muted);
+  color: var(--ml-muted);
 }

@@ -1,9 +1,9 @@
 // Showtime Scheduler — weekly timetable
-// Colour-coded by showtime type: Normal = violet, Premiere = sunset orange, Special = teal.
+// Colour-coded by showtime type: Normal = marquee gold, Premiere = teal, Special = rust.
 :host {
   --st-normal:   var(--ad-primary);
   --st-premiere: var(--ad-secondary);
-  --st-special:  #2dd4bf;
+  --st-special:  var(--ml-warn);
   --st-axis-w:   64px;
 }
 
@@ -12,7 +12,16 @@
 // ── Week navigation in the header ─────────────────────────────────────────────
 .st-week-nav { display: inline-flex; align-items: center; gap: 8px; }
 .st-week-label { min-width: 168px; }
-.st-movie-filter { width: 200px; }
+.st-movie-filter {
+  width: 200px;
+  align-self: center;
+
+  // This select never shows a hint/error, so the app-wide reserved
+  // subscript space (_dialog-ledger.scss) just adds dead height below
+  // it, throwing off vertical centering against the plain buttons
+  // beside it in .ad-toolbar.
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
+}
 
 // ── Legend ────────────────────────────────────────────────────────────────────
 .st-legend {
@@ -83,7 +92,7 @@
   position: relative;
   border-right: 1px solid var(--ad-glass-border);
 
-  &.is-today { background: var(--bo-action-soft); }
+  &.is-today { background: var(--ml-action-soft); }
 }
 .st-line { border-bottom: 1px solid var(--ad-line-soft); }
 
@@ -106,7 +115,7 @@
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.15s ease;
 
-  &:hover { background: var(--ad-surface-3); box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.6); z-index: 2; }
+  &:hover { background: var(--ad-surface-3); box-shadow: 0 0 0 1px var(--ml-rule-strong); z-index: 2; }
 
   .st-block-title { font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .st-block-time  { font-size: 11px; color: var(--ad-muted); font-variant-numeric: tabular-nums; }
@@ -125,102 +134,3 @@
 .st-block.st-block--premiere { border-left-color: var(--st-premiere); }
 .st-block.st-block--special  { border-left-color: var(--st-special); }
 
-// ── Dialog form ─────────────────────────────────────────────────────────────
-// The shell (scrim, card, header) comes from app-modal; only the form body is local.
-.st-form-body {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.st-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-.st-poster {
-  margin-top: 10px;
-  img { width: 72px; border-radius: var(--ad-r-sm); border: 1px solid var(--ad-glass-border); display: block; }
-}
-
-// Segmented control
-.st-seg {
-  display: inline-flex;
-  padding: 4px;
-  gap: 4px;
-  border: 1px solid var(--ad-glass-border);
-  border-radius: var(--ad-r-sm);
-  background: var(--ad-surface-0);
-}
-.st-seg-btn {
-  flex: 1;
-  min-width: 56px;
-  height: 34px;
-  padding: 0 14px;
-  border: none;
-  border-radius: calc(var(--ad-r-sm) - 2px);
-  background: transparent;
-  color: var(--ad-muted);
-  font: 600 13px/1 var(--ad-font-body);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-
-  &:hover { color: var(--ad-on); }
-  &.is-active { background: var(--ad-primary); color: var(--ad-on-primary); box-shadow: 0 4px 14px -4px var(--ad-primary-glow); }
-}
-
-// Toggle
-.st-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--ad-on);
-
-  input { position: absolute; opacity: 0; pointer-events: none; }
-  .st-toggle-track {
-    position: relative;
-    width: 42px;
-    height: 24px;
-    border-radius: var(--ad-r-full);
-    background: var(--ad-surface-4);
-    transition: background 0.18s ease;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #fff;
-      transition: transform 0.18s ease;
-    }
-  }
-  input:checked + .st-toggle-track { background: var(--ad-primary); }
-  input:checked + .st-toggle-track::after { transform: translateX(18px); }
-}
-
-.st-form-error {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 10px 12px;
-  border: 1px solid var(--bo-danger);
-  border-radius: var(--ad-r-sm);
-  background: color-mix(in srgb, var(--bo-danger) 12%, transparent);
-  color: var(--bo-danger);
-  font-size: 13px;
-  line-height: 1.45;
-
-  mat-icon { flex: none; width: 18px; height: 18px; font-size: 18px; }
-}
-
-.st-form-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 4px;
-  padding-top: 18px;
-  border-top: 1px solid var(--ad-glass-border);
-
-  .st-spacer { flex: 1; }
-}

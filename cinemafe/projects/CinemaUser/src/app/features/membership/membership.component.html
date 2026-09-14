@@ -11,14 +11,14 @@
   <div *ngIf="loading" class="spinner-wrap"><mat-spinner diameter="40"></mat-spinner></div>
 
   <div *ngIf="!loading && !tiers.length" class="empty">
-    <i class="fas fa-crown"></i>
+    <mat-icon>workspace_premium</mat-icon>
     <p>{{ 'membership.emptyText' | translate }}</p>
   </div>
 
   <div class="tier-grid">
     <div class="tier-card" *ngFor="let t of tiers; let i = index" [class.featured]="isFeatured(i)">
       <div class="tier-badge" *ngIf="isFeatured(i)">{{ 'membership.popular' | translate }}</div>
-      <div class="tier-crown"><i class="fas fa-crown"></i></div>
+      <div class="tier-crown"><mat-icon>workspace_premium</mat-icon></div>
       <h3 class="tier-name">{{ t.name }}</h3>
       <div class="tier-discount">
         <span class="disc-value">{{ t.discountPercent }}%</span>
@@ -26,9 +26,12 @@
       </div>
       <p class="tier-points">{{ t.minPoints | number }}<ng-container *ngIf="t.maxPoints"> – {{ t.maxPoints | number }}</ng-container> {{ 'membership.pointsUnit' | translate }}</p>
       <ul class="tier-perks">
-        <li *ngFor="let perk of perks"><i class="fas fa-check"></i> {{ perk | translate }}</li>
+        <li *ngFor="let perk of perks"><mat-icon>check</mat-icon> {{ perk | translate }}</li>
       </ul>
-      <a class="join-btn" [class.btn-primary-cta]="isFeatured(i)" [class.btn-ghost-cta]="!isFeatured(i)" routerLink="/auth/register">
+      <a mat-raised-button class="join-btn" *ngIf="isFeatured(i)" routerLink="/auth/register">
+        {{ 'membership.registerNow' | translate }}
+      </a>
+      <a mat-stroked-button class="join-btn" *ngIf="!isFeatured(i)" routerLink="/auth/register">
         {{ 'membership.registerNow' | translate }}
       </a>
     </div>

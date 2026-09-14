@@ -1,0 +1,501 @@
+// Dialog form controls for the "Marquee Ledger" system — fields, dropdowns,
+// checkboxes and slide toggles inside a MatDialog. Mixin-only: @use'ing this
+// file emits nothing (see _ledger-tokens.scss / _auth-ledger.scss for the
+// same convention). @include ledger-dialog-forms once, from
+// _marquee-ledger.scss, after the MatDialog chrome block.
+//
+// Two caveats baked into this file's shape:
+//  1. The dialog-only layout classes (.dlg-*, .check-group, checkbox/switch
+//     styling) are scoped under .mat-mdc-dialog-surface, since those class
+//     names never appear outside a dialog template — scoping them costs
+//     nothing and keeps the intent explicit. The generic Material field/
+//     select box-model rules (.mat-mdc-text-field-wrapper,
+//     .mat-mdc-form-field-infix, .mat-mdc-select and friends) are declared
+//     app-wide instead: those selectors match ANY instance of the component,
+//     dialog or not, and a field/dropdown that's a consistent height in one
+//     place but not another reads as a bug, not a variant — see the height
+//     bugs this exact split was introduced to fix.
+//  2. mat-select's option panel renders in .cdk-overlay-container, a sibling
+//     of <body>, not a descendant of the dialog surface — no surface-scoped
+//     selector ever reaches it. Panel geometry (border/radius/background) is
+//     therefore gated behind an opt-in `panelClass="dlg-select-panel"` set on
+//     each dialog's <mat-select>, declared as a top-level (non-nested)
+//     selector below. Option colour (hover/selected) is left unscoped and
+//     applies to every mat-option in the app — that spillover onto filter-card
+//     selects is intentional, for visual consistency, not an oversight.
+//
+// A few rules below reach into Material's internal `.mdc-*` classes because
+// no `--mat-*`/`--mdc-*` custom property exists for that property (checkbox
+// background/checkmark, slide-toggle track/handle/icons). Those are
+// version-coupled to the installed Angular Material release and are the most
+// likely thing to need a look after a Material upgrade.
+//
+// Element id convention: native inputs/selects that need a `<label for>` or
+// `aria-labelledby` target use `<dialog-prefix>-<controlName>[-lbl]`, e.g.
+// `mv-duration` (movie dialog) / `rt-name` (room-type dialog). Ids are
+// document-global — invent a short, dialog-specific prefix per new dialog
+// rather than reusing another dialog's, so two dialogs never collide if
+// ever mounted at once.
+
+@mixin ledger-dialog-forms {
+  // ── mat-form-field: flat ledger box, no floating label ──────────────────
+  // App-wide (see caveat #1) — every mat-form-field in CinemaAdmin, dialog or
+  // filter card, gets the same flat outline box and height.
+  .mat-mdc-form-field {
+    width: 100%;
+    --mdc-outlined-text-field-container-shape: var(--ml-r-sm);
+    --mdc-outlined-text-field-outline-color: var(--ml-rule);
+    --mdc-outlined-text-field-hover-outline-color: var(--ml-rule-strong);
+    --mdc-outlined-text-field-focus-outline-color: var(--ml-action);
+    --mdc-outlined-text-field-outline-width: 1px;
+    --mdc-outlined-text-field-focus-outline-width: 1px;
+    --mdc-outlined-text-field-input-text-color: var(--ml-ink);
+    --mdc-outlined-text-field-input-text-placeholder-color: var(--ml-faint);
+    --mdc-outlined-text-field-error-outline-color: var(--ml-danger);
+    --mdc-outlined-text-field-error-hover-outline-color: var(--ml-danger);
+    --mdc-outlined-text-field-error-focus-outline-color: var(--ml-danger);
+    --mat-form-field-error-text-color: var(--ml-danger-ink);
+    --mat-form-field-subscript-text-font: var(--ml-font-data);
+    --mat-form-field-subscript-text-size: var(--cx-text-xs);
+    --mat-form-field-subscript-text-line-height: 1.4;
+  }
+  .mat-mdc-text-field-wrapper {
+    background: var(--ml-panel-2);
+    border-radius: var(--ml-r-sm);
+    transition: box-shadow var(--cx-dur) var(--cx-ease);
+  }
+  // Everything below that forces a hard box height/layout is scoped to
+  // `.mdc-text-field--no-label` — the modifier class Material itself toggles
+  // onto this same wrapper element when the field has no `<mat-label>`
+  // (`_hasFloatingLabel()` in Material's own form-field source). Every
+  // dialog field is built label-less (the label lives above the field as
+  // `.dlg-label`, not inside it), so this held everywhere it was tested —
+  // but several *filter-card* selects genuinely use a real `<mat-label>`,
+  // and forcing a fixed 40px/no-vertical-padding box on those broke
+  // Material's own floating-label layout (the label text overlapped the
+  // value instead of floating above it). A labeled field keeps Material's
+  // own sizing entirely; only the label-less case gets the ledger box.
+  .mat-mdc-text-field-wrapper.mdc-text-field--no-label {
+    // A fixed height, not just a minimum — a `min-height` on both an
+    // input's wrapper and a select's own box still let each grow to its
+    // own content's natural size (a select trigger's line-height/box model
+    // differs slightly from a plain input's), so two fields sitting side
+    // by side in a row visibly differed by a few px even though both
+    // "respected" the same 40px minimum. A hard `height` removes that
+    // slack entirely.
+    height: 40px;
+  }
+  // `--mat-form-field-container-height` feeds Material's OWN internal
+  // layout/label-position math (it's read by Material's own compiled CSS,
+  // not just informational) — setting it on every .mat-mdc-form-field
+  // regardless of label previously left a labeled field's floating label
+  // positioned as if the box were 40px tall while the box itself correctly
+  // kept Material's own larger default height (the height rule above is
+  // no-label-scoped), stranding the label near the top with dead space
+  // below it instead of centered/floating correctly. Scoping the token
+  // itself the same way the box height already is fixes that: a label-less
+  // field's token and actual box height now agree; a labeled field's token
+  // is left at Material's own default, matching its own untouched box.
+  .mat-mdc-form-field:has(.mdc-text-field--no-label) {
+    --mat-form-field-container-height: 40px;
+  }
+  // The wrapper is the actual bordered/background box a viewer sees — the
+  // textarea and multi-select-chip exceptions below have to be mirrored
+  // here too, not just on .mat-mdc-form-field-infix inside it, or the
+  // *visible* box stays clipped to 40px while its content silently grows
+  // past it (wrapped genre chips overlapping the hint text below is
+  // exactly that: the infix and select both correctly grew, but this
+  // wrapper — the only element with the border/background — didn't).
+  .mat-mdc-text-field-wrapper.mdc-text-field--no-label:has(textarea) {
+    height: auto;
+    min-height: 64px;
+  }
+  .mat-mdc-text-field-wrapper.mdc-text-field--no-label:has(.mat-mdc-select-multiple) {
+    height: auto;
+    min-height: 40px;
+  }
+  .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+    background: var(--ml-panel);
+    box-shadow: 0 0 0 3px var(--ml-action-ring);
+  }
+  .mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 0 3px var(--ml-danger-soft);
+  }
+  // Ledger boxes carry no floating label chrome — collapse the notch/space
+  // Material otherwise reserves for one, and vertically centre the input
+  // inside the fixed 40px box. Centering matters here because Material's
+  // own `.mdc-text-field__input` has an explicit (non-auto) height — a
+  // flex item with a definite cross-size is never stretched by
+  // `align-items: stretch` regardless of what the parent asks for, it just
+  // falls back to top-alignment instead, which pushed the input's text
+  // above the wrapper's visible (rounded-corner, overflow-hidden) box and
+  // clipped the tops of its glyphs. (The native date/time picker icon,
+  // which this rule used to be blamed for hiding, turned out to be
+  // suppressed by a completely different Material rule — see the
+  // `display: block` override below — so centering here doesn't affect it.)
+  // Scoped to `.mdc-text-field--no-label` for the same reason as the
+  // wrapper rule above — a labeled field needs Material's own infix padding
+  // for the label to float into.
+  .mdc-text-field--no-label .mat-mdc-form-field-infix {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  // A textarea is deliberately multi-line/taller/resizable — it opts back
+  // out of the fixed-40px rule above (a hard `height` would clip a resize
+  // handle or wrapped text), top-aligned like any textarea.
+  .mdc-text-field--no-label .mat-mdc-form-field-infix:has(textarea) {
+    align-items: flex-start;
+    height: auto;
+    min-height: 64px;
+    padding-block: 9px;
+  }
+  // Same exception for a multi-select's wrapped chip row (see
+  // .mat-mdc-select-multiple below) — it also needs to grow past 40px.
+  .mdc-text-field--no-label .mat-mdc-form-field-infix:has(.mat-mdc-select-multiple) {
+    align-items: flex-start;
+    height: auto;
+    min-height: 40px;
+  }
+  textarea.mat-mdc-input-element {
+    resize: vertical;
+    line-height: var(--cx-leading);
+  }
+  // Material draws a second, plain CSS-triangle arrow via this
+  // pseudo-element on every mat-select's form field — a legacy fallback
+  // baked in independent of appearance or label — in addition to the
+  // SVG-based `.mat-mdc-select-arrow` we already hide below and the custom
+  // chevron we draw ourselves via `.mat-mdc-select-trigger::after`. Left
+  // alone a select showed two arrows stacked on top of each other.
+  .mat-mdc-form-field-infix::after {
+    display: none;
+  }
+  // Native date/time pickers (no matDatepicker in this app). Angular
+  // Material's own `.mdc-text-field__input` styles unconditionally hide
+  // this pseudo-element (`display: none`, aimed at browsers' default date
+  // input chrome, on the assumption every date/time field uses
+  // matDatepicker instead) — that rule silently kills the *only* way to
+  // open a native date/time field's picker here, so it has to be undone,
+  // not just recoloured. This selector already out-specifies Material's
+  // (two class/attribute selectors vs. its one), so declaring `display`
+  // here wins without `!important`.
+  input[type="date"],
+  input[type="time"] {
+    &::-webkit-calendar-picker-indicator {
+      display: block;
+      filter: opacity(0.55);
+      cursor: pointer;
+      &:hover { filter: opacity(1) sepia(1) saturate(4) hue-rotate(0deg); }
+    }
+  }
+
+  // ── mat-select: filled ledger box + custom chevron ────────────────────────
+  // No horizontal padding here — the field's own container padding
+  // (shared with a text input via .mat-mdc-form-field-infix) already
+  // indents the value; adding a second padding on top of it is what used
+  // to make a select's text start deeper than an input's in the same row.
+  // Height forced only for the label-less case, same reasoning as the
+  // wrapper/infix rules above.
+  .mdc-text-field--no-label .mat-mdc-select {
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
+  .mat-mdc-select-value {
+    color: var(--ml-ink);
+  }
+  // Only a multiple-selection value needs to grow past one line (it holds
+  // the chip row) — a single-select value keeps Material's own
+  // nowrap/ellipsis so a long option name doesn't spill past the border
+  // or make the box taller than the input beside it. Material's own
+  // component styles put the actual nowrap/overflow-hidden/ellipsis on
+  // TWO levels — .mat-mdc-select-value (the outer box) AND the nested
+  // .mat-mdc-select-value-text span the chip row's ng-content lands in —
+  // both have to be reset, or the chip row still clips/scrolls
+  // horizontally inside the (correctly) wrapping outer box.
+  .mat-mdc-select-multiple {
+    // The base .mat-mdc-select rule above is a hard 40px so a single
+    // select and a plain input match exactly — a multi-select's chip row
+    // has to opt back out of that (same reasoning as the textarea infix
+    // exception below) or a 3rd+ wrapped chip row gets clipped.
+    height: auto;
+    min-height: 40px;
+    align-items: flex-start;
+
+    .mat-mdc-select-value,
+    .mat-mdc-select-value-text {
+      overflow: visible;
+      white-space: normal;
+      text-overflow: clip;
+    }
+    // Material's own .mat-mdc-select-trigger is `display: inline-flex`
+    // with the default no-wrap, so a chip row past one line needs its own
+    // wrap + top alignment (the single-line case stays vertically
+    // centered via the base .mat-mdc-select-trigger, untouched here).
+    .mat-mdc-select-trigger {
+      flex-wrap: wrap;
+      align-items: flex-start;
+      padding-block: 6px;
+    }
+  }
+  .mat-mdc-select-placeholder { color: var(--ml-faint); }
+  // Material's own arrow-wrapper CSS (`display: inline-flex`) is injected as
+  // a runtime component style, added to <head> AFTER this stylesheet has
+  // already been parsed — so on an exact specificity tie (both are a single
+  // class selector) it wins the cascade regardless of our rule existing at
+  // all, and its SVG arrow kept rendering alongside our own chevron below.
+  // Qualifying with the ancestor (an extra class) breaks the tie without
+  // `!important`, same technique already used for the dialog chrome in
+  // _marquee-ledger.scss.
+  .mat-mdc-select .mat-mdc-select-arrow-wrapper { display: none; } // replaced by the chevron below
+  .mat-mdc-select-trigger {
+    position: relative;
+    padding-right: 22px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 2px;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      border-right: 1.5px solid var(--ml-muted);
+      border-bottom: 1.5px solid var(--ml-muted);
+      transform: translateY(-65%) rotate(45deg);
+      pointer-events: none;
+    }
+  }
+  .mat-mdc-select-panel-open .mat-mdc-select-trigger::after {
+    border-color: var(--ml-action);
+  }
+
+  .mat-mdc-dialog-surface {
+    // ── Layout: rows of up to 3 fields, or a single full-width row ──────────
+    .dlg-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--cx-space-4);
+    }
+    // A plain .dlg-row is already a single implicit column — .dlg-row--2/--3
+    // are the only modifiers that add columns, so the narrow-viewport
+    // collapse only has to reset those two (no grid-auto-flow to fight).
+    .dlg-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--cx-space-4);
+    }
+    .dlg-row--2 { grid-template-columns: repeat(2, 1fr); }
+    .dlg-row--3 { grid-template-columns: repeat(3, 1fr); }
+
+    @media (max-width: 560px) {
+      .dlg-row--2, .dlg-row--3 { grid-template-columns: 1fr; }
+    }
+
+    .dlg-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+
+      // A mat-button-toggle-group with more items than its column is wide
+      // (e.g. a 3-way toggle sharing a 2-up row with a 2-way one) would
+      // otherwise clip its last item past the dialog border — wrap instead.
+      .mat-button-toggle-group {
+        flex-wrap: wrap;
+        height: auto;
+        // .dlg-field is a column flex container — without this, the group
+        // stretches to the field's full width (matching the mat-form-fields
+        // above it) instead of hugging its own buttons, leaving a large
+        // empty strip inside its own border past the last toggle.
+        align-self: flex-start;
+        max-width: 100%;
+      }
+    }
+    .dlg-label {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--cx-space-2);
+      // Reserves 2 lines regardless of actual wrap, so a row's controls all
+      // start at the same y position even when one label wraps (Vietnamese
+      // labels run longer) and a sibling doesn't — see the row height note
+      // below the .dlg-row rule.
+      min-height: calc(2 * var(--cx-text-xs) * 1.35);
+      line-height: 1.35;
+      font-family: var(--ml-font-data);
+      font-size: var(--cx-text-xs);
+      font-weight: var(--cx-weight-semibold);
+      letter-spacing: var(--cx-track-caps);
+      text-transform: uppercase;
+      color: var(--ml-muted);
+    }
+
+    // Multi-select closed-state chips (movie genres today; any future
+    // multi-select reuses the same markup/classes via mat-select-trigger).
+    .dlg-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin: 2px 4px 2px 0;
+      padding: 3px 6px 3px 10px;
+      border: 1px solid var(--ml-rule-soft);
+      border-radius: var(--ml-r-full);
+      background: var(--ml-panel-3);
+      font-family: var(--ml-font-data);
+      font-size: var(--cx-text-xs);
+      color: var(--ml-ink-2);
+      line-height: 1.6;
+    }
+    .dlg-chip-x {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ml-muted);
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+
+      &:hover { color: var(--ml-danger); }
+    }
+
+    // ── mat-checkbox: square ledger box, gold fill when checked ─────────────
+    .mat-mdc-checkbox {
+      --mdc-checkbox-state-layer-size: 32px;
+
+      label { color: var(--ml-ink); font-family: var(--ml-font-body); }
+
+      .mdc-checkbox__background {
+        border-color: var(--ml-rule-strong) !important;
+        border-radius: 3px;
+        background-color: var(--ml-panel) !important;
+      }
+      &.mat-mdc-checkbox-checked .mdc-checkbox__background {
+        border-color: var(--ml-action) !important;
+        background-color: var(--ml-action) !important;
+      }
+      .mdc-checkbox__checkmark { color: var(--ml-on-action); }
+      .mdc-checkbox__mixedmark { background-color: var(--ml-on-action); }
+      .mat-mdc-checkbox-ripple,
+      .mdc-checkbox__ripple { display: none; }
+    }
+
+    // Grouped checkboxes — a bordered ledger box, dashed ticket-tear dividers
+    // between rows. Used for a multi-choice set (discount.dialog's theater
+    // scope list).
+    .check-group {
+      border: 1px solid var(--ml-rule);
+      border-radius: var(--ml-r-md);
+      background: var(--ml-panel);
+      margin-top: 8px;
+    }
+    .check-item {
+      padding: 8px 12px;
+
+      & + .check-item { border-top: 1px dashed var(--ml-rule); }
+    }
+    // Short, same-shape items (e.g. weekdays) — let them wrap inline instead
+    // of stacking one per dashed row.
+    .check-group--inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--cx-space-2) var(--cx-space-4);
+      padding: 10px 12px;
+      margin-top: 8px;
+
+      .check-item { padding: 0; border-top: none !important; }
+    }
+
+    // ── Lone boolean flag: a gold slide toggle, label left / toggle right ──
+    .dlg-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--cx-space-3);
+      padding: 10px 12px;
+      border: 1px solid var(--ml-rule);
+      border-radius: var(--ml-r-sm);
+
+      .dlg-switch-label { color: var(--ml-ink); }
+    }
+    .mat-mdc-slide-toggle {
+      --mdc-switch-unselected-track-color: var(--ml-panel-3);
+      --mdc-switch-unselected-focus-track-color: var(--ml-panel-3);
+      --mdc-switch-unselected-hover-track-color: var(--ml-panel-3);
+      --mdc-switch-unselected-pressed-track-color: var(--ml-panel-3);
+      --mdc-switch-unselected-handle-color: var(--ml-panel);
+      --mdc-switch-unselected-focus-handle-color: var(--ml-panel);
+      --mdc-switch-unselected-hover-handle-color: var(--ml-panel);
+      --mdc-switch-unselected-pressed-handle-color: var(--ml-panel);
+      --mdc-switch-unselected-track-outline-color: var(--ml-rule-strong);
+      --mdc-switch-selected-track-color: var(--ml-action);
+      --mdc-switch-selected-focus-track-color: var(--ml-action);
+      --mdc-switch-selected-hover-track-color: var(--ml-action);
+      --mdc-switch-selected-pressed-track-color: var(--ml-action);
+      --mdc-switch-selected-handle-color: var(--ml-on-action);
+      --mdc-switch-selected-focus-handle-color: var(--ml-on-action);
+      --mdc-switch-selected-hover-handle-color: var(--ml-on-action);
+      --mdc-switch-selected-pressed-handle-color: var(--ml-on-action);
+      --mdc-switch-selected-icon-color: transparent;
+      --mdc-switch-unselected-icon-color: transparent;
+
+      .mdc-switch__icons { display: none; }
+    }
+  }
+
+  // subscriptSizing="dynamic" only reserves space when a hint/error is
+  // actually rendered — so a required-but-untouched field (its mat-error
+  // renders as soon as the control is invalid, not only once touched) ends
+  // up taller than an optional sibling with no error at all in the same
+  // row. Pin one line's worth of height here so every field reserves the
+  // same subscript space regardless of whether it currently has a message
+  // to show; a genuinely long error still grows past this. App-wide (see
+  // caveat #1) — every mat-form-field in CinemaAdmin, list-page filter
+  // cards included, gets the same fix.
+  .mat-mdc-form-field-subscript-wrapper {
+    min-height: 22px;
+  }
+
+  // ── mat-select option panel geometry — opt-in via panelClass, since the
+  // panel renders outside the dialog surface (see file-header caveat #2) ────
+  .dlg-select-panel.mat-mdc-select-panel {
+    background: var(--ml-panel);
+    border: 1px solid var(--ml-rule);
+    border-radius: var(--ml-r-md);
+    box-shadow: 0 12px 28px -12px rgba(20, 16, 10, 0.35);
+    padding: 4px;
+  }
+
+  // ── Option colour — global by design (see file-header caveat #2): every
+  // mat-option in the app, dialog or filter card, reads consistently. ───────
+  .mat-mdc-option {
+    font-family: var(--ml-font-body);
+    color: var(--ml-ink);
+    border-radius: var(--ml-r-sm);
+
+    &:hover:not(.mdc-list-item--disabled),
+    &.mat-mdc-option-active {
+      background: var(--ml-hover);
+    }
+    &.mdc-list-item--selected:not(.mat-mdc-option-multiple) {
+      background: var(--ml-action-soft);
+      color: var(--ml-ink);
+
+      .mdc-list-item__primary-text { font-weight: var(--cx-weight-semibold); }
+    }
+    .mat-pseudo-checkbox {
+      color: var(--ml-rule-strong);
+      &.mat-pseudo-checkbox-checked {
+        color: var(--ml-action);
+        &::after { color: var(--ml-on-action); }
+      }
+    }
+  }
+}

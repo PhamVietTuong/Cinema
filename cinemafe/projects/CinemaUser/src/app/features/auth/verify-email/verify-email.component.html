@@ -3,7 +3,7 @@
     <div class="cinema-glow"></div>
     <div class="cinema-inner">
       <div class="cinema-brand">
-        <i class="fas fa-film"></i>
+        <svg-icon key="logo"></svg-icon>
         <span>Midnight Premium</span>
       </div>
       <h2 class="cinema-headline">{{ 'auth.verify.heroTitle1' | translate }}<br>{{ 'auth.verify.heroTitle2' | translate }}</h2>
@@ -23,10 +23,10 @@
         <p class="form-sub">{{ 'auth.verify.confirming' | translate }}</p>
 
         <div class="api-success" *ngIf="status === 'confirmed'">
-          <i class="fas fa-check-circle"></i> {{ 'auth.verify.confirmed' | translate }}
+          <mat-icon>check_circle</mat-icon> {{ 'auth.verify.confirmed' | translate }}
         </div>
         <div class="api-error" *ngIf="status === 'error'">
-          <i class="fas fa-exclamation-circle"></i> {{ 'auth.verify.error' | translate }}
+          <mat-icon>error</mat-icon> {{ 'auth.verify.error' | translate }}
         </div>
         <div class="api-error" *ngIf="loading" style="background:none;border:none;color:var(--mp-muted)">
           <mat-spinner diameter="18"></mat-spinner>
@@ -38,30 +38,30 @@
         <p class="form-sub">{{ 'auth.verify.resendSubtitle' | translate }}</p>
 
         <div class="api-success" *ngIf="status === 'resent'">
-          <i class="fas fa-check-circle"></i> {{ 'auth.verify.resent' | translate }}
+          <mat-icon>check_circle</mat-icon> {{ 'auth.verify.resent' | translate }}
         </div>
 
         <form *ngIf="status !== 'resent'" [formGroup]="resendForm" (ngSubmit)="resend()">
           <div class="field-group">
-            <label class="field-label">{{ 'auth.fields.email' | translate }}</label>
-            <div class="field-wrap">
-              <i class="fas fa-envelope field-icon"></i>
-              <input class="field-input" type="email" formControlName="email" placeholder="email@example.com">
-            </div>
-            <div class="field-error" *ngIf="resendForm.get('email')?.touched && resendForm.get('email')?.invalid">
-              {{ 'auth.errors.emailValid' | translate }}
-            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'auth.fields.email' | translate }}</mat-label>
+              <mat-icon matPrefix>mail</mat-icon>
+              <input matInput type="email" formControlName="email" placeholder="email@example.com">
+              <mat-error *ngIf="resendForm.get('email')?.invalid">
+                {{ 'auth.errors.emailValid' | translate }}
+              </mat-error>
+            </mat-form-field>
           </div>
 
-          <button type="submit" class="btn-primary-cta submit-btn" [disabled]="loading">
+          <button type="submit" mat-raised-button class="btn-primary-cta submit-btn" [disabled]="loading">
             <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
-            <ng-container *ngIf="!loading">{{ 'auth.verify.resendSubmit' | translate }} <i class="fas fa-paper-plane"></i></ng-container>
+            <ng-container *ngIf="!loading">{{ 'auth.verify.resendSubmit' | translate }} <mat-icon>send</mat-icon></ng-container>
           </button>
         </form>
       </ng-container>
 
       <p class="switch-link">
-        <a routerLink="/auth/login"><i class="fas fa-arrow-left"></i> {{ 'auth.backToLogin' | translate }}</a>
+        <a routerLink="/auth/login"><mat-icon>arrow_back</mat-icon> {{ 'auth.backToLogin' | translate }}</a>
       </p>
     </div>
   </div>

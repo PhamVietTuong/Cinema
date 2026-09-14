@@ -1,0 +1,43 @@
+<div mat-dialog-title class="dialog-title">{{ (editingId ? 'theaters.timeSlots.editTitle' : 'theaters.timeSlots.newTitle') | translate }}</div>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="dlg-grid">
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="ts-name">{{ 'theaters.timeSlots.nameLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="ts-name" formControlName="name" [placeholder]="'theaters.timeSlots.namePlaceholder' | translate">
+            <mat-error *ngIf="form.controls['name'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="ts-startTime">{{ 'theaters.timeSlots.startLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="ts-startTime" type="time" formControlName="startTime">
+            <mat-error *ngIf="form.controls['startTime'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="ts-endTime">{{ 'theaters.timeSlots.endLabel' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="ts-endTime" type="time" formControlName="endTime">
+            <mat-error *ngIf="form.controls['endTime'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-raised-button type="button" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit">{{ 'common.save' | translate }}</button>
+  </div>
+</form>
+
+<button mat-icon-button type="button" class="dialog-close-btn" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>

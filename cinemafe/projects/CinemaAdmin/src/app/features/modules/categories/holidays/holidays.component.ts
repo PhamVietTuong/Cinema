@@ -43,12 +43,12 @@ export class HolidaysManagementComponent extends BaseTableComponent {
   }
 
   openCreate(): void {
-    this._dialog.open(HolidayDialog, { width: '480px', data: { holiday: null } })
+    this._dialog.open(HolidayDialog, { width: '560px', data: { holiday: null } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(item: Dto): void {
-    this._dialog.open(HolidayDialog, { width: '480px', data: { holiday: item } })
+    this._dialog.open(HolidayDialog, { width: '560px', data: { holiday: item } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 

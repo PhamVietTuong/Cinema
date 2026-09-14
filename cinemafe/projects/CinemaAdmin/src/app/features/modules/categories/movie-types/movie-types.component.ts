@@ -43,12 +43,12 @@ export class MovieTypesManagementComponent extends BaseTableComponent {
   }
 
   openCreate(): void {
-    this._dialog.open(MovieTypeDialog, { width: '480px', data: { movieType: null } })
+    this._dialog.open(MovieTypeDialog, { width: '560px', data: { movieType: null } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(item: Dto): void {
-    this._dialog.open(MovieTypeDialog, { width: '480px', data: { movieType: item } })
+    this._dialog.open(MovieTypeDialog, { width: '560px', data: { movieType: item } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 

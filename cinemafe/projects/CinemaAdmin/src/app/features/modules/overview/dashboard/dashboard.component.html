@@ -51,10 +51,12 @@
     <div class="ad-card">
       <div class="card-head">
         <h3 class="ad-card-title">{{ 'dashboard.revenueTitle' | translate:{ days: revenueDays } }}</h3>
-        <select class="ad-input period-select" [ngModel]="revenueDays" (ngModelChange)="onPeriodChange($event)">
-          <option [ngValue]="7">{{ 'dashboard.periodThisWeek' | translate }}</option>
-          <option [ngValue]="30">{{ 'dashboard.period30Days' | translate }}</option>
-        </select>
+        <mat-form-field appearance="outline" class="period-select">
+          <mat-select [ngModel]="revenueDays" (ngModelChange)="onPeriodChange($event)">
+            <mat-option [value]="7">{{ 'dashboard.periodThisWeek' | translate }}</mat-option>
+            <mat-option [value]="30">{{ 'dashboard.period30Days' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="chart" *ngIf="revenueTrend.length; else noRevenue">
         <div class="bar-col" *ngFor="let d of revenueTrend">
@@ -96,22 +98,78 @@
       <h3 class="ad-card-title">{{ 'dashboard.recentInvoices' | translate }}</h3>
       <a class="see-all" routerLink="/invoices">{{ 'dashboard.seeAll' | translate }}</a>
     </div>
-    <div class="ad-table-wrap">
-      <table class="ad-table">
-        <thead>
-          <tr><th>{{ 'dashboard.colCode' | translate }}</th><th>{{ 'dashboard.colCustomer' | translate }}</th><th>{{ 'dashboard.colAmount' | translate }}</th><th>{{ 'common.status' | translate }}</th><th>{{ 'common.date' | translate }}</th></tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let i of invoices">
-            <td><strong>{{ i.code || '—' }}</strong></td>
-            <td>{{ i.userName || i.userEmail || '—' }}</td>
-            <td>{{ i.finalAmount | currency:'VND':'symbol':'1.0-0' }}</td>
-            <td><span class="ad-pill" [class]="'ad-pill ' + statusClass(i.status)">{{ statusLabel(i.status) }}</span></td>
-            <td>{{ i.creationTime | date:'short' }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div *ngIf="!invoices.length" class="ad-empty"><mat-icon>receipt_long</mat-icon><p>{{ 'dashboard.noInvoices' | translate }}</p></div>
+    <div class="ad-table-wrap ad-desktop-only">
+      <ngx-datatable
+        class="material ad-datatable"
+        [rows]="pageRows"
+        [columnMode]="'force'"
+        [headerHeight]="44"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [externalSorting]="true"
+        [count]="total"
+        [offset]="pageOffset"
+        [limit]="pageSize"
+        [loadingIndicator]="loadingIndicator"
+        [messages]="{ emptyMessage: 'dashboard.noInvoices' | translate, selectedMessage: '' }"
+        (page)="onChangePage($event)">
+
+        <ngx-datatable-column [name]="'dashboard.colCode' | translate" prop="code" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.code || '—' }}</strong></ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [name]="'dashboard.colCustomer' | translate" prop="userName" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template>{{ row.userName || row.userEmail || '—' }}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [name]="'dashboard.colAmount' | translate" prop="finalAmount" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template>{{ row.finalAmount | currency:'VND':'symbol':'1.0-0' }}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [name]="'common.status' | translate" prop="status" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <span class="ad-pill" [ngClass]="statusClass(row.status)">{{ statusLabel(row.status) }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [name]="'common.date' | translate" prop="creationTime" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template>{{ row.creationTime | date:'short' }}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+          <ng-template ngx-datatable-footer-template>
+            <div class="page-count">{{ 'common.totalEntries' | translate }} {{ total }}</div>
+            <ngx-datatable-pager *ngIf="total > pageSize"></ngx-datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+
+    <!-- Phones: a table doesn't fit legibly, so each row becomes its own Material card. -->
+    <div class="ad-mobile-only">
+      <mat-card class="ad-mobile-card" *ngFor="let row of pageRows" appearance="outlined">
+        <mat-card-content>
+          <div class="ad-mobile-card-title"><strong>{{ row.code || '—' }}</strong></div>
+          <div class="ad-mobile-card-row"><span>{{ 'dashboard.colCustomer' | translate }}</span><span>{{ row.userName || row.userEmail || '—' }}</span></div>
+          <div class="ad-mobile-card-row"><span>{{ 'dashboard.colAmount' | translate }}</span><span>{{ row.finalAmount | currency:'VND':'symbol':'1.0-0' }}</span></div>
+          <div class="ad-mobile-card-row">
+            <span>{{ 'common.status' | translate }}</span>
+            <span class="ad-pill" [ngClass]="statusClass(row.status)">{{ statusLabel(row.status) }}</span>
+          </div>
+          <div class="ad-mobile-card-row"><span>{{ 'common.date' | translate }}</span><span>{{ row.creationTime | date:'short' }}</span></div>
+        </mat-card-content>
+      </mat-card>
+      <div *ngIf="!pageRows.length" class="ad-empty"><mat-icon>receipt_long</mat-icon><p>{{ 'dashboard.noInvoices' | translate }}</p></div>
+
+      <mat-paginator
+        *ngIf="total > 0"
+        [length]="total"
+        [pageSize]="pageSize"
+        [pageIndex]="pageOffset"
+        [hidePageSize]="true"
+        (page)="onChangePage({ pageSize: $event.pageSize, offset: $event.pageIndex })">
+      </mat-paginator>
     </div>
   </div>
 </div>

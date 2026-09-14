@@ -1,7 +1,7 @@
 <nav class="topbar">
   <div class="topbar-inner">
     <a routerLink="/" class="logo-link">
-      <span class="logo-row"><i class="fas fa-film"></i><span>Midnight Premium</span></span>
+      <span class="logo-row"><svg-icon key="logo"></svg-icon><span>Midnight Premium</span></span>
       <span class="marquee-rule marquee-rule--sm">
         <i class="bulb"></i><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i><i class="bulb"></i>
       </span>
@@ -13,48 +13,77 @@
       <li><a routerLink="/membership" routerLinkActive="active-link">{{ 'nav.membership' | translate }}</a></li>
     </ul>
     <div class="nav-actions">
-      <button type="button" class="nav-theme-btn" (click)="toggleTheme()"
-              [attr.aria-label]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate"
-              [title]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate">
-        <i class="fas" [class.fa-sun]="theme.isDark()" [class.fa-moon]="!theme.isDark()"></i>
-      </button>
-      <cl-language-switcher></cl-language-switcher>
-      <ng-container *ngIf="isAuth$ | async; else guestNav">
-        <button class="nav-user-btn" [matMenuTriggerFor]="userMenu">
-          <i class="fas fa-circle-user"></i>
-          <span>{{ (user$ | async)?.name }}</span>
-          <i class="fas fa-chevron-down small-icon"></i>
+      <div class="nav-cluster">
+        <button mat-icon-button type="button" class="nav-theme-btn" (click)="toggleTheme()"
+                [attr.aria-label]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate"
+                [title]="(theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate">
+          <mat-icon>{{ theme.isDark() ? 'wb_sunny' : 'brightness_3' }}</mat-icon>
         </button>
-        <mat-menu #userMenu="matMenu">
-          <a mat-menu-item routerLink="/profile">
-            <i class="fas fa-user menu-icon"></i> {{ 'nav.account' | translate }}
-          </a>
-          <button mat-menu-item (click)="doLogout()">
-            <i class="fas fa-right-from-bracket menu-icon"></i> {{ 'nav.logout' | translate }}
+        <span class="nav-cluster-div"></span>
+        <cl-language-switcher></cl-language-switcher>
+        <ng-container *ngIf="isAuth$ | async">
+          <span class="nav-cluster-div"></span>
+          <button mat-button class="nav-user-btn" [matMenuTriggerFor]="userMenu">
+            <span class="user-avatar">{{ (user$ | async)?.name?.charAt(0)?.toUpperCase() }}</span>
+            <span class="user-name">{{ (user$ | async)?.name }}</span>
+            <mat-icon class="small-icon">expand_more</mat-icon>
           </button>
-        </mat-menu>
-      </ng-container>
-      <ng-template #guestNav>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="!(isAuth$ | async)">
         <a routerLink="/auth/login" class="nav-link-text">{{ 'nav.login' | translate }}</a>
-        <a routerLink="/auth/register" class="btn-nav-primary">{{ 'nav.register' | translate }}</a>
-      </ng-template>
+        <a mat-raised-button routerLink="/auth/register" class="btn-nav-primary">{{ 'nav.register' | translate }}</a>
+      </ng-container>
     </div>
 
+    <mat-menu #userMenu="matMenu" class="user-account-menu">
+      <ng-container *ngIf="user$ | async as user">
+        <div class="menu-header">
+          <span class="user-avatar">{{ user.name?.charAt(0)?.toUpperCase() }}</span>
+          <span class="menu-who">
+            <b>{{ user.name }}</b>
+            <span>{{ user.email }}</span>
+            <span class="tier-badge" *ngIf="user.memberShipName">
+              <mat-icon>military_tech</mat-icon> {{ user.memberShipName }}
+            </span>
+          </span>
+        </div>
+        <div class="menu-quick-row">
+          <a mat-menu-item routerLink="/profile">
+            <mat-icon>confirmation_number</mat-icon> {{ 'nav.myTickets' | translate }}
+          </a>
+          <a mat-menu-item routerLink="/membership">
+            <mat-icon>military_tech</mat-icon> {{ 'nav.membership' | translate }}
+          </a>
+        </div>
+        <div class="menu-div"></div>
+        <a mat-menu-item routerLink="/profile">
+          <mat-icon class="menu-icon">person</mat-icon> {{ 'nav.account' | translate }}
+        </a>
+        <button mat-menu-item class="menu-item-quiet" (click)="doLogout()">
+          <mat-icon class="menu-icon">logout</mat-icon> {{ 'nav.logout' | translate }}
+        </button>
+      </ng-container>
+    </mat-menu>
+
     <!-- Mobile hamburger -->
-    <button class="nav-burger" type="button" (click)="toggleMenu()" aria-label="Menu">
-      <i class="fas" [class.fa-bars]="!menuOpen" [class.fa-xmark]="menuOpen"></i>
+    <button mat-icon-button class="nav-burger" type="button" (click)="toggleMenu()" aria-label="Menu">
+      <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
     </button>
   </div>
 
-  <!-- Mobile menu panel -->
-  <div class="mobile-menu" [class.is-open]="menuOpen">
+</nav>
+
+<mat-sidenav-container class="app-shell">
+  <!-- Mobile menu drawer -->
+  <mat-sidenav class="mobile-menu" position="end" mode="over" [opened]="menuOpen" (openedChange)="onSidenavOpenedChange($event)">
     <a routerLink="/movies" routerLinkActive="active-link" (click)="closeMenu()">{{ 'nav.movies' | translate }}</a>
     <a routerLink="/theaters" routerLinkActive="active-link" (click)="closeMenu()">{{ 'nav.theaters' | translate }}</a>
     <a routerLink="/promotions" routerLinkActive="active-link" (click)="closeMenu()">{{ 'nav.promotions' | translate }}</a>
     <a routerLink="/membership" routerLinkActive="active-link" (click)="closeMenu()">{{ 'nav.membership' | translate }}</a>
     <div class="mobile-menu-divider"></div>
     <button type="button" (click)="toggleTheme()">
-      <i class="fas" [class.fa-sun]="theme.isDark()" [class.fa-moon]="!theme.isDark()"></i>
+      <mat-icon>{{ theme.isDark() ? 'wb_sunny' : 'brightness_3' }}</mat-icon>
       {{ (theme.isDark() ? 'nav.lightMode' : 'nav.darkMode') | translate }}
     </button>
     <!-- The desktop switcher lives in .nav-actions, which is display:none on mobile, so without
@@ -69,10 +98,10 @@
       <a routerLink="/auth/login" (click)="closeMenu()">{{ 'nav.login' | translate }}</a>
       <a routerLink="/auth/register" (click)="closeMenu()">{{ 'nav.register' | translate }}</a>
     </ng-template>
-  </div>
-</nav>
-<div class="mobile-menu-scrim" *ngIf="menuOpen" (click)="closeMenu()"></div>
+  </mat-sidenav>
 
-<router-outlet></router-outlet>
-
-<app-chatbot></app-chatbot>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+    <app-chatbot></app-chatbot>
+  </mat-sidenav-content>
+</mat-sidenav-container>

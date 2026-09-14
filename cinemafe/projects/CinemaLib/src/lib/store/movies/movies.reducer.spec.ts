@@ -23,7 +23,8 @@ describe('moviesReducer', () => {
     const from: MoviesState = { ...initialMoviesState, error: 'previous failure' };
 
     for (const action of [
-      MoviesActions.loadNowShowing(),
+      MoviesActions.loadNowShowing({ page: 1, pageSize: 15 }),
+      MoviesActions.loadComingSoon({ page: 1, pageSize: 15 }),
       MoviesActions.loadMovies({ page: 1, pageSize: 20 }),
       MoviesActions.loadMovieDetail({ id: '1' }),
     ]) {
@@ -33,14 +34,26 @@ describe('moviesReducer', () => {
     }
   });
 
-  it('loadNowShowingSuccess replaces the list and stops loading', () => {
+  it('loadNowShowingSuccess replaces the list on page 1 and stops loading', () => {
     const movies = [movie(1, 'Dune'), movie(2, 'Arrival')];
 
     const state = moviesReducer({ ...initialMoviesState, loading: true },
-      MoviesActions.loadNowShowingSuccess({ movies }));
+      MoviesActions.loadNowShowingSuccess({ movies, total: movies.length, page: 1 }));
 
     expect(state.nowShowing).toEqual(movies);
+    expect(state.nowShowingTotal).toBe(movies.length);
     expect(state.loading).toBe(false);
+  });
+
+  it('loadNowShowingSuccess appends to the list on page 2', () => {
+    const first = [movie(1, 'Dune')];
+    const second = [movie(2, 'Arrival')];
+    const from: MoviesState = { ...initialMoviesState, nowShowing: first, nowShowingTotal: 2 };
+
+    const state = moviesReducer(from, MoviesActions.loadNowShowingSuccess({ movies: second, total: 2, page: 2 }));
+
+    expect(state.nowShowing).toEqual([...first, ...second]);
+    expect(state.nowShowingTotal).toBe(2);
   });
 
   it('loadComingSoonSuccess fills comingSoon without touching nowShowing', () => {
@@ -48,9 +61,10 @@ describe('moviesReducer', () => {
     const soon = [movie(9, 'Sequel')];
     const from: MoviesState = { ...initialMoviesState, nowShowing: showing };
 
-    const state = moviesReducer(from, MoviesActions.loadComingSoonSuccess({ movies: soon }));
+    const state = moviesReducer(from, MoviesActions.loadComingSoonSuccess({ movies: soon, total: soon.length, page: 1 }));
 
     expect(state.comingSoon).toEqual(soon);
+    expect(state.comingSoonTotal).toBe(soon.length);
     expect(state.nowShowing).toEqual(showing);
   });
 
@@ -76,6 +90,7 @@ describe('moviesReducer', () => {
 
     for (const action of [
       MoviesActions.loadNowShowingFailure({ error: 'network' }),
+      MoviesActions.loadComingSoonFailure({ error: 'network' }),
       MoviesActions.loadMoviesFailure({ error: 'network' }),
       MoviesActions.loadMovieDetailFailure({ error: 'network' }),
     ]) {

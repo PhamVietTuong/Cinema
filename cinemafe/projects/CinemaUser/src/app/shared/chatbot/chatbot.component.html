@@ -1,13 +1,13 @@
 <!-- Floating toggle -->
 <button type="button" class="cb-fab" (click)="toggle()" [attr.aria-label]="(open ? 'chatbot.closeAssistant' : 'chatbot.openAssistant') | translate">
-  <i class="fas" [class.fa-comment-dots]="!open" [class.fa-xmark]="open"></i>
+  <mat-icon>{{ open ? 'close' : 'chat' }}</mat-icon>
 </button>
 
 <!-- Chat panel -->
 <div class="cb-panel" *ngIf="open">
   <div class="cb-head">
-    <span class="cb-title"><i class="fas fa-headset"></i> {{ 'chatbot.title' | translate }}</span>
-    <button type="button" class="cb-close" (click)="toggle()" [attr.aria-label]="'common.close' | translate"><i class="fas fa-xmark"></i></button>
+    <span class="cb-title"><mat-icon>support_agent</mat-icon> {{ 'chatbot.title' | translate }}</span>
+    <button mat-icon-button type="button" class="cb-close" (click)="toggle()" [attr.aria-label]="'common.close' | translate"><mat-icon>close</mat-icon></button>
   </div>
 
   <div class="cb-body">
@@ -21,7 +21,9 @@
   </div>
 
   <form class="cb-input" (ngSubmit)="send()">
-    <input [(ngModel)]="input" name="cbInput" [placeholder]="'chatbot.inputPlaceholder' | translate" autocomplete="off">
-    <button type="submit" [disabled]="!input.trim()" [attr.aria-label]="'chatbot.send' | translate"><i class="fas fa-paper-plane"></i></button>
+    <mat-form-field appearance="outline">
+      <input matInput [(ngModel)]="input" name="cbInput" [placeholder]="'chatbot.inputPlaceholder' | translate" autocomplete="off">
+    </mat-form-field>
+    <button mat-icon-button type="submit" [disabled]="!input.trim()" [attr.aria-label]="'chatbot.send' | translate"><mat-icon>send</mat-icon></button>
   </form>
 </div>

@@ -5,14 +5,18 @@
     <div class="page-header-inner">
       <nav class="breadcrumb">
         <a routerLink="/">{{ 'booking.breadcrumb.home' | translate }}</a>
-        <i class="fas fa-chevron-right"></i>
+        <mat-icon>chevron_right</mat-icon>
         <a routerLink="/movies">{{ 'booking.breadcrumb.movies' | translate }}</a>
-        <i class="fas fa-chevron-right"></i>
+        <mat-icon>chevron_right</mat-icon>
         <span>{{ 'booking.confirm.title' | translate }}</span>
       </nav>
       <h1 class="page-title">{{ 'booking.confirm.title' | translate }}</h1>
     </div>
   </div>
+
+  <button type="button" class="back-link" (click)="backToSeats()">
+    <i class="fas fa-arrow-left"></i> {{ 'booking.checkout.backToSeats' | translate }}
+  </button>
 
   <!-- Seat-hold countdown -->
   <div class="hold-banner" [class.expired]="holdExpired" *ngIf="!holdExpired">
@@ -29,74 +33,53 @@
     <!-- Left: Payment Form -->
     <div class="payment-form-col">
 
-      <!-- Payment Methods -->
       <div class="form-card">
-        <h3 class="card-title"><i class="fas fa-credit-card"></i> {{ 'booking.confirm.paymentMethod' | translate }}</h3>
-        <div class="method-grid">
-          <button class="method-card" [class.active]="paymentMethod === 'ApplePay'" (click)="paymentMethod='ApplePay'">
-            <i class="fab fa-apple"></i> Apple Pay
-          </button>
-          <button class="method-card" [class.active]="paymentMethod === 'GooglePay'" (click)="paymentMethod='GooglePay'">
-            <i class="fab fa-google"></i> Google Pay
-          </button>
-          <button class="method-card momo" [class.active]="paymentMethod === 'Momo'" (click)="paymentMethod='Momo'">
-            <i class="fas fa-wallet"></i> {{ 'booking.confirm.momoWallet' | translate }}
-          </button>
-          <button class="method-card" [class.active]="paymentMethod === 'Card'" (click)="paymentMethod='Card'">
-            <i class="fas fa-credit-card"></i> {{ 'booking.confirm.domesticCard' | translate }}
-          </button>
-        </div>
+        <h3 class="card-title"><mat-icon>credit_card</mat-icon> {{ 'booking.confirm.paymentMethod' | translate }}</h3>
+        <mat-button-toggle-group class="method-grid" [(ngModel)]="paymentMethod">
+          <mat-button-toggle value="ApplePay">
+            <svg-icon key="apple"></svg-icon> Apple Pay
+          </mat-button-toggle>
+          <mat-button-toggle value="GooglePay">
+            <svg-icon key="google"></svg-icon> Google Pay
+          </mat-button-toggle>
+          <mat-button-toggle value="Momo" class="momo">
+            <mat-icon>account_balance_wallet</mat-icon> {{ 'booking.confirm.momoWallet' | translate }}
+          </mat-button-toggle>
+          <mat-button-toggle value="Card">
+            <mat-icon>credit_card</mat-icon> {{ 'booking.confirm.domesticCard' | translate }}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
 
-      <!-- Concessions / combos (this theater's menu) -->
-      <div class="form-card" *ngIf="foods.length">
-        <h3 class="card-title"><i class="fas fa-utensils"></i> {{ 'booking.confirm.concessions' | translate }}</h3>
-        <div class="combo-list">
-          <div class="combo-row" *ngFor="let f of foods">
-            <div class="combo-info">
-              <span class="combo-name">{{ f.name }}</span>
-              <span class="combo-price">{{ f.price | number:'1.0-0' }}đ</span>
-            </div>
-            <div class="combo-qty">
-              <button type="button" (click)="decFood(f)" [disabled]="!foodQty[f.id!]">−</button>
-              <span>{{ foodQty[f.id!] || 0 }}</span>
-              <button type="button" (click)="incFood(f)">+</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card form (shown for card) -->
       <div class="form-card" *ngIf="paymentMethod === 'Card'">
         <h3 class="card-title">{{ 'booking.confirm.creditDebit' | translate }}</h3>
-        <div class="field-group">
-          <label class="field-label">{{ 'booking.confirm.cardNumber' | translate }}</label>
-          <input class="field-input" placeholder="0000 0000 0000 0000" maxlength="19">
-        </div>
+        <mat-form-field class="field-group" appearance="outline">
+          <mat-label>{{ 'booking.confirm.cardNumber' | translate }}</mat-label>
+          <input matInput placeholder="0000 0000 0000 0000" maxlength="19">
+        </mat-form-field>
         <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">{{ 'booking.confirm.expiry' | translate }}</label>
-            <input class="field-input" placeholder="MM / YY" maxlength="7">
-          </div>
-          <div class="field-group">
-            <label class="field-label">CVV</label>
-            <input class="field-input" placeholder="•••" maxlength="4" type="password">
-          </div>
+          <mat-form-field class="field-group" appearance="outline">
+            <mat-label>{{ 'booking.confirm.expiry' | translate }}</mat-label>
+            <input matInput placeholder="MM / YY" maxlength="7">
+          </mat-form-field>
+          <mat-form-field class="field-group" appearance="outline">
+            <mat-label>CVV</mat-label>
+            <input matInput placeholder="•••" maxlength="4" type="password">
+          </mat-form-field>
         </div>
-        <div class="field-group">
-          <label class="field-label">{{ 'booking.confirm.cardName' | translate }}</label>
-          <input class="field-input" placeholder="NGUYEN VAN A">
-        </div>
+        <mat-form-field class="field-group" appearance="outline">
+          <mat-label>{{ 'booking.confirm.cardName' | translate }}</mat-label>
+          <input matInput placeholder="NGUYEN VAN A">
+        </mat-form-field>
       </div>
 
-      <!-- E-wallet note -->
       <div class="form-card center" *ngIf="paymentMethod !== 'Card'">
-        <div class="qr-placeholder"><i class="fas fa-qrcode"></i></div>
+        <div class="qr-placeholder"><mat-icon>qr_code_2</mat-icon></div>
         <p class="qr-note">{{ 'booking.confirm.qrNote' | translate:{ app: paymentMethod === 'Momo' ? 'MoMo' : paymentMethod === 'ApplePay' ? 'Apple Pay' : 'Google Pay' } }}</p>
       </div>
 
       <div *ngIf="error" class="error-banner">
-        <i class="fas fa-exclamation-circle"></i> {{ error }}
+        <mat-icon>error</mat-icon> {{ error }}
       </div>
     </div>
 
@@ -108,16 +91,12 @@
         <div class="seat-list">
           <div class="seat-entry" *ngFor="let s of seats">
             <div class="seat-entry-info">
-              <span class="seat-entry-code">{{ s.rowName }}{{ s.colIndex }}</span>
-              <span class="seat-entry-type">{{ s.seatTypeName }}</span>
-              <select class="field-input seat-entry-category" *ngIf="patronCategories.length"
-                      [ngModel]="categoryBySeat[s.id!]" (ngModelChange)="onCategoryChange(s.id!, $event)">
-                <option *ngFor="let c of patronCategories" [value]="c.id">{{ c.name }} (-{{ c.discountPercent }}%)</option>
-              </select>
+              <span class="seat-entry-code">{{ s.label }}</span>
+              <span class="seat-entry-type">{{ s.seatTypeName }} · {{ s.patronCategoryName }}</span>
             </div>
             <span class="seat-entry-price">
-              <span class="seat-entry-price-strike" *ngIf="seatPrice(s) !== s.price">{{ s.price | number:'1.0-0' }}đ</span>
-              {{ seatPrice(s) | number:'1.0-0' }}đ
+              <span class="seat-entry-price-strike" *ngIf="s.price !== s.basePrice">{{ s.basePrice | number:'1.0-0' }}đ</span>
+              {{ s.price | number:'1.0-0' }}đ
             </span>
           </div>
         </div>
@@ -128,24 +107,28 @@
           <span>{{ 'booking.summary.tickets' | translate:{ count: seats.length } }}</span>
           <span>{{ totalPrice | number:'1.0-0' }}đ</span>
         </div>
-        <div class="summary-row" *ngFor="let f of selectedFoods">
-          <span>{{ f.name }} × {{ foodQty[f.id!] }}</span>
-          <span>{{ (f.price || 0) * foodQty[f.id!] | number:'1.0-0' }}đ</span>
+        <div class="summary-row" *ngFor="let f of foods">
+          <span>{{ f.name }} × {{ f.quantity }}</span>
+          <span>{{ f.unitPrice * f.quantity | number:'1.0-0' }}đ</span>
         </div>
 
         <div class="summary-divider"></div>
 
         <div class="field-group">
-          <label class="field-label">{{ 'booking.summary.discountCode' | translate }}</label>
-          <input class="field-input" [(ngModel)]="discountCode" [placeholder]="'booking.summary.discountPlaceholder' | translate">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'booking.summary.discountCode' | translate }}</mat-label>
+            <input matInput [(ngModel)]="discountCode" [placeholder]="'booking.summary.discountPlaceholder' | translate">
+          </mat-form-field>
           <span class="discount-note">{{ 'booking.summary.discountNote' | translate }}</span>
         </div>
 
         <div class="field-group">
-          <label class="field-label">{{ 'booking.summary.giftCardCode' | translate }}</label>
           <div class="gift-card-row">
-            <input class="field-input" [(ngModel)]="giftCardCode" [placeholder]="'booking.summary.giftCardPlaceholder' | translate">
-            <button type="button" class="gift-card-apply" (click)="validateGiftCard()" [disabled]="giftCardChecking || !giftCardCode.trim()">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'booking.summary.giftCardCode' | translate }}</mat-label>
+              <input matInput [(ngModel)]="giftCardCode" [placeholder]="'booking.summary.giftCardPlaceholder' | translate">
+            </mat-form-field>
+            <button mat-stroked-button type="button" class="gift-card-apply" (click)="validateGiftCard()" [disabled]="giftCardChecking || !giftCardCode.trim()">
               {{ 'booking.summary.giftCardApply' | translate }}
             </button>
           </div>
@@ -157,14 +140,14 @@
         <!-- Loyalty points redemption -->
         <div class="summary-divider"></div>
         <div class="field-group">
-          <label class="field-label">
-            <i class="fas fa-star"></i> {{ 'booking.summary.redeemPoints' | translate }}
-          </label>
           <span class="discount-note">{{ 'booking.summary.pointsBalance' | translate:{ points: pointsBalance } }}</span>
-          <input class="field-input" type="number" min="0" [max]="maxRedeemablePoints" step="1"
-            [(ngModel)]="pointsToRedeem" (ngModelChange)="clampPoints()"
-            [disabled]="maxRedeemablePoints === 0"
-            [placeholder]="'booking.summary.pointsPlaceholder' | translate">
+          <mat-form-field appearance="outline">
+            <mat-label><mat-icon>star</mat-icon> {{ 'booking.summary.redeemPoints' | translate }}</mat-label>
+            <input matInput type="number" min="0" [max]="maxRedeemablePoints" step="1"
+              [(ngModel)]="pointsToRedeem" (ngModelChange)="clampPoints()"
+              [disabled]="maxRedeemablePoints === 0"
+              [placeholder]="'booking.summary.pointsPlaceholder' | translate">
+          </mat-form-field>
           <span class="discount-note">{{ 'booking.summary.pointsHint' | translate:{ max: maxRedeemablePoints } }}</span>
         </div>
 
@@ -180,14 +163,14 @@
           <span class="total-amount">{{ finalTotal | number:'1.0-0' }}đ</span>
         </div>
 
-        <button class="btn-primary-cta confirm-btn" (click)="confirmBooking()" [disabled]="loading">
+        <button mat-raised-button class="btn-primary-cta confirm-btn" (click)="confirmBooking()" [disabled]="loading">
           <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
           <ng-container *ngIf="!loading">
-            <i class="fas fa-lock"></i> {{ 'booking.confirm.payCta' | translate }}
+            <mat-icon>lock</mat-icon> {{ 'booking.confirm.payCta' | translate }}
           </ng-container>
         </button>
 
-        <p class="secure-note"><i class="fas fa-shield-alt"></i> {{ 'booking.confirm.secureNote' | translate }}</p>
+        <p class="secure-note"><mat-icon>verified_user</mat-icon> {{ 'booking.confirm.secureNote' | translate }}</p>
       </div>
     </div>
 
@@ -197,22 +180,18 @@
 <!-- ── SUCCESS STEP ────────────────────────────────────────────────────────── -->
 <ng-container *ngIf="bookingSuccess">
   <div class="success-page">
-    <div class="success-glow"></div>
-
-    <!-- Check icon -->
     <div class="success-icon-wrap">
       <div class="success-icon">
-        <i class="fas fa-check"></i>
+        <mat-icon>check</mat-icon>
       </div>
     </div>
     <h2 class="success-title">{{ 'booking.success.title' | translate }}</h2>
     <p class="success-sub">{{ 'booking.success.subtitle' | translate }}</p>
 
-    <!-- Ticket Card -->
     <div class="ticket-card">
       <div class="ticket-top">
         <div class="ticket-brand">
-          <i class="fas fa-film"></i>
+          <mat-icon>movie</mat-icon>
           <span>Midnight Premium</span>
         </div>
         <div class="ticket-code">{{ bookingCode }}</div>
@@ -222,7 +201,7 @@
         <div class="ticket-seats">
           <div class="ticket-detail-label">{{ 'booking.success.seatsLabel' | translate }}</div>
           <div class="ticket-seats-row">
-            <span class="ticket-seat-chip" *ngFor="let s of seats">{{ s.rowName }}{{ s.colIndex }}</span>
+            <span class="ticket-seat-chip" *ngFor="let s of seats">{{ s.label }}</span>
           </div>
         </div>
         <div class="ticket-total-wrap">
@@ -240,23 +219,21 @@
         <div class="perf-right"></div>
       </div>
 
-      <!-- QR -->
       <div class="ticket-qr-section">
         <div class="qr-box">
           <img *ngIf="qrDataUrl" [src]="qrDataUrl" alt="E-ticket QR" width="160" height="160">
-          <i *ngIf="!qrDataUrl" class="fas fa-qrcode"></i>
+          <mat-icon *ngIf="!qrDataUrl">qr_code_2</mat-icon>
         </div>
         <p class="qr-instruction">{{ 'booking.success.qrInstruction' | translate }}</p>
       </div>
     </div>
 
-    <!-- Actions -->
     <div class="success-actions">
-      <button class="btn-primary-cta" (click)="goProfile()">
-        <i class="fas fa-ticket-alt"></i> {{ 'booking.success.viewTickets' | translate }}
+      <button mat-raised-button class="btn-primary-cta" (click)="goProfile()">
+        <mat-icon>confirmation_number</mat-icon> {{ 'booking.success.viewTickets' | translate }}
       </button>
-      <button class="btn-ghost-cta" (click)="goHome()">
-        <i class="fas fa-home"></i> {{ 'booking.success.backHome' | translate }}
+      <button mat-stroked-button class="btn-ghost-cta" (click)="goHome()">
+        <mat-icon>home</mat-icon> {{ 'booking.success.backHome' | translate }}
       </button>
     </div>
   </div>

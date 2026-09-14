@@ -1,9 +1,13 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Router, NavigationEnd } from '@angular/router';
 import { selectCurrentUser, loadUserFromStorage, logout, ThemeService } from 'CinemaLib';
+
+/** Sidebar becomes an off-canvas mat-sidenav drawer below this width; matches app.scss's own breakpoint. */
+const MOBILE_QUERY = '(max-width: 768px)';
 
 /** Route segment → i18n key. The key is resolved with the `translate` pipe in
  *  the template so the page title reacts to language switches too. */
@@ -41,6 +45,12 @@ export class App implements OnInit {
   /** Mobile sidebar drawer open state (ignored on desktop where the rail is static). */
   menuOpen = false;
 
+  private readonly _breakpoints = inject(BreakpointObserver);
+  private readonly _cd = inject(ChangeDetectorRef);
+
+  /** Below the mobile breakpoint the sidenav becomes an off-canvas 'over' drawer; above it, a static 'side' rail. */
+  isMobile = this._breakpoints.isMatched(MOBILE_QUERY);
+
   /** Dark/light state — persisted and applied to <html data-theme> by the service. */
   readonly theme = inject(ThemeService);
 
@@ -54,10 +64,20 @@ export class App implements OnInit {
       map(() => this._titleKeyFromUrl(this._router.url)),
       startWith(this._titleKeyFromUrl(this._router.url)),
     );
+    this._breakpoints.observe(MOBILE_QUERY).subscribe(result => {
+      this.isMobile = result.matches;
+      this._cd.markForCheck();
+    });
   }
 
   toggleMenu(): void { this.menuOpen = !this.menuOpen; }
-  closeMenu(): void { this.menuOpen = false; }
+
+  /** mat-sidenav emits this on any open/close (backdrop click, escape key, or our own toggle). */
+  onSidenavOpenedChange(opened: boolean): void {
+    if (this.isMobile) {
+      this.menuOpen = opened;
+    }
+  }
 
   ngOnInit(): void {
     this._store.dispatch(loadUserFromStorage());

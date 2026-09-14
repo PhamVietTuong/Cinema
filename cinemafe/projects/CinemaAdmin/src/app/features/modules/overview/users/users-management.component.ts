@@ -73,12 +73,12 @@ export class UsersManagementComponent extends BaseTableComponent {
   }
 
   openCreate(): void {
-    this._dialog.open(UserDialog, { width: '480px', data: { user: null } })
+    this._dialog.open(UserDialog, { width: '560px', data: { user: null } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 
   edit(row: UserRow): void {
-    this._dialog.open(UserDialog, { width: '480px', data: { user: row.dto } })
+    this._dialog.open(UserDialog, { width: '560px', data: { user: row.dto } })
       .afterClosed().subscribe(saved => { if (saved) { this.triggerSearch(); } });
   }
 

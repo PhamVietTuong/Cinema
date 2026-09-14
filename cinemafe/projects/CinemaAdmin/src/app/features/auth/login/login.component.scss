@@ -14,32 +14,34 @@
   justify-content: space-between;
   padding: 48px 56px;
   overflow: hidden;
-  // "Box Office" is a flat direction — the two ambient brand glows that used to
-  // wash this panel are gone rather than recoloured. A hairline and a shift in
-  // surface tone are enough to separate the brand side from the form side.
-  background: var(--bo-panel);
-  border-right: 1px solid var(--bo-rule);
+  // The brand panel is the one place this direction always stays dark — like
+  // the sidebar/topbar chrome, the login screen doesn't follow the app's own
+  // light/dark content toggle (auth screens conventionally don't).
+  background: linear-gradient(160deg, var(--ml-chrome), var(--ml-chrome-2) 70%);
+  border-right: 1px solid var(--ml-chrome-rule);
 }
 
 .brand-lockup { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
 .brand-mark {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 42px; height: 42px; border-radius: var(--ad-r-md);
-  background: var(--ad-primary); color: #fff;
-  box-shadow: 0 8px 24px -6px var(--ad-primary-glow);
+  width: 42px; height: 42px; border-radius: var(--ml-r-md);
+  background: var(--ml-action); color: var(--ml-on-action);
   mat-icon { font-size: 24px; width: 24px; height: 24px; }
 }
-.brand-word { font-family: var(--ad-font-head); font-weight: 600; letter-spacing: 0.14em; color: var(--ad-muted);
-  strong { color: var(--ad-on); font-weight: 800; margin-left: 3px; } }
+.brand-word { font-family: var(--ml-font-display); font-weight: 400; letter-spacing: 0.05em; font-size: 18px; color: var(--ml-chrome-ink-2);
+  strong { color: var(--ml-chrome-ink); font-weight: 400; margin-left: 3px; } }
 
 .brand-hero { position: relative; z-index: 1; max-width: 460px;
-  h1 { font-size: 48px; line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; color: var(--ad-on); margin: 0 0 16px; }
-  p { font-size: 17px; color: var(--ad-muted); margin: 0; }
+  h1 { font-family: var(--ml-font-head); font-size: 40px; line-height: 1.15; font-weight: 600; text-transform: uppercase; letter-spacing: 0.01em; color: var(--ml-chrome-ink); margin: 0 0 16px; }
+  p { font-size: 17px; color: var(--ml-chrome-ink-2); margin: 0; }
 }
 
-.brand-stats { position: relative; z-index: 1; display: flex; gap: 12px; flex-wrap: wrap;
-  .ad-chip { backdrop-filter: blur(8px); }
-  mat-icon { font-size: 17px; width: 17px; height: 17px; color: var(--ad-primary-strong); }
+// The brand panel is fixed-dark chrome (see .brand-panel), so its chips take
+// fixed chrome tones rather than the switchable .ad-chip default.
+.brand-stats {
+  position: relative; z-index: 1; display: flex; gap: 12px; flex-wrap: wrap;
+  .ad-chip { background: var(--ml-chrome-hover); border-color: var(--ml-chrome-rule); color: var(--ml-chrome-ink); }
+  mat-icon { font-size: 17px; width: 17px; height: 17px; color: var(--ml-action-strong); }
 }
 
 // ── Right form panel ────────────────────────────────────────────────────────
@@ -87,12 +89,14 @@
 .login-error {
   display: flex; align-items: center; gap: 8px;
   padding: 10px 12px; border-radius: var(--ad-r-sm);
-  background: var(--ad-danger-soft); color: #b91c1c; font-size: 13.5px;
+  background: var(--ml-danger-soft); color: var(--ml-danger-ink); font-size: 13.5px;
   mat-icon { font-size: 18px; width: 18px; height: 18px; }
 }
 
 .ad-btn--block { margin-top: 2px; height: 46px; }
-::ng-deep .login-form .mat-mdc-progress-spinner circle { stroke: #fff; }
+// The spinner sits inside the gold primary button — gold is a light fill, so
+// its stroke needs dark ink, never white.
+::ng-deep .login-form .mat-mdc-progress-spinner circle { stroke: var(--ml-on-action); }
 
 .login-foot { text-align: center; margin: 22px 0 0; font-size: 12px; color: var(--ad-faint); }
 

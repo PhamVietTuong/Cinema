@@ -1,0 +1,112 @@
+<div mat-dialog-title class="dialog-title">{{ (editingId ? 'showTimes.editTitle' : 'showTimes.addShowTime') | translate }}</div>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="dlg-grid">
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" id="sh-movieId-lbl">{{ 'showTimes.movie' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="movieId" panelClass="dlg-select-panel" aria-labelledby="sh-movieId-lbl" [placeholder]="'showTimes.selectMovie' | translate">
+              <mat-option *ngFor="let m of data.movies" [value]="m.id">{{ m.title }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['movieId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+          <div class="st-poster" *ngIf="moviePoster(form.value.movieId) as poster">
+            <img [src]="poster" alt="">
+          </div>
+        </div>
+      </div>
+
+      <div class="dlg-row dlg-row--3">
+        <div class="dlg-field">
+          <label class="dlg-label" for="sh-date">{{ 'showTimes.showDate' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="sh-date" type="date" formControlName="date" [min]="editingId ? null : todayYmd">
+            <mat-error *ngIf="form.controls['date'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+            <mat-error *ngIf="form.controls['date'].hasError('pastDate')">{{ 'showTimes.dateInPast' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="sh-start">{{ 'showTimes.startTime' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="sh-start" type="time" formControlName="start">
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="sh-end">{{ 'showTimes.endTime' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="sh-end" type="time" formControlName="end">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" id="sh-projectionForm-lbl">{{ 'showTimes.format' | translate }}</label>
+          <mat-button-toggle-group formControlName="projectionForm" aria-labelledby="sh-projectionForm-lbl">
+            <mat-button-toggle *ngFor="let p of projectionForms" [value]="p.value">{{ p.name }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="sh-showTimeType-lbl">{{ 'showTimes.showType' | translate }}</label>
+          <mat-button-toggle-group formControlName="showTimeType" aria-labelledby="sh-showTimeType-lbl">
+            <mat-button-toggle *ngFor="let t of showTimeTypes" [value]="t.value">{{ t.name }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" id="sh-theaterId-lbl">{{ 'showTimes.theater' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="theaterId" (selectionChange)="onTheaterChange()" panelClass="dlg-select-panel" aria-labelledby="sh-theaterId-lbl" [placeholder]="'showTimes.selectTheater' | translate">
+              <mat-option *ngFor="let t of data.theaters" [value]="t.id">{{ t.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['theaterId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="sh-roomId-lbl">{{ 'showTimes.room' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="roomId" [disabled]="!form.value.theaterId" panelClass="dlg-select-panel" aria-labelledby="sh-roomId-lbl" [placeholder]="'showTimes.selectRoom' | translate">
+              <mat-option *ngFor="let r of roomsForTheater" [value]="r.id">{{ r.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['roomId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="sh-basePrice">{{ 'showTimes.basePrice' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="sh-basePrice" type="number" min="0" step="1000" formControlName="basePrice">
+            <mat-error *ngIf="form.controls['basePrice'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-switch">
+        <span class="dlg-switch-label" id="sh-isActive-lbl">{{ 'showTimes.onSale' | translate }}</span>
+        <mat-slide-toggle formControlName="isActive" aria-labelledby="sh-isActive-lbl"></mat-slide-toggle>
+      </div>
+
+      <div class="st-form-error" *ngIf="formError">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ formError }}</span>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-raised-button type="button" *ngIf="editingId" (click)="deleteCurrent()"><mat-icon>delete</mat-icon> {{ 'common.delete' | translate }}</button>
+    <span class="st-spacer"></span>
+    <button mat-raised-button type="button" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit">{{ 'showTimes.saveShowTime' | translate }}</button>
+  </div>
+</form>
+
+<button mat-icon-button type="button" class="dialog-close-btn" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>

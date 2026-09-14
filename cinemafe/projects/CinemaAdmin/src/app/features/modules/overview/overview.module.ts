@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'CinemaLib';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { ModalComponent } from '../../../shared/modal.component';
-import { ConfirmModalComponent } from '../../../shared/confirm-modal.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -13,13 +11,22 @@ import { TheatersManagementComponent } from './theaters/theaters-management.comp
 import { TheaterDialog } from './theaters/theater.dialog';
 import { TheaterDetailComponent } from './theaters/theater-detail.component';
 import { TheaterRoomsComponent } from './theaters/theater-rooms.component';
+import { RoomDialog } from './theaters/room.dialog';
+import { SeatMapDialog } from './theaters/seat-map.dialog';
 import { TheaterRoomTypesComponent } from './theaters/theater-room-types.component';
+import { RoomTypeDialog } from './theaters/room-type.dialog';
 import { TheaterSeatTypesComponent } from './theaters/theater-seat-types.component';
+import { SeatTypeDialog } from './theaters/seat-type.dialog';
 import { TheaterPatronCategoriesComponent } from './theaters/theater-patron-categories.component';
+import { PatronCategoryDialog } from './theaters/patron-category.dialog';
 import { TheaterFoodComponent } from './theaters/theater-food.component';
+import { FoodAndDrinkDialog } from './theaters/food-and-drink.dialog';
 import { TheaterTimeSlotsComponent } from './theaters/theater-time-slots.component';
+import { TimeSlotDialog } from './theaters/time-slot.dialog';
 import { TheaterTicketPricesComponent } from './theaters/theater-ticket-prices.component';
+import { TicketPriceDialog } from './theaters/ticket-price.dialog';
 import { ShowTimesManagementComponent } from './show-times/show-times.component';
+import { ShowTimeDialog } from './show-times/show-time.dialog';
 import { UsersManagementComponent } from './users/users-management.component';
 import { UserDialog } from './users/user.dialog';
 
@@ -54,21 +61,28 @@ const routes: Routes = [
     TheaterDialog,
     TheaterDetailComponent,
     TheaterRoomsComponent,
+    RoomDialog,
+    SeatMapDialog,
     TheaterRoomTypesComponent,
+    RoomTypeDialog,
     TheaterSeatTypesComponent,
+    SeatTypeDialog,
     TheaterPatronCategoriesComponent,
+    PatronCategoryDialog,
     TheaterFoodComponent,
+    FoodAndDrinkDialog,
     TheaterTimeSlotsComponent,
+    TimeSlotDialog,
     TheaterTicketPricesComponent,
+    TicketPriceDialog,
     ShowTimesManagementComponent,
+    ShowTimeDialog,
     UsersManagementComponent,
     UserDialog,
   ],
   imports: [
     SharedModule,
     NgxDatatableModule,
-    ModalComponent,
-    ConfirmModalComponent,
     RouterModule.forChild(routes),
   ],
 })

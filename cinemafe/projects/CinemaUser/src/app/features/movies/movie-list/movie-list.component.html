@@ -5,83 +5,56 @@
         <h1 class="page-title">{{ title | translate }}</h1>
         <p class="page-sub">{{ 'movies.list.subtitle' | translate }}</p>
       </div>
-      <span class="search-box">
-        <i class="fas fa-magnifying-glass"></i>
-        <input [formControl]="searchCtrl" [placeholder]="'movies.list.searchPlaceholder' | translate">
-      </span>
+      <mat-form-field appearance="outline" class="search-box">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [formControl]="searchCtrl" [placeholder]="'movies.list.searchPlaceholder' | translate">
+      </mat-form-field>
     </div>
 
     <div class="filter-row">
-      <div class="tabs">
-        <button *ngFor="let t of tabs" class="tab" [class.active]="mode === t.mode" (click)="setMode(t.mode)">{{ t.label | translate }}</button>
-      </div>
-      <select class="genre-select" [(ngModel)]="selectedGenre" *ngIf="!isPaged && genres.length">
-        <option value="">{{ 'movies.filters.genre' | translate }}</option>
-        <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
-      </select>
-      <select class="genre-select" [(ngModel)]="selectedLanguage" *ngIf="!isPaged && languages.length">
-        <option value="">{{ 'movies.filters.language' | translate }}</option>
-        <option *ngFor="let l of languages" [value]="l">{{ l }}</option>
-      </select>
+      <mat-button-toggle-group class="tabs" [value]="mode" (change)="setMode($event.value)">
+        <mat-button-toggle *ngFor="let t of tabs" class="tab" [value]="t.mode">{{ t.label | translate }}</mat-button-toggle>
+      </mat-button-toggle-group>
+      <mat-form-field appearance="outline" *ngIf="hasClientFilters && genres.length">
+        <mat-select [(ngModel)]="selectedGenre">
+          <mat-option value="">{{ 'movies.filters.genre' | translate }}</mat-option>
+          <mat-option *ngFor="let g of genres" [value]="g">{{ g }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="hasClientFilters && languages.length">
+        <mat-select [(ngModel)]="selectedLanguage">
+          <mat-option value="">{{ 'movies.filters.language' | translate }}</mat-option>
+          <mat-option *ngFor="let l of languages" [value]="l">{{ l }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 </div>
 
 <div class="movies-page">
-  <div *ngIf="loading$ | async" class="spinner-wrap">
+  <div *ngIf="(loading$ | async) && displayed.length === 0" class="spinner-wrap">
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 
   <div class="movie-grid">
-    <div class="movie-card" *ngFor="let movie of displayed" [routerLink]="['/movies', movie.id]">
-      <div class="card-poster">
-        <img [src]="movie.posterUrl || 'assets/no-poster.jpg'" [alt]="movie.title">
-        <div class="card-hover-overlay">
-          <span class="btn-book-small"><i class="fas fa-ticket"></i> {{ 'movies.list.book' | translate }}</span>
-        </div>
-        <div class="card-rating" *ngIf="movie.averageRating"><i class="fas fa-star"></i> {{ movie.averageRating | number:'1.1-1' }}</div>
-        <span class="card-age" *ngIf="movie.ageRestrictionCode">{{ movie.ageRestrictionCode }}</span>
-      </div>
-      <div class="card-info">
-        <h3 class="card-title">{{ movie.title }}</h3>
-        <div class="card-genres">
-          <span class="chip-genre" *ngFor="let g of movie.genres | slice:0:2">{{ g }}</span>
-        </div>
-        <p class="card-duration"><i class="fas fa-clock"></i> {{ 'movies.durationMinutes' | translate:{ count: movie.duration } }}</p>
-      </div>
-    </div>
+    <app-movie-card *ngFor="let movie of displayed" [movie]="movie"></app-movie-card>
   </div>
 
   <div *ngIf="displayed.length === 0 && !(loading$ | async)" class="empty">
-    <i class="fas fa-film"></i>
+    <mat-icon>movie</mat-icon>
     <p>{{ 'movies.list.empty' | translate }}</p>
   </div>
 
-  <div class="pager" *ngIf="isPaged && total > pageSize">
-    <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
+  <div class="pager-loadmore" *ngIf="canLoadMore">
+    <div class="lm-track"><div class="lm-fill" [style.width.%]="loadProgressPct"></div></div>
+    <span class="lm-count">{{ 'movies.list.shownCount' | translate: { shown: loadedCount, total: total } }}</span>
+    <button type="button" class="lm-btn" (click)="loadMore()" [disabled]="loading$ | async">
+      <mat-spinner diameter="16" *ngIf="loading$ | async"></mat-spinner>
+      <ng-container *ngIf="!(loading$ | async)">
+        {{ 'movies.list.loadMore' | translate }} <mat-icon>expand_more</mat-icon>
+      </ng-container>
+    </button>
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="ml-footer">
-  <div class="ml-footer-inner">
-    <div class="foot-brand">
-      <a class="foot-logo"><i class="fas fa-film"></i> <strong>Midnight Premium</strong></a>
-      <p>{{ 'movies.footer.tagline' | translate }}</p>
-    </div>
-    <div class="foot-col">
-      <h4>{{ 'movies.footer.links' | translate }}</h4>
-      <a routerLink="/movies">{{ 'movies.footer.linkMovies' | translate }}</a>
-      <a routerLink="/theaters">{{ 'movies.footer.linkTheaters' | translate }}</a>
-      <a routerLink="/promotions">{{ 'movies.footer.linkPromotions' | translate }}</a>
-      <a routerLink="/membership">{{ 'movies.footer.linkMembership' | translate }}</a>
-    </div>
-    <div class="foot-col">
-      <h4>{{ 'movies.footer.support' | translate }}</h4>
-      <a href="#">{{ 'movies.footer.terms' | translate }}</a>
-      <a href="#">{{ 'movies.footer.privacy' | translate }}</a>
-      <a href="#">{{ 'movies.footer.contact' | translate }}</a>
-    </div>
-  </div>
-  <p class="foot-copy">© 2026 Midnight Premium Cinema. All rights reserved.</p>
-</footer>
+<app-site-footer></app-site-footer>

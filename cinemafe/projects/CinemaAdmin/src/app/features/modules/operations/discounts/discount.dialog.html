@@ -2,121 +2,140 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'common.code' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="code" [placeholder]="'discounts.codePlaceholder' | translate">
-        <mat-error *ngIf="form.controls['code'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.discountType' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="discountTypeId" [placeholder]="'discounts.selectType' | translate">
-          <mat-option *ngFor="let t of discountTypes" [value]="t.id">{{ t.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.controls['discountTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.percent' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" formControlName="percent" placeholder="25">
-        <mat-error *ngIf="form.controls['percent'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.maxDiscount' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" formControlName="maxDiscountAmount" placeholder="50000">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'common.startDate' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="date" formControlName="startDate">
-        <mat-error *ngIf="form.controls['startDate'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'common.endDate' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="date" formControlName="endDate">
-        <mat-error *ngIf="form.controls['endDate'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.maxUsage' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="number" formControlName="maxUsage" placeholder="100">
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.movieScope' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <mat-select formControlName="movieId">
-          <mat-option [value]="null">{{ 'discounts.anyMovie' | translate }}</mat-option>
-          <mat-option *ngFor="let m of movies" [value]="m.id">{{ m.title }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'common.description' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput formControlName="description" [placeholder]="'discounts.descriptionPlaceholder' | translate">
-      </mat-form-field>
-    </div>
-
-    <!-- ── Promotion scope ── -->
-    <div class="dialog-row">
-      <mat-checkbox formControlName="autoApply" (change)="onAutoApplyChange()">{{ 'discounts.autoApply' | translate }}</mat-checkbox>
-      <small class="ad-hint">{{ 'discounts.autoApplyHint' | translate }}</small>
-    </div>
-
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.scope' | translate }}</mat-label>
-      <div class="dialog-row-field">
-        <mat-checkbox formControlName="applyToAllTheaters" (change)="onApplyToAllChange()">{{ 'discounts.applyToAll' | translate }}</mat-checkbox>
-        <div class="scope-checklist" *ngIf="!form.value.applyToAllTheaters">
-          <mat-checkbox *ngFor="let t of theaters" [checked]="isTheaterSelected(t.id)" (change)="toggleTheater(t.id)">{{ t.name }}</mat-checkbox>
-          <p *ngIf="!theaters.length" class="ad-hint">—</p>
+    <div class="dlg-grid">
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-code">{{ 'common.code' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-code" formControlName="code" [placeholder]="'discounts.codePlaceholder' | translate">
+            <mat-error *ngIf="form.controls['code'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="dc-discountTypeId-lbl">{{ 'discounts.discountType' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="discountTypeId" panelClass="dlg-select-panel" aria-labelledby="dc-discountTypeId-lbl" [placeholder]="'discounts.selectType' | translate">
+              <mat-option *ngFor="let t of discountTypes" [value]="t.id">{{ t.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['discountTypeId'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
         </div>
       </div>
-    </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.daysOfWeek' | translate }} <small class="ad-hint">{{ 'discounts.anyDayHint' | translate }}</small></mat-label>
-      <div class="dialog-row-field">
-        <div class="scope-days">
-          <mat-checkbox *ngFor="let d of weekDays" [checked]="isDaySelected(d.value)" (change)="toggleDay(d.value)">{{ 'discounts.days.' + d.key | translate }}</mat-checkbox>
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-percent">{{ 'discounts.percent' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-percent" type="number" formControlName="percent" placeholder="25">
+            <mat-error *ngIf="form.controls['percent'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-maxDiscountAmount">{{ 'discounts.maxDiscount' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-maxDiscountAmount" type="number" formControlName="maxDiscountAmount" placeholder="50000">
+          </mat-form-field>
         </div>
       </div>
-    </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.timeFrom' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="time" formControlName="startTimeOfDay">
-      </mat-form-field>
-    </div>
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-startDate">{{ 'common.startDate' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-startDate" type="date" formControlName="startDate">
+            <mat-error *ngIf="form.controls['startDate'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-endDate">{{ 'common.endDate' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-endDate" type="date" formControlName="endDate">
+            <mat-error *ngIf="form.controls['endDate'].hasError('required')">{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-label class="dialog-row-label">{{ 'discounts.timeTo' | translate }}</mat-label>
-      <mat-form-field appearance="outline" class="dialog-row-field">
-        <input matInput type="time" formControlName="endTimeOfDay">
-      </mat-form-field>
-    </div>
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-maxUsage">{{ 'discounts.maxUsage' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-maxUsage" type="number" formControlName="maxUsage" placeholder="100">
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" id="dc-movieId-lbl">{{ 'discounts.movieScope' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="movieId" panelClass="dlg-select-panel" aria-labelledby="dc-movieId-lbl">
+              <mat-option [value]="null">{{ 'discounts.anyMovie' | translate }}</mat-option>
+              <mat-option *ngFor="let m of movies" [value]="m.id">{{ m.title }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <div class="dialog-row">
-      <mat-checkbox formControlName="isActive">{{ 'discounts.activeLabel' | translate }}</mat-checkbox>
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-description">{{ 'common.description' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-description" formControlName="description" [placeholder]="'discounts.descriptionPlaceholder' | translate">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- ── Promotion scope ── -->
+      <div>
+        <div class="dlg-switch">
+          <span class="dlg-switch-label" id="dc-autoApply-lbl">{{ 'discounts.autoApply' | translate }}</span>
+          <mat-slide-toggle formControlName="autoApply" (change)="onAutoApplyChange()" aria-labelledby="dc-autoApply-lbl"></mat-slide-toggle>
+        </div>
+        <p class="ad-sub">{{ 'discounts.autoApplyHint' | translate }}</p>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <mat-checkbox formControlName="applyToAllTheaters" (change)="onApplyToAllChange()">{{ 'discounts.applyToAll' | translate }}</mat-checkbox>
+          <ng-container *ngIf="!form.value.applyToAllTheaters">
+            <div class="check-group" *ngIf="theaters.length">
+              <div class="check-item" *ngFor="let t of theaters">
+                <mat-checkbox [checked]="isTheaterSelected(t.id)" (change)="toggleTheater(t.id)">{{ t.name }}</mat-checkbox>
+              </div>
+            </div>
+            <p *ngIf="!theaters.length" class="ad-sub">—</p>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-field">
+          <label class="dlg-label">{{ 'discounts.daysOfWeek' | translate }}</label>
+          <p class="ad-sub">{{ 'discounts.anyDayHint' | translate }}</p>
+          <div class="check-group check-group--inline">
+            <div class="check-item" *ngFor="let d of weekDays">
+              <mat-checkbox [checked]="isDaySelected(d.value)" (change)="toggleDay(d.value)">{{ 'discounts.days.' + d.key | translate }}</mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dlg-row dlg-row--2">
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-startTimeOfDay">{{ 'discounts.timeFrom' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-startTimeOfDay" type="time" formControlName="startTimeOfDay">
+          </mat-form-field>
+        </div>
+        <div class="dlg-field">
+          <label class="dlg-label" for="dc-endTimeOfDay">{{ 'discounts.timeTo' | translate }}</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput id="dc-endTimeOfDay" type="time" formControlName="endTimeOfDay">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="dlg-switch">
+        <span class="dlg-switch-label" id="dc-isActive-lbl">{{ 'discounts.activeLabel' | translate }}</span>
+        <mat-slide-toggle formControlName="isActive" aria-labelledby="dc-isActive-lbl"></mat-slide-toggle>
+      </div>
     </div>
   </mat-dialog-content>
 
